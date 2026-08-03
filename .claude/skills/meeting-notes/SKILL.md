@@ -735,6 +735,8 @@ Meeting notes that sit in your private doc help no one.
 
 ## Example Inputs and Outputs
 
+> Examples below are synthetic — illustrative format, not repo data. Named people (e.g. "Sarah Chen") are invented; real stakeholder context lives in `product-development/product/strategy/business-context/stakeholders.md`.
+
 ### Example 1: Raw Voice Memo
 
 **Input:**

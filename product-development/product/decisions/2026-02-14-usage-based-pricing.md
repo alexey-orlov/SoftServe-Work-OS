@@ -8,13 +8,13 @@
 
 ## Options Considered
 
-1. **Per-seat pricing** — predictable revenue and familiar to buyers, but seats are a poor proxy for value: heavy API users run 3 seats, light UI users run 40.
-2. **Usage-based credits (tiered allotments + overage)** — aligns price with enriched records, monetizes API-first customers, and matches how the top two competitors already package.
-3. **Hybrid (seats + usage cap)** — hedges both, but doubles billing complexity and muddies the sales pitch.
+1. **Per-seat pricing** — predictable and familiar, but seats are a poor value proxy: heavy API users run 3 seats, light UI users run 40.
+2. **Usage-based credits (tiered allotments + overage)** — aligns price with enriched records; matches how the top two competitors package.
+3. **Hybrid (seats + usage cap)** — hedges both, but doubles billing complexity and muddies the pitch.
 
 ## Decision
 
-Usage-based credits: Starter $99/5K, Growth $499/30K, Scale $1,999/150K credits monthly, with per-credit overage that gets cheaper at higher tiers.
+Usage-based credits: Starter $99/5K, Growth $499/30K, Scale $1,999/150K monthly, plus per-credit overage that gets cheaper at higher tiers.
 
 ## Reasoning
 
@@ -31,6 +31,6 @@ Revenue becomes less predictable, and silent credit depletion becomes a churn ri
 
 ## Related
 
-- PRD the tradeoff forced: [credit-usage-dashboard-prd.md](../PRDs/billing/credit-usage-dashboard-prd.md)
-- Metrics watching the revisit conditions: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
+- Tradeoff PRD: [credit-usage-dashboard-prd.md](../PRDs/billing/credit-usage-dashboard-prd.md)
+- Revisit-condition metrics: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
 - Feature index: `feature-index.yaml#billing.credit-usage-dashboard`

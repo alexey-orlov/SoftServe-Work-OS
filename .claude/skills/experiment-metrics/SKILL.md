@@ -10,7 +10,6 @@ group: definition
 
 **When to use:** Before launching any experiment, when metrics feel unreliable, or when experiment results are confusing
 
-**Framework source:** SoftServe Team OS experiment-metrics guidance (STEDII)
 
 ---
 

@@ -19,7 +19,7 @@ Tell me which tool to connect (e.g., "connect to Amplitude") and I will guide yo
 2. The skill searches for official MCP servers (remote first, then local)
 3. The skill guides you through credentials and authentication
 4. The skill tests the connection and discover available tools
-5. The skill updates your PM OS skills and CLAUDE.md routing automatically
+5. The skill updates your Team OS skills and CLAUDE.md routing automatically
 
 **Example:** `/connect-mcps connect to linear`
 
@@ -57,7 +57,7 @@ When you run `/connect-mcps connect to [tool name]`, the skill will:
 3. **If no remote server** - Research manual setup (OAuth, API tokens)
 4. **Guide credential entry** - Prompt you for required credentials
 5. **Test connection** - Verify the connection works and discover available tools
-6. **Map to skills** - Automatically determine which PM OS skills benefit from this MCP
+6. **Map to skills** - Automatically determine which Team OS skills benefit from this MCP
 7. **Update workspace** - Add integration instructions to relevant skills and update CLAUDE.md registry
 8. **Enable intelligent routing** - Your natural language queries will automatically route to the right MCP
 
@@ -488,7 +488,7 @@ Testing connection... ✓ Connected successfully!
 
 **Category:** Analytics
 
-**Integrating with PM OS skills...**
+**Integrating with Team OS skills...**
 ✓ feature-metrics updated
 ✓ impact-sizing updated
 ✓ retention-analysis updated
@@ -552,7 +552,7 @@ Testing connection... ✓ Connected successfully!
 
 **Category:** Project Management
 
-**Integrating with PM OS skills...**
+**Integrating with Team OS skills...**
 ✓ create-tickets updated
 ✓ meeting-notes updated
 ✓ status-update updated
@@ -804,7 +804,7 @@ The tool appears to handle:
 - A/B testing
 - Analytics
 
-Which PM OS skills should integrate with this MCP?
+Which Team OS skills should integrate with this MCP?
 A) Analytics skills (metrics, retention, experiments)
 B) Product skills (PRD, decisions)
 C) Both A and B

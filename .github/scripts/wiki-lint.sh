@@ -26,6 +26,8 @@ done < <(find "$PD" -type d ! -path '*/.git*')
 
 # ---- Check 2b: every nav link target exists ----------------------------------------
 # Scan CLAUDE.md files for markdown links to local paths; verify each resolves.
+# (collect into a temp file first — a piped while runs in a subshell and loses $FAIL)
+NAVTMP=$(mktemp)
 while IFS= read -r nav; do
   dir=$(dirname "$nav")
   # extract link targets: [text](target) — local, non-anchor, non-URL
@@ -36,12 +38,14 @@ while IFS= read -r nav; do
     t="${t%%#*}"; t="${t#<}"; t="${t%>}"
     [ -z "$t" ] && continue
     if [ ! -e "$dir/$t" ] && [ ! -e "$t" ]; then
-      echo "BROKEN_NAV $nav -> $t"
+      echo "$nav -> $t"
     fi
   done
-done < <(find "$PD" .claude -name 'CLAUDE.md' 2>/dev/null) | sort -u | while IFS= read -r line; do
-  fail "nav link broken: ${line#BROKEN_NAV }"
-done
+done < <(find "$PD" .claude -name 'CLAUDE.md' 2>/dev/null) | sort -u > "$NAVTMP"
+while IFS= read -r line; do
+  [ -n "$line" ] && fail "nav link broken: $line"
+done < "$NAVTMP"
+rm -f "$NAVTMP"
 
 # ---- Check 2c: every content file has a nav entry in its folder's CLAUDE.md --------
 while IFS= read -r f; do
@@ -63,10 +67,13 @@ except ImportError:
     print("⚠️  pyyaml unavailable — feature-index path check skipped"); sys.exit(0)
 pd = sys.argv[1]
 bad = 0
+SKIP_KEYS = {"tickets", "figma", "initiatives"}  # external refs / handled separately
 def walk(node, feature):
     global bad
     if isinstance(node, dict):
         for k, v in node.items():
+            if k in SKIP_KEYS:
+                continue
             walk(v, feature)
     elif isinstance(node, list):
         for v in node:

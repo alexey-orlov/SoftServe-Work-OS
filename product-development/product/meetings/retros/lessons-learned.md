@@ -23,6 +23,9 @@ sprint; this file keeps only the takeaways that should change how the team
 works next quarter. Skills that plan work (`/weekly-plan`, `/pre-mortem`) read
 this file — a lesson buried in a dated retro doc is a lesson lost.
 
+**Scope:** *process* lessons — how the team works. Product learnings belong in
+`product-development/product/decisions/` as hindsight notes, not here.
+
 ## Lessons
 
 - 2026-08-03 — (synthetic example — replace with your first real lesson) Pre-registering the experiment design before the flag ramp made the ship/kill call take one meeting instead of three; make it the default for any A/B ([worked example](../../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md))
