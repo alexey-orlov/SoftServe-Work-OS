@@ -1,0 +1,21 @@
+# Paths /wiki-lint's staleness check skips (one per line, shell wildcards allowed).
+# Worked examples — reference material, not live content:
+product-development/product/PRDs/examples/*
+product-development/product/PRDs/billing/*
+product-development/engineering/rfcs/billing/*
+product-development/engineering/plans/billing/*
+product-development/engineering/bug-investigations/billing/*
+product-development/analytics/schemas/billing/*
+product-development/analytics/queries/billing/*
+product-development/analytics/metrics/billing/*
+product-development/analytics/dashboards/billing/*
+product-development/analytics/experiments/billing/*
+product-development/analytics/investigations/billing/*
+product-development/product/decisions/2026-02-14-usage-based-pricing.md
+product-development/product/initiatives/credit-usage-dashboard-v1.md
+product-development/product/initiatives/tier-discount-promo.md
+# Stable references — change intentionally, not on a schedule:
+product-development/product/strategy/frameworks/*
+product-development/product/processes/templates/*
+product-development/product/processes/writing-guides/*
+os-installation/*

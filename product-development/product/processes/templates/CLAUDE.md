@@ -14,3 +14,4 @@ Living master files are *not* here: stakeholder profiles live in `../../strategy
 - [launch-checklist-template.md](launch-checklist-template.md) — Launch checklist scaffold; filled copies go to `../launches/`, one per feature
 - [prd-template.md](prd-template.md) — PRD scaffold with per-stage guidance (kickoff → launch readiness); `/prd-draft` builds on it
 - [retrospective-template.md](retrospective-template.md) — Sprint/project retro scaffold: what went well, what didn't, action items
+- [initiative-page-template.md](initiative-page-template.md) — Living initiative page scaffold; copies go to `../../initiatives/{slug}.md`, one per initiative, edited in place

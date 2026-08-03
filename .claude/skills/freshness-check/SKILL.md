@@ -1,97 +1,21 @@
 ---
 name: freshness-check
-description: Scan the repo for stale and broken files. Categorizes by age tier, respects stable-reference exceptions, surfaces broken cross-references, and flags files that should have been updated but weren't.
+description: "Superseded by /wiki-lint — staleness scanning is check #1 there, with the same age tiers, stable-file exceptions, and .freshness-ignore support. Kept for one release so habits and references don't break; use /wiki-lint."
 group: os-admin
 ---
 
-# Freshness Check
+# freshness-check → moved to /wiki-lint
 
-Scan the Team OS repo for stale content and flag files that may need updating.
+This skill's whole scope now lives in `/wiki-lint` as check #1 (staleness), plus nine more
+checks (navigation coverage, broken references, index drift, mirror consistency, …).
 
-## When to Use
+Flag mapping:
+- `/freshness-check` → `/wiki-lint` (staleness section of the report)
+- `/freshness-check --schema-drift` → `/wiki-lint --schema-drift`
+- `[PENDING:]` marker aging → `/wiki-lint` check #1 (still 14 days)
 
-- Run weekly as automation (recommended)
-- Run manually before quarterly planning
-- Run before someone new starts querying the repo (clean up first)
-- Run after a period of low activity to assess what needs catching up
+`.freshness-ignore` in the repo root works unchanged. Reports land in
+`product-development/_meta/health/` instead of chat-only.
 
-## What It Does
-
-1. Scans all files in `product-development/` and `os-installation/` (excluding `.claude/` and files listed in `.freshness-ignore`)
-2. Checks last modified date via git log
-3. Categorizes files into freshness tiers
-4. Checks for broken references (files that link to things that don't exist)
-5. Identifies files that SHOULD have been updated but weren't (e.g., `metrics/{area}/` for a product area that shipped a feature recently per `feature-index.yaml`)
-
-## Freshness Tiers
-
-| Tier | Age | Label | Action |
-|------|-----|-------|--------|
-| Fresh | < 30 days | ✅ | No action |
-| Aging | 30-90 days | 🟡 | Review if still accurate |
-| Stale | 90-180 days | 🟠 | Flag to owner for update or archival |
-| Archive candidate | 180+ days | 🔴 | Consider moving to `archive/` |
-
-## Stable File Exceptions
-
-Some files are legitimately stable and should NOT be flagged as stale:
-- `analytics/schemas/` (table structures rarely change)
-- `os-installation/` (guides don't change weekly)
-- `.claude/skills/` (skills are updated intentionally, not on a schedule)
-- `.claude/agents/`, `.claude/commands/`
-- `LICENSE`
-
-If a file is in one of these paths, note: "Stable reference material — verify with owner only if the underlying system changed."
-
-To add custom exceptions, create a `.freshness-ignore` file in the repo root listing paths to skip (one per line, supports wildcards).
-
-## Output Format
-
-```
-## Freshness Check — {Date}
-
-### Aging (30-90 days — review if still accurate)
-- product-development/product/competitive-research/competitors/lovable/tldr.md — 45 days — Owner: {from roster}
-- ...
-
-### Stale (90-180 days — needs update or archival)
-- product-development/product/decisions/2025-11-pricing-v1.md — 178 days — Owner: {from roster}
-- ...
-
-### Archive Candidates (180+ days)
-- {file} — {days} — Owner: {from roster}
-- ...
-
-### Broken References
-- {file} references "{target}" but no matching file found
-- ...
-
-### Should-Have-Been-Updated
-- analytics/metrics/billing/credit-usage-metrics.md hasn't changed in 75 days, but feature-index.yaml#billing.credit-usage-dashboard shipped 12 days ago. Likely stale.
-
-### Schema Drift (--schema-drift mode, requires warehouse access)
-- analytics/schemas/billing/billing_events.md lists 8 columns; `INFORMATION_SCHEMA` for `ANALYTICS.PROD.billing_events` shows 9. New column `discount_code` not documented. Update schema doc + bump `data-catalog.yaml#billing_events.last_validated`.
-- If warehouse access isn't configured, this section is skipped with a note.
-
-### PENDING Forward References (--pending mode)
-- product/decisions/2026-04-22-vendor-x.md cites `[PENDING: customers/accounts/acme/calls/summaries/2026-04-22.md]` — file still missing 14+ days later. Either fill it in or remove the reference.
-
-### Recovery Suggestions (if many files are stale)
-If 30%+ of files are stale, the repo needs a recovery session:
-1. Block 1 hour with the team
-2. Divide stale files among owners
-3. Each person: update, archive, or confirm still accurate
-4. Re-run freshness check to verify
-
-### Summary
-- Total: {N} | Fresh: {N} ({X}%) | Aging: {N} | Stale: {N} | Archive: {N}
-- Broken references: {N}
-```
-
-## Rules
-
-1. Never auto-delete or auto-archive. Only flag. A human decides.
-2. Assign stale files to owners using the team roster from root CLAUDE.md.
-3. If Slack MCP is connected, post the summary to the team channel.
-4. If 50%+ of files are stale, add the recovery session suggestion prominently.
-5. Cross-reference `feature-index.yaml` to find documents that should have been updated when a feature shipped.
+**If invoked: run `/wiki-lint` and say so.** This stub is removed once nothing references
+it — `/wiki-lint`'s broken-reference check will show when that day comes.

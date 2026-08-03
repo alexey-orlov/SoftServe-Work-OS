@@ -1,6 +1,6 @@
 # Skills
 
-49 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+51 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -21,7 +21,7 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 | [`discovery-customers`](#discovery-customers) | Interview prep and processing, call summaries, research synthesis. | 4 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 5 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 4 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 6 |
 
 ### Communication & ops
 
@@ -109,8 +109,10 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 
 - [connect-mcps/](connect-mcps/) — Connect MCPs for real-time tool integration
 - [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, RFCs, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
-- [freshness-check/](freshness-check/) — Scan the repo for stale and broken files. Categorizes by age tier, respects stable-reference exceptions, surfaces broken cross-references, and flags files that should have been updated…
+- [freshness-check/](freshness-check/) — Deprecation stub — superseded by /wiki-lint (staleness is check #1 there); kept one release for muscle memory
 - [upgrade-to-team-os/](upgrade-to-team-os/) — Upgrade any personal OS (PM, engineering, design, analytics, ops, exec, multi-role) into a Team OS
+- [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
+- [wiki-lint/](wiki-lint/) — The health engine: ten checks (staleness, nav coverage, broken refs, index drift, mirror consistency, …); dated reports to `_meta/health/`; `--fix` repairs mechanical drift only
 
 ## Gaps
 

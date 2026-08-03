@@ -54,6 +54,9 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"What are this quarter's OKRs / priorities?"* | `product/strategy/current-quarter.md` → `product/strategy/okr-guide.md` only when writing new ones |
 | *"Who is stakeholder X, what do they care about, how do I get buy-in?"* | `product/strategy/business-context/stakeholders.md` → Team table above for handles |
 | *"What's the state of feature X?"* | `feature-index.yaml#X` → linked PRD, plan, latest experiment / investigation |
+| *"What's the state of initiative Y (current work)?"* | `product/initiatives/{slug}.md` → its linked artifacts and decisions |
+| *"Something new worth keeping (call, thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
+| *"Is the repo healthy / what's stale?"* | run `/wiki-lint` → latest report in `product-development/_meta/health/` |
 | *"What did customer Y say last call?"* | `product/customers/accounts/{Y}/calls/summaries/{latest}.md` → transcript only if the summary falls short |
 | *"Why did we choose Z?"* | `product/decisions/` → the dated decision file |
 | *"How do we calculate metric M?"* | `analytics/metrics/{area}/` → linked query → schema only if column-level detail needed |
@@ -64,7 +67,10 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 
 | Area | File | Description |
 |------|------|-------------|
-| Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets |
+| Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
+| Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
+| Wiki machinery | `product-development/_meta/` | `write-policy.yaml` (protected-paths registry), `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending Tier-2 changes) |
+| Write-back contract | `.claude/references/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
 | Data catalog | `product-development/analytics/data-catalog.yaml` | Warehouse table registry — owner, refresh, upstream, used-by |
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences. Living masters: edit in place, keep current |
 | Product | `product-development/product/CLAUDE.md` | Product context, PRDs, customers, decisions |
@@ -84,8 +90,16 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 ## Three Rules
 
 1. **Summaries first, raw data in subfolders.** A one-hour call becomes a 500-token summary in `summaries/`. Raw transcripts sit in `transcripts/` for when the summary isn't enough. Every level of nesting is a context-saving decision.
-2. **Every folder has a CLAUDE.md navigation file.** Update it when you add files. This is how Claude finds things without burning tokens searching.
-3. **The repo gets updated before a feature ships.** Run `/feature-launch-gate`. No exceptions. *"The feature is not rolled out until the repository is updated."*
+2. **Every folder has a CLAUDE.md navigation file.** Update it when you add files — append new entries to the END of the list, never re-sort (re-sorting causes merge conflicts; only `/wiki-lint --fix` re-orders).
+3. **The repo gets updated before a feature ships.** Run `/feature-launch-gate`. No exceptions. *"The feature is not rolled out until the repository is updated."* Between launches, `/wiki-lint` (weekly + on every PR) catches what slipped.
+
+## Governance
+
+- **Write policy** — `product-development/_meta/write-policy.yaml` is the traceable registry of protected context. Default is **auto**: agents write and commit directly (transcripts, summaries, PRDs, analyses, decisions, navigation). **Confirm** tier (`business-info.md`, `stakeholders.md`, `current-quarter.md`, `feature-index.yaml`, this file): show the exact before/after and get an in-session yes first; headless runs file a proposal in `_meta/proposals/` instead. **Admin** tier (skills, hooks, the contract, the registry itself): steward only. Enforced by the write-guard hook; optionally hard-stopped by a GitHub push ruleset; audited weekly.
+- **One writer per surface** — table in `.claude/references/write-back-contract.md`.
+- **Mirror rule** — the Fundamentals block above summarizes `business-info.md`; whoever changes one updates the other in the same change.
+- **Failure visibility** — an automation that can drop work must surface its own failure; a silent success-shaped exit is the bug.
+- **Commit prefixes** — `context:` for wiki folds and lint fixes; normal conventions otherwise.
 
 ## Privacy Contract
 
@@ -110,11 +124,9 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
 | Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/processes/` | Competitive intel, vision docs, processes |
 
-## Branch Protection (Recommended)
+## Enforcement on GitHub
 
-GitHub: Settings → Branches → Add rule for `main`:
-- Require pull request reviews (at least 1 approval)
-- Prevents accidental pushes and ensures review
+Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue), the push ruleset that hard-stops non-steward changes to protected paths (path list generated from the write policy), and branch protection for admin-tier changes. Day-to-day auto-tier work commits straight to `main` — no PR required.
 
 ## Credits
 

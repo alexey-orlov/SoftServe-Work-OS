@@ -1,0 +1,52 @@
+# Write Policy — which files agents change freely, and which need a human first.
+#
+# This registry is the single traceable list of protected context. The OS admin
+# edits it here; everything that enforces the policy reads from here:
+#   - .claude/hooks/write-guard.sh   (in-session: native confirm prompt on protected paths)
+#   - GitHub push ruleset            (server-side hard stop; path list generated from this
+#                                     file — see os-installation/claude-code/scheduled-governance.md)
+#   - .github/workflows/wiki-lint.yml (weekly audit: lists commits that touched protected paths)
+#
+# Tier semantics:
+#   auto    — DEFAULT for any path not listed below. Agents write and commit directly.
+#             Covers raw material, records (summaries, decisions, results), deliverables
+#             (PRDs, analyses), navigation CLAUDE.md files, the ledger, health reports.
+#   confirm — the distilled steering files. An agent must show the exact before/after and
+#             get an in-session yes BEFORE writing. Headless/scheduled runs cannot confirm:
+#             they write a proposal to product-development/_meta/proposals/ instead.
+#   admin   — the system's own rules. Only the steward changes these (via reviewed PR).
+#
+# Paths are repo-root-relative. Globs use shell fnmatch (`*` does not cross `/`, `**` does).
+
+version: 1
+
+# Who approves admin-tier changes and reviews the weekly protected-path audit.
+steward: "[Your Name]"   # ← fill during setup (see Team table in root CLAUDE.md)
+
+tiers:
+  confirm:
+    - CLAUDE.md                                                              # root — carries the business-fundamentals mirror block
+    - product-development/feature-index.yaml                                 # the product map
+    - product-development/product/strategy/business-context/business-info.md
+    - product-development/product/strategy/business-context/stakeholders.md
+    - product-development/product/strategy/current-quarter.md
+
+  admin:
+    - product-development/_meta/write-policy.yaml                            # this file
+    - .claude/references/**
+    - .claude/settings.json
+    - .claude/hooks/**
+    - .claude/skills/**
+    - .claude/agents/**
+    - .claude/commands/**
+    - .github/**
+
+# Living pages — edit-in-place current-truth files (auto tier unless listed above).
+# Informational: /wiki-lint verifies each exists, carries a `_updated:` header, and
+# stays within its size budget. Extend this list as the wiki grows.
+living-pages:
+  - product-development/product/initiatives/*.md
+  - product-development/product/customers/accounts/*/account-context.md
+  - product-development/product/strategy/business-context/business-info.md
+  - product-development/product/strategy/business-context/stakeholders.md
+  - product-development/product/strategy/current-quarter.md
