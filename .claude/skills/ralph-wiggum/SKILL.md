@@ -38,7 +38,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Strategy Docs | `product-development/product/strategy/*.md` | claims in the document | Does the document contradict stated strategy? |
-| Related PRDs | `product-development/product/PRDs/{area}/*.md`, `product-development/product/PRDs/{area}/*.md` | feature name, related features | Conflicting scope, duplicated work, missed dependencies |
+| Related PRDs | `product-development/product/PRDs/{area}/*.md`, `product-development/product/PRDs/examples/*.md` | feature name, related features | Conflicting scope, duplicated work, missed dependencies |
 | User Research | `product-development/product/customers/*.md` | problem claims, user quotes | Are claims actually supported by research? Are quotes cherry-picked? |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | metrics, revenue, North Star | Do success metrics ladder to the North Star? Are impact numbers realistic? |
 | Decisions | `product-development/product/decisions/*.md` | feature name, trade-offs | Has this been tried before? Are we repeating past mistakes? |
@@ -131,7 +131,7 @@ Before reviewing, silently check:
 1. **Strategy alignment:** Read `product-development/product/strategy/*.md`. Does the document's "why now" actually match current strategy?
 2. **Research backing:** Read `product-development/product/customers/*.md`. Are the user pain points real or assumed?
 3. **Past decisions:** Read `product-development/product/decisions/*.md`. Have we been here before?
-4. **Related PRDs:** Read `product-development/product/PRDs/{area}/*.md` and `product-development/product/PRDs/{area}/*.md`. Any conflicts or dependencies?
+4. **Related PRDs:** Read `product-development/product/PRDs/{area}/*.md` and `product-development/product/PRDs/examples/*.md`. Any conflicts or dependencies?
 5. **Stakeholder concerns:** Read stakeholder profiles. Who will object to this and why?
 
 Note any contradictions, unsupported claims, or gaps for the review.
@@ -297,6 +297,20 @@ Not everything is broken. Here's what's solid:
 
 *Review by your friendly neighborhood skeptic. Remember: I'm not trying to kill your PRD. I'm trying to make it bulletproof before someone else tries to kill it.*
 ```
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

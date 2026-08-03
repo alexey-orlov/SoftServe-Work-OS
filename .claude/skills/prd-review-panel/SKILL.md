@@ -25,7 +25,7 @@ Catches gaps, challenges assumptions, and surfaces conflicts before stakeholder 
 **Check these files first:**
 1. `product-development/product/strategy/business-context/business-info.md` - Company, product, ICP, business model. No need to paste it into sub-agent prompts — each persona file's "Context to Load First" block tells its sub-agent which parts to load itself
 2. `product-development/product/PRDs/{area}/` - Active PRDs to review
-3. `product-development/product/PRDs/{area}/` - Reference PRDs and past reviews
+3. `product-development/product/PRDs/examples/` - Reference PRDs and past reviews
 4. `.claude/agents/reviewers/` - The 7 reviewer personas
 5. `product-development/product/strategy/` - Strategic context for executive review, including `current-quarter.md`
 6. `product-development/product/customers/` - User research for UXR validation
@@ -46,7 +46,7 @@ Catches gaps, challenges assumptions, and surfaces conflicts before stakeholder 
 ### Step 1: PRD Selection
 
 1. **If user specified PRD name:**
-   - Look for it in `product-development/product/PRDs/{area}/` and `product-development/product/PRDs/{area}/`
+   - Look for it in `product-development/product/PRDs/{area}/` and `product-development/product/PRDs/examples/`
    - If found: Proceed
    - If not found: List available PRDs, ask user to choose
 
@@ -588,6 +588,22 @@ agents: [engineer, designer, executive, legal, uxr, skeptic, customer]
    - If conflicts exist: "Run `/decision-doc` to document the [Conflict] decision?"
    - If ready: "PRD looks solid! Ready for stakeholder review."
    - Always: "Review synthesis saved to [file path]"
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

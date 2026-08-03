@@ -26,8 +26,6 @@ identify the biggest bottleneck, and recommend specific fixes.
 
 **When to use:** When diagnosing activation problems, improving onboarding, or measuring early product engagement
 
-**Framework source:** SoftServe Team OS activation and onboarding frameworks
-
 ## Context Routing Logic (Internal - for Claude)
 
 **Automatic Context Checks:**
@@ -518,6 +516,22 @@ After defining Setup → Aha → Habit, ask:
 
 ---
 
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+---
+
 ## Related Skills
 
 - `user-research-synthesis` - Understand user struggles in onboarding, synthesis of feedback
@@ -597,7 +611,3 @@ Before delivering the activation analysis, verify:
 - [ ] **Benchmarks** are included for context (industry-appropriate, not generic)
 - [ ] **Connected to retention** -- does activation actually predict D30 retention?
 - [ ] **No generic advice** -- all recommendations reference this specific product and data
-
----
-
-**Framework credit:** SoftServe Team OS activation and onboarding frameworks.

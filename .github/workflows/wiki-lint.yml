@@ -1,0 +1,62 @@
+# Wiki lint — the scheduled/PR leg of the repo's self-updating loop.
+# Engine-vs-scheduler split: .github/scripts/wiki-lint.sh implements the mechanical
+# subset of .claude/skills/wiki-lint/SKILL.md (the spec of record). The judgment
+# checks (staleness triage, contradiction sweep) run via /wiki-lint in a session.
+name: wiki-lint
+
+on:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC — weekly full pass
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  mechanical-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run mechanical wiki-lint
+        id: lint
+        run: |
+          set -o pipefail
+          bash .github/scripts/wiki-lint.sh | tee lint-report.txt
+
+      - name: Protected-path audit (weekly)
+        if: github.event_name != 'pull_request'
+        run: |
+          {
+            echo ""
+            echo "== protected-path commits (last 8 days) =="
+            # Paths from write-policy.yaml tiers (confirm + admin) — keep in sync via
+            # os-installation/claude-code/scheduled-governance.md
+            git log --since="8 days ago" --name-only --pretty="format:%h %an %s" -- \
+              CLAUDE.md \
+              product-development/feature-index.yaml \
+              "product-development/product/strategy/business-context/*" \
+              product-development/product/strategy/current-quarter.md \
+              product-development/_meta/write-policy.yaml \
+              ".claude/**" \
+              ".github/**" | sed '/^$/d' || true
+          } | tee -a lint-report.txt
+
+      - name: Open/update weekly health issue
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Weekly wiki-lint report"
+          BODY_FILE=lint-report.txt
+          EXISTING=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number' || true)
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh issue comment "$EXISTING" --body-file "$BODY_FILE"
+          else
+            gh issue create --title "$TITLE" --body-file "$BODY_FILE" --label "wiki-health" || \
+            gh issue create --title "$TITLE" --body-file "$BODY_FILE"
+          fi

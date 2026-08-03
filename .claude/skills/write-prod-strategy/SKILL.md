@@ -286,7 +286,7 @@ Example: "In 3 years, product teams using our platform ship features 10x faster 
 [Narrative of how a user will experience your product]
 
 Example:
-"Sarah, a PM at a fast-growing startup, has an idea for a new feature at 9am. By 9:15am, she's used our AI to generate three prototype variants. By 10am, she's running an A/B test with 1,000 users. By 3pm, she has statistically significant results. By 5pm, engineering has the winning design and technical spec. What used to take 6 weeks now takes 8 hours."
+"[A PM at a fast-growing startup] has an idea for a new feature at 9am. By 9:15am, they've used our AI to generate three prototype variants. By 10am, they're running an A/B test with 1,000 users. By 3pm, they have statistically significant results. By 5pm, engineering has the winning design and technical spec. What used to take 6 weeks now takes 8 hours."
 
 ### Visiontype (Prototype of Vision)
 
@@ -699,6 +699,22 @@ After writing strategy:
 - `/user-research-synthesis` - User insights inform Users component
 - `/impact-sizing` - Feature impact sizing informs Impact component
 - `/competitor-analysis` - Competitive insights inform Superpowers component
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

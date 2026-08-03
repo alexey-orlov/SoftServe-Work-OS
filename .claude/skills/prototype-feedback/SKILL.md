@@ -30,7 +30,7 @@ Rapidly iterate on prototypes using AI-powered building and automated feedback c
 
 | Source | Files/Folders | What to Extract |
 |--------|---------------|-----------------|
-| PRD | `product-development/product/PRDs/{area}/`, `product-development/product/PRDs/{area}/` | Requirements, acceptance criteria, success metrics |
+| PRD | `product-development/product/PRDs/{area}/` | Requirements, acceptance criteria, success metrics |
 | Design System | `product-development/product/product-systems/`, design docs | Colors, typography, component patterns to match |
 | Stakeholder Profiles | `product-development/product/processes/templates/stakeholder-*.md` | Who reviews this, their priorities and concerns |
 | User Research | `product-development/product/customers/` | User pain points, quotes, behavior patterns |
@@ -451,3 +451,19 @@ Before delivering prototype feedback, verify:
 - [ ] **Previous feedback rounds referenced** -- If this is round 2+, confirm previous issues were resolved
 
 If any check fails, fix it before delivering. Generic feedback wastes iteration cycles.
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.

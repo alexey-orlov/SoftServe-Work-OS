@@ -177,7 +177,7 @@ Effort is not an axis. It sets sequence, not whether — and estimating effort a
 
 ## Output Format
 
-Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place.** After the first save, add it to `product-development/product/strategy/CLAUDE.md`'s `### Files` list.
+Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place** (rewrite to current truth, bump its `_updated:` line; never stack "UPDATE:" sections). After the first save, append it to the END of `product-development/product/strategy/CLAUDE.md`'s `### Files` list. Themes routed "act now" that map to a feature: propose the feature-index addition (Tier 2 — user confirms) and link from the initiative page when one exists. End your reply listing every repo path written — full contract: `.claude/references/write-back-contract.md`.
 
 ````markdown
 # Feature Requests

@@ -43,7 +43,7 @@ End-of-week synthesis reviewing what you accomplished, what you learned, and wha
 - **GitHub MCP** - Code activity (if relevant to your role)
 - **Slack MCP** - Key conversations and decisions
 
-**Fallback:** File-based analysis of PM OS workspace + manual input for completions.
+**Fallback:** File-based analysis of the Team OS repo + manual input for completions.
 
 ---
 
@@ -82,12 +82,12 @@ If no weekly plan exists:
 
 **B. PRD Progress:**
 
-Scan `product-development/product/PRDs/{area}/` and `product-development/product/PRDs/{area}/`:
+Scan `product-development/product/PRDs/{area}/`:
 
 Method 1 - File modification dates:
 ```bash
 # Files modified in the past 7 days
-find product-development/product/PRDs/{area}/ product-development/product/PRDs/{area}/ -name "*.md" -mtime -7
+find product-development/product/PRDs/{area}/ -name "*.md" -mtime -7
 ```
 
 For each PRD touched this week:
@@ -718,3 +718,19 @@ Before delivering the weekly review, verify:
 - [ ] **Metrics referenced where available:** If launches happened or metrics data exists, actual numbers are cited (not just "things went well").
 - [ ] **Appropriate length:** Default review is ~150 lines. Full review is longer but still organized with clear section headers. Do not generate a full review unless the user asked for one.
 - [ ] **Honest about what did not go well:** The review includes at least one thing that did not go as planned, with root cause analysis. A review with only wins is incomplete.
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.

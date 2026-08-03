@@ -555,3 +555,19 @@ Before presenting output to the PM, verify:
 - [ ] **User quotes from research included:** Where available, real user quotes from `product-development/product/customers/` are embedded in relevant journey stages (not fabricated quotes)
 - [ ] **Opportunities linked to specific product improvements:** Each opportunity names a concrete product change (e.g., "add progress bar to onboarding step 3"), not generic advice like "improve the experience"
 - [ ] **Emotional journey shows highs and lows:** The emotional arc across stages is not flat; it includes at least one high point and one low point with explanations for the shifts
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.

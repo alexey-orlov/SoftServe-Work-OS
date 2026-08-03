@@ -660,6 +660,27 @@ Great work! Your PRD is ready for review.
 - When finalized: Move to `product-development/product/PRDs/{area}/[feature-name].md` for historical reference
 - Evolve through stages: Team Kickoff → Planning Review → XFN Kickoff → Solution Review → Launch → Impact
 
+### Register the feature and the initiative (prd-draft is the index producer)
+
+A PRD is the anchor artifact — creating one is what registers new work in the wiki:
+
+1. **Feature index**: read `product-development/feature-index.yaml`; if the target feature has no key, draft the entry (`{area}: {feature-slug}: prd: <path>`); if it exists, add the PRD path to it. Either way this file is Tier 2 (`_meta/write-policy.yaml`): show the PM the exact addition and apply only after they confirm.
+2. **Initiative page**: check `product-development/product/initiatives/` for a page covering this work. None → create `{initiative-slug}.md` from `processes/templates/initiative-page-template.md` (status `active`, this PRD linked under Artifacts, target feature set), append its row to `initiatives/CLAUDE.md`, and include the feature's `initiatives:` list addition in the same confirmed index change. Exists → link this PRD from its Artifacts section and bump `_updated:`.
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
 ### Link to Other Work
 
 After creating PRD:
@@ -692,7 +713,8 @@ After creating PRD:
 Before presenting the PRD draft to the PM, verify:
 
 - [ ] **Filename follows convention:** `[feature-name-kebab-case]-[stage].md` (e.g., `voice-task-capture-team-kickoff.md`)
-- [ ] **Saved to correct location:** `product-development/product/PRDs/{area}/` (NOT `product-development/product/PRDs/{area}/`)
+- [ ] **Saved to correct location:** `product-development/product/PRDs/{area}/` (NOT `product-development/product/PRDs/examples/` — that folder holds reference examples only)
+- [ ] **Registered:** folder CLAUDE.md row appended; feature-index addition proposed (and applied only after PM confirmation); initiative page created or updated
 - [ ] **Word count matches stage:** Check against the Stage-Specific Length Guidance table
 - [ ] **Hypothesis is testable:** Contains a clear "If we... then... because..." statement
 - [ ] **Strategic fit references actual strategy:** Cites specific goals from `product-development/product/strategy/`, not generic strategy language

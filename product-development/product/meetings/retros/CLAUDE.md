@@ -8,4 +8,8 @@ Retrospective writeups and rolling lessons learned.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Files
+
+- [lessons-learned.md](lessons-learned.md) — Rolling team-process lessons (`- YYYY-MM-DD — lesson (source retro link)`); appended by `/weekly-review` and `/context-update`. Ships with one synthetic example entry
+
+_Add a one-line entry here for every retro writeup you add._

@@ -104,7 +104,7 @@ Inspired by personal operating system patterns but tailored specifically for Pro
 
 **Fallback Strategy:**
 If no integrations available, the skill will:
-1. Use file-based data (meeting notes, task lists in PM OS)
+1. Use file-based data (meeting notes, task lists in the Team OS repo)
 2. Ask focused questions (5-6 quick inputs from you)
 3. Generate plan with placeholders you can fill in
 
@@ -193,7 +193,7 @@ If Gmail MCP not available:
 
 **C. Active PRDs & Initiatives:**
 
-Scan `product-development/product/PRDs/{area}/` and `product-development/product/PRDs/{area}/`:
+Scan `product-development/product/PRDs/{area}/`:
 - Check file modification dates (recently updated = active)
 - Read frontmatter or first section to determine stage:
   - Team Kickoff
@@ -487,7 +487,7 @@ mcps_used: [Calendar, Gmail, Linear, Analytics]
 **Delegation Section Trigger Logic:**
 
 Include this section when ANY of these are true:
-- PM's role is VP, Director, or Head of [function] (check `product-development/product/strategy/business-context/business-info.md` or `product-development/product/strategy/business-context/business-info.md`)
+- PM's role is VP, Director, or Head of [function] (check `product-development/product/strategy/business-context/business-info.md`)
 - PM has direct reports or manages PM leads (check stakeholder profiles for reports)
 - PM explicitly asks for delegation suggestions
 
@@ -557,6 +557,22 @@ Before presenting the daily plan, verify:
    - "Need meeting prep for any specific meeting? I can help draft talking points."
    - "Want me to create Linear tasks for anything not tracked yet?"
    - If no weekly plan: "This week isn't planned yet. Run `/weekly-plan` to set priorities?"
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 
@@ -792,7 +808,7 @@ When you run /daily-plan, I ask:
    → You: "9am product sync, 2pm stakeholder review"
 
 2. "Who's attending each?"
-   → You: "Product sync: Sarah, John. Stakeholder review: VP Eng"
+   → You: "Product sync: [designer], [engineer]. Stakeholder review: [VP Eng]"
 
 3. "What P0 tasks are on your plate?"
    → You: "Finish PRD for X, review metrics for Y"
@@ -807,7 +823,7 @@ Total time: 2 minutes
 ```
 
 **The skill will then:**
-- Look up Sarah, John, VP Eng in stakeholder profiles (if exists)
+- Look up each named attendee in stakeholder profiles (if they exist)
 - Check PRD X in `product-development/product/PRDs/{area}/`
 - Find Feature Z in `product-development/product/processes/launches/`
 - Generate full daily plan with all context

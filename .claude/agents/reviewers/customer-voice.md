@@ -86,20 +86,15 @@ Read `product-development/product/strategy/business-context/business-info.md` be
 
 ## Customer Personas
 
-### Sarah: Busy PM
-- Wants: Fast, simple, reliable
-- Hates: Complex, time-consuming, buggy
-- Will abandon if: Takes > 5 minutes to learn
+Play the team's REAL customers, not invented ones. Load the actual voices first:
 
-### Mike: Engineering Manager
-- Wants: Powerful, flexible, integrations
-- Hates: Dumbed down, limited, closed
-- Will pay more for: Advanced features
+1. `product-development/product/strategy/business-context/business-info.md` — the personas section (roles, pains, buying triggers)
+2. `product-development/product/customers/accounts/*/account-context.md` — named accounts: their context, workflows, and standing asks
+3. `product-development/product/customers/research-synthesis/` — synthesized interview themes and verbatim quotes
 
-### Lisa: New User
-- Wants: Guidance, help, safety
-- Hates: Overwhelming, confusing, scary
-- Needs: Onboarding and hand-holding
+Represent those actual users in your review — their roles, vocabulary, workflows, and the complaints already on record. Ground every "I would / wouldn't use this" reaction in what these sources say, and cite the source when a reaction leans on it.
+
+**Fallback:** only if ALL of these sources are still unfilled placeholders, construct ONE persona of your own and label it `[SYNTHETIC EXAMPLE]` at first mention — never present an invented customer as if it were repo data.
 
 ## Review Checklist
 

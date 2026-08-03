@@ -375,7 +375,7 @@ What can differ:
 │        │  Recent Activity                                   │
 │        │  ┌──────────────────────────────────────────────┐  │
 │        │  │ Project Alpha completed          2h ago      │  │
-│        │  │ New user signup: john@co.com     3h ago      │  │
+│        │  │ New user signup: user@example.com 3h ago     │  │
 │        │  │ Team Beta shipped v2.0           5h ago      │  │
 │        │  │ [View All Activity →]                        │  │
 │        │  └──────────────────────────────────────────────┘  │
@@ -562,9 +562,9 @@ Before creating any wireframe, check these sources:
 
 | Source | Files | What to Extract |
 |--------|-------|-----------------|
-| Active PRD | `product-development/product/PRDs/{area}/*.md`, `product-development/product/PRDs/{area}/*.md` | UI requirements, user flows, feature scope, non-goals (what NOT to design) |
+| Active PRD | `product-development/product/PRDs/{area}/*.md` | UI requirements, user flows, feature scope, non-goals (what NOT to design) |
 | User Research | `product-development/product/customers/*.md` | Pain points to solve, user quotes about current UX frustrations |
-| Stakeholder Profiles | `product-development/product/strategy/business-context/stakeholders.md` | Designer preferences (e.g., Lisa wants accessibility-first), exec priorities |
+| Stakeholder Profiles | `product-development/product/strategy/business-context/stakeholders.md` | Designer preferences (e.g., [design lead] wants accessibility-first), exec priorities |
 | Design System | Any design docs or style references in workspace | Colors, component patterns, layout conventions to follow |
 | Past Prototypes | `product-development/design/prototypes/*.md` | Existing wireframes for consistency, decisions already made |
 | Business Context | `product-development/product/strategy/business-context/business-info.md` | Product type, user personas, platform (web/mobile/both) |
@@ -595,6 +595,20 @@ Before delivering the napkin sketch, verify:
 - [ ] **Actionable for next step** -- Wireframe is clear enough to feed into `/generate-ai-prototype` or `/create-tickets`
 
 If any check fails, fix it before delivering. A 5-minute wireframe should save hours of miscommunication.
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

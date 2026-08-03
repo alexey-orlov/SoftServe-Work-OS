@@ -345,17 +345,25 @@ If Step 0.1 set `mode = idempotent-augment`, **skip this step**. The structure a
 ```
 product-development/
 ├── feature-index.yaml
+├── _meta/                      ← wiki machinery
+│   ├── write-policy.yaml       ← protected-paths registry (copy from this template)
+│   ├── processed.txt           ← ingestion ledger (created empty)
+│   ├── health/                 ← /wiki-lint reports
+│   └── proposals/              ← pending Tier-2 changes from headless runs
 ├── product/
 │   ├── PRDs/{area}/
+│   ├── initiatives/            ← one living page per current work effort
 │   ├── customers/accounts/{customer}/calls/{summaries,transcripts}/
+│   ├── customers/accounts/portfolio.yaml
+│   ├── customers/research-synthesis/
 │   ├── competitive-research/competitors/{competitor}/
 │   ├── strategy/{roadmaps,business-context,frameworks}/
 │   ├── decisions/
 │   ├── meetings/{standup,sprint-planning,team-bi-weekly}/{docs,transcripts,summaries}/
-│   ├── meetings/retros/
+│   ├── meetings/retros/        ← incl. lessons-learned.md (rolling)
 │   ├── workflows/
 │   ├── sales-enablement/
-│   ├── processes/
+│   ├── processes/              ← templates incl. initiative-page-template.md
 │   └── product-systems/
 ├── engineering/
 │   ├── plans/{area}/
@@ -374,13 +382,20 @@ product-development/
 os-installation/
 ├── installation-guide.md
 ├── first-session-checklist.md
-└── claude-code/
+└── claude-code/                ← incl. scheduled-governance.md
+
+.github/
+└── workflows/wiki-lint.yml + scripts/wiki-lint.sh   ← PR gate + weekly health issue
 
 .claude/
-├── skills/{name}/SKILL.md
+├── skills/{name}/SKILL.md      ← incl. context-update + wiki-lint (the ingest/lint engines)
 ├── commands/customer-call.md
-├── hooks/session-start hook
-└── settings.json (if applicable)
+├── references/write-back-contract.md
+├── hooks/session-start.sh + write-guard.sh (+ docs)
+├── team-learnings.md
+└── settings.json               ← wires SessionStart + PreToolUse hooks
+
+.freshness-ignore               ← staleness exceptions (repo root)
 
 CLAUDE.md
 README.md
@@ -472,7 +487,7 @@ If an account folder has any of: `under NDA` flag in account-context.md, frontma
 
 ### 5.5 Recursive Personal-Context Extraction
 
-In idempotent-augment mode (Alex), `personal-context-*.md` files can hide nested deep under `product-development/product/` or other canonical folders. Run a recursive walk for these patterns at any depth:
+In idempotent-augment mode (an already-canonical source repo), `personal-context-*.md` files can hide nested deep under `product-development/product/` or other canonical folders. Run a recursive walk for these patterns at any depth:
 
 - `personal-context*.md`
 - `working-preferences*.md`
@@ -681,7 +696,7 @@ Rollback: rm -rf {output} (source at {source} is verified untouched).
 - **Sanitization kills the insight along with the anecdote.** Mitigation: Step 3.2 preserve-insight-drop-anecdote rule.
 - **Asks the user 8 questions when 1 would do.** Mitigation: Step 0 pre-detection + MCP probe + skip-if rules on every Input.
 - **No-skills repo (Yuki) runs Step 3 vacuously.** Mitigation: Step 3.0 no-skills branch.
-- **Already-canonical repo (Alex) gets re-scaffolded.** Mitigation: Step 0.1 maturity scan + Step 4.0 idempotent-augment skip.
+- **An already-canonical repo gets re-scaffolded.** Mitigation: Step 0.1 maturity scan + Step 4.0 idempotent-augment skip.
 - **NDA pilot customer leaks via vertical/ARR band inference.** Mitigation: Step 5.4 NDA slug anonymization.
 - **Personal-context files nested deep.** Mitigation: Step 5.5 recursive extraction + Step 2.1 path triggers match at any depth.
 

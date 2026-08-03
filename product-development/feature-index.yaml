@@ -4,13 +4,13 @@
 # all related artifacts so any teammate (or agent) can find what exists in one
 # read instead of grepping the repo.
 #
-# SoftServe Team OS pattern — https://www.softserveinc.com
-#
 # Structure: product-area → sub-feature → all related artifacts
 #
 # Conventions
 # - Keep this file authoritative. Whenever a feature ships, the launch gate
 #   verifies its entry here.
+# - This file is Tier 2 in the write policy: agents confirm changes with the
+#   user before writing — see _meta/write-policy.yaml.
 # - Paths are relative to product-development/.
 # - tickets references your tracker (Linear / Jira / Asana). Pick one format.
 # - Omit keys that don't apply yet. Add them when artifacts exist.
@@ -44,6 +44,7 @@ billing:
       - analytics/metrics/billing/billing-metrics.md
     dashboards: analytics/dashboards/billing/credit-usage-dashboards.md
     experiments:
+      - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md
       - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md
     investigations:
       - analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md
@@ -51,16 +52,19 @@ billing:
       - engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md
     decisions:
       - product/decisions/2026-02-14-usage-based-pricing.md
+    initiatives: [credit-usage-dashboard-v1]
 
   tier-discount-promo:
-    # Launching 2026-05-13. Analyst-side artifacts present; PRD + eng plan
-    # owned by PM/Eng leads — flagged in /feature-launch-gate output.
+    # Original 2026-05-13 launch target slipped — /feature-launch-gate is
+    # BLOCKED until the PRD + eng plan land. Analyst-side artifacts present;
+    # PRD + eng plan owned by PM/Eng leads.
     table-schemas:
       - analytics/schemas/billing/promo_offers.md
     queries:
       - analytics/queries/billing/promo_conversion_rate.sql
     metrics:
       - analytics/metrics/billing/tier-discount-promo-metrics.md
+    initiatives: [tier-discount-promo]
 
 # Add more product areas here. Common starting set:
 # onboarding:

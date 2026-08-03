@@ -428,9 +428,9 @@ Output <promise>DONE</promise> when all success criteria met.
 
 ---
 
-## Integration with PM OS Workflows
+## Integration with Team OS Workflows
 
-Ralph Wiggum works seamlessly with other PM OS components:
+Ralph Wiggum works seamlessly with other Team OS components:
 
 ### With Context Library
 ```bash

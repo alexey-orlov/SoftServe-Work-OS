@@ -6,4 +6,6 @@ Metric definitions by area — numerator, denominator, caveats, owner.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — billing metric definitions; `billing/billing-metrics.md` is the convention reference all metric docs follow

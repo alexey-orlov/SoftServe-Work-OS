@@ -22,12 +22,10 @@ This skill walks you through the decision tree: reversibility, hypothesis
 strength, detectable impact, and risk level. You'll get a clear
 recommendation: A/B test, ship + monitor, or just ship.
 
-**Output:** Decision documented inline or saved to `product-development/product/decisions/`
+**Output:** The test-vs-ship call is a decision — it is always saved to `product-development/product/decisions/{YYYY-MM-DD}-{slug}.md` in `/decision-log-entry`'s quick format and appended to the END of "Recent Decisions" in `decisions/CLAUDE.md` (contract: `.claude/references/write-back-contract.md`). Inline-only output is not an option: "why didn't we A/B test X?" is exactly the question the decision log exists to answer.
 **Time:** ~5 min for clear-cut cases, ~15 min for nuanced decisions
 
 **When to use:** Before building any feature, when stakeholders demand "data-driven" decisions, or when unsure if testing is worth the effort
-
-**Framework source:** SoftServe Team OS guidance on when to A/B test vs. just ship
 
 ---
 
@@ -346,10 +344,6 @@ Before delivering the experiment decision, verify:
 - `/activation-analysis` - Test activation improvements
 - `/metrics-framework` - Understand leading vs lagging metrics
 - `/define-north-star` - Align tests to North Star
-
----
-
-**Framework credit:** SoftServe Team OS experiment decision frameworks.
 
 ---
 

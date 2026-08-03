@@ -17,4 +17,5 @@ Metrics, queries, schemas, dashboards, experiments, and investigations.
 
 ### Files
 
-- [data-catalog.yaml](data-catalog.yaml) — tables:
+- [data-catalog.yaml](data-catalog.yaml) — Warehouse table registry: owner, refresh, upstream, grain, PII flag, used-by per table; column-level detail lives in `schemas/`
+- `cohort-exclusions.yaml` — cohort exclusion windows, created on first use by analytics skills

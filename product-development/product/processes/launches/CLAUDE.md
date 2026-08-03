@@ -6,4 +6,8 @@ Filled launch checklists and launch plans, one file per feature (`[feature-name]
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Files
+
+- [credit-usage-dashboard-v1-gate-2026-03-18.md](credit-usage-dashboard-v1-gate-2026-03-18.md) — EXAMPLE (synthetic) — filled `/feature-launch-gate` verdict, VERDICT: PASS; shows what a passing gate record looks like
+
+_Add a one-line entry here for every file you add._

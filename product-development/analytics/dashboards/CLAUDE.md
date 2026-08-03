@@ -6,4 +6,6 @@ Dashboard definitions and links by area.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — credit-usage dashboard registry (exec, ops, experiment readout)

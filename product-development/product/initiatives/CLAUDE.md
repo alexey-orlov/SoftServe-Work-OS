@@ -25,4 +25,7 @@ decisions, and open loops — in one page, without grepping six folders.
 
 ### Files
 
-_Empty. Add a one-line entry here (append to the end) for every initiative page you create._
+- [credit-usage-dashboard-v1.md](credit-usage-dashboard-v1.md) — EXAMPLE (synthetic) — shipped 2026-03-20; worked example of a closed initiative with a full artifact trail and a PASS gate verdict
+- [tier-discount-promo.md](tier-discount-promo.md) — EXAMPLE (synthetic) — active; deliberately demos the BLOCKED-gate state (PRD + eng plan still `[PENDING:]`)
+
+_Append a one-line entry to the end of this list for every initiative page you create._

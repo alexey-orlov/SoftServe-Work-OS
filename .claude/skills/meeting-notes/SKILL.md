@@ -978,18 +978,33 @@ addressed stakeholder concerns and shortened the approval conversation.
 ### Where Files Go
 
 **Meeting notes:**
-- Quick capture: `product-development/product/meetings/{type}/summaries/[date]-[topic].md` (raw processing)
-- When finalized: Archive to `product-development/product/meetings/[date]-[topic].md` for historical reference
-- Use as templates: Your meeting notes become template for team
+- Summary: `product-development/product/meetings/{type}/summaries/[date]-[topic].md` — the summary IS the finalized artifact; there is no separate archive location (the meetings root holds only type folders)
+- Raw transcript (when one was provided): save it untouched to the sibling `product-development/product/meetings/{type}/transcripts/[date]-[topic].md` — summaries-first, raw beneath
+- **Ledger** (ingest skill): append the transcript's repo path to `product-development/_meta/processed.txt` (one repo-root-relative path per line, keep sorted) so `/context-update` never re-processes it
 
 ### Link to Other Work
 
 After processing meeting notes:
-- **Update PRDs** - If feature decision was made, update `/prd-draft`
+- **File decisions** - Every decision detected in the meeting gets a real entry via `/decision-log-entry` (quick format is fine) — linked from the notes, never left inline-only
+- **Update PRDs** - If feature scope changed, update the PRD and its initiative page in `product-development/product/initiatives/`
 - **Create action items** - Use `/create-tickets` for engineering tasks from meeting
 - **Status updates** - Reference meeting decisions in `/status-update`
 - **Research synthesis** - If customer interview, add to `/user-research-synthesis` batch
 - **Slack share** - Use `/slack-message` to share recap with broader team
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ### Cross-Skill Integration
 
@@ -1022,6 +1037,7 @@ Before presenting the meeting notes, verify:
 - [ ] **Key quotes are verbatim:** Customer quotes use exact wording from transcript, not paraphrased
 - [ ] **Sensitive content flagged:** If confidential topics detected, recommendation to mark as internal-only is included
 - [ ] **File saved correctly:** `product-development/product/meetings/{type}/summaries/[YYYY-MM-DD]-[topic-kebab-case].md`
+- [ ] **Decisions filed, transcript ledgered, nav updated:** decisions chained to `/decision-log-entry`; transcript (if any) saved to `transcripts/` and appended to `_meta/processed.txt`; folder CLAUDE.md row appended
 - [ ] **Next steps are actionable:** Someone reading "Next Steps" knows exactly what to do without re-reading the full notes
 
 ---

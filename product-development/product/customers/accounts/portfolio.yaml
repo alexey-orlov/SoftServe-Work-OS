@@ -1,0 +1,32 @@
+# Account Health Portfolio
+#
+# Cross-account registry: one entry per managed account, keyed by the account's
+# folder slug under product/customers/accounts/.
+#
+# Read by  /portfolio-pulse   (daily / weekly account rollups)
+# Updated by /customer-call   (after each processed call: last_call, risks,
+#            expansion_signals) and /context-update (status, arr, renewal_date
+#            when new facts land).
+#
+# Field schema (every entry carries all fields; use [] when empty):
+#   status:             healthy | watch | at-risk
+#   arr:                integer, USD per year
+#   renewal_date:       YYYY-MM-DD
+#   champion_role:      role of the internal champion (role, not name — PII-safe)
+#   last_call:          YYYY-MM-DD of the most recent processed call
+#   risks:              list of one-line strings; empty list = no open risks
+#   expansion_signals:  list of one-line strings (seats, tiers, new use cases)
+#   last_updated:       YYYY-MM-DD this entry last changed
+#
+# EXAMPLE — the entry below is synthetic (fictional product Beacon). Replace it
+# with your first real account and delete this note.
+
+acme-example:
+  status: healthy
+  arr: 48000
+  renewal_date: 2027-01-15
+  champion_role: "Head of Ops"
+  last_call: 2026-07-21
+  risks: []
+  expansion_signals: []
+  last_updated: 2026-08-03

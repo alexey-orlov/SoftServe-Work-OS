@@ -62,7 +62,7 @@ Generate a summary of everything that changed in the Team OS repo this week. Pos
 - Files added this week: {N}
 - Total files: {N}
 - Contributors this week: {N} of {total team size}
-- Stale files (from /freshness-check): {N}
+- Stale files (from /wiki-lint's latest report in `product-development/_meta/health/`): {N}
 ```
 
 ## If Nothing Changed This Week
@@ -83,7 +83,7 @@ This gentle nudge prevents the repo from going silent without being preachy.
 
 1. Keep under 500 words. Scan, not report.
 2. "Top 3 Things to Know" is the most important section. Prioritize: decisions affecting the whole team > customer insights > metric movements.
-3. If Slack MCP connected, post to the team's product channel. If not, save to `product-development/product/meetings/team-bi-weekly/summaries/{YYYY-MM-DD}-weekly-synthesis.md`
+3. **Always** save the synthesis to `product-development/product/meetings/team-bi-weekly/summaries/{YYYY-MM-DD}-weekly-synthesis.md` and append its row to the END of that folder's CLAUDE.md list (contract: `.claude/references/write-back-contract.md`). If Slack MCP is connected, posting to the team's product channel is additive — the repo record is written regardless (a Slack-only synthesis leaves no baseline for next week's diff).
 4. Tag specific people if a change is relevant to them (using roster from root CLAUDE.md).
 5. Include the "New contributors" callout to celebrate adoption.
 6. For multi-team setups: each team should run their own `/weekly-synthesis` in their own channel for repo-level changes. The exec-grade rollup across teams (top risks, expansion signals, account health) is the `/portfolio-pulse` skill — see `.claude/skills/portfolio-pulse/SKILL.md`. Pair the two on Friday afternoon for the full picture.

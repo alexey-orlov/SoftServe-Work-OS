@@ -53,7 +53,7 @@ Don't worry about structure - just tell me what happened and what you need.
 ### What the Skill Needs to Know
 
 **Recipient:**
-- Specific person (@Sarah)
+- Specific person (@[name])
 - Team channel (#engineering)
 - Leadership (#exec-team)
 - Cross-functional (#product-updates)
@@ -119,14 +119,14 @@ Here's your message:
 
 **Your input:**
 ```
-I need to ask Sarah about the roadmap proposal action items. 
-It's January 28th and she was supposed to finish them by yesterday. 
+I need to ask [VP Product name] about the roadmap proposal action items. 
+It's January 28th and they were supposed to finish them by yesterday. 
 I don't want to be pushy but this is blocking other work.
 ```
 
 **My output:**
 ```
-Hey Sarah 👋 
+Hey [VP Product name] 👋 
 
 Quick check-in on the roadmap proposal action items from our meeting last 
 week. I know these directly impact our Q1 strategic objectives and the ARR 
@@ -166,7 +166,7 @@ some action items people need to know about.
 ```
 **Stakeholder Meeting Recap: Voice Feature** 📝
 
-Quick update from today's roadmap review with Sarah (VP Product):
+Quick update from today's roadmap review with [VP Product]:
 
 *Main decision:* ✅ Q1 timeline approved for voice feature (conditional)
 
@@ -252,12 +252,12 @@ Happy to provide any additional context Legal might need.
 ```
 I'm stuck on the data analysis for the user research. 
 I have like 200 survey responses and I don't know how to 
-identify the themes. Can Jake help? He's done this before.
+identify the themes. Can [teammate name] help? They've done this before.
 ```
 
 **My output:**
 ```
-Hey Jake 👋
+Hey [teammate name] 👋
 
 I could use your brain on something. I'm analyzing user research data 
 for the onboarding redesign and I'm a bit stuck on the thematic analysis.
@@ -308,7 +308,7 @@ Excited to share that we've launched voice-to-task creation to our first
 beta users this morning!
 
 *What this means:*
-Users can now speak a task naturally ("Follow up with Jake about the 
+Users can now speak a task naturally ("Follow up with [name] about the 
 pricing page") and our AI creates a structured task automatically - 
 assignee, due date, project, all inferred.
 
@@ -324,8 +324,8 @@ to 50% of users next week. Full rollout targeted for end of month.
 Huge shoutout to:
 • @Engineering team for the flawless launch
 • @Design for the intuitive UX that tested so well
-• @Marcus and the 8 users who gave us incredible research insights
-• @Sarah (VP Product) for believing in this bet
+• @[UX researcher] and the 8 users who gave us incredible research insights
+• @[VP Product] for believing in this bet
 
 More updates coming as we learn from the beta. Questions? Drop them below! 👇
 
@@ -559,7 +559,7 @@ When the PM uses `/slack-message`, the skill automatically:
 **Source:** `product-development/product/meetings/` + this chat thread
 - **What What to look for:** Specific meeting outcomes, action items, decisions, quotes
 - **How the skill uses it:** Reference the actual meeting (date, attendees) rather than generic "our conversation"
-- **Example:** "From our Jan 28 roadmap review with Sarah..." instead of "We discussed this meeting"
+- **Example:** "From our Jan 28 roadmap review with [VP Product]..." instead of "We discussed this meeting"
 
 ### 5. Auto-Detect Escalation Needs
 When you mention blockers:

@@ -878,11 +878,29 @@ When the PM uses `/decision-doc`, the skill automatically:
 
 ---
 
+## Relationship to /decision-log-entry
+
+Two skills, one folder, one convention. **decision-doc is the deliberation** (options, sign-off routing, one-way/two-way door analysis, run BEFORE the call is made); **decision-log-entry is the record** (filed once the call IS made). A decision-doc that ends in a made decision finishes by filing the record in decision-log-entry's format — same file, structured so the log stays uniform.
+
+Shared conventions (from `/decision-log-entry`):
+- Filename: `{YYYY-MM-DD}-{topic-slug}.md` — date first. Check the folder for same-day slug collisions; append `-01`, `-02` if needed.
+- After saving, **append** the entry to the END of the "Recent Decisions" list in `product-development/product/decisions/CLAUDE.md` (append-only — never re-sort; on a merge conflict keep both bullets and re-sort by date+sequence).
+- Status transitions: never delete superseded decisions — update their Status field.
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Append the decision to the END of "Recent Decisions" in `decisions/CLAUDE.md` (rule above).
+2. Link the decision from the relevant initiative page in `product-development/product/initiatives/` when one exists, and from the feature's index entry `decisions:` list (Tier 2 — confirm with the user).
+3. In the entry's Related section, link the source material (meeting summary, call, PRD) that prompted it.
+4. End your reply by listing every repo path you wrote or updated.
+
 ## Output Quality Self-Check
 
 Before presenting output to the PM, verify:
 
-- [ ] **File saved to correct location:** Output saved to `product-development/product/decisions/decision-[topic]-[date].md`
+- [ ] **File saved to correct location:** Output saved to `product-development/product/decisions/{YYYY-MM-DD}-{topic-slug}.md` (decision-log-entry's convention — date first, kebab slug)
 - [ ] **Context routing table was checked:** Reviewed `product-development/product/decisions/` for past decisions, `product-development/product/strategy/` for alignment, and `product-development/product/strategy/business-context/stakeholders.md` for stakeholder context
 - [ ] **Decision framed as clear question:** The decision is stated as a specific, answerable question with 2-4 distinct options (not open-ended or vague)
 - [ ] **Each alternative has pros, cons, and trade-offs:** Every option includes at least 2 pros, 2 cons, and explicit trade-offs with the other options

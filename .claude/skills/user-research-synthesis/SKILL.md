@@ -155,6 +155,8 @@ Processing now...
 
 The skill creates a structured list like this:
 
+> Example (synthetic — illustrative format, not repo data):
+
 ```markdown
 ## Observation #1
 **Type:** Pain Point  
@@ -205,6 +207,8 @@ Clustering now...
 
 The skill creates theme clusters like this:
 
+> Example (synthetic — illustrative format, not repo data):
+
 ```markdown
 ## Theme 1: "Task Capture Friction"
 **Frequency:** 6 out of 8 users mentioned this  
@@ -238,6 +242,8 @@ When I have a spontaneous task idea, I want to capture it instantly without thin
 ### Handling Contradictions
 
 When users disagree, the skill will explicitly call it out:
+
+> Example (synthetic — illustrative format, not repo data):
 
 ```markdown
 ## 🔴 Contradiction Detected: "Manual Control vs Automation"
@@ -376,8 +382,6 @@ As The skill analyzes, the skill flags any data that might be unreliable:
 ✅ **Workarounds:** "Here's my hack for this problem"
 
 ### Advanced Interview Question Patterns
-
-**From the SoftServe Team OS customer interview framework:**
 
 **1. The Time Machine Question**
 - **Ask:** "Walk me through the last time you [did this task]. What happened first, then what?"
@@ -623,7 +627,25 @@ When synthesis is complete, the skill creates:
 
 All files will be saved to:
 - `product-development/product/customers/research-synthesis/[topic]-[date].md`
-- `product-development/product/strategy/business-context/business-info.md` (updated)
+
+**If the synthesis changes persona or ICP facts:** propose the exact edit to
+`product-development/product/strategy/business-context/business-info.md` (show the before/after)
+and apply it only after the user confirms — that file is Tier 2 in `_meta/write-policy.yaml`.
+Keep the root CLAUDE.md fundamentals block consistent with `business-info.md` in the same change.
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

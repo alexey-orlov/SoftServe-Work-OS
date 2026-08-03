@@ -46,7 +46,7 @@ When this skill is invoked, immediately check:
 
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
-| Active PRDs | `product-development/product/PRDs/{area}/*.md`, `product-development/product/PRDs/{area}/*.md` | feature name | Requirements, user flows, success metrics, edge cases |
+| Active PRDs | `product-development/product/PRDs/{area}/*.md` | feature name | Requirements, user flows, success metrics, edge cases |
 | Previous Prototypes | `product-development/design/prototypes/*.md` | feature name | Previous versions, iteration history, feedback received |
 | User Research | `product-development/product/customers/*.md` | user pain, problem | User quotes, pain points, workflows to design for |
 | Napkin Sketches | `product-development/design/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
@@ -96,7 +96,7 @@ Let's build a prototype. First, let me check what we're working with...
 ```
 
 **Silently check:**
-1. Read most recent PRDs in `product-development/product/PRDs/{area}/` and `product-development/product/PRDs/{area}/`
+1. Read most recent PRDs in `product-development/product/PRDs/{area}/`
 2. Check `product-development/design/prototypes/` for previous versions
 3. Read any napkin sketches from `/napkin-sketch`
 4. Check user research for UX-relevant insights
@@ -588,6 +588,22 @@ Before presenting the prototype or prompt, verify:
 - [ ] File saved with correct naming convention: `[feature-name]-[type]-v[N].md`
 - [ ] Requirements verification checklist included (PRD requirements mapped to prototype coverage with reasons for any gaps)
 - [ ] Next steps are clear (how to test, how to iterate, how to get feedback)
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 

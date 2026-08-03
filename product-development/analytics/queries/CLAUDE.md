@@ -6,4 +6,6 @@ Reusable SQL by area. Never commit customer-identifier cohorts inline.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — canonical SQL for the billing metrics (churn/depletion rollup, promo conversion)

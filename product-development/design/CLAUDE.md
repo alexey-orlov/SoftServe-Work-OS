@@ -6,4 +6,11 @@ Design rationale. Artifacts live in Figma and are linked from `feature-index.yam
 
 ## Contents
 
+### Subfolders
+
+- [prototypes/](prototypes/) — Prototype prompts, sketches, and feedback rounds (created on first use)
+- [journey-maps/](journey-maps/) — Journey map documents (created on first use)
+
+### Files
+
 _Empty. Add a one-line entry here for every file you add._

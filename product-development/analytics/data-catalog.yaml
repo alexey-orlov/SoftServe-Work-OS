@@ -78,10 +78,11 @@ tables:
     row_count_estimate: ~30M total, ~800K/day
     pii: false
     partition_key: created_at
-    last_validated: 2026-04-15
+    last_validated: 2026-07-28
     used_by:
       - dashboards/billing/credit-usage-dashboards.md
       - queries/billing/churn_by_segment.sql
+      - metrics/billing/billing-metrics.md
       - feature-index.yaml#billing.credit-usage-dashboard
     schema_doc: schemas/billing/billing_events.md
 
@@ -111,10 +112,10 @@ tables:
     refresh: streaming (Snowpipe)
     upstream: Billing service → Snowpipe
     grain: one row per promo offer event
-    row_count_estimate: ~50K/day projected at launch (no backfill, earliest data 2026-05-13)
+    row_count_estimate: ~2K/day internal beta (since 2026-06-15); ~50K/day projected at GA. No backfill
     pii: false
     partition_key: offer_shown_at
-    last_validated: 2026-05-06
+    last_validated: 2026-07-28
     used_by:
       - queries/billing/promo_conversion_rate.sql
       - metrics/billing/tier-discount-promo-metrics.md

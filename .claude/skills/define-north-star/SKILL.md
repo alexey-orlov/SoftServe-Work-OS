@@ -10,8 +10,6 @@ group: definition
 
 **When to use:** During strategy planning, when metrics feel scattered, or when teams are optimizing different things
 
-**Framework source:** SoftServe Team OS North Star Metric guidance
-
 ## Quick Start
 
 1. Tell me: "Help me define our North Star metric" (or "Validate our current North Star")
@@ -405,6 +403,8 @@ Once you have your North Star, break it down into input metrics:
 
 ## Real-World Example: Slack
 
+> Example (synthetic — illustrative format, not repo data):
+
 **Slack's North Star Evolution:**
 
 **2014-2015 (Early):**
@@ -585,6 +585,22 @@ After defining North Star:
 
 ---
 
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+---
+
 ## Related Skills
 
 - `/activation-analysis` - Find your activation metric
@@ -609,7 +625,3 @@ Before delivering the North Star analysis, verify:
 - [ ] **Guardrails defined:** 2-3 guardrail metrics are specified with thresholds and breach actions. A North Star without guardrails is dangerous.
 - [ ] **Tradeoff scenario tested:** At least one real decision scenario is described where the North Star helps choose between two options. If it does not help decide, it is not working.
 - [ ] **Review timeline set:** A specific date to revisit the North Star is recommended (typically 6-12 months).
-
----
-
-**Framework credit:** SoftServe Team OS North Star Metric framework.

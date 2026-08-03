@@ -6,4 +6,6 @@ Ad-hoc analytical investigations by area.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — credit-depletion → churn analysis (2026-03-10)

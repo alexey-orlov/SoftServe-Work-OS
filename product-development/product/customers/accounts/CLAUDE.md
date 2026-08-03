@@ -6,4 +6,8 @@ One subfolder per customer account, slugified.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Files
+
+- [portfolio.yaml](portfolio.yaml) — Account health registry (status, ARR, renewal, risks, expansion signals per account); read by `/portfolio-pulse`, updated by `/customer-call` and `/context-update`. Ships with one synthetic `acme-example` entry
+
+_Add a one-line entry here for every account folder you add._

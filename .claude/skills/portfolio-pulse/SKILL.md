@@ -116,6 +116,7 @@ Compresses Weekly mode to one page. Adds: ARR-weighted risk score, ARR-weighted 
 4. Health distribution is computed from `portfolio.yaml#status`. If the YAML is stale (last_updated > 30 days for any entry), flag in the output.
 5. For multi-team setups, the cross-team rollup pulls from each team's repo using a configurable list. If repos aren't reachable, mark "(unreachable)".
 6. Token budget: daily mode under 800 tokens output, weekly under 1500, board under 1000.
+7. **Persist weekly and board runs** — save to `product-development/product/meetings/team-bi-weekly/summaries/{YYYY-MM-DD}-portfolio-pulse-{mode}.md` and append the row to that folder's CLAUDE.md list (contract: `.claude/references/write-back-contract.md`). The template's "Δ vs. last week" column reads LAST week's saved file — without persistence there is no baseline. Daily mode stays chat-only by default (offer to save when something material moved).
 
 ## Setting Up Multi-Team Rollup
 
@@ -131,13 +132,13 @@ A starter `multi-team.yaml` schema:
 teams:
   - name: Growth
     repo: ~/work/growth-team-os
-    pm: drew
+    pm: "[pm-a]"
   - name: Platform
     repo: ~/work/platform-team-os
-    pm: alex
+    pm: "[pm-b]"
   - name: Enterprise
     repo: ~/work/enterprise-team-os
-    pm: sam
+    pm: "[pm-c]"
 ```
 
 ## Related

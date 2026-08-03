@@ -12,9 +12,11 @@ The enforcement rule: *"The feature is not rolled out until the repository is up
 
 ## When to Use
 
-Before any feature launch: `/feature-launch-gate {feature-name}`
+Before any feature launch: `/feature-launch-gate {feature-or-initiative-name}`
 
-For small changes (bug fixes, copy updates): `/feature-launch-gate {feature-name} --lightweight`
+For small changes (bug fixes, copy updates): `/feature-launch-gate {feature-or-initiative-name} --lightweight`
+
+The gate runs per **initiative** (the shipping work effort — see `product-development/product/initiatives/`); its checks resolve against the target feature's entry in `feature-index.yaml`. Worked demo: the shipped example initiative passes the full gate; `tier-discount-promo` (PRD and eng plan deliberately missing) shows the BLOCKED state.
 
 ## Full Gate Checklist
 
@@ -40,7 +42,7 @@ For small changes (bug fixes, copy updates): `/feature-launch-gate {feature-name
 - [ ] Table schemas for any new tables documented in `analytics/schemas/{area}/`
   - Schema header has refresh / lag / volume / partition_key / pii / grain / owner
 - [ ] New tables registered in `analytics/data-catalog.yaml` with all required fields
-- [ ] **Schema drift detected.** If the feature added a column to an existing table, the schema doc and `data-catalog.yaml#last_validated` must both have been updated this PR. Use `/freshness-check --schema-drift` to detect column-doc mismatches against your warehouse's `INFORMATION_SCHEMA`.
+- [ ] **Schema drift detected.** If the feature added a column to an existing table, the schema doc and `data-catalog.yaml#last_validated` must both have been updated this PR. Use `/wiki-lint --schema-drift` to detect column-doc mismatches against your warehouse's `INFORMATION_SCHEMA`.
 - [ ] Dashboard link added to `analytics/dashboards/{area}/` (if applicable)
 - [ ] **Experiment auto-detection.** Gate scans the PRD for keywords (`A/B`, `treatment`, `holdout`, `experiment`, `control`, `MDE`, `power`, `assigned`). If any are present, an experiment is assumed launching and the gate requires:
   - Pre-registered design at `analytics/experiments/{area}/{name}-{date}-experiment-design.md` (with hypothesis, MDE, sample size, stopping rules, decision criteria)
@@ -58,7 +60,8 @@ For small changes (bug fixes, copy updates): `/feature-launch-gate {feature-name
 ### Navigation
 - [ ] All new files have entries in their folder's CLAUDE.md
 - [ ] `product-development/CLAUDE.md` updated if new folders were created
-- [ ] `feature-index.yaml` updated for the feature
+- [ ] `feature-index.yaml` updated for the feature (including its `initiatives:` list)
+- [ ] The initiative's page in `product/initiatives/` reflects current truth — artifacts linked, `_updated:` fresh
 
 ## Lightweight Gate Checklist
 
@@ -92,7 +95,20 @@ For small changes that don't add new metrics, tables, or features:
 
 ### VERDICT: {PASS / BLOCKED}
 {If BLOCKED: list specific files that need creation or updates with full paths}
+
+Verdict saved to: product-development/product/processes/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md
 ```
+
+## Persist the verdict (mandatory)
+
+The gate run is a record, not just a chat message. After every run (PASS or BLOCKED):
+
+1. Save the filled checklist + verdict to `product-development/product/processes/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md`.
+2. Append its row to the END of the file list in `launches/CLAUDE.md`.
+3. Link the verdict from the initiative's page (`Artifacts → Launch checklist / gate verdict`); on PASS for a shipping initiative, that page's `_status:` moves to `shipped YYYY-MM-DD — …`.
+4. End your reply listing every repo path written or updated.
+
+Without this, there is no way to audit whether the gate was actually run before a launch.
 
 ## Rules
 

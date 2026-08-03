@@ -1,12 +1,12 @@
 # Installation Guide
 
-Get your PM Operating System up and running in 15 minutes.
+Get your Team OS up and running in 15 minutes.
 
 ## What You'll Install
 
 1. **Claude Code** - Your AI coding assistant in the terminal
 2. **Cursor** - AI-powered code editor (optional but recommended)
-3. **This Repository** - Your PM OS files
+3. **This Repository** - Your Team OS files
 
 ---
 
@@ -50,13 +50,13 @@ source ~/.zshrc
 
 ---
 
-## Step 2: Download PM Operating System
+## Step 2: Download Team OS
 
 1. Download the zip file from your purchase
-2. Extract to a folder called `pm-operating-system`
+2. Extract to a folder called `team-os`
 3. Open terminal and navigate to that folder:
 ```bash
-cd ~/Downloads/pm-operating-system
+cd ~/Downloads/team-os
 ```
 
 ---
@@ -89,11 +89,11 @@ Let's verify everything works:
 
 ### Test 1: Claude Code Basics
 ```bash
-cd pm-operating-system
+cd team-os
 claude "Read CLAUDE.md and explain what this system does"
 ```
 
-You should see Claude read the master context file and explain the PM OS.
+You should see Claude read the master context file and explain the Team OS.
 
 ### Test 2: Use a Slash Command
 ```bash
@@ -114,16 +114,16 @@ Claude should generate a one-pager document.
 ## Step 5: Customize Your Setup
 
 ### How Claude Code Uses Your Context
-Claude Code automatically reads `CLAUDE.md` when you launch it in the PM OS directory -- no need to tell it manually. Just start Claude Code in the project folder and it will understand the full system.
+Claude Code automatically reads `CLAUDE.md` when you launch it in the Team OS repo directory -- no need to tell it manually. Just start Claude Code in the project folder and it will understand the full system.
 
 ### Create a Shortcut (Optional)
 Add this to your `.bashrc` or `.zshrc`:
 
 ```bash
-alias pm="cd ~/path/to/pm-operating-system && claude"
+alias teamos="cd ~/path/to/team-os && claude"
 ```
 
-Now you can just type `pm` to start a PM session!
+Now you can just type `teamos` to start a session!
 
 ---
 
@@ -147,8 +147,13 @@ Now you can just type `pm` to start a PM session!
 - Add to shell config for persistence
 
 ### Claude doesn't read files
-- Check you're in the pm-operating-system directory: `pwd`
+- Check you're in the team-os repo directory: `pwd`
 - Try absolute paths: `claude "Read /full/path/to/CLAUDE.md"`
+
+### Hooks don't fire
+- Make the scripts executable: `chmod +x .claude/hooks/*.sh`
+- Hooks load at session start — restart the session after changing `.claude/settings.json`
+- Test standalone: `bash .claude/hooks/session-start.sh` must print the briefing and exit 0
 
 ### Rate limits
 - Anthropic API has rate limits
@@ -160,24 +165,45 @@ Now you can just type `pm` to start a PM session!
 ## File Structure Reminder
 
 ```
-pm-operating-system/
-├── CLAUDE.md                 ← Master context (read this first!)
-├── .claude/skills/           ← 50 slash command skills (flat; grouped via CLAUDE.md)
-├── setup/                    ← You are here
-├── product-development/          ← Fill these out for your situation
-├── .claude/agents/reviewers/               ← Different reviewer perspectives
-├── templates/                ← Document templates
-├── product-development/                  ← Active work outputs
-└── advanced/                 ← Power user features
+team-os/
+├── CLAUDE.md                    ← Master context + governance rules (loads every session)
+├── .claude/
+│   ├── skills/                  ← 51 slash-command skills (flat; grouped via skills/CLAUDE.md)
+│   ├── hooks/                   ← session-start briefing + write-guard (wired in settings.json)
+│   ├── references/              ← write-back contract (cross-skill rules)
+│   ├── agents/reviewers/        ← reviewer perspectives for /prd-review-panel
+│   └── team-learnings.md        ← agent-behavior rules, injected each session
+├── product-development/         ← the wiki: all product, eng, analytics, design artifacts
+│   ├── feature-index.yaml       ← the product map (protected — changes confirmed)
+│   ├── _meta/                   ← write policy, ingestion ledger, health reports, proposals
+│   └── product/initiatives/     ← one living page per current work effort
+├── os-installation/             ← you are here
+├── .github/                     ← wiki-lint Action (PR check + weekly health issue)
+└── .freshness-ignore            ← staleness exceptions
 ```
+
+---
+
+## Make It a Git Repo (required)
+
+The governance loop reads git history (staleness tiers, weekly synthesis, protected-path
+audit). If you didn't clone this from GitHub:
+
+```bash
+git init && git add -A && git commit -m "baseline: Team OS install"
+chmod +x .claude/hooks/*.sh
+```
+
+When you push to GitHub, finish enforcement setup per
+`claude-code/scheduled-governance.md` (push ruleset + the wiki-lint Action activate there).
 
 ---
 
 ## Next Steps
 
 1. ✅ You've installed everything
-2. 📝 Next: Set up your environment keys → `environment-keys.md`
-3. ✅ Then: Run through the first session checklist → `first-session-checklist.md`
+2. ✅ Then: Run through the first session checklist → `first-session-checklist.md`
+3. 🔒 When on GitHub: set up `claude-code/scheduled-governance.md`
 
 ---
 

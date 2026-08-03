@@ -295,7 +295,7 @@ Dovetail is purpose-built for research synthesis:
 2. **Action:** Send to transcription service
 3. **Action:** Send transcript to Claude for analysis
 4. **Action:** Post summary to Slack
-5. **Action:** Save to Notion/Confluence
+5. **Action:** Save the report to `product-development/product/customers/research-synthesis/` (mandatory); optionally mirror to Notion/Confluence
 
 **Result:** Automatic insights within an hour of interview completion.
 
@@ -446,7 +446,7 @@ Dovetail is purpose-built for research synthesis:
 
 ### Setup Repository
 
-**Using Notion or Confluence:**
+**Using Notion or Confluence (optional mirror — the repo folders below stay the source of truth):**
 1. Create "Customer Research" database
 2. Fields: Date, User name, Segment, Pain points, Quotes, Insights
 3. Upload all past transcripts
@@ -513,6 +513,27 @@ Before delivering the final research synthesis, verify:
 | **Output file saved** | Report saved to `product-development/product/customers/research-synthesis/[date]-interview-insights.md` | [ ] |
 
 **If any check fails, address it before delivering the output.**
+
+---
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+**Ledger (this is an ingest skill):** after filing transcripts to
+`product-development/product/customers/accounts/{account}/calls/transcripts/`, append each
+transcript's repo path to `product-development/_meta/processed.txt` — one repo-root-relative
+path per line, keep the file sorted.
 
 ---
 

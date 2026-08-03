@@ -87,7 +87,7 @@ Save **two paired files**:
 **Switch to the Full variant** below when:
 - You have 10+ active customers and you're synthesizing across calls
 - Cross-customer pattern detection is the main payoff (e.g., "what are 5+ customers asking for that we don't ship?")
-- You're producing the bi-weekly customer-call-synthesis section in `workflows/bi-weekly-update/`
+- You're producing the bi-weekly customer-call-synthesis section in `product-development/product/meetings/team-bi-weekly/`
 
 The Full variant has 7 sections (Executive Summary, Insights tables, Feature Requests tables, Next Steps, Follow-up Email, Slack Summary, Relationship Signal) and is what scales for a team managing a full customer portfolio.
 
@@ -295,6 +295,24 @@ Before finalizing:
 - [ ] Action item tables at file top updated (completed moved, new added)
 - [ ] If transcript exists, transcript file saved to `transcripts/{YYYY-MM-DD}.md` with cross-reference link
 - [ ] `account-context.md` updated with any new context worth carrying forward
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+This is an INGEST skill: after processing, also append the transcript's repo path to
+`product-development/_meta/processed.txt` (one repo-root-relative path per line, keep the
+file sorted) so sweep runs know the call has been handled.
 
 ## Related
 

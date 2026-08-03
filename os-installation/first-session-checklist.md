@@ -1,10 +1,10 @@
 # First Session Checklist
 
-Verify your PM Operating System is working perfectly.
+Verify your Team OS is working perfectly.
 
 ## Overview
 
-This checklist walks you through testing every major component of your PM OS. By the end, you'll have:
+This checklist walks you through testing every major component of your Team OS. By the end, you'll have:
 - ✅ Verified Claude Code works
 - ✅ Uploaded your existing work documents
 - ✅ Customized your context
@@ -23,7 +23,7 @@ Before starting, verify:
 ```bash
 # 1. You're in the right directory
 pwd
-# Should show: /path/to/pm-operating-system
+# Should show: /path/to/team-os
 
 # 2. Claude is installed
 claude --version
@@ -44,7 +44,7 @@ All good? Let's go.
 
 ## Setup Step 1: Upload Your Existing Work Documents
 
-**What we're doing:** Importing your existing context into PM OS
+**What we're doing:** Importing your existing context into the Team OS repo
 
 Before testing features, let's get your real work documents into the system:
 
@@ -92,7 +92,7 @@ Please read each one and organize them into the appropriate folders in product-d
 
 ## Setup Step 2: Fill Out Context Templates
 
-**What we're doing:** Customizing PM OS for your company
+**What we're doing:** Customizing the Team OS for your company
 
 ```bash
 # First, let's see what context files exist
@@ -132,7 +132,7 @@ claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-
 **What we're testing:** Claude Code can read files and respond
 
 ```bash
-claude "Read CLAUDE.md and summarize what this PM Operating System does in 2 sentences"
+claude "Read CLAUDE.md and summarize what this Team OS does in 2 sentences"
 ```
 
 **Expected result:**
@@ -141,7 +141,7 @@ claude "Read CLAUDE.md and summarize what this PM Operating System does in 2 sen
 - No errors
 
 **If it fails:**
-- Check you're in the pm-operating-system directory
+- Check you're in the team-os directory
 - Verify CLAUDE.md exists: `ls -la CLAUDE.md`
 - Try with absolute path: `claude "Read /full/path/to/CLAUDE.md"`
 
@@ -380,7 +380,7 @@ Go through this final checklist:
 
 **Core Functionality:**
 - [ ] Claude Code is installed and working
-- [ ] Can read markdown files from the PM OS
+- [ ] Can read markdown files from the Team OS repo
 - [ ] Can execute skills (slash commands)
 - [ ] Can create new files
 - [ ] Can provide different perspectives (`.claude/agents/reviewers/`)
@@ -401,7 +401,7 @@ Go through this final checklist:
 
 **You Feel Confident:**
 - [ ] You can start a Claude session
-- [ ] You know how to reference PM OS files
+- [ ] You know how to reference Team OS files
 - [ ] You can create your own workflows
 - [ ] You know where to find help
 
@@ -411,7 +411,7 @@ Go through this final checklist:
 
 ### If Everything Passed ✅
 
-**You're ready to use the PM OS for real work!**
+**You're ready to use the Team OS for real work!**
 
 Start with:
 1. **Upload more documents** - Add more PRDs, research, strategy docs to `product-development/`
@@ -443,7 +443,7 @@ Save these for future reference:
 
 ```bash
 # Start a PM session
-cd pm-operating-system
+cd team-os
 claude "Read CLAUDE.md, ready for PM work"
 
 # Process meeting notes
@@ -463,7 +463,7 @@ claude "/status-update - Create my weekly update covering: [what you did]"
 
 ## Create Your Own Checklist
 
-As you use the PM OS, create a personal checklist for your most common tasks:
+As you use the Team OS, create a personal checklist for your most common tasks:
 
 **My Weekly PM Checklist:**
 - [ ] Process all meeting notes from this week
@@ -472,27 +472,49 @@ As you use the PM OS, create a personal checklist for your most common tasks:
 - [ ] Competitive intelligence check
 - [ ] Plan next week's priorities
 
-Customize the PM OS to match your actual workflow!
+Customize the Team OS to match your actual workflow!
+
+---
+
+## Verify the Self-Updating Loop (10 minutes)
+
+The repo maintains itself — confirm the machinery works before trusting it:
+
+1. **Briefing fires** — start a fresh `claude` session in the repo. The first thing in
+   context should be the `=== TEAM CONTEXT (session-start hook) ===` block (recent
+   decisions, quarter priorities, team learnings, fold backlog). If not:
+   `chmod +x .claude/hooks/*.sh` and start a new session.
+2. **Ingest works** — paste any short meeting note and say *"fold this in"*.
+   `/context-update` should route it, update the touched pages and navigation, and end
+   with a run summary (`processed … — pages touched: …`).
+3. **The guard guards** — ask Claude to edit
+   `product-development/product/strategy/business-context/business-info.md`. A
+   confirmation prompt naming the write policy should appear BEFORE any change.
+4. **Lint is clean** — run `/wiki-lint`. Expect zero broken references and a dated report
+   in `product-development/_meta/health/`.
+5. **The gate demos both verdicts** — `/feature-launch-gate credit-usage-dashboard-v1`
+   → PASS; `/feature-launch-gate tier-discount-promo` → BLOCKED (its PRD is deliberately
+   missing).
 
 ---
 
 ## Need Help?
 
 - **Documentation:** README.md and CLAUDE.md
-- **Examples:** Check product-development/product/PRDs/examples/
-- **Templates:** Browse templates/
+- **Examples:** Check product-development/product/PRDs/examples/ and the two worked initiative pages in product-development/product/initiatives/
+- **Templates:** Browse product-development/product/processes/templates/
 - **Workflows:** See `.claude/skills/` for slash command workflows
-- **Advanced:** Look at advanced/ for power features
+- **Governance:** os-installation/claude-code/scheduled-governance.md once on GitHub
 
 ---
 
 ## Congratulations!
 
-You've successfully set up and tested your PM Operating System. You now have:
+You've successfully set up and tested your Team OS. You now have:
 - ✅ An AI assistant that understands PM work
 - ✅ Ready-to-use commands for common tasks
 - ✅ Templates and examples to learn from
-- ✅ Workflows to streamline your process
+- ✅ A knowledge base that updates itself as the team works
 
 **Time to build great products!**
 

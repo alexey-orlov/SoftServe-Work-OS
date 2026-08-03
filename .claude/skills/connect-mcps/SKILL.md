@@ -9,7 +9,7 @@ group: os-admin
 
 # `/connect-mcps` - MCP Integration & Connection Manager
 
-Connect Model Context Protocol (MCP) servers to your PM OS workspace for real-time data access from your tools.
+Connect Model Context Protocol (MCP) servers to your Team OS repo for real-time data access from your tools.
 
 ## Quick Start
 
@@ -241,6 +241,26 @@ After successful integration, the skill:
   - How to use the MCP with natural language queries
 - Provide next steps
 
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+For this skill specifically: `os-installation/mcp-integration-logs/` is created on demand —
+writing the first log there is step 1's "new folder" case (create the 5-line CLAUDE.md stub
+inside it and list the folder in `os-installation/`'s CLAUDE.md). Step 8's edits to the root
+`CLAUDE.md` MCP registry and routing logic touch a Tier 2 file (`_meta/write-policy.yaml`):
+propose those edits and apply them only after the user confirms in-session.
+
 ## MCP Intelligence Gathering
 
 ### What to Look For in Documentation
@@ -396,7 +416,7 @@ This ensures MCP integration info appears early but doesn't interrupt the skill'
 User: /connect-mcps connect to figma
 
 Me:
-Let me help you connect Figma to your PM OS workspace.
+Let me help you connect Figma to your Team OS repo.
 
 [Searches: "Figma official MCP server"]
 [Finds: https://developers.figma.com/docs/figma-mcp-server/]
@@ -437,7 +457,7 @@ Full documentation: https://developers.figma.com/docs/figma-mcp-server/remote-se
 User: /connect-mcps connect to amplitude
 
 Me:
-Let me help you connect Amplitude to your PM OS workspace.
+Let me help you connect Amplitude to your Team OS repo.
 
 [Searches: "Amplitude MCP server documentation 2026"]
 [Finds: GitHub repo, NPM package, setup guide]
@@ -502,7 +522,7 @@ Full log: os-installation/mcp-integration-logs/2026-01-30-amplitude.md
 User: /connect-mcps connect to linear
 
 Me:
-Let me help you connect Linear to your PM OS workspace.
+Let me help you connect Linear to your Team OS repo.
 
 [Searches: "Linear MCP server documentation 2026"]
 

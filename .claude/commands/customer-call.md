@@ -15,6 +15,7 @@ Ask the user (or infer):
 If the customer folder doesn't exist:
 1. Create `accounts/{customer}/CLAUDE.md`, `accounts/{customer}/account-context.md`, `accounts/{customer}/calls/summaries/`, `accounts/{customer}/calls/transcripts/`
 2. Update `accounts/CLAUDE.md` with a row for the new customer
+3. Add the customer's entry to `accounts/portfolio.yaml` (status, arr if known, renewal_date, champion_role, last_updated)
 
 ## Step 2: Check for Existing Files
 
@@ -48,13 +49,17 @@ Read the skill: `.claude/skills/customer-call-summary/SKILL.md`. Read the exampl
 
 Apply the **PII rule**: no customer-side personal names anywhere in the summary. Role titles only.
 
-## Step 5: Write Files
+## Step 5: Write Files (the write-back — contract: `.claude/references/write-back-contract.md`)
 
 1. Write the summary to `accounts/{customer}/calls/summaries/{YYYY-MM-DD}.md`
 2. Write the transcript (if available) to `accounts/{customer}/calls/transcripts/{YYYY-MM-DD}.md`
 3. Add a cross-reference link from the summary to the transcript
-4. Update `accounts/{customer}/account-context.md` if any new context is worth carrying forward (new champion, renewal date moved, new strategic risk)
+4. Update `accounts/{customer}/account-context.md` if any new context is worth carrying forward (new champion, renewal date moved, new strategic risk) — rewrite in place to current truth, bump its `_updated:` line
 5. Update `accounts/CLAUDE.md` table with the last-call date
+6. Update `accounts/portfolio.yaml#{customer}`: `last_call`, plus `status` / `risks` / `expansion_signals` when the call moved them; bump `last_updated`
+7. **Ledger**: append the transcript's repo path to `product-development/_meta/processed.txt` (one repo-root-relative path per line, keep sorted) — this call is now folded; `/context-update` sweeps will skip it
+8. **Route by type**: a decision made on the call → `/decision-log-entry` (quick format, linked from the summary); intel about a competitor → its teardown folder; material for an active initiative → link it from that initiative page
+9. End your reply by listing every repo path you wrote or updated
 
 ## Step 6: Run the Quality Checklist
 

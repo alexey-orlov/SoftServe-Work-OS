@@ -375,9 +375,23 @@ Before you launch an experiment, verify:
 - `/define-north-star` - Choose your North Star Metric
 - `/retention-analysis` - Measure long-term impact
 
----
+## Save Location
 
-**Framework credit:** SoftServe Team OS STEDII framework.
+The selected metric set is a launch-gate input, not a chat ephemeral: `/feature-launch-gate` blocks launches on metric definitions existing in the repo. Save the STEDII evaluation + final metric definitions (each with numerator, denominator, window, and a "Canonical query" link) to `product-development/analytics/metrics/{area}/{feature}-experiment-metrics.md`.
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 
@@ -427,3 +441,4 @@ Before presenting output to the PM, verify:
 - [ ] **Metric sensitivity analysis included:** The output states whether the expected change is detectable given current traffic, variance, and experiment duration
 - [ ] **Guardrail metrics identified:** At least 3 guardrail metrics are defined with acceptable ranges to prevent unintended harm
 - [ ] **No vanity metrics without justification:** If any metric could be considered a vanity metric (e.g., page views, total signups), the output explains why it is valid for this specific experiment
+- [ ] **Saved and registered:** definitions written to `analytics/metrics/{area}/`, folder CLAUDE.md row appended, feature-index addition proposed

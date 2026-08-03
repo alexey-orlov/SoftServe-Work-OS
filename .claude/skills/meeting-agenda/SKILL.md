@@ -722,7 +722,23 @@ After generating the agenda, also create a matching meeting notes stub that can 
 - Notes to share with:
 ```
 
-Save this stub alongside the agenda so the PM can fill it in during or right after the meeting.
+**Save locations (both files):**
+- Agenda: `product-development/product/meetings/{type}/docs/[YYYY-MM-DD]-[topic]-agenda.md`
+- Notes stub: `product-development/product/meetings/{type}/docs/[YYYY-MM-DD]-[topic]-notes-stub.md` — the input `/meeting-notes` expects after the meeting
+
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
 
 ---
 
@@ -737,7 +753,7 @@ Before delivering the agenda, verify:
 - [ ] **Right attendees:** Required vs optional clearly marked; no more than 7 required attendees
 - [ ] **Decision-maker identified:** If a decision is needed, the decider is named
 - [ ] **Total time adds up:** Time boxes sum to the meeting duration (not over or under)
-- [ ] **Meeting notes stub created:** A matching notes template is generated alongside the agenda
+- [ ] **Meeting notes stub created and saved:** A matching notes template is saved next to the agenda in `meetings/{type}/docs/`, and both files have nav rows
 - [ ] **Async alternative considered:** The diagnostic confirmed this meeting is truly necessary
 - [ ] **Context referenced:** Relevant past meetings, PRDs, or strategy docs are linked in pre-read
 - [ ] **Prep time estimate included:** Specific prep tasks listed with estimated times for each

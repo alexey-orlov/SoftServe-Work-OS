@@ -10,8 +10,6 @@ group: definition
 
 **When to use:** Setting up metrics, designing dashboards, or when you need early signal before outcomes materialize
 
-**Framework source:** SoftServe Team OS A/B testing and metrics guidance
-
 ## Quick Start
 
 1. Tell me: "Help me build a metrics framework for [product/feature]"
@@ -272,6 +270,8 @@ INPUT METRICS (Drivers)
 ```
 
 ### Example: Slack
+
+> Example (synthetic — illustrative format, not repo data):
 
 **Tier 1 - Lagging (Annual):**
 - Revenue
@@ -689,6 +689,22 @@ After building your framework:
 
 ---
 
+## Write-back (mandatory)
+
+After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+
+1. Add a one-line entry for the new file at the END of the file list in its folder's
+   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
+   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
+   5-line CLAUDE.md stub inside it.
+2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
+   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+3. In the artifact's header, link the source material it was derived from.
+4. End your reply by listing every repo path you wrote or updated.
+
+---
+
 ## Related Skills
 
 - `/define-north-star` - Choose your North Star (lagging metric)
@@ -714,7 +730,3 @@ Before delivering the metrics framework, verify:
 - [ ] **Multi-stream handled:** If the product has multiple value streams, each stream has its own leading indicators with explicit roll-up to the shared North Star. If the product is single-stream, this is not needed.
 - [ ] **Metric retirement guidance included:** For any existing metrics being reviewed, include signals for when to retire them and a replacement process. New frameworks should note that metrics have a shelf life.
 - [ ] **Data quality bar stated:** For any correlation claims between leading and lagging metrics, state the sample size, time period, and confidence level. Do not present low-confidence correlations as validated findings.
-
----
-
-**Framework credit:** SoftServe Team OS metrics frameworks.

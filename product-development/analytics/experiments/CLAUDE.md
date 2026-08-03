@@ -6,4 +6,6 @@ Experiment designs and results by area.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — low-balance-warning experiment (design + results)

@@ -6,4 +6,6 @@ Table and event schema documentation by area.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+### Subfolders
+
+- [billing/](billing/) — EXAMPLE (synthetic) — billing_events and promo_offers schema docs
