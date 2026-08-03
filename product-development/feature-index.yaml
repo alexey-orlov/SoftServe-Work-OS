@@ -1,0 +1,74 @@
+# Feature Index
+#
+# Master lookup for every feature your team is building. Maps each feature to
+# all related artifacts so any teammate (or agent) can find what exists in one
+# read instead of grepping the repo.
+#
+# SoftServe Team OS pattern — https://www.softserveinc.com
+#
+# Structure: product-area → sub-feature → all related artifacts
+#
+# Conventions
+# - Keep this file authoritative. Whenever a feature ships, the launch gate
+#   verifies its entry here.
+# - Paths are relative to product-development/.
+# - tickets references your tracker (Linear / Jira / Asana). Pick one format.
+# - Omit keys that don't apply yet. Add them when artifacts exist.
+
+# Replace these examples with your own product areas. Keep one or two as a
+# template for new entries.
+
+billing:
+  credit-usage-dashboard:
+    # The starter template ships every artifact for this feature so the
+    # /feature-launch-gate gate passes on the example out of the box.
+    prd: product/PRDs/billing/credit-usage-dashboard-prd.md
+    eng-rfc: engineering/rfcs/billing/credit-usage-dashboard-rfc.md
+    eng-plan: engineering/plans/billing/credit-usage-dashboard.md
+    # Figma references. Use file IDs (the abc123 in the URL), not display
+    # names — file IDs survive renames. For specific frames, add a node-id:
+    # https://figma.com/file/abc123/?node-id=42:128
+    # Multiple Figma artifacts per feature is fine — separate by purpose.
+    figma:
+      flow: https://figma.com/file/your-figma-file
+      prototype: https://figma.com/proto/your-figma-file
+      components: https://figma.com/file/your-design-system-file/?node-id=42:128
+    tickets:
+      - YOURPROJ/123
+      - YOURPROJ/124
+    table-schemas:
+      - analytics/schemas/billing/billing_events.md
+    queries:
+      - analytics/queries/billing/churn_by_segment.sql
+    metrics:
+      - analytics/metrics/billing/billing-metrics.md
+    dashboards: analytics/dashboards/billing/credit-usage-dashboards.md
+    experiments:
+      - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md
+    investigations:
+      - analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md
+    bug-investigations:
+      - engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md
+    decisions:
+      - product/decisions/2026-02-14-usage-based-pricing.md
+
+  tier-discount-promo:
+    # Launching 2026-05-13. Analyst-side artifacts present; PRD + eng plan
+    # owned by PM/Eng leads — flagged in /feature-launch-gate output.
+    table-schemas:
+      - analytics/schemas/billing/promo_offers.md
+    queries:
+      - analytics/queries/billing/promo_conversion_rate.sql
+    metrics:
+      - analytics/metrics/billing/tier-discount-promo-metrics.md
+
+# Add more product areas here. Common starting set:
+# onboarding:
+#   first-run-experience:
+#     prd: ...
+# core-product:
+#   ...
+# growth:
+#   ...
+# enterprise:
+#   ...

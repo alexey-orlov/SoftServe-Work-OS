@@ -1,0 +1,13 @@
+# Local, never-shared upgrade state (may contain clear-text owner identifiers)
+.claude/upgrade-state.local.json
+
+# Machine-local Claude Code settings (permissions granted on one machine)
+.claude/settings.local.json
+
+# Session-end handoff note written by hooks, surfaced at next session start
+.claude/.last-session-state
+
+# Quarantined personal content pending manual review
+_extracted-personal/
+
+.DS_Store
