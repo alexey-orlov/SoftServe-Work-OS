@@ -512,7 +512,7 @@ Required:
 
 Plus:
 - `.claude/commands/customer-call.md`
-- `.claude/hooks/session-start.json` (or .md per the canonical Team OS)
+- `.claude/hooks/session-start.sh` + `.claude/hooks/session-start.md`, wired in `.claude/settings.json`
 
 Verify each must-exist path before continuing. Step 7.5 has the formal check.
 

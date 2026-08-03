@@ -3,7 +3,7 @@
 > Synthetic worked example for the fictional product Beacon (B2B data-enrichment SaaS).
 
 **Date:** 2026-02-14
-**Decided by:** [PM], [Engineer] (roster placeholders — root CLAUDE.md team table not yet filled)
+**Decided by:** [PM], [Engineer] (roster placeholders)
 **Status:** Active
 
 ## Options Considered

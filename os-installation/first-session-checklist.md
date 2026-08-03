@@ -424,8 +424,8 @@ Start with:
 
 **Don't worry, let's fix it:**
 
-1. **Check installation** - Re-run `setup/installation-guide.md`
-2. **Verify keys** - Double-check `setup/environment-keys.md`
+1. **Check installation** - Re-run [installation-guide.md](installation-guide.md)
+2. **Verify keys** - Confirm `ANTHROPIC_API_KEY` is set (Common Issues in the install guide)
 3. **Test individually** - Isolate what's not working
 4. **Try alternatives** - Some features are optional (MCPs, sub-agents)
 

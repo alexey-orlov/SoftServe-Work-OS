@@ -39,7 +39,7 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 - [status-update/](status-update/) — Generate stakeholder status updates. Creates clear, concise progress reports for different audiences
 - [weekly-plan/](weekly-plan/) — Set next week's priorities
 - [weekly-review/](weekly-review/) — Review week's progress, meetings, learnings
-- [weekly-synthesis/](weekly-synthesis/) — Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering, data-engineering, design)
+- [weekly-synthesis/](weekly-synthesis/) — Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering, design)
 
 ### Definition
 
@@ -116,4 +116,6 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 
 ## Gaps
 
-Use-case blocks from the Skills & Context Inventory with **no skill yet**: go-to-market (positioning & messaging, monetization & pricing, GTM & growth planning), and within Definition: opportunity/solution discovery, backlog prioritization, business model design.
+Work the eight groups above don't cover yet — candidates if you are adding skills:
+go-to-market (positioning & messaging, monetization & pricing, GTM & growth planning), and
+within Definition: opportunity/solution discovery, backlog prioritization, business model design.

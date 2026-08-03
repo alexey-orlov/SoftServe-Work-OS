@@ -52,8 +52,8 @@ source ~/.zshrc
 
 ## Step 2: Download Team OS
 
-1. Download the zip file from your purchase
-2. Extract to a folder called `team-os`
+1. Clone the repository (or extract the archive you were given)
+2. Put it in a folder called `team-os`
 3. Open terminal and navigate to that folder:
 ```bash
 cd ~/Downloads/team-os
@@ -219,4 +219,4 @@ When you push to GitHub, finish enforcement setup per
 
 **Time Investment:** 15 minutes  
 **Skill Level:** No coding required  
-**Support:** Community-maintained, modify as needed
+**Support:** Provided as-is — modify it to fit your team (see [LICENSE](../LICENSE))

@@ -82,7 +82,7 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 | `product-development/product/strategy/current-quarter.md` | Objectives, Strategic Themes, and `## Explicitly Not Doing` — **one of two sources for the Fit axis** (the other is `product-development/product/strategy/roadmaps/`) | Not filled → fall through to the Step 4 gate. Fit reads `unknown` only if the roadmap is *also* unfilled |
 | `product-development/product/strategy/roadmaps/*.md` | What is already NOW / NEXT / Under Consideration — do not re-triage committed work | "No roadmap yet" — note it, continue |
 | `product-development/product/decisions/` | Already decided? Do not re-litigate a settled call | — |
-| `product-development/product/customers/research-synthesis/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder does not exist yet — note it, continue |
+| `product-development/product/customers/research-synthesis/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
 | `product-development/feature-index.yaml` | Does it already ship? **A request for a shipped feature is a discoverability problem, not a demand signal** — exclude from counts, list separately | Only the starter `billing:` template entries → print "feature-index not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
 | `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list | First run — create it |
 

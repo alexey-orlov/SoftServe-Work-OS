@@ -2,7 +2,7 @@
 
 A shared knowledge base for a product team — structured so both humans and AI agents can find things without searching.
 
-Authored and maintained by [SoftServe](https://www.softserveinc.com). Personal context, career material, and machine-local credentials are deliberately kept out — everything here is team-safe.
+Authored and maintained by [SoftServe](https://www.softserveinc.com).
 
 ## Start Here
 

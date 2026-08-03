@@ -4,7 +4,7 @@ Incident and bug investigation writeups by product area.
 
 **Read this when:** You are debugging something that may have happened before.
 
-> **Stubbed.** No engineer is on the team yet — the only contents are the synthetic billing worked example. Populate for real when that function joins; the structure is already correct.
+> The only contents are the synthetic billing worked example. The structure is ready — file real investigations into it as they happen.
 
 ## Contents
 

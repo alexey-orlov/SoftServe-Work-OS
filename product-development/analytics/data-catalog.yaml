@@ -4,9 +4,6 @@
 # find the right table without reading every schema doc. For column-level
 # detail, see analytics/schemas/{area}/.
 #
-# SoftServe Team OS pattern, with extensions (pii flag, grain, partition_key,
-# last_validated) for richer cross-referencing. https://www.softserveinc.com
-#
 # Conventions
 # - One entry per table you query regularly. Skip ephemeral or staging tables.
 # - owner: a team or person from the team roster
@@ -20,7 +17,7 @@
 # - partition_key: column the table is partitioned/clustered on (perf hint
 #   for analysts writing big queries)
 # - last_validated: YYYY-MM-DD when an analyst last confirmed the schema
-#   matches reality. /freshness-check will flag entries older than 90 days
+#   matches reality. /wiki-lint flags entries older than 90 days
 # - row_count_estimate: rough size hint so analysts know whether to LIMIT or
 #   sample. Update quarterly.
 # - used_by: list of references that depend on this table. Each entry is

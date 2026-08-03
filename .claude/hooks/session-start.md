@@ -1,7 +1,7 @@
 # Session Hooks — how the wiki stays in every session's head
 
-Two hooks ship installed and wired via `.claude/settings.json` (this is the working
-configuration — no setup needed beyond `chmod +x .claude/hooks/*.sh` after cloning).
+Two hooks ship installed and wired via `.claude/settings.json` — no setup needed beyond
+`chmod +x .claude/hooks/*.sh` after cloning.
 
 ## 1. `session-start.sh` — the briefing (SessionStart)
 
@@ -59,8 +59,8 @@ audit are for (see `os-installation/claude-code/scheduled-governance.md`).
 }
 ```
 
-(Older docs showed a `"session_start": {"command": …}` shape — that schema is wrong and
-never fires; the matcher-array form above is the working one.)
+Use the matcher-array form above. A `"session_start": {"command": …}` shape does not match
+the hook schema and never fires.
 
 ## Optional: session-end note (`SessionEnd`)
 

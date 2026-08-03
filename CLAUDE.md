@@ -21,7 +21,7 @@ Your team's shared knowledge base. Every document, decision, metric definition, 
 
 ## Team
 
-> Placeholder rows — no Slack/GitHub MCP was connected during setup, so the roster could not be pulled automatically. Fill these in, and add rows (Designer, Analytics) as the team grows.
+> Placeholder rows — fill these in from your workspace, and add rows (Designer, Analytics) as the team grows. With a Slack or GitHub MCP connected, `/connect-mcps` can pull most of this for you.
 
 | Function | Team Member | GitHub | Slack ID | After-Hours Escalation |
 |----------|-------------|--------|----------|------------------------|
@@ -81,7 +81,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
 | Processes | `product-development/product/processes/` | `templates/` (blank scaffolds — copy, don't edit), `writing-guides/`, `launches/` (filled launch checklists) |
 | Meetings | `product-development/product/meetings/` | Standup, sprint planning, bi-weekly — docs / transcripts / summaries; `retros/` for retrospective writeups |
-| Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations (stubbed until an engineer joins) |
+| Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | Design | `product-development/design/CLAUDE.md` | Design rationale (artifacts live in Figma, linked from feature-index) |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
