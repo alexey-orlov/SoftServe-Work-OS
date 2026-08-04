@@ -32,7 +32,9 @@ full pass — run the script first, then do the judgment checks the script can't
    `[PENDING:]` markers older than 14 days.
 2. **Navigation coverage, both directions** — every directory under `product-development/`
    has a `CLAUDE.md`; every content file appears in its folder's CLAUDE.md list; every nav
-   line's target exists on disk.
+   line's target exists on disk. Queue folders with transient contents
+   (`product-development/inbox/`, `_meta/proposals/`) are exempt from the per-file nav
+   requirement — their CLAUDE.md describes the queue, not its contents.
 3. **Feature-index ↔ disk** — every path in `feature-index.yaml` resolves; every PRD /
    metric doc / experiment / investigation on disk appears in some feature entry (orphans);
    every slug in an `initiatives:` list has a page in `product/initiatives/`.
@@ -56,7 +58,8 @@ full pass — run the script first, then do the judgment checks the script can't
    "Decided by" names in recent decisions vs the team roster.
 8. **Ledger integrity** — every ledger path exists on disk; ledger is sorted and
    duplicate-free; unprocessed backlog count (the `/context-update` discovery `comm`);
-   proposals in `_meta/proposals/` older than 14 days flagged.
+   proposals in `_meta/proposals/` older than 14 days flagged. Inbox arrivals are ledgered
+   under their destination path after the move (junk under its inbox path).
 9. **Placeholder / truncation scan** — `[Your `, `[FILL IN]`, `[NEED:` outside
    `processes/templates/`, `PRDs/examples/`, and the root-CLAUDE.md setup blocks
    (report as "setup not finished" on a fresh clone, warning not failure); nav description

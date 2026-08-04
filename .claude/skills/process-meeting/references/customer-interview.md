@@ -96,6 +96,9 @@ Cards roll up into one report at
   [customer-call.md](customer-call.md) write-back 1 if they're a real customer/prospect).
   A participant that genuinely maps to no account (anonymous panel) → ask the user where to
   file before writing.
+- **Feature requests** from the insight cards → one dated record each in
+  `customers/feature-requests/` (per SKILL.md Step 3); the session report's Top Feature
+  Requests entries link their records.
 - **Ledger** every transcript filed.
 - Insights that clearly feed an active PRD → one line in that PRD's open questions
   (Tier 2 → confirm), per SKILL.md Step 3.

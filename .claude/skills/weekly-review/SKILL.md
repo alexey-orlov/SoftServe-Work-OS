@@ -23,6 +23,10 @@ Best time: Friday afternoon (week fresh, plan next week right after; `/weekly-pl
 follows). Alternative: Monday morning. A `--digest` run earlier in the week is extended in
 place by a later full run — same file, keyed by ISO week. Past weeks are never rewritten.
 
+Scheduling and the single-runner rule (one steward-owned scheduled task per team — no
+duplicate crons, nothing tied to one person's laptop):
+`os-installation/claude-code/scheduled-governance.md`.
+
 ## One data pass (read in this order)
 
 1. `product-development/product/initiatives/` — every page with `_status: active`, plus any
@@ -38,6 +42,10 @@ place by a later full run — same file, keyed by ISO week. Past weeks are never
    the same way.
 5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
 6. The latest report in `product-development/_meta/health/` — staleness count.
+7. `product-development/product/customers/feature-requests/` — records with `requested:`
+   in the window, and their `tracker_ref` state (`"-"` = awaiting tracker push). When a
+   tracker MCP is connected (Linear / Jira / Asana), cross-check tickets labeled
+   `customer-request` created in the window.
 
 **Part B additionally:** `meetings/team-bi-weekly/docs/{YYYY}-W{XX}-weekly-plan.md` (what
 you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
@@ -61,6 +69,8 @@ connected: Linear/Jira for completed tasks, analytics for launched-feature metri
 
 - **Decisions:** {title} — {one line} ({link})
 - **Customer calls:** {customer}: {key takeaway, role-attributed quote if relevant}
+- **Feature requests:** {request} — {account} — {pending push | {tracker_ref}} ({link to record})
+- ⏳ {N} request(s) awaiting tracker push — `/create-tickets push` (only when N > 0)
 - **Analytics:** {metrics, queries, schemas, experiments that changed}
 - **Competitive:** {new entries or matrix updates}
 - **Retros / lessons:** {list}
@@ -101,8 +111,11 @@ The gentle nudge prevents the repo from going silent without being preachy.
 4. "Top 3 Things to Know" is the most-read section. Prioritize: decisions affecting the
    whole team > customer insights > metric movements.
 5. Tag specific people when an item is relevant to them (roster in root CLAUDE.md).
-6. Slack posting (when the MCP is connected) is additive — the repo record is written
-   regardless; a Slack-only digest leaves no baseline for next week's diff.
+6. Messenger posting (Slack, Teams — whichever team-messenger MCP is connected) is
+   additive — the repo record is written first, regardless; a messenger-only digest leaves
+   no baseline for next week's diff. A `--digest` (headless) run posts automatically when
+   a messenger MCP is connected and otherwise notes "not posted — repo record only" in its
+   run summary; interactive runs show the draft and ask before posting.
 
 ## Part B — Execution Review (default; skipped by --digest)
 

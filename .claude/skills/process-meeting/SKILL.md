@@ -25,7 +25,8 @@ filed, summary written, records routed, navigation and ledger updated, run summa
 **Accepted inputs:** transcripts (Zoom, Otter, Grain, Granola, Fireflies, Meet, Teams),
 bullet notes, voice-memo dictation, Slack threads, email chains, or "let me tell you what
 happened." With a meeting-transcription MCP connected (see `/connect-mcps`), pull the
-transcript directly.
+transcript directly. Files dropped by an integration land in `product-development/inbox/`
+(arrival contract in its CLAUDE.md) — `/context-update` sweeps hand them here.
 
 **Nothing written down at all?** Ask 5 questions and generate from the answers:
 1. Who was in the meeting? (customer side: roles only)
@@ -68,7 +69,12 @@ use customer-call and give the discovery findings their own summary section.
    `product-development/_meta/processed.txt` → no-op; say so.
 1. **File the raw transcript** (when one exists) verbatim at the category's transcript home
    (table below), with a header linking where the summary will live. Raw material is
-   immutable from then on — corrections happen in the summary, never the transcript.
+   immutable from then on — corrections happen in the summary, never the transcript. An
+   input path inside `product-development/inbox/` is **moved** — write the canonical copy,
+   delete the inbox original: the inbox is staging; the file becomes immutable raw
+   material at its destination, and the ledger gets the destination path. When the
+   filename carries no date: ISO or `GMT{YYYYMMDD}` filename prefix → a date line in the
+   content → file mtime, flagged "date inferred" in the run summary.
 2. **Load the one reference file** for the category and write the summary in its format.
    Every summary carries `**Initiatives touched:** {slug(s) or "-"}` — check
    `product-development/product/initiatives/` for active slugs.
@@ -87,7 +93,8 @@ use customer-call and give the discovery findings their own summary section.
    confirmations asked. Nothing is handled silently.
 9. **Handoffs** (offer, don't auto-run): 3+ interviews processed →
    `/user-research-synthesis`; Slack recap → `/slack-message` (or post via MCP);
-   engineering tasks → `/create-tickets`.
+   engineering tasks → `/create-tickets`; pending feature-request records →
+   `/create-tickets push` (when a tracker MCP is connected).
 
 ### Save locations
 
@@ -109,7 +116,7 @@ handles the meeting-borne subset:
 |---|---|
 | **Decision** ("we decided / chose", tradeoffs weighed) | `/decision-log-entry` quick format → `decisions/{date}-{slug}.md` with its `Initiative:` header + END-append to Recent Decisions in `decisions/CLAUDE.md`; summary links the entry |
 | **Lesson** ("next time…", process learning) | append `- YYYY-MM-DD — lesson (source link)` to `meetings/retros/lessons-learned.md` |
-| **Feature request** | the summary's Feature Requests section; also one line in the matching feature's PRD open questions or its `feature-index.yaml` entry (Tier 2 → confirm) |
+| **Feature request** | the summary's Feature Requests section **+ one dated record** in `customers/feature-requests/{date}-{account}-{slug}.md` (schema in that folder's CLAUDE.md; check for an existing record of the same request+account first — append evidence rather than duplicate), linked from the summary's table row; also one line in the matching feature's PRD open questions or its `feature-index.yaml` entry (Tier 2 → confirm). A record with `tracker_ref: "-"` awaits `/create-tickets push` once a tracker MCP is connected |
 | **Competitor intel** | `competitive-research/competitors/{slug}/` (scaffold from the teardown pattern on first intel) + matrix row refresh |
 | **Segment shift** (new use case adopted, size band / vertical corrected) | `portfolio.yaml#{customer}` segment fields (auto) + flag `segmentation-matrix.md` cells for `/context-update` (Tier 2) |
 | **Business or stakeholder fact** | hand to `/context-update` — `business-info.md` / `stakeholders.md` are Tier-2 surfaces with a mirror rule; don't edit them from here |

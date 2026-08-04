@@ -1,6 +1,6 @@
 ---
 name: create-tickets
-description: Create tickets via Linear/Jira MCP or generate formatted ticket text
+description: Break PRDs into dev-backlog tickets, or push customer feature-request records as 1:1 intake tickets — via the connected tracker MCP (Linear / Jira / Asana) or formatted text fallback
 group: delivery
 ---
 
@@ -22,12 +22,42 @@ Generate engineering tickets from PRDs, feature specs, or task lists. Supports d
 
 **Time:** 15-30 minutes depending on PRD complexity
 
+## Customer-request intake push (distinct from the PRD → dev-backlog flow)
+
+This mode files **product-demand intake** tickets — one ticket per customer feature-request
+record, 1:1 — not decomposed engineering work. No effort estimates, no dependency mapping,
+no sprint suggestions; those belong to the PRD flow below, which runs much later, after a
+request theme graduates through `/prioritize-requests` → PRD. Intake often targets a
+different project/board (PM triage) than the dev backlog — confirm the target per batch.
+
+**Source:** a record in `product-development/product/customers/feature-requests/` (created
+by `/process-meeting` from a call or interview; a summary's Feature Requests table row is
+an acceptable direct source, but create the record first). The record's `## Draft ticket`
+section is the ticket body verbatim; the title comes from its `# [{Area}] {Request}` line;
+label `customer-request`; the description ends with provenance links (record + source
+summary).
+
+**Push mode** — `/create-tickets push` or "push pending feature requests":
+
+1. Scan `customers/feature-requests/*.md` (excluding CLAUDE.md) for `tracker_ref: "-"`.
+2. **No tracker MCP connected** (Linear, Jira, Asana — any): report the pending count and
+   stop. Explicit no-op — records untouched, nothing lost; point to `/connect-mcps`.
+3. **Tracker MCP connected:** confirm the target project/team once for the batch
+   (interactive runs only — **headless runs never push**; they report the count), then per
+   record: create the ticket → write the returned id/URL into `tracker_ref:` and bump
+   `_updated:` → propose appending the id to the matching feature's `tickets:` list in
+   `product-development/feature-index.yaml` (Tier 2 → confirm).
+4. Records are **never deleted** — the record stays as the durable evidence, now carrying
+   its ticket reference. A failed push leaves `tracker_ref: "-"` and is reported.
+5. End with counts — pushed / failed / remaining — plus every record path touched.
+
 ## When to Use This Skill
 
 - Breaking down PRDs into implementation tickets
 - Converting feature specs into actionable tasks
 - Batch ticket creation from roadmap items
 - Generating ticket text for manual entry
+- Pushing pending customer feature-request records to the tracker (`push` mode above)
 
 ## Prerequisites
 

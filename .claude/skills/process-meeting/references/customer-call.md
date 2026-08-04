@@ -222,6 +222,10 @@ move completed items (add date) → add new items:
    revealed (use case adopted, size band or vertical corrected) → update `vertical` /
    `size_band` / `use_cases` too and flag `segmentation-matrix.md` cells for
    `/context-update` (Tier 2 → confirm).
+5. **Feature-request records:** one dated record per request in
+   `customers/feature-requests/` (per SKILL.md Step 3), each linked from its Feature
+   Requests table row (Full variant) or noted alongside the implied gap in the Executive
+   Summary (Quick).
 
 ## Quality checklist (before finalizing)
 
@@ -236,4 +240,4 @@ move completed items (add date) → add new items:
 - [ ] PII pass: no customer-side personal names anywhere in the summary
 - [ ] Action-item tables at file top updated (completed moved, new added)
 - [ ] Renewal/QBR fields captured when the call was one, `portfolio.yaml` matched
-- [ ] Account write-backs 1–4 done
+- [ ] Account write-backs 1–5 done (incl. feature-request records created + linked)

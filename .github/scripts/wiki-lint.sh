@@ -52,6 +52,8 @@ while IFS= read -r f; do
   base=$(basename "$f")
   dir=$(dirname "$f")
   case "$base" in CLAUDE.md|processed.txt|.*) continue ;; esac
+  # queue folders hold transient files by design — no per-file nav requirement
+  case "$f" in "$PD"/inbox/*|"$PD"/_meta/proposals/*) continue ;; esac
   if [ -f "$dir/CLAUDE.md" ] && ! grep -qF "$base" "$dir/CLAUDE.md"; then
     fail "file not in its folder's CLAUDE.md: $f"
   fi

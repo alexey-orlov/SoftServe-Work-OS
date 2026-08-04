@@ -1,6 +1,6 @@
 ---
 name: context-update
-description: Fold new artifacts into the team wiki — transcripts, pasted threads, documents, session facts — routing each piece by TYPE (customer insight, decision, lesson, metric change, competitor intel, stakeholder fact, business fact, initiative material, junk) to its proper page, updating navigation and indexes, and recording every handled file in the ledger. Three modes — sweep (no args: process everything new under */transcripts/ via the ledger), single artifact (a path), pasted content ("fold this in"). Detects new initiatives/accounts/competitors and scaffolds their pages, respects the write policy (Tier-2 files need in-session confirmation), skips junk, and always ends with a run summary. Use on /context-update, "fold this in / into context", "update the repo from this thread/doc", after sharing a meeting outcome or document worth remembering, or when the repo looks behind reality. For a meeting or call transcript use /process-meeting instead — sweeps gate transcripts and delegate them to it.
+description: Fold new artifacts into the team wiki — transcripts, pasted threads, documents, session facts — routing each piece by TYPE (customer insight, decision, lesson, metric change, competitor intel, stakeholder fact, business fact, initiative material, junk) to its proper page, updating navigation and indexes, and recording every handled file in the ledger. Three modes — sweep (no args: process everything new in product-development/inbox/ and under */transcripts/ via the ledger), single artifact (a path), pasted content ("fold this in"). Detects new initiatives/accounts/competitors and scaffolds their pages, respects the write policy (Tier-2 files need in-session confirmation), skips junk, and always ends with a run summary. Use on /context-update, "fold this in / into context", "update the repo from this thread/doc", after sharing a meeting outcome or document worth remembering, or when the repo looks behind reality. For a meeting or call transcript use /process-meeting instead — sweeps gate transcripts and delegate them to it.
 group: os-admin
 ---
 
@@ -47,13 +47,15 @@ account page / initiative page / area CLAUDE.md — before writing anything.
 ```bash
 comm -23 <(find product-development/product/customers/accounts \
                 product-development/product/meetings \
-           -type f -path '*/transcripts/*' \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
+                product-development/inbox \
+           -type f \( -path '*/transcripts/*' -o -path '*/inbox/*' \) \
+           \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
            ! -name 'CLAUDE.md' 2>/dev/null | sort) \
         <(sort product-development/_meta/processed.txt 2>/dev/null)
 ```
 (No shell globs on purpose — an unmatched `accounts/*/…` glob aborts the whole pipeline in
 zsh while the repo has no account folders yet; `-path` matching has no such failure mode
-and also covers `retros/transcripts/`.)
+and also covers `retros/transcripts/` and the `inbox/` drop zone.)
 If more than ~15 are new, process newest-first and report what was left for the next run —
 no silent truncation.
 
@@ -64,6 +66,17 @@ no silent truncation.
   re-processing — fold only genuinely new information (usually none), then ledger it, count
   as "dup". Near-identical content inside one batch → ONE routed item, every file ledgered.
 - A path already in the ledger verbatim = no-op beyond the summary line.
+
+**2a. Inbox arrivals** (`product-development/inbox/` — arrival contract in its CLAUDE.md):
+the gates above run first — junk → ledger the *inbox* path and leave the file (humans
+delete the file and its ledger line together). Everything else is a meeting record →
+delegate to `/process-meeting` (single writer for transcript → summary → account/portfolio
+updates → ledger). It infers the date, detects the category, **moves** the file to its
+canonical `*/transcripts/` home, and ledgers the **destination** path — never the inbox
+path, which would break `/wiki-lint` check 8 after the move. A file the gates can't place
+without a human (unknown account, no matching meeting type) → leave it in the inbox, never
+ledger it, and name it in the run summary; it re-surfaces every sweep until someone
+renames, files, or deletes it.
 
 **3. Route by TYPE — type beats location.** A decision found inside a customer call still
 becomes a `decisions/` entry; the account page carries a one-line pointer, never a restated
@@ -131,8 +144,9 @@ git add -A && git commit -m "context: <one line on what changed>"
 
 ## Run summary (always output)
 
-`processed N (folded F · junk J · dup D) — pages touched: … — records filed: decisions X ·
-summaries Y — proposals filed: … — new entities: … — backlog: …` — plus one line per
+`processed N (folded F · junk J · dup D) — inbox: filed M · left L — pages touched: … —
+records filed: decisions X · summaries Y — proposals filed: … — new entities: … —
+backlog: …` — plus one line per
 substantive change so the team can correct the folding, and an explicit list of every
 Tier-2 confirmation that was asked (or proposal filed).
 
@@ -147,6 +161,8 @@ Tier-2 confirmation that was asked (or proposal filed).
 - Write policy honored: no confirm-tier file changed without an in-session yes (or a
   proposal filed headlessly); no admin-tier file touched.
 - Ledger updated for EVERY artifact handled, including junk and duplicates.
+- Inbox arrivals ledgered under their destination path (junk under its inbox path);
+  nothing left in the inbox unreported.
 - Navigation current: every new file has a nav line, every new folder a stub + parent entry.
 - New entities got scaffold + nav + index treatment (after the index check).
 - **Nothing handled silently**: every discovered artifact appears in the run summary as

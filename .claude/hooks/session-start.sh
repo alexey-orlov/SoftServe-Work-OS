@@ -46,9 +46,11 @@ fi
 
 echo "--- Fold backlog ---"
 BACKLOG=$(comm -23 \
-  <(find "$PD"/product/customers/accounts/*/calls/transcripts \
-         "$PD"/product/meetings/*/transcripts \
-         -type f \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
+  <(find "$PD"/product/customers/accounts \
+         "$PD"/product/meetings \
+         "$PD"/inbox \
+         -type f \( -path '*/transcripts/*' -o -path '*/inbox/*' \) \
+         \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
          ! -name 'CLAUDE.md' 2>/dev/null | sort) \
   <(sort "$PD/_meta/processed.txt" 2>/dev/null) 2>/dev/null | wc -l | tr -d ' ')
 if [ "${BACKLOG:-0}" -gt 0 ] 2>/dev/null; then
