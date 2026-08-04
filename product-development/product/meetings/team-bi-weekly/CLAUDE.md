@@ -9,5 +9,5 @@ Bi-weekly team meeting and review artifacts.
 ### Subfolders
 
 - [docs/](docs/) — Agendas and prepared notes
-- [summaries/](summaries/) — Condensed summaries, including weekly review output. Read these first
+- [summaries/](summaries/) — Condensed summaries of the bi-weekly meeting itself (written by `/process-meeting`). Read these first; periodic rollups live in `../digests/`
 - [transcripts/](transcripts/) — Raw transcripts. Open only when the summary is insufficient

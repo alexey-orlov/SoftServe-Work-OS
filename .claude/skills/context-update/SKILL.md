@@ -45,12 +45,15 @@ account page / initiative page / area CLAUDE.md — before writing anything.
 
 **1. Discover (sweep mode only):**
 ```bash
-comm -23 <(find product-development/product/customers/accounts/*/calls/transcripts \
-                product-development/product/meetings/*/transcripts \
-           -type f \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
+comm -23 <(find product-development/product/customers/accounts \
+                product-development/product/meetings \
+           -type f -path '*/transcripts/*' \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
            ! -name 'CLAUDE.md' 2>/dev/null | sort) \
         <(sort product-development/_meta/processed.txt 2>/dev/null)
 ```
+(No shell globs on purpose — an unmatched `accounts/*/…` glob aborts the whole pipeline in
+zsh while the repo has no account folders yet; `-path` matching has no such failure mode
+and also covers `retros/transcripts/`.)
 If more than ~15 are new, process newest-first and report what was left for the next run —
 no silent truncation.
 
