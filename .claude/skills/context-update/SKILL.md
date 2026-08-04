@@ -1,6 +1,6 @@
 ---
 name: context-update
-description: Fold new artifacts into the team wiki — transcripts, pasted threads, documents, session facts — routing each piece by TYPE (customer insight, decision, lesson, metric change, competitor intel, stakeholder fact, business fact, initiative material, junk) to its proper page, updating navigation and indexes, and recording every handled file in the ledger. Three modes — sweep (no args: process everything new under */transcripts/ via the ledger), single artifact (a path), pasted content ("fold this in"). Detects new initiatives/accounts/competitors and scaffolds their pages, respects the write policy (Tier-2 files need in-session confirmation), skips junk, and always ends with a run summary. Use on /context-update, "fold this in / into context", "update the repo from this call/thread/doc", after sharing a meeting outcome or document worth remembering, or when the repo looks behind reality.
+description: Fold new artifacts into the team wiki — transcripts, pasted threads, documents, session facts — routing each piece by TYPE (customer insight, decision, lesson, metric change, competitor intel, stakeholder fact, business fact, initiative material, junk) to its proper page, updating navigation and indexes, and recording every handled file in the ledger. Three modes — sweep (no args: process everything new under */transcripts/ via the ledger), single artifact (a path), pasted content ("fold this in"). Detects new initiatives/accounts/competitors and scaffolds their pages, respects the write policy (Tier-2 files need in-session confirmation), skips junk, and always ends with a run summary. Use on /context-update, "fold this in / into context", "update the repo from this thread/doc", after sharing a meeting outcome or document worth remembering, or when the repo looks behind reality. For a meeting or call transcript use /process-meeting instead — sweeps gate transcripts and delegate them to it.
 group: os-admin
 ---
 
@@ -68,7 +68,7 @@ copy. Mixed artifacts are split — each part goes to its home, one ledger entry
 
 | Type | Signal | Destination + follow-through |
 |---|---|---|
-| Customer insight / request | call transcript, support thread, quote | summary in `accounts/{c}/calls/summaries/{date}.md` (customer-call-summary format) → rewrite `account-context.md` to current truth → refresh the row in `accounts/CLAUDE.md` and `portfolio.yaml#{c}` (last_call, health, segment fields) → a feature request also lands as one line in the matching feature's PRD open questions or its index entry (Tier 2 → confirm) |
+| Customer insight / request | call transcript, support thread, quote | an unprocessed meeting/call transcript → hand to `/process-meeting` (single writer for transcript → summary → account/portfolio updates → ledger; the junk/dup gates above still run here first). Non-transcript customer facts: rewrite `account-context.md` to current truth → refresh the row in `accounts/CLAUDE.md` and `portfolio.yaml#{c}` (last_call, health, segment fields) → a feature request also lands as one line in the matching feature's PRD open questions or its index entry (Tier 2 → confirm) |
 | Decision | "we decided / chose", tradeoff language | `decisions/{YYYY-MM-DD}-{slug}.md` per `/decision-log-entry` format (quick entry is fine — set its `Initiative:` header, slug(s) or `-`) + append to the END of Recent Decisions in `decisions/CLAUDE.md` + link from each initiative page named in the header (same change). From a transcript: automatic, with the transcript linked under Related and the decision flagged in the run summary. Mid-session ("we decided X"): file immediately and show the entry |
 | Lesson | "next time…", retro item, agent correction | team-process lesson → append to `meetings/retros/lessons-learned.md`; agent-behavior rule → `.claude/team-learnings.md` (admin tier — propose the line, the steward file is small and capped) |
 | Metric change | definition/threshold/window moved | edit `analytics/metrics/{area}/…` in place + `data-catalog.yaml` if a table changed |
@@ -77,7 +77,7 @@ copy. Mixed artifacts are split — each part goes to its home, one ledger entry
 | Business fact | ICP / pricing / positioning / stage shift | `business-info.md` (Tier 2 → confirm) **and the root CLAUDE.md fundamentals block in the SAME change** — the mirror rule; one without the other leaves the wiki self-contradictory |
 | Segment shift | account signed / churned / re-tiered; vertical, size band, or use-case mix changed | update `portfolio.yaml#{c}` segment fields (auto) → refresh the affected cells **and totals** of `business-context/segmentation-matrix.md` (Tier 2 → confirm), keeping its totals equal to the fundamentals block and business-info Key Metrics — the same mirror rule |
 | Initiative material | scope change, milestone, artifact for current work; a summary's `Initiatives touched:` header names slugs | the initiative's page in `product/initiatives/` (edit in place — one dated Activity line per declared slug, linking the summary; declared joins beat inference, infer only when the field is absent) + the artifact's own home per its class |
-| New entity | first artifact for an unknown account / initiative / competitor | **index check first** — read `accounts/CLAUDE.md` keys, `initiatives/` pages, `feature-index.yaml`, the competitor list BEFORE creating. Then scaffold: account per the `/customer-call` command's step 1; initiative page from the template + `initiatives/CLAUDE.md` line + proposed feature-index `initiatives:` addition (Tier 2); competitor folder + matrix row |
+| New entity | first artifact for an unknown account / initiative / competitor | **index check first** — read `accounts/CLAUDE.md` keys, `initiatives/` pages, `feature-index.yaml`, the competitor list BEFORE creating. Then scaffold: account per `/process-meeting`'s customer-call scaffold step; initiative page from the template + `initiatives/CLAUDE.md` line + proposed feature-index `initiatives:` addition (Tier 2); competitor folder + matrix row |
 | Junk | empty, test, purely social | ledger + count |
 
 **3a. New initiative — create the page when the content shows true engagement:** the team
@@ -122,8 +122,9 @@ git add -A && git commit -m "context: <one line on what changed>"
 - Never edit raw material (`*/transcripts/`, source docs) — read-only inputs.
 - `_meta/health/` is `/wiki-lint`'s surface; `_meta/processed.txt` is appended here but
   never rewritten beyond sorting; admin-tier paths are never edited (propose to steward).
-- Deliverable *creation* belongs to its skill (`/prd-draft`, `/customer-call-summary`, …) —
-  this skill folds facts and fixes the maps; it doesn't ghost-write PRDs from transcripts.
+- Deliverable *creation* belongs to its skill (`/prd-draft`, `/process-meeting`, …) —
+  this skill folds facts and fixes the maps; it doesn't ghost-write PRDs or summaries from
+  transcripts.
 
 ## Run summary (always output)
 

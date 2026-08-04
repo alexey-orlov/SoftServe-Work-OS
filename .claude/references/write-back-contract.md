@@ -14,7 +14,7 @@ while the maps that make them findable rot. Unwritten-back work is unfinished wo
 | Class | Examples | Rule |
 |---|---|---|
 | **Raw material** | `*/transcripts/`, source docs | Immutable. Never edit; wiki pages link INTO them (provenance). |
-| **Records** | decision log, call/meeting summaries, experiment results, health reports | Append-only dated streams. New file per event; never rewrite history. |
+| **Records** | decision log, call/meeting summaries, digests, experiment results, health reports | Append-only dated streams. New file per event; never rewrite history. |
 | **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
 | **Deliverables** | PRDs, RFCs, analyses, prototypes, checklists | Work products that are team knowledge. Saved in their functional folder, registered in navigation, linked from their initiative page. |
 
@@ -57,9 +57,10 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 5. **Budgets.** Living pages ≤120 lines; folder CLAUDE.md ≤80 lines; root CLAUDE.md ≤150.
    When a page outgrows its budget, split a subpage and link it — don't let it sprawl.
 6. **The ledger** (`product-development/_meta/processed.txt`) is appended only by ingest
-   skills — the ones that consume raw sources: `/context-update`, the `/customer-call`
-   command, `/meeting-notes`, `/user-interview`. One repo-root-relative path per line,
-   kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing is re-judged.
+   skills — the ones that consume raw sources: `/context-update`, `/process-meeting`, and
+   `/user-research-synthesis` (when handed raw transcripts directly). One repo-root-relative
+   path per line, kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing
+   is re-judged.
 7. **Run visibility.** A skill that processed multiple items reports what it did —
    processed / folded / skipped counts and every path touched. Nothing is handled silently.
 8. **Initiative joins are declared, not inferred.** Records that can touch current work
@@ -81,6 +82,11 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 | `product-development/_meta/proposals/` | headless runs (created), humans (cleared) |
 | root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change, by whoever edits either (Tier 2 confirm covers both) |
 | `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always Tier 2 confirm; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
+| `accounts/{c}/calls/` and `meetings/{type}/` transcripts + summaries (incl. `retros/transcripts/`) | `/process-meeting` — `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; it never writes call/meeting summaries itself |
+| `customers/research-synthesis/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview) — distinct filename patterns |
+| `meetings/digests/` | by filename prefix: `*-weekly-review.md` → `/weekly-review` · `*-portfolio-pulse-*.md` → `/portfolio-pulse` · `*-status-*.md` → `/status-update` · `*-daily-batch.md` → `/process-meeting` |
+| `meetings/retros/lessons-learned.md` | append-only, by `/process-meeting`, `/weekly-review`, and `/context-update` |
+| `meetings/{type}/docs/feedback-*.md` | `/meeting-feedback` |
 | navigation list re-ordering | `/wiki-lint --fix` only |
 
 ## Exempt skills

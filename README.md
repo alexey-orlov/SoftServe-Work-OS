@@ -15,7 +15,7 @@ Authored and maintained by [SoftServe](https://www.softserveinc.com).
 
 ## What's In Here
 
-- **51 skills** in `.claude/skills/` — invoke with `/{skill-name}`, grouped into 8 use-case groups in [.claude/skills/CLAUDE.md](.claude/skills/CLAUDE.md). Seven are canonical Team OS skills (`/context-update` — the ingest engine, `/wiki-lint` — the health engine, `/feature-launch-gate`, `/weekly-synthesis`, `/customer-call-summary`, `/decision-log-entry`, `/portfolio-pulse`); the rest cover the wider PM workflow.
+- **47 skills** in `.claude/skills/` — invoke with `/{skill-name}`, grouped into 8 use-case groups in [.claude/skills/CLAUDE.md](.claude/skills/CLAUDE.md). Seven are canonical Team OS skills (`/context-update` — the ingest engine, `/wiki-lint` — the health engine, `/feature-launch-gate`, `/weekly-review`, `/process-meeting`, `/decision-log-entry`, `/portfolio-pulse`); the rest cover the wider PM workflow.
 - **The self-updating loop**: every writing skill closes with the same write-back steps ([.claude/references/write-back-contract.md](.claude/references/write-back-contract.md)); a write policy ([product-development/_meta/write-policy.yaml](product-development/_meta/write-policy.yaml)) marks the few steering files that need human confirmation; session hooks brief every session and guard protected paths; a GitHub Action lints on every PR and weekly.
 - **7 reviewer personas** in `.claude/agents/reviewers/` — powering `/prd-review-panel`.
 - **7 strategy frameworks** in `product-development/product/strategy/frameworks/` — 7 Powers, JTBD, growth loops, PLG iceberg, counter-positioning, hook-retain-expand, AI product strategy.

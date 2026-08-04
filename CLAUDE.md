@@ -57,7 +57,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"What's the state of feature X?"* | `feature-index.yaml#X` → linked PRD, plan, latest experiment / investigation |
 | *"What's the state of initiative Y (current work)?"* | `product/initiatives/{slug}.md` → its linked artifacts and decisions |
 | *"Starting or stress-testing a new bet / feature?"* | `product/processes/de-risk-a-bet.md` → the stage skill for your moment |
-| *"Something new worth keeping (call, thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
+| *"Process this meeting / call transcript?"* | run `/process-meeting` — files transcript + summary, routes records, updates the ledger |
+| *"Something new worth keeping (thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
 | *"Is the repo healthy / what's stale?"* | run `/wiki-lint` → latest report in `product-development/_meta/health/` |
 | *"What did customer Y say last call?"* | `product/customers/accounts/{Y}/calls/summaries/{latest}.md` → transcript only if the summary falls short |
 | *"Why did we choose Z?"* | `product/decisions/` → the dated decision file |
@@ -82,7 +83,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Strategy | `product-development/product/strategy/` | `current-quarter.md` (this quarter's OKRs), `roadmaps/`, `business-context/`, `frameworks/` |
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
 | Processes | `product-development/product/processes/` | `templates/` (blank scaffolds — copy, don't edit), `writing-guides/`, `launches/` (filled launch checklists) |
-| Meetings | `product-development/product/meetings/` | Standup, sprint planning, bi-weekly — docs / transcripts / summaries; `retros/` for retrospective writeups |
+| Meetings | `product-development/product/meetings/` | Standup, sprint planning, bi-weekly — docs / transcripts / summaries; `retros/` for retrospective writeups; `digests/` for periodic rollups |
 | Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |

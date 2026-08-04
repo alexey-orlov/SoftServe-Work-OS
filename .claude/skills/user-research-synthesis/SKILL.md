@@ -539,9 +539,9 @@ The skill will remind you:
 ### Where Files Go
 
 **Research synthesis:**
-- Active work: `product-development/product/customers/research-synthesis/[topic]-[date].md`
-- When finalized: Archive to `product-development/product/customers/[topic]-synthesis.md` for future reference
+- `product-development/product/customers/research-synthesis/[topic]-[date].md` — records stay where they land; no archive move
 - Executive summary: Can be shared directly with stakeholders
+- Per-interview inputs typically come from `/process-meeting`'s interview category (insight cards + transcripts already filed and ledgered)
 
 ### Link to Other Work
 
@@ -646,6 +646,12 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
+
+**Ledger (ingest clause):** when handed raw transcripts directly (not already processed by
+`/process-meeting`), file each one to the participant's account
+`calls/transcripts/{date}.md` and append its repo path to
+`product-development/_meta/processed.txt` (one repo-root-relative path per line, kept
+sorted) — otherwise `/context-update` sweeps will re-discover them.
 
 ---
 

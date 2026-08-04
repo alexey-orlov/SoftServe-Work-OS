@@ -1,6 +1,6 @@
 # Skills
 
-51 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+47 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -14,11 +14,11 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 
 | Group | Covers | Skills |
 |-------|--------|--------|
-| [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 13 |
+| [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 11 |
 | [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 15 |
 | [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus triaging what comes back in. | 5 |
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
-| [`discovery-customers`](#discovery-customers) | Interview prep and processing, call summaries, research synthesis. | 4 |
+| [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 5 |
 | [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 6 |
@@ -31,15 +31,13 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 - [decision-doc/](decision-doc/) — Document important product decisions. Creates decision logs with rationale, alternatives, and trade-offs
 - [decision-log-entry/](decision-log-entry/) — Record a team decision with reasoning, options, and tradeoffs. Two variants — full entry for debated decisions, quick entry for fast ones
 - [meeting-agenda/](meeting-agenda/) — Create structured meeting agendas for effective collaboration
-- [meeting-cleanup/](meeting-cleanup/) — Batch process multiple meetings from a single day. Consolidates action items and insights across meetings
 - [meeting-feedback/](meeting-feedback/) — Post-meeting effectiveness feedback and continuous improvement
-- [meeting-notes/](meeting-notes/) — Transform meeting transcripts into structured action items, decisions, and key insights. Processes raw notes, voice memos, or recordings
 - [portfolio-pulse/](portfolio-pulse/) — Exec-grade daily / weekly synthesis across all managed accounts and active features. Rolls up account health, risks, expansion signals, top 3 priorities, and drafted Slack messages
 - [slack-message/](slack-message/) — Draft team communications for Slack. Creates clear, actionable messages for different contexts
 - [status-update/](status-update/) — Generate stakeholder status updates. Creates clear, concise progress reports for different audiences
 - [weekly-plan/](weekly-plan/) — Set next week's priorities
-- [weekly-review/](weekly-review/) — Review week's progress, meetings, learnings
-- [weekly-synthesis/](weekly-synthesis/) — The team's one weekly digest: initiative-by-initiative movement, stalls, next week's due items, repo health. Slack-ready
+- [weekly-review/](weekly-review/) — Close out the week: the initiative-spine team digest (absorbs weekly-synthesis; `--digest` = cron-safe Part A) + your execution review
+- [process-meeting/](process-meeting/) — One entry point for every meeting record: customer calls, interviews, internal meetings, retros, batch days — transcript filed, summary written, records routed, ledger updated
 
 ### Definition
 
@@ -79,11 +77,9 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 
 ### Discovery: customers
 
-`group: discovery-customers` — Interview prep and processing, call summaries, research synthesis.
+`group: discovery-customers` — Interview prep and cross-interview synthesis. (Per-interview and call processing live in `/process-meeting`, communication-ops.)
 
-- [customer-call-summary/](customer-call-summary/) — Process a customer call transcript or notes into a structured summary, insight tables by topic, feature requests by area, action items, follow-up email, and Slack message
 - [interview-guide/](interview-guide/) — Create JTBD-based interview guides for user research. Structured questions for discovery interviews
-- [user-interview/](user-interview/) — Systematically process user interviews to extract actionable insights. Batch processes interviews and generates research reports
 - [user-research-synthesis/](user-research-synthesis/) — Turn user interviews into actionable insights. Advanced synthesis techniques and frameworks
 
 ### Discovery: product analytics
