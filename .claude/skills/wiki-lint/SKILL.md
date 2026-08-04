@@ -40,14 +40,20 @@ full pass — run the script first, then do the judgment checks the script can't
    `product-development/` and `.claude/` that point at nothing.
 5. **Initiative-page health** — every `initiatives/*.md` has `_status:` + `_updated:`;
    pages with `_status: active` but no artifact/activity change in 30+ days flagged; every
-   artifact link on the page resolves.
+   artifact link on the page resolves. Join symmetry: every decision entry whose
+   `Initiative:` header names a slug is linked from that page's Decisions section, and
+   every meeting/call summary whose `Initiatives touched:` names a slug has a matching
+   Activity line there (one-way — pages may link records that don't name them).
 6. **Living-page registry** — every glob in `write-policy.yaml#living-pages` matches at
    least the expected files; each living page carries `_updated:`; each is within its
-   ≤120-line budget (folder CLAUDE.mds ≤80; root CLAUDE.md ≤150).
+   ≤120-line budget (folder CLAUDE.mds ≤80; root CLAUDE.md ≤150; `segmentation-matrix.md`
+   ≤200 — table-heavy by design).
 7. **Mirror consistency** — the root CLAUDE.md fundamentals block vs `business-info.md`,
    field by field (company, ICP, model, north star, competitors, quarter focus);
-   `current-quarter.md`'s quarter label vs today's date; "Decided by" names in recent
-   decisions vs the team roster.
+   `segmentation-matrix.md` General-matrix totals vs the ARR / paying-accounts figures in
+   both, and every `portfolio.yaml` segment label (`vertical`, `size_band`, `use_cases`)
+   vs the matrix's canonical axes; `current-quarter.md`'s quarter label vs today's date;
+   "Decided by" names in recent decisions vs the team roster.
 8. **Ledger integrity** — every ledger path exists on disk; ledger is sorted and
    duplicate-free; unprocessed backlog count (the `/context-update` discovery `comm`);
    proposals in `_meta/proposals/` older than 14 days flagged.

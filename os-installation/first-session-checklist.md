@@ -62,7 +62,7 @@ Please read each one and organize them into the appropriate folders in product-d
 - Launch plans/release notes → product-development/product/processes/launches/
 - Analytics reports/A/B tests → product-development/analytics/metrics/{area}/
 - Meeting notes/retros → product-development/product/meetings/
-- Other docs → product-development/product/product-systems/
+- Other docs → run /context-update to route them by type
 "
 ```
 
@@ -119,6 +119,7 @@ claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-
 **Also fill out:**
 - This quarter's goals (`product-development/product/strategy/current-quarter.md`)
 - Stakeholder profiles (`product-development/product/strategy/business-context/stakeholders.md`)
+- Segmentation matrix — account counts and ARR by vertical × size band (`product-development/product/strategy/business-context/segmentation-matrix.md`); B2B teams only, delete the use-case sections if single-product
 - Team writing conventions (`product-development/product/processes/writing-guides/*.md`)
 
 > Personal context and working preferences stay in your **personal** OS — they are never committed here. See the Privacy Contract in [CLAUDE.md](../CLAUDE.md).

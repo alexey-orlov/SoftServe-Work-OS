@@ -39,7 +39,7 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 - [status-update/](status-update/) — Generate stakeholder status updates. Creates clear, concise progress reports for different audiences
 - [weekly-plan/](weekly-plan/) — Set next week's priorities
 - [weekly-review/](weekly-review/) — Review week's progress, meetings, learnings
-- [weekly-synthesis/](weekly-synthesis/) — Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering, design)
+- [weekly-synthesis/](weekly-synthesis/) — Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering)
 
 ### Definition
 

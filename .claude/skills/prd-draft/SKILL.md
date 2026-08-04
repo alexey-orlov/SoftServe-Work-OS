@@ -40,6 +40,7 @@ When this skill is invoked, immediately check:
 | Related PRDs | `product-development/product/PRDs/{area}/*.md` | feature dependencies | Related features and cross-functional impact |
 | User Research | `product-development/product/customers/*.md` | problem related to feature | User pain points, quotes, validation |
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | pricing, revenue, metrics | Revenue impact, North Star alignment |
+| Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | target segment, vertical, size band, use case | How many accounts and how much ARR the target segment actually holds — grounds opportunity sizing |
 | Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Competitive positioning if relevant |
 | Stakeholder Context | Stakeholder profiles | key stakeholders for this feature | Who to involve, communication style |
 
@@ -66,6 +67,7 @@ Before we draft, the skill checks what context exists...
 - `product-development/product/strategy/` for strategic alignment
 - `product-development/product/customers/` for user validation
 - `product-development/product/strategy/business-context/business-info.md` for business context
+- `product-development/product/strategy/business-context/segmentation-matrix.md` for the target segment's account count and ARR
 - Stakeholder profiles for who needs to be involved
 
 ### Context Health Check
@@ -83,6 +85,16 @@ Want to:
 
 **If strategy docs are empty/missing:**
 Flag this and suggest `/write-prod-strategy` or `/strategy-sprint` first.
+
+**If no assumption map exists for this feature** (`product-development/product/PRDs/{area}/reviews/{slug}-assumption-map.md`):
+Offer stage 1 of the de-risk chain before drafting:
+```
+This bet hasn't been assumption-mapped yet. Running /assumption-map first surfaces what we're betting on and what to test — the riskiest assumptions become this PRD's Open Questions instead of surprises later.
+
+1. **Map first** (recommended for new bets)
+2. **Draft anyway** - I'll flag unvalidated assumptions as we go
+```
+(Full sequence and skip rules: `product-development/product/processes/de-risk-a-bet.md` — small changes and internal tools legitimately skip stages.)
 
 **Based on what found, This skill surfaces:**
 
@@ -494,6 +506,8 @@ Want me to review this from multiple perspectives?
 
 Just let me know which perspectives would be helpful.
 ```
+
+**Also point downstream** (the de-risk chain): when the draft is ~80% done and before resources are committed, run `/red-team`; at stage milestones (kickoff, solution, launch-readiness) run `/prd-review-panel`. Full sequence with skip rules: `product-development/product/processes/de-risk-a-bet.md`.
 
 ### How to Run Multi-Agent Review
 
@@ -964,3 +978,9 @@ Add this to the standard PRD for AI features:
 - User satisfaction < ___%
 - Escalation rate > ___%
 ```
+
+---
+
+## Chain Position
+
+Stage 2 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/assumption-map` · downstream: `/red-team` (draft ~80%), `/prd-review-panel` (stage milestones). Skip rules live in the chain doc.

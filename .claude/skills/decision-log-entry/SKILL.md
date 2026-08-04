@@ -38,6 +38,7 @@ Save to: `product-development/product/decisions/{YYYY-MM-DD}-{topic-slug}.md`
 
 **Date:** [YYYY-MM-DD]
 **Decided by:** [Names from team roster]
+**Initiative:** [slug(s) from product/initiatives/ this was decided under, or "-"]
 **Status:** Active | Superseded by [link] | Reversed on [date]
 
 ## Options Considered
@@ -75,6 +76,7 @@ For decisions made quickly without formal deliberation:
 
 **Date:** [YYYY-MM-DD]
 **Decided by:** [Names]
+**Initiative:** [slug or "-"]
 **Status:** Active
 
 **Decision:** [What was decided and why, in 2-3 sentences.]
@@ -120,7 +122,7 @@ The `/freshness-check` skill flags `[PENDING:]` markers older than 14 days so th
 
 1. Full entries: under 200 words. Quick entries: under 75 words. This is a log, not a doc.
 2. Always include at least 2 options in full entries. If the team didn't consider alternatives, note: "No alternatives formally considered — fast decision based on [reason]." Or use the quick entry format.
-3. After saving, **append** to the bottom of the "Recent Decisions" list in `product-development/product/decisions/CLAUDE.md` (one bullet per line, one decision per bullet). Don't insert in the middle — that creates merge conflicts when two PMs file decisions the same day. If you hit a merge conflict on the index, keep both bullets and re-sort by date+sequence. Also: if a relevant initiative page exists in `product-development/product/initiatives/`, link the entry from it. End your reply by listing every repo path you wrote or updated. Full contract: `.claude/references/write-back-contract.md`.
+3. After saving, **append** to the bottom of the "Recent Decisions" list in `product-development/product/decisions/CLAUDE.md` (one bullet per line, one decision per bullet). Don't insert in the middle — that creates merge conflicts when two PMs file decisions the same day. If you hit a merge conflict on the index, keep both bullets and re-sort by date+sequence. Also: set the header's `Initiative:` field to the slug(s) this was decided under (or `-`), and link the entry from each named page's Decisions section **in the same change** — a slug in the header without the backlink is drift `/wiki-lint` flags. (One-way rule: initiative pages may link older decisions that don't name them.) End your reply by listing every repo path you wrote or updated. Full contract: `.claude/references/write-back-contract.md`.
 4. The "Reasoning" section must answer WHY, not WHAT. "We chose X" is not reasoning. "We chose X because our cost ratio is 22x" is reasoning.
 5. When a decision is reversed or superseded, don't delete the old entry. Update its Status field to "Superseded by [link to new decision]" or "Reversed on [date] — see [link]". The history of why we changed our minds is as valuable as the original decision.
 6. Use the team roster from root CLAUDE.md for the "Decided by" field. If someone not on the roster was involved, add their role: "[Name], VP Sales (not on core team)."

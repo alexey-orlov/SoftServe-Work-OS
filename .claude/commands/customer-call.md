@@ -15,7 +15,7 @@ Ask the user (or infer):
 If the customer folder doesn't exist:
 1. Create `accounts/{customer}/CLAUDE.md`, `accounts/{customer}/account-context.md`, `accounts/{customer}/calls/summaries/`, `accounts/{customer}/calls/transcripts/`
 2. Update `accounts/CLAUDE.md` with a row for the new customer
-3. Add the customer's entry to `accounts/portfolio.yaml` (status, arr if known, renewal_date, champion_role, last_updated)
+3. Add the customer's entry to `accounts/portfolio.yaml` (status, arr if known, vertical + size_band + use_cases using the canonical labels in `strategy/business-context/segmentation-matrix.md`, renewal_date, champion_role, last_updated)
 
 ## Step 2: Check for Existing Files
 
@@ -56,9 +56,9 @@ Apply the **PII rule**: no customer-side personal names anywhere in the summary.
 3. Add a cross-reference link from the summary to the transcript
 4. Update `accounts/{customer}/account-context.md` if any new context is worth carrying forward (new champion, renewal date moved, new strategic risk) — rewrite in place to current truth, bump its `_updated:` line
 5. Update `accounts/CLAUDE.md` table with the last-call date
-6. Update `accounts/portfolio.yaml#{customer}`: `last_call`, plus `status` / `risks` / `expansion_signals` when the call moved them; bump `last_updated`
+6. Update `accounts/portfolio.yaml#{customer}`: `last_call`, plus `status` / `risks` / `expansion_signals` when the call moved them; bump `last_updated`. If the call revealed a segment change (new use-case category adopted, size band or vertical corrected), update `vertical` / `size_band` / `use_cases` too and flag that `strategy/business-context/segmentation-matrix.md` needs its affected cells refreshed (Tier 2 — confirm or hand to `/context-update`)
 7. **Ledger**: append the transcript's repo path to `product-development/_meta/processed.txt` (one repo-root-relative path per line, keep sorted) — this call is now folded; `/context-update` sweeps will skip it
-8. **Route by type**: a decision made on the call → `/decision-log-entry` (quick format, linked from the summary); intel about a competitor → its teardown folder; material for an active initiative → link it from that initiative page
+8. **Route by type**: a decision made on the call → `/decision-log-entry` (quick format with its `Initiative:` header set, linked from the summary); intel about a competitor → its teardown folder; material for an active initiative → read the summary's `Initiatives touched:` header and append one dated Activity line per named slug to that initiative page, linking the summary
 9. End your reply by listing every repo path you wrote or updated
 
 ## Step 6: Run the Quality Checklist

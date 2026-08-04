@@ -14,7 +14,7 @@ group: delivery
 
 **Example:** "Build the user preferences feature from product-development/product/PRDs/{area}/preferences.md"
 
-**Output:** Code in your codebase + summary saved to `product-development/design/prototypes/[feature]-first-draft.md`
+**Output:** Code in your codebase + summary saved to `product-development/product/PRDs/prototypes/[feature]-first-draft.md`
 
 **Time:** 1-3 hours depending on feature complexity
 
@@ -34,7 +34,7 @@ Connect to codebase and build initial implementation of a feature. Single-pass d
 
 **Check first:**
 1. `product-development/product/PRDs/{area}/` - PRD for requirements
-2. `product-development/product/product-systems/codebase-overview.md` - Cached codebase context
+2. `product-development/engineering/codebase-overview.md` - Cached codebase context
 3. Codebase (`.git` directory, source files)
 
 ---
@@ -69,7 +69,7 @@ tree -L 2 -I 'node_modules|__pycache__|.git'
 ```
 
 **Save context:**
-Create `product-development/product/product-systems/codebase-overview.md`:
+Create `product-development/engineering/codebase-overview.md`:
 ```markdown
 # Codebase Overview
 
@@ -161,7 +161,7 @@ Create `product-development/product/product-systems/codebase-overview.md`:
 
 ### Step 5: Summary Document
 
-Save to `product-development/design/prototypes/[feature]-first-draft.md`:
+Save to `product-development/product/PRDs/prototypes/[feature]-first-draft.md`:
 
 ```markdown
 # First Draft Implementation: [Feature]
@@ -229,7 +229,7 @@ Before choosing the prototype tech stack, check `product-development/product/str
 - Include a `README.md` with setup instructions (`npm install && npm run dev` or equivalent)
 - Add a header comment in every file: `// Reference prototype - not production code. Share with engineering as a starting point.`
 
-**Output:** Save all files to `product-development/design/prototypes/[feature]-reference-impl/`
+**Output:** Save all files to `product-development/product/PRDs/prototypes/[feature]-reference-impl/`
 
 **When presenting to PM:**
 > "No codebase detected, so I built a standalone reference prototype using [stack]. This is not production code -- share it with engineering as a starting point for the real implementation. They should adapt it to your actual codebase patterns, auth system, and infrastructure."
@@ -336,7 +336,7 @@ Before delivering the first draft, verify:
 - [ ] **Edge cases handled** -- Error states, empty states, loading states, and validation are implemented
 - [ ] **Inline comments for complex logic** -- Non-obvious code is explained; TODOs are marked for future work
 - [ ] **Summary document complete** -- Files created/modified, test coverage, known issues, and next steps documented
-- [ ] **Output saved to correct path** -- Summary at `product-development/design/prototypes/[feature]-first-draft.md`, not `product-development/engineering/plans/{area}/`
+- [ ] **Output saved to correct path** -- Summary at `product-development/product/PRDs/prototypes/[feature]-first-draft.md`, not `product-development/engineering/plans/{area}/`
 
 If any check fails, fix it before delivering. A first draft with failing tests or missing accessibility is not ready to share.
 

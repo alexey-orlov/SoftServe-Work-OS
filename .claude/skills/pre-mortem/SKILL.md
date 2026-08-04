@@ -232,3 +232,9 @@ Before presenting output to the PM, verify:
 - [ ] **No go/no-go language anywhere:** recommendations yes, verdicts no
 - [ ] **Mitigations are actions, not adverbs:** "carefully" and "closely monitor" are not mitigations without a what, who, and when
 - [ ] **Re-runs preserved history:** existing file updated in place with a Revision History entry
+
+---
+
+## Chain Position
+
+Stage 5 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/prd-review-panel` · downstream: `/launch-checklist` (4–6 weeks out). Skip rules live in the chain doc.

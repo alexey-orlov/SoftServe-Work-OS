@@ -414,3 +414,9 @@ Before delivering the launch checklist, verify:
 - [ ] **Customized to launch type** -- Small features have a streamlined checklist; major launches have expanded sections
 
 If any check fails, fix it before delivering. A launch checklist with missing owners or unclear dependencies creates false confidence.
+
+---
+
+## Chain Position
+
+Stage 6 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/pre-mortem` · downstream: `/feature-launch-gate` (ship moment). Skip rules live in the chain doc.

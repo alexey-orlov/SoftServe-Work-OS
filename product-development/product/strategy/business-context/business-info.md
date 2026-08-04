@@ -4,7 +4,7 @@ The durable answer to: who are we, what do we sell, to whom, at what price, and 
 
 **What belongs here:** identity, product, market, ICP and personas, value proposition, business model, GTM motion, and product principles. Things that change a few times a year at most.
 
-**What does not:** quarterly OKRs (`../current-quarter.md`), competitor teardowns (`product/competitive-research/`), metric definitions (`analytics/metrics/`), team roster and Slack channels (root `CLAUDE.md`). Every section below that overlaps one of those links out instead of copying it.
+**What does not:** quarterly OKRs (`../current-quarter.md`), competitor teardowns (`product/competitive-research/`), metric definitions (`analytics/metrics/`), segment counts and ARR mix ([segmentation-matrix.md](segmentation-matrix.md)), team roster and Slack channels (root `CLAUDE.md`). Every section below that overlaps one of those links out instead of copying it.
 
 A summary of this file lives in the root `CLAUDE.md` and loads every session. When you change something here that also appears there, update both.
 
@@ -66,6 +66,8 @@ A summary of this file lives in the root `CLAUDE.md` and loads every session. Wh
 ## Target Market
 
 ### Customer Segments
+
+Qualitative target definitions only. The quantitative mix of the actual base — account counts and ARR by vertical × size band, overall and per use-case category — lives in [segmentation-matrix.md](segmentation-matrix.md). Describe company size and industry below using that file's canonical band and vertical names, so the two files never talk past each other.
 
 **Primary Customer:**
 - **Who:** [Title/Role]
@@ -238,7 +240,7 @@ Headline numbers only. Metric **definitions**, the SQL behind them, and dashboar
 
 **North Star Metric:** [Metric name] — definition in `analytics/metrics/{area}/`
 
-**Business:** ARR/MRR [figure] · Growth [YoY, MoM] · Paying accounts [number] · ARPU [amount]
+**Business:** ARR/MRR [figure] · Growth [YoY, MoM] · Paying accounts [number] · ARPU [amount] — segment breakdown in [segmentation-matrix.md](segmentation-matrix.md); its totals must equal the ARR and account figures here
 
 **Product:** DAU/MAU [ratio] · Activation [%] · Retention D7/D30 [%] · NPS [score]
 

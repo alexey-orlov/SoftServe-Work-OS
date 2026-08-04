@@ -13,7 +13,7 @@ group: definition
 ## Quick Start
 
 1. Tell me: "I need a [1-day / 1-week / 1-month] strategy for [topic]"
-2. The skill checks `product-development/product/strategy/` and `product-development/product/strategy/business-context/business-info.md` for existing context
+2. The skill checks `product-development/product/strategy/`, `product-development/product/strategy/business-context/business-info.md`, and `business-context/segmentation-matrix.md` (current segment mix — accounts and ARR) for existing context
 3. The skill will ask 3-5 clarifying questions about scope, stakeholders, and constraints
 4. We build progressively -- even a 1-month sprint starts with the 1-day foundation first
 5. Output goes to `product-development/product/strategy/strategy-[topic]-[date].md`

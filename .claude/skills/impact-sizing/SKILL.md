@@ -20,6 +20,7 @@ When this skill is invoked, immediately check:
 | Current PRD | `product-development/product/PRDs/{area}/*.md` | feature name from chat | User impact, problem severity |
 | User Research | `product-development/product/customers/*.md` | feature problem, user quotes | Addressable users, pain severity |
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | pricing, revenue model, TAM | Revenue impact drivers |
+| Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case | Account counts and ARR per segment — the denominators for eligible-accounts and revenue math |
 | Historical Data | `product-development/analytics/metrics/{area}/*.md` | similar features, baseline conversion | Reference adoption rates |
 | Strategy | `product-development/product/strategy/*.md` | feature strategic fit | Resource availability, priority context |
 
@@ -45,6 +46,7 @@ Before we estimate impact, the skill checks what context exists...
 - `product-development/product/PRDs/{area}/` for the feature definition
 - `product-development/product/customers/` for user research on this problem
 - `product-development/product/strategy/business-context/business-info.md` for business model context
+- `product-development/product/strategy/business-context/segmentation-matrix.md` for account counts and ARR by segment (sizing denominators)
 - `product-development/analytics/metrics/{area}/` for comparable feature data
 
 **Based on what found, This skill surfaces:**
@@ -256,6 +258,7 @@ After sizing impact:
 - `product-development/product/customers/` - User pain and adoption patterns
 - `/user-research-synthesis` - Qualitative insights about addressable users
 - `product-development/product/strategy/business-context/business-info.md` - Business model and growth drivers
+- `product-development/product/strategy/business-context/segmentation-matrix.md` - Account counts and ARR per segment for eligible-population math
 - `product-development/analytics/metrics/{area}/` - Historical data on similar features
 
 ---
@@ -291,7 +294,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 Before presenting output to the PM, verify:
 
 - [ ] **File saved to correct location:** Output saved to `product-development/analytics/investigations/{area}/impact-sizing-[feature-name]-[date].md`
-- [ ] **Context routing table was checked:** Reviewed `product-development/product/strategy/business-context/business-info.md`, `product-development/product/strategy/`, and `product-development/analytics/metrics/{area}/` for relevant context
+- [ ] **Context routing table was checked:** Reviewed `product-development/product/strategy/business-context/business-info.md`, `product-development/product/strategy/business-context/segmentation-matrix.md`, `product-development/product/strategy/`, and `product-development/analytics/metrics/{area}/` for relevant context
 - [ ] **Driver tree has specific numbers:** Every node in the driver tree contains actual estimates (not placeholders like "[X]" or "[number]")
 - [ ] **Confidence levels assigned:** Each assumption in the confidence assessment table has a High/Med/Low rating with justification
 - [ ] **Revenue/user impact calculated with clear methodology:** Impact estimates show the math (e.g., "10,000 eligible users x 30% adoption x $5 ARPU = $15,000/month"), not just final numbers

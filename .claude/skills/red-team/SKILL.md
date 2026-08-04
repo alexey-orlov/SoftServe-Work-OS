@@ -229,3 +229,9 @@ Before presenting output to the PM, verify:
 - [ ] **What's Well-Reasoned is non-empty, or the doc is truly hollow:** balance is what makes the attack credible
 - [ ] **Count is 3–5 and ranked:** no ties dodged, the lede is not buried
 - [ ] **No people-attacks:** every conflict cites an artifact, not an author
+
+---
+
+## Chain Position
+
+Stage 3 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/prd-draft` · downstream: `/prd-review-panel`; doc-quality worry → `/ralph-wiggum` instead. Skip rules live in the chain doc.

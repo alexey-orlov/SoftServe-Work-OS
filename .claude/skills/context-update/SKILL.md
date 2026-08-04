@@ -15,15 +15,15 @@ by this skill — not re-derived per session, not left to humans to file.
   raw material (`*/transcripts/`, source docs — read-only inputs, never edited; pages link
   INTO them), records (dated append-only streams: `decisions/`, `calls/summaries/`,
   experiment results), living pages (edit-in-place current truth: `account-context.md`,
-  `business-info.md`, `stakeholders.md`, `current-quarter.md`, `initiatives/*.md`),
-  deliverables (PRDs, analyses — functional folders).
+  `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`,
+  `initiatives/*.md`), deliverables (PRDs, analyses — functional folders).
 - **Index layer**: root `CLAUDE.md` (+ its business-fundamentals mirror block),
   `product-development/feature-index.yaml`, every folder's `CLAUDE.md` file list.
 - **Ledger**: `product-development/_meta/processed.txt` — one repo-root-relative path per
   line = "already folded". Idempotency across runs, machines, and teammates.
 - **Write policy**: `product-development/_meta/write-policy.yaml`. Confirm-tier files
-  (business-info, stakeholders, current-quarter, feature-index, root CLAUDE.md) are edited
-  only after showing the exact before/after and getting an in-session yes. Headless runs
+  (business-info, stakeholders, segmentation-matrix, current-quarter, feature-index, root
+  CLAUDE.md) are edited only after showing the exact before/after and getting an in-session yes. Headless runs
   write a proposal to `product-development/_meta/proposals/{date}-{slug}.md` instead.
 - Invariant to protect: an agent that reads root CLAUDE.md plus one account page or one
   initiative page has working context for that thread without opening a transcript.
@@ -68,14 +68,15 @@ copy. Mixed artifacts are split — each part goes to its home, one ledger entry
 
 | Type | Signal | Destination + follow-through |
 |---|---|---|
-| Customer insight / request | call transcript, support thread, quote | summary in `accounts/{c}/calls/summaries/{date}.md` (customer-call-summary format) → rewrite `account-context.md` to current truth → refresh the row in `accounts/CLAUDE.md` and `portfolio.yaml#{c}` (last_call, health fields) → a feature request also lands as one line in the matching feature's PRD open questions or its index entry (Tier 2 → confirm) |
-| Decision | "we decided / chose", tradeoff language | `decisions/{YYYY-MM-DD}-{slug}.md` per `/decision-log-entry` format (quick entry is fine) + append to the END of Recent Decisions in `decisions/CLAUDE.md` + link from the initiative page. From a transcript: automatic, with the transcript linked under Related and the decision flagged in the run summary. Mid-session ("we decided X"): file immediately and show the entry |
+| Customer insight / request | call transcript, support thread, quote | summary in `accounts/{c}/calls/summaries/{date}.md` (customer-call-summary format) → rewrite `account-context.md` to current truth → refresh the row in `accounts/CLAUDE.md` and `portfolio.yaml#{c}` (last_call, health, segment fields) → a feature request also lands as one line in the matching feature's PRD open questions or its index entry (Tier 2 → confirm) |
+| Decision | "we decided / chose", tradeoff language | `decisions/{YYYY-MM-DD}-{slug}.md` per `/decision-log-entry` format (quick entry is fine — set its `Initiative:` header, slug(s) or `-`) + append to the END of Recent Decisions in `decisions/CLAUDE.md` + link from each initiative page named in the header (same change). From a transcript: automatic, with the transcript linked under Related and the decision flagged in the run summary. Mid-session ("we decided X"): file immediately and show the entry |
 | Lesson | "next time…", retro item, agent correction | team-process lesson → append to `meetings/retros/lessons-learned.md`; agent-behavior rule → `.claude/team-learnings.md` (admin tier — propose the line, the steward file is small and capped) |
 | Metric change | definition/threshold/window moved | edit `analytics/metrics/{area}/…` in place + `data-catalog.yaml` if a table changed |
 | Competitor intel | competitor named with a new fact | `competitive-research/competitors/{slug}/` (create the folder + CLAUDE.md stub from the teardown pattern on first intel) + refresh the matrix row |
 | Stakeholder fact | durable role/preference/decision-power change | `stakeholders.md` (Tier 2 → confirm). **Reconcile the structure, not just the cell**: if the new fact breaks the doc's grouping (a person now leads what the doc splits), MOVE them and fix the grouping — patching one row inside a contradicted scheme is the same staleness failure as not editing |
 | Business fact | ICP / pricing / positioning / stage shift | `business-info.md` (Tier 2 → confirm) **and the root CLAUDE.md fundamentals block in the SAME change** — the mirror rule; one without the other leaves the wiki self-contradictory |
-| Initiative material | scope change, milestone, artifact for current work | the initiative's page in `product/initiatives/` (edit in place) + the artifact's own home per its class |
+| Segment shift | account signed / churned / re-tiered; vertical, size band, or use-case mix changed | update `portfolio.yaml#{c}` segment fields (auto) → refresh the affected cells **and totals** of `business-context/segmentation-matrix.md` (Tier 2 → confirm), keeping its totals equal to the fundamentals block and business-info Key Metrics — the same mirror rule |
+| Initiative material | scope change, milestone, artifact for current work; a summary's `Initiatives touched:` header names slugs | the initiative's page in `product/initiatives/` (edit in place — one dated Activity line per declared slug, linking the summary; declared joins beat inference, infer only when the field is absent) + the artifact's own home per its class |
 | New entity | first artifact for an unknown account / initiative / competitor | **index check first** — read `accounts/CLAUDE.md` keys, `initiatives/` pages, `feature-index.yaml`, the competitor list BEFORE creating. Then scaffold: account per the `/customer-call` command's step 1; initiative page from the template + `initiatives/CLAUDE.md` line + proposed feature-index `initiatives:` addition (Tier 2); competitor folder + matrix row |
 | Junk | empty, test, purely social | ledger + count |
 
@@ -137,8 +138,8 @@ Tier-2 confirmation that was asked (or proposal filed).
 - Superseded facts removed, not stacked; "-" for empty sections; pages within budget;
   `_updated:` bumped on every touched living page.
 - Routing went by TYPE: no decision buried in an account page, no business fact patched
-  without its root-CLAUDE.md mirror, no stakeholder cell patched inside a contradicted
-  grouping.
+  without its root-CLAUDE.md mirror, no segment shift folded without the matrix cells and
+  totals reconciled, no stakeholder cell patched inside a contradicted grouping.
 - Write policy honored: no confirm-tier file changed without an in-session yes (or a
   proposal filed headlessly); no admin-tier file touched.
 - Ledger updated for EVERY artifact handled, including junk and duplicates.

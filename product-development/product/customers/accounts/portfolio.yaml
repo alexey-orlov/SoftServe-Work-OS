@@ -3,14 +3,22 @@
 # Cross-account registry: one entry per managed account, keyed by the account's
 # folder slug under product/customers/accounts/.
 #
-# Read by  /portfolio-pulse   (daily / weekly account rollups)
-# Updated by /customer-call   (after each processed call: last_call, risks,
-#            expansion_signals) and /context-update (status, arr, renewal_date
-#            when new facts land).
+# Read by  /portfolio-pulse   (daily / weekly account rollups) and the
+#            segmentation-matrix refresh — the segment fields below roll up into
+#            product/strategy/business-context/segmentation-matrix.md.
+# Updated by /customer-call   (sets all fields at account creation; after each
+#            processed call: last_call, risks, expansion_signals) and
+#            /context-update (status, arr, segment fields, renewal_date when
+#            new facts land).
 #
 # Field schema (every entry carries all fields; use [] when empty):
 #   status:             healthy | watch | at-risk
 #   arr:                integer, USD per year
+#   vertical:           one of the canonical vertical labels in
+#                       product/strategy/business-context/segmentation-matrix.md
+#   size_band:          smb | corp | ent — thresholds defined in segmentation-matrix.md
+#   use_cases:          use-case categories the account actively uses (canonical
+#                       labels from segmentation-matrix.md); [] until known
 #   renewal_date:       YYYY-MM-DD
 #   champion_role:      role of the internal champion (role, not name — PII-safe)
 #   last_call:          YYYY-MM-DD of the most recent processed call
@@ -24,6 +32,9 @@
 acme-example:
   status: healthy
   arr: 48000
+  vertical: "E-commerce"
+  size_band: corp
+  use_cases: ["lead-enrichment"]
   renewal_date: 2027-01-15
   champion_role: "Head of Ops"
   last_call: 2026-07-21

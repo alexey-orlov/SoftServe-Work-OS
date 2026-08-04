@@ -28,6 +28,7 @@ tiers:
     - CLAUDE.md                                                              # root — carries the business-fundamentals mirror block
     - product-development/feature-index.yaml                                 # the product map
     - product-development/product/strategy/business-context/business-info.md
+    - product-development/product/strategy/business-context/segmentation-matrix.md
     - product-development/product/strategy/business-context/stakeholders.md
     - product-development/product/strategy/current-quarter.md
 
@@ -48,6 +49,7 @@ living-pages:
   - product-development/product/initiatives/*.md
   - product-development/product/customers/accounts/*/account-context.md
   - product-development/product/strategy/business-context/business-info.md
+  - product-development/product/strategy/business-context/segmentation-matrix.md
   - product-development/product/strategy/business-context/stakeholders.md
   - product-development/product/strategy/current-quarter.md
 

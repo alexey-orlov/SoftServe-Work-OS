@@ -4,6 +4,7 @@
 
 **Date:** 2026-02-14
 **Decided by:** [PM], [Engineer] (roster placeholders)
+**Initiative:** credit-usage-dashboard-v1
 **Status:** Active
 
 ## Options Considered

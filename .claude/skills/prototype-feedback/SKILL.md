@@ -20,7 +20,7 @@ Rapidly iterate on prototypes using AI-powered building and automated feedback c
 
 **Example:** "Review my checkout prototype: [link]. PRD is in product-development/product/PRDs/{area}/checkout-redesign.md"
 
-**Output:** Saved to `product-development/design/prototypes/[feature]-feedback-round-[N].md`
+**Output:** Saved to `product-development/product/PRDs/prototypes/[feature]-feedback-round-[N].md`
 
 **Time:** 30 minutes per feedback round
 
@@ -31,10 +31,10 @@ Rapidly iterate on prototypes using AI-powered building and automated feedback c
 | Source | Files/Folders | What to Extract |
 |--------|---------------|-----------------|
 | PRD | `product-development/product/PRDs/{area}/` | Requirements, acceptance criteria, success metrics |
-| Design System | `product-development/product/product-systems/`, design docs | Colors, typography, component patterns to match |
+| Design System | Figma links in `product-development/feature-index.yaml` (`figma:` keys) | Colors, typography, component patterns to match |
 | Stakeholder Profiles | `product-development/product/processes/templates/stakeholder-*.md` | Who reviews this, their priorities and concerns |
 | User Research | `product-development/product/customers/` | User pain points, quotes, behavior patterns |
-| Past Prototypes | `product-development/design/prototypes/` | Previous feedback rounds, resolved issues |
+| Past Prototypes | `product-development/product/PRDs/prototypes/` | Previous feedback rounds, resolved issues |
 
 ## Overview
 

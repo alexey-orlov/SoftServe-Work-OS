@@ -34,6 +34,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | pricing, tiers, plans, ACV, revenue model, monetization | Current pricing, tiers, customer segments, revenue targets |
+| Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case, ARR | Where ARR concentrates; the per-category matrices show cross-sell whitespace (accounts present in one use-case category, absent from another) |
 | Metrics/Analytics | `product-development/analytics/metrics/{area}/*.md` | NRR, "net revenue retention", expansion rate, upsell, churn, MRR | Existing expansion metrics, NRR benchmarks, churn by segment |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | pricing, tier, feature gate, monetization | Feature decisions tied to monetization, pricing rationale |
 | Strategy | `product-development/product/strategy/*.md` | "growth", "expansion", "pricing", "positioning" | Strategic approach, customer segmentation, market positioning |
@@ -57,6 +58,7 @@ Before diving into expansion tactics, the skill checks what you already know abo
 
 **Checking:**
 - `product-development/product/strategy/business-context/business-info.md` for current pricing and segments
+- `product-development/product/strategy/business-context/segmentation-matrix.md` for ARR concentration by segment and cross-sell whitespace across use-case categories
 - `product-development/analytics/metrics/{area}/` for existing expansion metrics and NRR
 - `product-development/product/PRDs/{area}/` for monetization-related decisions
 - `product-development/product/strategy/` for revenue growth strategy

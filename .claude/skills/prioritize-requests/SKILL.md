@@ -101,7 +101,7 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 1. What's the product and what stage is it at? — skip if `product-development/product/strategy/business-context/business-info.md` is filled
 2. What are you trying to achieve this quarter? — skip if `current-quarter.md` is filled
 3. What constraints are you working under (team size, timeline, technical)? — **always ask**, nothing in the repo answers this
-4. Which customer segments carry more weight right now? — skip if `business-info.md` names an ICP, but confirm
+4. Which customer segments carry more weight right now? — skip if `business-info.md` names an ICP or `business-context/segmentation-matrix.md` is filled (segment ARR share is the default weight), but confirm
 
 ---
 
@@ -139,7 +139,7 @@ Once the gate passes:
 - **Strong** — 3+ distinct accounts, **or** ≥50% of accounts in the pile when the pile has 3–5 accounts **and the theme has at least 2 distinct accounts** (state the denominator), **or** 2+ accounts where one is in a priority segment, **or** corroborated by a `product-development/product/customers/research-synthesis/` theme with a frequency and severity rating, **or** appears as a `**Key Product Gaps**` entry in 2+ accounts
 - **Weak** — everything else. **A one-account theme is always Weak regardless of pile size** — one loud customer is not demand.
 
-If `business-info.md` names no ICP, the priority-segment clause is unavailable — say so rather than inferring segment from an account name.
+If `business-info.md` names no ICP and `business-context/segmentation-matrix.md` is unfilled, the priority-segment clause is unavailable — say so rather than inferring segment from an account name. When the matrix is filled, weight demand by the ARR the requesting accounts' segments carry there (their `vertical` / `size_band` / `use_cases` come from `portfolio.yaml`).
 
 ### Step 5: Route on the 2×2 and write the mandated treatment
 

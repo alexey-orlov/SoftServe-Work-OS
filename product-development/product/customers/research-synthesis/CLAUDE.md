@@ -9,3 +9,7 @@ Cross-interview synthesis reports — `/user-interview` and `/user-research-synt
 ### Files
 
 _Empty. Add a one-line entry here for every report you add._
+
+### Created on demand
+
+- `journey-maps/` — Journey map documents — created on first use by `/journey-map`

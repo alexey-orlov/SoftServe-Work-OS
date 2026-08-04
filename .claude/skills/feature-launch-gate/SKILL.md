@@ -54,9 +54,6 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
 - [ ] Architectural decisions documented in `engineering/rfcs/{area}/` (if applicable)
 - [ ] Known limitations or edge cases documented
 
-### Customer Communication
-- [ ] Sales enablement updated in `product/sales-enablement/` (if it changes the pitch)
-
 ### Navigation
 - [ ] All new files have entries in their folder's CLAUDE.md
 - [ ] `product-development/CLAUDE.md` updated if new folders were created
@@ -119,3 +116,9 @@ Without this, there is no way to audit whether the gate was actually run before 
 5. Items that genuinely don't apply (no new tables = no schema needed) should be marked NOT APPLICABLE, not FAILED.
 6. After a successful gate, post a one-line confirmation to the team's launch channel.
 7. PRD content check uses these placeholder tokens to fail: `[FILL IN]`, `[NEED:`, `[Your `, `[Replace `, `[Add `, `[Description]`, `[Priority 1]`. If any of those are still present in the PRD, fail with the specific token list and line numbers.
+
+---
+
+## Chain Position
+
+Stage 7 (final) of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/launch-checklist` · downstream: — (post-launch: `/feature-results`). Skip rules live in the chain doc.

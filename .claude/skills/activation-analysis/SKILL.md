@@ -38,6 +38,7 @@ When this skill is invoked, immediately check:
 | Meeting Notes | `product-development/product/meetings/*.md` | "activation", "onboarding", "new users", "drop-off", "support tickets" | CS/support feedback on where users get stuck, win/loss reasons |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | "onboarding", "activation", "tutorial", "first-time user" | Past onboarding improvements, features to drive activation |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | target user, customer segment, use case, primary value | Who you're activating, what value matters to them |
+| Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case | Which segments dominate the base — activation benchmarks and fixes differ between SMB and Enterprise |
 
 **Context Priority:**
 1. Internal context FIRST (business info, existing activation metrics, user research)
@@ -57,6 +58,7 @@ Before measuring the Setup → Aha → Habit stages, the skill checks what data 
 
 **Checking:**
 - `product-development/product/strategy/business-context/business-info.md` for your product and target users
+- `product-development/product/strategy/business-context/segmentation-matrix.md` for which segments dominate the base (activation reads differ by size band and use case)
 - `product-development/analytics/metrics/{area}/` for existing activation metrics and onboarding data
 - `product-development/product/customers/` for user research on onboarding struggles
 - `product-development/product/meetings/` for CS/support feedback on where users get stuck

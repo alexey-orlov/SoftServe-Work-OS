@@ -677,3 +677,9 @@ Before presenting output to the PM, verify:
 - [ ] **Conflicting perspectives between reviewers explicitly flagged:** Any disagreements between agents (e.g., Engineering wants simplicity while Design wants richness) are called out in the "Conflicting Perspectives" section with both positions stated
 - [ ] **Synthesis section prioritizes feedback items:** The TL;DR and summary sections rank issues by severity (Critical Blockers > Important Gaps > Enhancements) with a clear recommended next step
 - [ ] **Feedback references specific PRD sections:** Each piece of feedback points to the exact section, requirement, or design element it applies to (e.g., "the rollout plan in Section 5" not "the rollout approach")
+
+---
+
+## Chain Position
+
+Stage 4 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/red-team` · downstream: `/pre-mortem` (once committed, launch in sight). Skip rules live in the chain doc.

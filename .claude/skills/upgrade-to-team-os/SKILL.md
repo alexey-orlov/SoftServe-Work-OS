@@ -361,23 +361,19 @@ product-development/
 │   ├── decisions/
 │   ├── meetings/{standup,sprint-planning,team-bi-weekly}/{docs,transcripts,summaries}/
 │   ├── meetings/retros/        ← incl. lessons-learned.md (rolling)
-│   ├── workflows/
-│   ├── sales-enablement/
-│   ├── processes/              ← templates incl. initiative-page-template.md
-│   └── product-systems/
+│   └── processes/              ← templates incl. initiative-page-template.md
 ├── engineering/
 │   ├── plans/{area}/
 │   ├── rfcs/{area}/
 │   └── bug-investigations/{area}/
-├── analytics/
-│   ├── data-catalog.yaml
-│   ├── metrics/{area}/
-│   ├── queries/{area}/
-│   ├── schemas/{area}/
-│   ├── dashboards/{area}/
-│   ├── experiments/{area}/
-│   └── investigations/{area}/
-└── design/
+└── analytics/
+    ├── data-catalog.yaml
+    ├── metrics/{area}/
+    ├── queries/{area}/
+    ├── schemas/{area}/
+    ├── dashboards/{area}/
+    ├── experiments/{area}/
+    └── investigations/{area}/
 
 os-installation/
 ├── installation-guide.md
@@ -409,9 +405,9 @@ For single-role repos, prune (but stub, never omit). Multi-role repos skip pruni
 | Role | Stubbed (placeholder CLAUDE.md only) |
 |------|-------------------------------------|
 | PM-only | `engineering/` (full subtree stubbed) |
-| Eng-only | `product/customers/`, `product/sales-enablement/`, `product/competitive-research/`, `product/strategy/roadmaps/` |
+| Eng-only | `product/customers/`, `product/competitive-research/`, `product/strategy/roadmaps/` |
 | Design-only | `engineering/`, `analytics/queries/`, `analytics/schemas/` |
-| Analytics-only | `engineering/`, `product/customers/`, `product/sales-enablement/` |
+| Analytics-only | `engineering/`, `product/customers/` |
 | Exec/strategy-only | most of `engineering/`, `analytics/queries/` (keep `analytics/dashboards/` and `analytics/metrics/` for board-level rollups) |
 | DevOps-only | `product/PRDs/`, `product/customers/`, `analytics/dashboards/`, `analytics/experiments/` |
 
@@ -442,7 +438,7 @@ Every shared file gets copied to its team-OS destination, sanitized along the wa
 | Personal OS pattern | Team OS destination |
 |---|---|
 | `context-library/business-info*` | `product-development/product/strategy/business-context/business-info.md` (then hoist a summary into the root `CLAUDE.md` fundamentals block) |
-| `context-library/product-context*`, codebase overviews, design-system docs | `product-development/product/product-systems/` |
+| `context-library/product-context*`, codebase overviews, design-system docs | `product-development/engineering/` (e.g. `codebase-overview.md`) |
 | Quarterly OKRs / current-quarter goals found anywhere | `product-development/product/strategy/current-quarter.md` |
 | Stakeholder profiles / maps (`stakeholder*`) | `product-development/product/strategy/business-context/stakeholders.md` (strip managing-up / how-they-evaluate-you notes — those stay personal) |
 | `context-library/competitive-intel/{name}.md` (flat) | `product-development/product/competitive-research/competitors/{name}/CLAUDE.md` (split flat → per-competitor folder) |

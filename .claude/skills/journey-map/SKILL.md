@@ -549,7 +549,7 @@ When the PM uses `/journey-map`, the skill automatically:
 
 Before presenting output to the PM, verify:
 
-- [ ] **File saved to correct location:** Output saved to `product-development/design/journey-maps/[journey-name]-[date].md`
+- [ ] **File saved to correct location:** Output saved to `product-development/product/customers/research-synthesis/journey-maps/[journey-name]-[date].md`
 - [ ] **Context routing table was checked:** Reviewed `product-development/product/customers/` for user research, interview transcripts, and persona data before building the map
 - [ ] **Every stage has all four elements:** Each journey phase includes actions, thoughts, emotions, and pain points (no empty or missing sections)
 - [ ] **User quotes from research included:** Where available, real user quotes from `product-development/product/customers/` are embedded in relevant journey stages (not fabricated quotes)

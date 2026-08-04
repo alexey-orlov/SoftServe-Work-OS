@@ -201,6 +201,7 @@ Processing now...
 **Attendees:** [Names]
 **Meeting Type:** [Customer Interview / Stakeholder Review / etc.]
 **Duration:** [Time]
+**Initiatives touched:** [slug(s) from product-development/product/initiatives/, or "-"]
 
 ---
 
@@ -303,6 +304,17 @@ Processing now...
 
 </details>
 ```
+
+---
+
+## Initiative Join (mandatory)
+
+`Initiatives touched:` declares which current work this meeting affected — check
+`product-development/product/initiatives/` for active slugs; `-` when none. For every slug
+named, append one line to that initiative page's Activity section **in the same change**:
+`YYYY-MM-DD — [one-line outcome] ([summary](relative/path/to/this/summary.md))`. Declared
+joins beat inference — `/context-update` reads this field when sweeping and `/wiki-lint`
+flags a named slug with no matching Activity line. Full rule: `.claude/references/write-back-contract.md` rule 8.
 
 ---
 

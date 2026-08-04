@@ -36,6 +36,7 @@ If you have under ~10 active customers, **use the Quick variant**. Three section
 
 **Attendees:** {Our names. Customer side: roles only}
 **Call type:** {Discovery / Check-in / Escalation / Renewal / Demo}
+**Initiatives touched:** {slug(s) from product/initiatives/, or "-"}
 
 ## Executive Summary
 
@@ -53,6 +54,8 @@ If you have under ~10 active customers, **use the Quick variant**. Three section
 That's the whole thing. PII rule (no customer-side personal names) still applies. This is enough for a 3-person team with 5 customers and a 10-person team with 8 customers.
 
 **Save the file at:** `product-development/product/customers/accounts/{customer}/calls/summaries/{YYYY-MM-DD}.md` (replace `{customer}` with the customer slug like `acme-corp`, replace `{YYYY-MM-DD}` with the call date).
+
+**Both variants carry `Initiatives touched:`** — check `product-development/product/initiatives/` for active slugs (`-` when none). For each slug named, append one dated line to that initiative page's Activity section linking this summary, in the same change (write-back contract rule 8).
 
 If the customer folder doesn't exist, create it with a CLAUDE.md and an `account-context.md` (see `accounts/CLAUDE.md` for the template).
 

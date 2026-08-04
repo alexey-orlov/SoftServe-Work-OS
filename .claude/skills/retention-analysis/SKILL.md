@@ -38,6 +38,7 @@ When this skill is invoked, immediately check:
 | Meeting Notes | `product-development/product/meetings/*.md` | churn, "cancelled", "downgrade", lost deal, customer feedback | CS feedback on churn, customer complaints, drop-off patterns |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | retention, sticky, habit, engagement, notification, reminder | Features built to improve retention |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | target user, use case, frequency, engagement, core activity | How often users should use product, what drives stickiness |
+| Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case | Segment denominators — churn and retention are reported by segment, never overall alone |
 
 **Context Priority:**
 1. Internal context FIRST (business info, retention metrics, churn research)
@@ -57,6 +58,7 @@ Before diving into retention analysis, the skill checks what data already exists
 
 **Checking:**
 - `product-development/product/strategy/business-context/business-info.md` for expected product usage patterns
+- `product-development/product/strategy/business-context/segmentation-matrix.md` for segment denominators (report churn and retention by segment, never overall alone)
 - `product-development/analytics/metrics/{area}/` for existing retention metrics and cohort data
 - `product-development/product/customers/` for churn interviews and user feedback
 - `product-development/product/meetings/` for CS/support feedback on why users churn

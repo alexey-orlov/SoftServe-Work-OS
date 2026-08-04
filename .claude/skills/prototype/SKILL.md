@@ -47,9 +47,9 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Active PRDs | `product-development/product/PRDs/{area}/*.md` | feature name | Requirements, user flows, success metrics, edge cases |
-| Previous Prototypes | `product-development/design/prototypes/*.md` | feature name | Previous versions, iteration history, feedback received |
+| Previous Prototypes | `product-development/product/PRDs/prototypes/*.md` | feature name | Previous versions, iteration history, feedback received |
 | User Research | `product-development/product/customers/*.md` | user pain, problem | User quotes, pain points, workflows to design for |
-| Napkin Sketches | `product-development/design/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
+| Napkin Sketches | `product-development/product/PRDs/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
 | Stakeholder Profiles | Stakeholder templates | design reviewers | Who will review this and what they care about |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | brand, product | Brand guidelines, product context, existing UI patterns |
 | Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Competitor implementations for reference |
@@ -97,7 +97,7 @@ Let's build a prototype. First, let me check what we're working with...
 
 **Silently check:**
 1. Read most recent PRDs in `product-development/product/PRDs/{area}/`
-2. Check `product-development/design/prototypes/` for previous versions
+2. Check `product-development/product/PRDs/prototypes/` for previous versions
 3. Read any napkin sketches from `/napkin-sketch`
 4. Check user research for UX-relevant insights
 
@@ -246,7 +246,7 @@ Create a [component/page type] for [product context].
 ---
 ```
 
-Save to: `product-development/design/prototypes/[feature-name]-v0-prompt.md`
+Save to: `product-development/product/PRDs/prototypes/[feature-name]-v0-prompt.md`
 
 ---
 
@@ -318,7 +318,7 @@ Build a [app type] for [product context].
 ---
 ```
 
-Save to: `product-development/design/prototypes/[feature-name]-lovable-prompt.md`
+Save to: `product-development/product/PRDs/prototypes/[feature-name]-lovable-prompt.md`
 
 ---
 
@@ -357,7 +357,7 @@ Build a [app type] using [React/Next.js/vanilla].
 ---
 ```
 
-Save to: `product-development/design/prototypes/[feature-name]-bolt-prompt.md`
+Save to: `product-development/product/PRDs/prototypes/[feature-name]-bolt-prompt.md`
 
 ---
 
@@ -381,7 +381,7 @@ Build the prototype directly in the conversation.
 - Footer/secondary actions
 ```
 
-Save the code to: `product-development/design/prototypes/[feature-name]-artifacts-v[N].md`
+Save the code to: `product-development/product/PRDs/prototypes/[feature-name]-artifacts-v[N].md`
 
 ---
 
@@ -444,7 +444,7 @@ Generate a detailed design spec that a designer can implement in Figma.
 - [Napkin sketch from /napkin-sketch]
 ```
 
-Save to: `product-development/design/prototypes/[feature-name]-figma-handoff.md`
+Save to: `product-development/product/PRDs/prototypes/[feature-name]-figma-handoff.md`
 
 ---
 
@@ -475,7 +475,7 @@ This checklist goes at the end of the prototype output, before the "Next steps" 
 After generating the prototype, offer next steps:
 
 ```
-Prototype ready! Saved to product-development/design/prototypes/[filename].
+Prototype ready! Saved to product-development/product/PRDs/prototypes/[filename].
 
 **Next steps:**
 1. **Test it:** [Instructions specific to type -- paste into v0, open in Lovable, etc.]
@@ -496,7 +496,7 @@ Prototype ready! Saved to product-development/design/prototypes/[filename].
 
 When the PM comes back with feedback:
 
-1. **Read previous prototype:** Check `product-development/design/prototypes/[feature]-*` for history
+1. **Read previous prototype:** Check `product-development/product/PRDs/prototypes/[feature]-*` for history
 2. **Understand feedback:** What worked? What didn't? What changed?
 3. **Generate updated version:** Increment version number
 4. **Track changes:** Note what changed between versions

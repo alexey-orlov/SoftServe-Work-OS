@@ -259,3 +259,9 @@ Before presenting output to the PM, verify:
 - [ ] **No idea-level verdict appears anywhere:** the skill mapped the bet; it didn't judge it
 - [ ] **Team & Org rows name no individuals:** team-level capability and capacity only
 - [ ] **Update mode preserved history:** existing maps were re-rated in place with a Revision History entry, not regenerated
+
+---
+
+## Chain Position
+
+Stage 1 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: — (chain entry) · downstream: `/prd-draft`; riskiest assumptions → `/experiment-decision`. Skip rules live in the chain doc.

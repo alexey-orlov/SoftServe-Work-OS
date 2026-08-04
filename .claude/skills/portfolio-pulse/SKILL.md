@@ -16,6 +16,7 @@ The skill reads:
 
 - `product-development/product/strategy/business-context/business-info.md` — ICP, pricing tiers, headline metrics. Needed to judge whether an account is on-profile, whether an expansion signal is real, and what "healthy" means for this business
 - `product-development/product/customers/accounts/portfolio.yaml` — primary input
+- `product-development/product/strategy/business-context/segmentation-matrix.md` — segment axes and ARR mix; lets the rollup say where risk and expansion concentrate (vertical / size band / use case), not just which accounts
 - Recent summaries in `accounts/{customer}/calls/summaries/` (last 14 days)
 - `product/decisions/` (recent)
 - `feature-index.yaml` — for cross-referencing in-flight work

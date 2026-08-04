@@ -1,6 +1,6 @@
 # Product Development
 
-Root of all product, engineering, analytics, and design artifacts.
+Root of all product, engineering, and analytics artifacts.
 
 **Read this when:** You need any artifact for a feature — start at `feature-index.yaml`.
 
@@ -9,7 +9,6 @@ Root of all product, engineering, analytics, and design artifacts.
 ### Subfolders
 
 - [analytics/](analytics/) — Metrics, queries, schemas, dashboards, experiments, and investigations
-- [design/](design/) — Design rationale. Artifacts live in Figma and are linked from feature-index.yaml
 - [engineering/](engineering/) — Engineering plans, RFCs, and bug investigations
 - [product/](product/) — Product context, PRDs, customers, strategy, decisions, and operating processes
 - [_meta/](_meta/) — Wiki machinery: write policy (protected paths), ingestion ledger, health reports, pending proposals

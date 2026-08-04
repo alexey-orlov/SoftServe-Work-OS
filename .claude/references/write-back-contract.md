@@ -15,7 +15,7 @@ while the maps that make them findable rot. Unwritten-back work is unfinished wo
 |---|---|---|
 | **Raw material** | `*/transcripts/`, source docs | Immutable. Never edit; wiki pages link INTO them (provenance). |
 | **Records** | decision log, call/meeting summaries, experiment results, health reports | Append-only dated streams. New file per event; never rewrite history. |
-| **Living pages** | `business-info.md`, `stakeholders.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
+| **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
 | **Deliverables** | PRDs, RFCs, analyses, prototypes, checklists | Work products that are team knowledge. Saved in their functional folder, registered in navigation, linked from their initiative page. |
 
 ## The uniform block (canonical text)
@@ -62,6 +62,13 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
    kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing is re-judged.
 7. **Run visibility.** A skill that processed multiple items reports what it did —
    processed / folded / skipped counts and every path touched. Nothing is handled silently.
+8. **Initiative joins are declared, not inferred.** Records that can touch current work
+   carry an initiative header — decision entries `Initiative:`, meeting/call summaries
+   `Initiatives touched:` — set to slug(s) from `product/initiatives/` or `-`. Whoever
+   writes the record adds the matching backlink in the SAME change: the decision linked
+   from each named page's Decisions section; the summary linked from one dated Activity
+   line per named slug. `/wiki-lint` check 5 flags one-way drift (a named slug with no
+   backlink); pages linking records that don't name them is fine.
 
 ## One writer per surface
 
@@ -73,6 +80,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 | `product-development/_meta/health/` | `/wiki-lint` |
 | `product-development/_meta/proposals/` | headless runs (created), humans (cleared) |
 | root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change, by whoever edits either (Tier 2 confirm covers both) |
+| `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always Tier 2 confirm; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
 | navigation list re-ordering | `/wiki-lint --fix` only |
 
 ## Exempt skills

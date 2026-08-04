@@ -1,6 +1,6 @@
 ---
 name: weekly-synthesis
-description: Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering, design). Highlights decisions, customer insights, metric changes. Slack-ready output.
+description: Summarize everything that changed in the repo this week, grouped by folder (product, analytics, engineering). Highlights decisions, customer insights, metric changes. Slack-ready output.
 group: communication-ops
 ---
 

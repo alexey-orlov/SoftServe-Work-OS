@@ -18,7 +18,7 @@ Create optimized prompts for AI prototyping tools (v0.dev, Lovable, Bolt.new) to
 
 **Example:** "Generate a prototype prompt for the onboarding wizard from PRD-2024-05"
 
-**Output:** Saved to `product-development/design/prototypes/[feature]-prototype-prompt.md`
+**Output:** Saved to `product-development/product/PRDs/prototypes/[feature]-prototype-prompt.md`
 
 **Time:** 10-15 minutes to generate prompt, 1-2 minutes to build prototype
 
