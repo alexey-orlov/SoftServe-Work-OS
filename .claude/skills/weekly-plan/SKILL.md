@@ -20,7 +20,7 @@ Plan your week forward with clear priorities tied to quarterly goals. Sets the f
 **Check these files first:**
 1. `product-development/product/initiatives/` - Active initiative pages: open loops (owned, dated) seed the week's candidate priorities; `_status:` shows momentum
 2. `product-development/product/strategy/` - Quarter OKRs, North Star, strategic pillars
-3. `product-development/product/meetings/team-bi-weekly/summaries/` - Last week's review (if exists)
+3. `product-development/product/meetings/digests/` - Last week's review (if exists)
 4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages (for work no initiative tracks)
 5. `product-development/product/processes/launches/` - Upcoming launches
 6. `product-development/product/meetings/team-bi-weekly/docs/` - Previous weekly plans (for pattern analysis)
@@ -51,7 +51,7 @@ Plan your week forward with clear priorities tied to quarterly goals. Sets the f
 
 ### Step 2: Review Last Week (If Available)
 
-Check for `product-development/product/meetings/team-bi-weekly/summaries/[last-week]-weekly-review.md`:
+Check for `product-development/product/meetings/digests/[YYYY]-W[XX]-weekly-review.md` (last week's ISO week):
 
 If exists, extract:
 - **Carried over items** - What didn't get done?
@@ -475,7 +475,7 @@ Before presenting output to the PM, verify:
 - [ ] **Priorities aligned with strategic goals:** Each of the top 3 priorities explicitly references which quarter goal, OKR, or strategic pillar it advances
 - [ ] **Low-value work is named, not just the priorities:** the week explicitly lists what is being dropped, delegated, or timeboxed — a plan that only lists priorities silently keeps everything else
 - [ ] **Dependencies and blockers identified:** Each priority lists what it depends on (people, decisions, deliverables) and any known blockers with mitigation plans
-- [ ] **Carry-over items from last week addressed:** If `product-development/product/meetings/team-bi-weekly/summaries/` or `product-development/product/meetings/team-bi-weekly/docs/` contain incomplete items from last week, they are explicitly acknowledged as carried over, deferred, or dropped with reasoning
+- [ ] **Carry-over items from last week addressed:** If last week's review in `product-development/product/meetings/digests/` or previous plans in `product-development/product/meetings/team-bi-weekly/docs/` contain incomplete items, they are explicitly acknowledged as carried over, deferred, or dropped with reasoning
 
 ---
 

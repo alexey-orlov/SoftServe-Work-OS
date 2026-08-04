@@ -8,7 +8,7 @@ group: communication-ops
 
 Exec-grade synthesis for the person watching the whole portfolio. Outputs priorities, account health rollup, top risks, expansion signals, and drafted messages.
 
-This is the morning-ritual / exec-digest skill for hub-and-spoke usage. Pair with `/weekly-synthesis` (the team's weekly digest of initiative movement and repo changes) for the full picture.
+This is the morning-ritual / exec-digest skill for hub-and-spoke usage. Pair with `/weekly-review --digest` (the team's weekly digest of initiative movement and repo changes) for the full picture.
 
 ## Inputs
 
@@ -120,7 +120,7 @@ Compresses Weekly mode to one page. Adds: ARR-weighted risk score, ARR-weighted 
 4. Health distribution is computed from `portfolio.yaml#status`. If the YAML is stale (last_updated > 30 days for any entry), flag in the output.
 5. For multi-team setups, the cross-team rollup pulls from each team's repo using a configurable list. If repos aren't reachable, mark "(unreachable)".
 6. Token budget: daily mode under 800 tokens output, weekly under 1500, board under 1000.
-7. **Persist weekly and board runs** — save to `product-development/product/meetings/team-bi-weekly/summaries/{YYYY-MM-DD}-portfolio-pulse-{mode}.md` and append the row to that folder's CLAUDE.md list (contract: `.claude/references/write-back-contract.md`). The template's "Δ vs. last week" column reads LAST week's saved file — without persistence there is no baseline. Daily mode stays chat-only by default (offer to save when something material moved).
+7. **Persist weekly and board runs** — save to `product-development/product/meetings/digests/{YYYY-MM-DD}-portfolio-pulse-{mode}.md` and append the row to that folder's CLAUDE.md list (contract: `.claude/references/write-back-contract.md`). The template's "Δ vs. last week" column reads LAST week's saved file — without persistence there is no baseline. Daily mode stays chat-only by default (offer to save when something material moved).
 
 ## Setting Up Multi-Team Rollup
 
@@ -147,6 +147,6 @@ teams:
 
 ## Related
 
-- `/weekly-synthesis` — the team's weekly digest (initiative movement, decisions, repo changes); pair with portfolio-pulse for the full Friday afternoon read
+- `/weekly-review` — the team's weekly digest (initiative movement, decisions, repo changes; `--digest` for the cron-safe Part A); pair with portfolio-pulse for the full Friday afternoon read
 - `customers/accounts/portfolio.yaml` — the registry this skill reads from
 - `product/initiatives/` — the workstream pages this skill reads for status, open loops, and activity

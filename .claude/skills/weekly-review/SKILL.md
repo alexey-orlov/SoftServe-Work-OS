@@ -1,728 +1,174 @@
 ---
 name: weekly-review
-description: Review week's progress, meetings, learnings
+description: Close out the week in one run — Part A, the team digest (initiative-by-initiative movement, stalls, next week's due items, repo health; Slack-ready), then Part B, your execution review (plan vs actual on the week's priorities, learnings, draft priorities for /weekly-plan). --digest runs Part A alone, headless-safe for a Friday cron. One data pass feeds both. Saves to meetings/digests/{YYYY}-W{XX}-weekly-review.md. Absorbs the old /weekly-synthesis. Run Friday afternoon or Monday morning. Not the account/ARR rollup (/portfolio-pulse), not audience-tailored updates (/status-update), not demand triage (/prioritize-requests).
 group: communication-ops
 ---
 
-## Quick Start
+# weekly-review — the week, closed out in one run
 
-1. Run `/weekly-review` on Friday afternoon (best time) or Monday morning
-2. The skill scans your workspace: weekly plans, daily plans, PRDs, meeting notes, decisions, and launches from the past 7 days
-3. The skill generates a focused review comparing plan vs. actual, surfacing key wins, blockers, and learnings
-4. Output goes to `product-development/product/meetings/team-bi-weekly/summaries/YYYY-WXX-weekly-review.md`
-5. After the review, the skill suggests running `/weekly-plan` to plan next week
-
-**Default output is focused (~150 lines max).** Say "full review" if you want the expanded version with stakeholder pulse, task-level execution metrics, and pattern analysis.
-
-## Purpose
-
-End-of-week synthesis reviewing what you accomplished, what you learned, and what needs attention. Feeds into next week's planning and builds institutional memory.
+Two parts, one data pass. **Part A** is the team digest — what moved, initiative by
+initiative, readable by anyone and Slack-ready. **Part B** is your execution review — plan
+vs actual, learnings, and next week's draft priorities. The digest is the shared record;
+the review is what you do about it.
 
 ## Usage
 
-- `/weekly-review` - Review current/past week
-- `/weekly-review last-week` - Review previous week (if you forgot)
-
----
-
-## Context Routing
-
-**Check these files first:**
-1. `product-development/product/initiatives/` - Active initiative pages: Activity lines dated this week (the primary record of what happened) and open-loop deltas
-2. `product-development/product/meetings/team-bi-weekly/docs/` - This week's plan (what you intended)
-3. `product-development/product/meetings/standup/docs/` - Daily plans from this week
-4. `product-development/product/PRDs/{area}/` - PRDs modified this week (for work no initiative tracks)
-5. `product-development/product/meetings/{type}/summaries/` - Meeting notes from past 7 days
-6. `product-development/product/processes/launches/` - Launches that happened this week
-7. `product-development/product/decisions/` - Decisions made this week
-8. `product-development/product/customers/research-synthesis/` - Research conducted
-9. `product-development/product/strategy/` - Quarter goals (to track progress)
-
-**MCP Queries (if available):**
-- **Linear/Jira MCP** - Tasks completed this week
-- **Analytics MCP** - Metrics for features launched recently
-- **GitHub MCP** - Code activity (if relevant to your role)
-- **Slack MCP** - Key conversations and decisions
-
-**Fallback:** File-based analysis of the Team OS repo + manual input for completions.
-
----
-
-## Workflow
-
-### Step 1: Determine Review Period
-
-1. **Calculate week to review:**
-   - Default: Current week (if Friday or later)
-   - If Monday-Thursday: Ask "Review last week or current week?"
-   - If user specified: Use that week
-
-2. **Check if review already exists:**
-   - Look for `product-development/product/meetings/team-bi-weekly/summaries/YYYY-WXX-weekly-review.md`
-   - If exists: Ask "Update existing review or create new version?"
-
----
-
-### Step 2: Data Collection
-
-Start with `product-development/product/initiatives/`: Activity lines dated this week are the primary record of what happened, and open loops show what's still hanging. The scans below fill in work that no initiative tracks.
-
-**A. Weekly Plan (What Was Intended):**
-
-Read `product-development/product/meetings/team-bi-weekly/docs/YYYY-WXX-weekly-plan.md`:
-
-Extract:
-- Top 3 priorities for the week
-- Key tasks under each priority
-- Success criteria
-- Expected meeting load
-
-If no weekly plan exists:
-- Note: "Week wasn't planned. Reviewing what happened only."
-- Suggest: "Next week, run `/weekly-plan` on Monday for better focus."
-
----
-
-**B. PRD Progress:**
-
-Scan `product-development/product/PRDs/{area}/`:
-
-Method 1 - File modification dates:
-```bash
-# Files modified in the past 7 days
-find product-development/product/PRDs/{area}/ -name "*.md" -mtime -7
+```
+/weekly-review              → Part A + Part B (interactive)
+/weekly-review --digest     → Part A only — headless-safe, for a Friday cron
+/weekly-review last-week    → review the previous week (if you forgot)
 ```
 
-For each PRD touched this week:
-- Read frontmatter or first section for current stage
-- Compare to last week's stage (if weekly review from last week exists)
-- Determine: Advanced, Stalled, or New
+Best time: Friday afternoon (week fresh, plan next week right after; `/weekly-plan`
+follows). Alternative: Monday morning. A `--digest` run earlier in the week is extended in
+place by a later full run — same file, keyed by ISO week. Past weeks are never rewritten.
 
-Method 2 - If Git available:
-```bash
-# PRDs with commits this week
-git log --since="7 days ago" --name-only --pretty=format: | grep -E "prds/.*\.md$" | sort -u
-```
+## One data pass (read in this order)
 
-**Categorize:**
-- **Advanced:** Moved to next stage (Team Kickoff → Planning Review)
-- **Active:** Work happened but didn't advance stage
-- **Stalled:** No activity this week
-- **New:** Started this week
+1. `product-development/product/initiatives/` — every page with `_status: active`, plus any
+   page whose `_status:` changed during the week. Pull each page's Activity lines dated in
+   the window and its Open loops with due dates.
+2. Git commits from the last 7 days across `product-development/` — catches changes no
+   Activity line records.
+3. `product-development/product/decisions/` — entries dated this week. Each entry's
+   `Initiative:` header routes it: a named slug → that initiative's bullet; `-` → "Also
+   this week".
+4. The week's meeting and call summaries (`meetings/*/summaries/`,
+   `customers/accounts/*/calls/summaries/`) — their `Initiatives touched:` headers route
+   the same way.
+5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
+6. The latest report in `product-development/_meta/health/` — staleness count.
 
----
+**Part B additionally:** `meetings/team-bi-weekly/docs/{YYYY}-W{XX}-weekly-plan.md` (what
+you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
+suggest `/weekly-plan` Monday), `meetings/standup/docs/` daily plans (what actually
+happened), PRDs modified this week (for work no initiative tracks),
+`processes/launches/`, `customers/research-synthesis/` (research conducted). MCPs when
+connected: Linear/Jira for completed tasks, analytics for launched-feature metrics.
 
-**C. Feature Launches:**
-
-Check `product-development/product/processes/launches/`:
-- Launches completed this week
-- Launch checklists finished
-- Post-launch monitoring started
-
-For each launch:
-If Analytics MCP available:
-```
-Query metrics since launch date
-Compare to success criteria from PRD
-```
-
-Categorize:
-- ✅ On track (meeting targets)
-- ⚠️ Needs attention (below targets)
-- ❌ Underperforming (significantly below)
-- 🚀 Exceeding (beating targets)
-
----
-
-**D. Meetings & Decisions:**
-
-Scan `product-development/product/meetings/{type}/summaries/` from past 7 days:
-
-For each meeting:
-- Extract date, attendees, topic
-- Look for: Decisions made, action items created, blockers identified
-
-Check `product-development/product/decisions/`:
-- Decision docs created this week
-- Link to related meetings
-
-**Build stakeholder pulse:**
-- Who did you meet with most? (frequency)
-- Who did you miss syncing with? (gaps)
-- What topics dominated discussions? (themes)
-
----
-
-**E. Tasks Completed:**
-
-If Linear/Jira MCP available:
-```
-Query: Tasks completed in past 7 days
-Group by: Priority, PRD/Initiative
-Calculate: Planned vs actual completion rate
-```
-
-If MCP not available:
-- Scan daily plans for checked-off tasks
-- Scan meeting notes for completed action items
-
-**Categorize by initiative:**
-```
-Initiative: [PRD Name]
-- ✅ Task 1 (from Priority 1)
-- ✅ Task 2 (from Priority 1)
-- [ ] Task 3 (carried over - why?)
-```
-
-**Calculate metrics:**
-- Tasks completed vs planned
-- % completion rate
-- Carry-over rate
-
----
-
-**F. User Research & Insights:**
-
-Check `product-development/product/customers/`:
-- New interview notes this week
-- Competitive analysis updates
-
-Check `product-development/product/customers/research-synthesis/`:
-- Synthesis reports created
-- Themes identified
-
-Extract:
-- Key findings
-- Recurring themes (mentioned in multiple sources)
-- Recommendations for roadmap
-
----
-
-**G. Learnings & Patterns:**
-
-This is where weekly review gets powerful - surfacing patterns.
-
-**From daily plans:**
-- What consistently took longer than expected?
-- What got deprioritized every day? (maybe not important)
-- What meeting prep was valuable vs not?
-
-**From outcomes:**
-- What decisions went well? (process to repeat)
-- What decisions went poorly? (what to change)
-- What blockers kept recurring? (systemic issue)
-
-**From stakeholder interactions:**
-- What communication worked well?
-- What caused confusion or misalignment?
-- Who needs more/less frequent updates?
-
----
-
-### Step 3: Analysis & Synthesis
-
-**PRD Pipeline Analysis:**
-
-For each PRD:
-- Last week's stage → This week's stage
-- Movement: ✅ Advanced / → Active / ⚠️ Stalled
-
-**Why analysis:**
-- Advanced: What unblocked it? (repeat this)
-- Stalled: What's blocking? (action needed)
-
----
-
-**Strategic Alignment:**
-
-Read `product-development/product/strategy/` for quarter goals.
-
-For each goal:
-- Which priorities/tasks contributed to it this week?
-- Progress estimate: X% → Y% (did we move the needle?)
-- Velocity: Are we on track for quarter target?
-
-**Pillar balance:**
-If strategy has defined pillars:
-- Pillar 1: X% of time this week
-- Pillar 2: Y% of time
-- Pillar 3: Z% of time
-
-Compare to target allocation: Are we balanced?
-
----
-
-**Pattern Detection:**
-
-Look for:
-- **Recurring blockers:** Same dependency/person blocked multiple things
-- **Underestimated tasks:** Consistently took 2x longer than planned
-- **Overcommitted weeks:** Planned 30 hours with 25 hours of meetings
-- **Meeting value:** Which meetings led to outcomes vs were FYI only?
-- **Best working times:** When did deep work happen? (protect these blocks)
-
----
-
-### Step 4: Generate Weekly Review
-
-Create file: `product-development/product/meetings/team-bi-weekly/summaries/YYYY-WXX-weekly-review.md`
-
-**Output Length Guidance:**
-
-**Default (focused review, ~150 lines max).** Include only:
-1. TL;DR (5-6 bullet summary)
-2. Priority Completion (plan vs actual for top 3 priorities)
-3. Key Decisions Made (list with one-line rationale each)
-4. Metrics Movement (table of metrics that changed)
-5. Top 3 Learnings (what worked, what did not, what to change)
-6. Next Week Preview (draft priorities + items to unblock)
-
-**Full review (when user asks for it).** Expand to also include:
-- Stakeholder pulse (engagement gaps, new relationships)
-- Task-level execution metrics (completion rate, carry-over rate, scope creep indicator)
-- PRD pipeline table with stage movement
-- Meeting value assessment (high/medium/low for each meeting)
-- Pattern analysis (recurring blockers, underestimated task types, best working times)
-- User research and competitive intelligence updates
-
-**Template:**
+## Part A — Team Digest (Slack-ready)
 
 ```markdown
----
-week: YYYY-WXX
-week_start: YYYY-MM-DD
-week_end: YYYY-MM-DD
-quarter: Q[X] YYYY
----
+## 📋 Weekly Review — Week of {date range}
 
-# Weekly Review - Week of [Month] [DD], [YYYY]
+### Initiatives
 
-## TL;DR
+- **[{slug}]({link to page})** ({_status}) — {1-2 lines: what moved, from this week's Activity}
+  - ⚠️ {overdue open loop — owner — days overdue} (only when true)
+- **{slug}** (active) — no movement this week. {One line: what it's waiting on, from Open loops.}
 
-- **PRDs:** [X active], [Y advanced], [Z stalled]
-- **Launches:** [N features shipped]
-- **Meetings:** [M total], [P key decisions]
-- **Completion rate:** [X%] of planned tasks done
-- **Key win:** [Biggest accomplishment]
-- **Key challenge:** [Biggest blocker/lesson]
+### Also this week (no initiative)
 
----
+- **Decisions:** {title} — {one line} ({link})
+- **Customer calls:** {customer}: {key takeaway, role-attributed quote if relevant}
+- **Analytics:** {metrics, queries, schemas, experiments that changed}
+- **Competitive:** {new entries or matrix updates}
+- **Retros / lessons:** {list}
 
-## Strategic Progress
+### Next week
 
-**Quarter Goal:** [Primary goal for Q]
-**Progress This Week:** [What moved forward]
+- {Open loop due within 7 days} — {owner} — {due date} — {initiative}
+- {Launch or gate expected: {initiative} → `/feature-launch-gate`}
+- **Quarter checkpoint:** {one line — which current-quarter objective this week's movement served, or "no objective moved this week"}
 
-| Goal | Start of Week | End of Week | This Week | Status |
-|------|---------------|-------------|-----------|--------|
-| [Goal 1] | X% | Y% | +Z% | ✅ On track |
-| [Goal 2] | A% | B% | +C% | ⚠️ Behind |
+### ⚡ Top 3 Things to Know
 
-**Velocity check:**
-- [X] weeks left in quarter
-- [Y%] progress needed per week to hit goal
-- [Z%] actual progress this week
-- **Assessment:** [On track / Need to accelerate / Ahead]
+1. {Most important new information}
+2. {Second}
+3. {Third}
 
----
+### 📊 Repo Health
 
-## Top 3 Priorities Review
-
-[Compare planned vs actual]
-
-### Priority 1: [Title]
-
-**Planned:** [What we intended to achieve]
-**Actual:** [What we achieved]
-
-**Tasks:**
-- ✅ [Task 1] - Done
-- ✅ [Task 2] - Done
-- [ ] [Task 3] - Carried over because [reason]
-
-**Status:** ✅ Complete / 🟡 Partial / ❌ Not started
-
-**Key outcome:**
-- [What this unlocked or enabled]
-
-**Learning:**
-- [What went well or what to change]
-
----
-
-### Priority 2: [Title]
-
-[Same structure]
-
----
-
-### Priority 3: [Title]
-
-[Same structure]
-
----
-
-## PRD Pipeline
-
-| PRD | Stage (Start of Week) | Stage (End of Week) | Movement | Next Action |
-|-----|----------------------|---------------------|----------|-------------|
-| [Name] | Team Kickoff | Planning Review | ✅ Advanced | Get eng estimates |
-| [Name] | Solution Review | Solution Review | ⚠️ Stalled | Need legal review |
-| [Name] | - | Team Kickoff | 🆕 New | Scope and plan |
-
-**Analysis:**
-- **Advanced:** [PRD X] moved forward because [stakeholder signed off / design done / etc.]
-- **Stalled:** [PRD Y] blocked on [dependency / decision / resource]
-- **Recommendation:** [What to prioritize next week to unblock]
-
----
-
-## Launches & Impact
-
-### Shipped This Week
-
-[If anything launched]
-
-**[Feature Name]** (Launched [Day])
-
-**Success Criteria (from PRD):**
-- [Metric 1]: Target [X], Actual [Y] ([+/-Z%])
-- [Metric 2]: Target [A], Actual [B] ([+/-C%])
-
-**Early assessment:** ✅ On track / ⚠️ Needs attention / ❌ Below target / 🚀 Exceeding
-
-**Insights:**
-- [User feedback received]
-- [Unexpected behavior observed]
-- [Next iteration needed]
-
----
-
-### Post-Launch Monitoring
-
-[Features launched in past 4 weeks still being monitored]
-
-| Feature | Launch Date | Key Metric | Target | Actual | Trend | Status |
-|---------|-------------|------------|--------|--------|-------|--------|
-| [Name] | [Date] | [Metric] | [X] | [Y] | [↗↘→] | [✅⚠️❌] |
-
----
-
-## Key Decisions Made
-
-1. **[Decision]** ([Date] - [Meeting])
-   - **Context:** [Why this came up]
-   - **Decision:** [What was decided]
-   - **Rationale:** [Why we chose this]
-   - **Owner:** [Who's executing]
-   - **Impact:** [What this affects]
-   - **Doc:** [Link if exists]
-
-2. **[Decision 2]**
-   [Same structure]
-
----
-
-## Meetings & Stakeholder Pulse
-
-### Meetings This Week: [Total]
-
-| Day | Meeting | Attendees | Outcome | Value |
-|-----|---------|-----------|---------|-------|
-| Mon | [Topic] | [Names] | [Decision/Alignment] | 🟢 High |
-| Tue | [Topic] | [Names] | [Info sharing] | 🟡 Medium |
-| Wed | [Topic] | [Names] | [Cancelled] | ⚫ None |
-
-**Meeting load:** [X] hours / 40 = [Y%]
-**Deep work time:** [Z] hours (vs [A] hours planned)
-
-**Value assessment:**
-- 🟢 High value: Led to decision or unblocked work
-- 🟡 Medium value: Useful context but no immediate action
-- 🔴 Low value: Could have been async or skipped
-
-**Recommendation:** [Which meetings to keep/change/cancel]
-
----
-
-### Stakeholder Pulse
-
-**High engagement this week:**
-- **[Name]** - [Why: Multiple syncs, key decision, strong collaboration]
-  - Impact: [What this enabled]
-  - Continue: [Keep this cadence / Increase collaboration]
-
-**Needs attention:**
-- **[Name]** - [Why: Haven't synced in 2+ weeks, blocking issue, misalignment suspected]
-  - Impact: [What's at risk]
-  - Action: [Specific next step - schedule 1:1, send update, etc.]
-
-**New relationships:**
-- **[Name]** - [Met for first time, context]
-  - Follow-up: [Add to stakeholder profiles, schedule regular sync]
-
----
-
-## User Research & Insights
-
-[Only include if research happened]
-
-**New Research This Week:**
-- **[Interview/Study]** - [Date]
-  - Key finding: [Insight]
-  - Validates: [Which hypothesis or PRD]
-  - Challenges: [What assumption or approach]
-
-**Recurring Themes:**
-- **[Theme 1]** - Mentioned in [X] sources
-  - Evidence: [Quote or data point]
-  - Implication: [What this means for roadmap]
-
-- **[Theme 2]** - Validates hypothesis from [PRD]
-  - Evidence: [Quote or data point]
-  - Recommendation: [Accelerate this PRD / Pivot approach]
-
-**Competitive Intelligence:**
-[If competitive analysis updated]
-- [Competitor] launched [Feature]
-- Implication: [How this affects our strategy]
-
----
-
-## Tasks & Execution
-
-**Completion Metrics:**
-- **Completed:** [X] tasks
-- **Carried over:** [Y] tasks ([Z%] carry-over rate)
-- **Added mid-week:** [A] tasks (scope creep indicator)
-
-**By initiative:**
-
-### [Initiative/PRD Name]
-
-- ✅ [Task completed]
-- ✅ [Task completed]
-- [ ] [Task carried over] - **Why:** [Blocked by X / Deprioritized for Y / Under-estimated]
-
-### [Initiative 2]
-
-[Same structure]
-
-**Patterns:**
-- Tasks that took longer than expected: [Type/category]
-- Blockers that repeated: [Dependency on X person/team]
-- Tasks that got bumped repeatedly: [Maybe not actually important?]
-
----
-
-## Learnings & Patterns
-
-**What Worked Well:**
-- **[Approach/Decision]** - [Why it was effective]
-  - Example: [Specific instance]
-  - Repeat: [How to apply this pattern again]
-
-**What Didn't Work:**
-- **[Mistake/Inefficiency]** - [What happened]
-  - Impact: [Consequence]
-  - Root cause: [Why this happened]
-  - Fix: [Specific change for next time]
-
-**Process Improvements:**
-- [ ] [Specific improvement to implement]
-  - Why: [Problem it solves]
-  - How: [Concrete action]
-  - Owner: You
-  - By when: [Next week / Next sprint]
-
-**Personal Development:**
-[If applicable]
-- Skill practiced: [What you worked on]
-- Feedback received: [From whom, about what]
-- Growth area identified: [What to develop]
-
----
-
-## Next Week Preview
-
-### Top 3 Priorities (Draft)
-
-[Based on this week's outcomes, suggest next week's priorities]
-
-1. **[Priority 1]** - [Why: Carries over from this week / New urgent item / Strategic next step]
-2. **[Priority 2]** - [Why]
-3. **[Priority 3]** - [Why]
-
-> Note: Run `/weekly-plan` to formalize these and add detail
-
----
-
-### Key Meetings Next Week
-
-[From calendar if available]
-- **[Day]:** [Meeting] - [Goal/Outcome needed]
-- **[Day]:** [Meeting] - [Prep needed]
-
----
-
-### Items to Unblock
-
-| Item | Blocked Since | Blocked By | Action Needed |
-|------|---------------|------------|---------------|
-| [PRD/Task] | [Date/Week] | [Person/Dependency/Decision] | [Specific ask] |
-
-**Priority unblocks:**
-1. [Most critical blocker to address Monday]
-2. [Second priority]
-
----
-
-## Metrics to Monitor Next Week
-
-[Features to keep watching]
-
-- **[Feature 1]** - [Why: Early launch / Trending down / Critical metric]
-  - Watch: [Specific metric]
-  - Check: [Daily / Every other day]
-  - Flag if: [Threshold or condition]
-
----
-
-*Generated: [Timestamp]*
-*Data sources: [Weekly plan, Daily plans, PRDs, Meeting notes, Linear/Jira, Analytics]*
-*Next: Run `/weekly-plan` to plan next week*
+- Files added: {N} · Contributors: {N} of {team size} {— first-time contributor 🎉 if any}
+- Stale files (latest /wiki-lint report): {N}
 ```
 
----
+**If nothing changed this week, don't skip it.** Post the digest anyway with:
 
-### Step 5: Follow-Up Prompts
+> No changes this week. If decisions were made or customer calls happened, they should be
+> checked in. Quick reminder: /decision-log-entry after meetings with decisions,
+> /process-meeting after calls.
 
-After generating review, prompt user with contextual suggestions:
+The gentle nudge prevents the repo from going silent without being preachy.
 
-**Always offer:**
-> "Week synthesized and saved! Next steps:
->
-> 1. **Plan next week?** Run `/weekly-plan` (5-10 min) - I've drafted initial priorities above
-> 2. **Share with team?** I can format this as a stakeholder update
->
-> What would help?"
+### Digest rules
 
-**If significant wins:**
-> "🎉 Nice work on [Achievement]! Worth documenting this:
->
-> - Add to portfolio/resume
-> - Share in team update
-> - Capture as case study for future reference
->
-> Want me to help with any of these?"
+1. Keep Part A under 500 words. Scan, not report.
+2. One bullet per active initiative, **including the silent ones** — "no movement" on an
+   active initiative is information, not noise.
+3. Route by declared headers first (`Initiative:` on decisions, `Initiatives touched:` on
+   summaries); use the git diff only for changes that carry no header.
+4. "Top 3 Things to Know" is the most-read section. Prioritize: decisions affecting the
+   whole team > customer insights > metric movements.
+5. Tag specific people when an item is relevant to them (roster in root CLAUDE.md).
+6. Slack posting (when the MCP is connected) is additive — the repo record is written
+   regardless; a Slack-only digest leaves no baseline for next week's diff.
 
-**If patterns emerged:**
-> "📊 I noticed some patterns:
->
-> - [Recurring blocker X] appeared [Y] times
-> - [Task type Z] consistently took 2x longer than estimated
->
-> Want to dig into these and create process improvements?"
+## Part B — Execution Review (default; skipped by --digest)
 
-**If learnings captured:**
-> "💡 This week's learnings worth remembering:
->
-> - [Learning 1]
-> - [Learning 2]
->
-> I'll surface these in future planning. Want me to add to `product-development/product/meetings/retros/lessons-learned.md`?"
+```markdown
+## Execution Review
 
-**If metrics concerning:**
-> "⚠️ [Feature] metrics need attention:
->
-> - [Metric] is [X%] below target
-> - Trending [down/flat] since launch
->
-> Run `/feature-results` for deeper analysis? Or schedule stakeholder review?"
+### TL;DR
+- {5-6 bullets: PRDs advanced/stalled, launches, completion rate, key win, key challenge}
 
----
+### Priorities — plan vs actual
+#### Priority 1: {title}
+**Planned:** {intent} → **Actual:** {outcome} — ✅ Complete / 🟡 Partial / ❌ Not started
+- {task-level detail only where it explains the gap; carried-over items get a why}
+{repeat for top 3}
 
-## Integration with Other Skills
+### Top 3 Learnings
+- {What worked / didn't — specific, with the concrete change for next time. "Work harder"
+  is not a learning.}
 
-**Before `/weekly-review`:**
-- `/daily-plan` - Ran throughout the week (provides daily context)
-- `/meeting-notes` - Captured meeting outcomes
-- `/prd-draft` - Created/updated PRDs this week
+### Next Week Preview
+1. {Draft priority — why: carry-over / new urgent / strategic next step}
+2. {…}
+3. {…}
 
-**After `/weekly-review`:**
-- `/weekly-plan` - Plan next week based on this review
-- `/decision-doc` - Document key decisions made
-- `/status-update` - Share with stakeholders
-- `/feature-results` - Deep dive on launched features
+**Items to unblock Monday:** {blocker — blocked by whom — specific ask}
+```
 
-**Parallel use:**
-- `/impact-sizing` - Validate completed work had expected impact
-- `/competitor-analysis` - If competitive intel emerged this week
+Decisions and metric movements are NOT restated here — Part A already carries them; Part B
+links and adds only the so-what for your own execution.
 
----
+**Offer after Part B:** append durable process learnings to
+`meetings/retros/lessons-learned.md` (`- YYYY-MM-DD — lesson (source link)`); run
+`/weekly-plan` to formalize next week.
 
-## Tips for Best Results
+**"Full review" (only when asked):** expand Part B with stakeholder pulse (engagement gaps,
+new relationships), task-level execution metrics (completion / carry-over / scope-creep
+rates), a PRD pipeline table with stage movement, meeting-value assessment, and pattern
+analysis (recurring blockers, underestimated task types, best deep-work windows).
 
-**When to run:**
-- **Best time:** Friday afternoon (4-5pm)
-  - Week is fresh in memory
-  - Can plan next week immediately after
-  - Creates clean mental closure for weekend
-- **Alternative:** Monday morning (reflect before planning)
-- **Avoid:** Mid-week (incomplete picture)
+## Save
 
-**What makes a good review:**
-- ✅ Honest about what didn't go well (not just wins)
-- ✅ Specific about patterns (not vague "work harder")
-- ✅ Actionable improvements (concrete next steps)
-- ✅ Connects to strategy (not just task completion)
-- ❌ Just a task list (misses the "why" and learnings)
-- ❌ All problems, no wins (demotivating)
+`product-development/product/meetings/digests/{YYYY}-W{XX}-weekly-review.md` — one file per
+ISO week (frontmatter: `week:`, `week_start:`, `week_end:`, `quarter:`). Append the nav row
+to `digests/CLAUDE.md` on first write of the week.
 
-**How to build the habit:**
-- Week 1-2: the skill will prompt you Friday afternoon
-- Week 3-4: You'll start expecting it (ritual forming)
-- Week 5+: Feels incomplete without it
+## Boundaries
 
-**Use the output:**
-- Reference in 1:1s with manager (shows progress)
-- Share with stakeholders (transparency)
-- Compare month-over-month (velocity trends)
-- Review quarterly (pattern detection across multiple weeks)
+- `/portfolio-pulse` — the account/ARR rollup (exec lens). Pair on Friday for the full picture.
+- `/status-update` — audience-tailored narratives (your manager, an exec, XFN partners).
+- `/prioritize-requests` — demand triage. The rollup triangle: portfolio-pulse rolls up
+  **accounts**, this skill rolls up **the week**, prioritize-requests rolls up **demand**.
+- `/process-meeting` — files the summaries this skill reads; run it first when transcripts
+  are still unprocessed (the session-start fold backlog will say so).
 
----
+## Output quality self-check
 
-## Related Skills
-
-**Before this:**
-- `/daily-plan` - Daily execution throughout week
-- `/weekly-plan` - Set priorities at start of week
-- `/meeting-notes` - Captured throughout week
-
-**After this:**
-- `/weekly-plan` - Plan next week immediately after review
-- `/status-update` - Share summary with stakeholders
-- `/decision-doc` - Formalize key decisions made
-
-**Periodic use:**
-- `/feature-results` - Monthly deep dive on launched features
-- `/quarter-review` - (If exists) Quarterly synthesis of weekly reviews
-
----
-
-## Output Quality Self-Check
-
-Before delivering the weekly review, verify:
-
-- [ ] **Plan vs. actual compared:** If a weekly plan existed, every planned priority is addressed with a status (complete, partial, not started) and a reason for any gap.
-- [ ] **Learnings are specific and actionable:** Each learning includes what happened, why, and a concrete change for next time. "Work harder" is not a learning.
-- [ ] **Next week priorities are drafted:** At least 3 draft priorities for next week are suggested, grounded in this week's outcomes and strategic goals.
-- [ ] **Blockers have owners:** Every unresolved blocker has a specific action and person to contact on Monday.
-- [ ] **Metrics referenced where available:** If launches happened or metrics data exists, actual numbers are cited (not just "things went well").
-- [ ] **Appropriate length:** Default review is ~150 lines. Full review is longer but still organized with clear section headers. Do not generate a full review unless the user asked for one.
-- [ ] **Honest about what did not go well:** The review includes at least one thing that did not go as planned, with root cause analysis. A review with only wins is incomplete.
-
----
+- [ ] Every active initiative has a bullet, silent ones included
+- [ ] Declared headers routed first; git diff only filled the gaps
+- [ ] Part A under 500 words, Slack-ready, saved to the repo regardless of posting
+- [ ] Part B compares against the actual weekly plan (or says the week wasn't planned)
+- [ ] Learnings are specific and actionable; at least one thing that didn't go well, with a
+      root cause
+- [ ] Next-week draft priorities grounded in this week's outcomes; blockers have owners and
+      a Monday action
+- [ ] Nothing restated across parts — decisions live in Part A, links elsewhere
+- [ ] File saved to `digests/`, nav row appended, `/weekly-plan` offered
 
 ## Write-back (mandatory)
 

@@ -97,7 +97,7 @@ Before drafting, first gather what happened...
 
 ## When to Use
 
-- Audience-tailored weekly updates (for the team-wide weekly digest, use `/weekly-synthesis`)
+- Audience-tailored weekly updates (for the team-wide weekly digest, use `/weekly-review --digest`)
 - Monthly progress reports to leadership
 - Daily standups (async)
 - Project milestone updates
@@ -821,8 +821,7 @@ Given the extra time, we could:
 ### Where Files Go
 
 **Status updates:**
-- Weekly/recurring: Save to `product-development/product/meetings/team-bi-weekly/summaries/[date]-[audience].md`
-- Archive: Move finalized updates to `product-development/product/meetings/team-bi-weekly/summaries/` for historical record
+- Weekly/recurring: Save to `product-development/product/meetings/digests/[YYYY-MM-DD]-status-[audience].md` (records stay where they land — no archive move)
 - Share: Send directly or paste into Slack/email
 
 ### Link to Other Work
