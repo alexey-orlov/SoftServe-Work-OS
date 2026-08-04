@@ -105,7 +105,10 @@ else runs `/weekly-review` manually whenever they like.
 
 | Registered runner | Kind | Owner | Cadence |
 |---|---|---|---|
-| `team-os-weekly-digest` | Claude Code scheduled task (cloud-run) | steward | Fridays 16:00 |
+| `team-os-weekly-digest` | Claude Code scheduled task on the steward's machine — runs while the app is open; a missed Friday fires on next launch (harmless: the digest is week-idempotent) | steward | Fridays 16:00 |
+
+A missed-run catch-up is fine, but if the team wants a runner tied to no machine at all,
+switch to the GitHub Action below and delete the scheduled task — never run both.
 
 The task's prompt: run `/weekly-review --digest` for the current ISO week; write/update
 the week's digest file in place; include the feature-request lines from
