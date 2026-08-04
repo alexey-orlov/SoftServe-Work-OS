@@ -10,7 +10,7 @@ how healthy the repo is.
 
 ### Files
 
-- [write-policy.yaml](write-policy.yaml) — Which paths agents change freely (auto), which need in-session confirmation (confirm), which only the steward touches (admin). The single traceable registry of protected context.
+- [write-policy.yaml](write-policy.yaml) — Which paths agents change freely (auto), which need in-session confirmation (confirm), which only the steward touches (admin). The single traceable registry of protected context. Its `settings:` block also holds the auto-commit / auto-merge switches (both ship off), so the automation and the tiers it respects live in one file.
 - [processed.txt](processed.txt) — The ingestion ledger: one repo-root-relative path per line, kept sorted. A path here = already folded by `/context-update` (junk and duplicates are ledgered too). Merge conflicts: keep both sides, then `sort -u`. Written only by ingest skills.
 
 ### Subfolders

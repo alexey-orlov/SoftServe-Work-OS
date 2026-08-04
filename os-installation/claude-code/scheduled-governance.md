@@ -11,6 +11,12 @@ to a GitHub remote.
 - **Write-guard** (`.claude/hooks/write-guard.sh`) forces an in-session confirmation
   whenever an agent tries to write a confirm- or admin-tier path from
   `product-development/_meta/write-policy.yaml`.
+- **Auto-commit / auto-merge** (`.claude/hooks/auto-commit.sh`, **ships disabled**) commits
+  each turn's work and can merge it into `main`, scoped by the same tiers the write-guard
+  enforces — protected paths are held back and reported, never swept in. Switches live in
+  the `settings:` block of `write-policy.yaml`. Turn it on when the team wants the
+  "agents write and commit directly" default to be literally true; leave it off to keep a
+  human shaping every commit.
 
 Limit: hooks bind agent sessions only — not a human in a text editor, not bash
 redirection. That's what layers 2–3 are for. Details: `.claude/hooks/session-start.md`.
