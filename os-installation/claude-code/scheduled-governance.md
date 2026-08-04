@@ -75,9 +75,71 @@ day-to-day auto-tier commits go straight to `main` and nothing here is required.
 
 ## Capture integrations (optional, later)
 
-The ingest engine (`/context-update`) is source-agnostic: anything that lands a file in
-a `transcripts/` folder gets folded on the next sweep, and anything pasted in chat folds
-immediately. If the team later wants automated capture (e.g. a Slack emoji-trigger that
-files a thread into the repo via the GitHub API, or a meeting-transcription tool webhook), wire
-it to write files into the appropriate `transcripts/` folder and let the sweep do the
-rest — schedulers stay thin, the skill stays the engine.
+The ingest engine (`/context-update`) is source-agnostic: anything pasted in chat folds
+immediately via `/process-meeting`, and any tool that can drop a file can deliver
+transcripts by writing them into **`product-development/inbox/`** (arrival contract in
+that folder's CLAUDE.md) — the next sweep gates them and `/process-meeting` files them to
+their canonical `transcripts/` home. An integration that already knows the destination
+(account slug, meeting type) may write straight into that `transcripts/` folder instead;
+the sweep treats both the same. Schedulers stay thin, the skill stays the engine.
+
+Concrete bridge, works with any transcription tool (Zoom, Fireflies, Otter, Granola,
+Meet, Teams): a small n8n / Make / Zapier flow on the tool's "recording completed"
+webhook that fetches the transcript, converts it to `.md`/`.txt` (e.g. from `.vtt`), and
+commits it into `product-development/inbox/` via the GitHub API. A Slack emoji-trigger
+that files a thread the same way is the same pattern.
+
+## Weekly digest — one runner, idempotent
+
+`/weekly-review --digest` is the weekly team report (decisions, customer insights,
+feature-request status, initiative movement). It is safe to automate because it is
+**idempotent by design**: the output is one file per ISO week
+(`meetings/digests/{YYYY}-W{XX}-weekly-review.md`), updated in place within the week —
+duplicate or concurrent runs converge on the same file, and past weeks are never
+rewritten.
+
+**Single-runner rule:** exactly ONE scheduled run per team, owned by the steward
+(`write-policy.yaml#steward`) — never one cron per teammate, never a job tied to a
+personal laptop. The steward's task is registered here so nobody duplicates it; everyone
+else runs `/weekly-review` manually whenever they like.
+
+| Registered runner | Kind | Owner | Cadence |
+|---|---|---|---|
+| `team-os-weekly-digest` | Claude Code scheduled task (cloud-run) | steward | Fridays 16:00 |
+
+The task's prompt: run `/weekly-review --digest` for the current ISO week; write/update
+the week's digest file in place; include the feature-request lines from
+`product-development/product/customers/feature-requests/`; post Part A via the team
+messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
+record only"; never edit confirm-tier files headlessly (file a proposal in
+`product-development/_meta/proposals/` instead); end with the run summary listing every
+path written.
+
+**Team-neutral alternative — GitHub Action** (runs server-side under the repo, tied to no
+personal account). Add an `ANTHROPIC_API_KEY` repo secret, then:
+
+```yaml
+# .github/workflows/weekly-digest.yml
+name: weekly-digest
+on:
+  schedule:
+    - cron: "0 14 * * 5" # Fridays 14:00 UTC — adjust to your timezone
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: >
+            Run /weekly-review --digest for the current ISO week per
+            .claude/skills/weekly-review/SKILL.md, headless rules. Commit only the
+            files you wrote, prefix "context:".
+```
+
+**Pick exactly one** — the scheduled task OR the Action, never both: two runners means
+two writers racing on the same weekly file.

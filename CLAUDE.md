@@ -67,6 +67,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"What framework should I use for this strategy call?"* | `product/strategy/frameworks/` → the named framework |
 | *"How should I write this?"* | `product/processes/writing-guides/{audience}.md` |
 | *"I'm new here"* | `os-installation/` → `first-session-checklist.md` |
+| *"A transcript / recording arrived — process it"* | paste or path → `/process-meeting`; integration drops land in `product-development/inbox/` → swept by `/context-update` |
 
 | Area | File | Description |
 |------|------|-------------|
@@ -88,6 +89,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
 | Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-review-panel` |
+| Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
+| Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
 
 ## Three Rules
 
