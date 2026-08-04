@@ -118,6 +118,7 @@ Is improvement clear?
 Can you actually track it?
 - Data exists or can be collected
 - Engineering effort is reasonable
+- When `engineering/code-repos.yaml` lists a reachable repo covering the area, verify the event/property actually exists in code (`/code-qa`) — a metric on an uninstrumented event is a launch-week surprise
 
 ### I - Independent
 Does it avoid external factors?

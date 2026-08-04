@@ -203,7 +203,8 @@ When you push to GitHub, finish enforcement setup per
 
 1. ✅ You've installed everything
 2. ✅ Then: Run through the first session checklist → `first-session-checklist.md`
-3. 🔒 When on GitHub: set up `claude-code/scheduled-governance.md`
+3. 🔌 Optional: connect your product code for code-grounded answers → `/connect-code` (guide: `claude-code/code-access.md`)
+4. 🔒 When on GitHub: set up `claude-code/scheduled-governance.md`
 
 ---
 

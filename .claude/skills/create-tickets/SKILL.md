@@ -79,6 +79,10 @@ Ask the PM:
 4. **Ticket type:** Story, Task, Bug, Epic?
 5. **Priority level:** High, Medium, Low?
 
+When `engineering/code-repos.yaml` lists a reachable repo covering the area, pull real
+module paths and entry points via `/code-qa` so Technical Notes reference actual files,
+not guessed ones.
+
 ### Step 2: Analyze Source Material
 
 Read the source document and identify:

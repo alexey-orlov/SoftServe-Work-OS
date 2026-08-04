@@ -9,7 +9,7 @@ Root of all product, engineering, and analytics artifacts.
 ### Subfolders
 
 - [analytics/](analytics/) — Metrics, queries, schemas, dashboards, experiments, and investigations
-- [engineering/](engineering/) — Engineering plans, RFCs, and bug investigations
+- [engineering/](engineering/) — Engineering plans, RFCs, bug investigations, the code-repo registry, and codebase maps
 - [product/](product/) — Product context, PRDs, customers, strategy, decisions, and operating processes
 - [_meta/](_meta/) — Wiki machinery: write policy (protected paths), ingestion ledger, health reports, pending proposals
 - [inbox/](inbox/) — Integration drop zone: transcripts land here; /context-update sweeps gate them and /process-meeting files them out

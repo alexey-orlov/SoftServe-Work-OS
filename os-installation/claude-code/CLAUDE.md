@@ -15,3 +15,4 @@ Advanced Claude Code techniques, beyond the basics in the install guide.
 - [prompt-testing-guide.md](prompt-testing-guide.md) — Reference techniques for optimizing prompts
 - [ralph-wiggum.md](ralph-wiggum.md) — Autonomous iterative loops; companion to the `/ralph-wiggum` skill
 - [scheduled-governance.md](scheduled-governance.md) — Enforcement once the repo is on GitHub: push ruleset for protected paths, the wiki-lint Action (PR check + weekly health issue), branch protection for admin-tier changes, capture integrations via the inbox, and the weekly-digest runner (single-runner rule)
+- [code-access.md](code-access.md) — Granting sessions read access to product repos: additionalDirectories in the gitignored settings.local.json, read-only deny rules, clone flags, the headless workspace-trust gotcha, and remote fallbacks

@@ -8,7 +8,7 @@ Everything needed to install this OS on your machine and confirm it works.
 
 ### Subfolders
 
-- [claude-code/](claude-code/) — Advanced Claude Code guides: context management, plan mode, parallel agents, custom agents, prompt testing
+- [claude-code/](claude-code/) — Advanced Claude Code guides: context management, plan mode, parallel agents, custom agents, prompt testing, product-code access
 
 ### Files
 

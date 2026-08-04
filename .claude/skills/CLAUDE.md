@@ -1,6 +1,6 @@
 # Skills
 
-47 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+49 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -16,12 +16,12 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 |-------|--------|--------|
 | [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 11 |
 | [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 15 |
-| [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus triaging what comes back in. | 5 |
+| [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in. | 6 |
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 5 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 6 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 7 |
 
 ### Communication & ops
 
@@ -61,13 +61,14 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 
 ### Delivery
 
-`group: delivery` — Turning a spec into tickets, code and a shipped launch — plus triaging what comes back in.
+`group: delivery` — Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in.
 
 - [code-first-draft/](code-first-draft/) — Initial feature implementation
 - [create-tickets/](create-tickets/) — Create tickets via Linear/Jira MCP or generate formatted ticket text
 - [feature-results/](feature-results/) — Post-launch analysis and results documentation. Document what shipped and what we learned
 - [launch-checklist/](launch-checklist/) — Comprehensive product launch planning
 - [prioritize-requests/](prioritize-requests/) — Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park
+- [code-qa/](code-qa/) — Answer product questions from the code itself, PM-language and concise; evidence with repo@sha citations kept internal, shown on request
 
 ### Discovery: market analysis
 
@@ -108,7 +109,8 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 - [freshness-check/](freshness-check/) — Deprecation stub — superseded by /wiki-lint (staleness is check #1 there); kept one release for muscle memory
 - [upgrade-to-team-os/](upgrade-to-team-os/) — Upgrade any personal OS (PM, engineering, design, analytics, ops, exec, multi-role) into a Team OS
 - [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
-- [wiki-lint/](wiki-lint/) — The health engine: ten checks (staleness, nav coverage, broken refs, index drift, mirror consistency, …); dated reports to `_meta/health/`; `--fix` repairs mechanical drift only
+- [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `_meta/health/`; `--fix` repairs mechanical drift only
+- [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 
 ## Gaps
 

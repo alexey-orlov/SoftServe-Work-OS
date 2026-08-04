@@ -223,6 +223,10 @@ Scoring:
 
 Before launching:
 
+0. **Instrumentation exists in code** — `/code-qa`: does the event fire on the exact path
+   under test? (when code access is set up via `engineering/code-repos.yaml`; skip
+   honestly otherwise)
+
 1. **A:A Test** - Run experiment with no actual change
    - Both groups should be identical
    - If metrics differ, you have a setup problem

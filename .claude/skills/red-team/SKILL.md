@@ -100,6 +100,7 @@ Silently check what the repo already knows — attacks grounded in the team's ow
 | `product-development/product/strategy/current-quarter.md` | Does the plan contradict the objectives or the Explicitly Not Doing list? |
 | `product-development/product/customers/` + `product-development/product/competitive-research/` | Are the user and market claims supported by anything on file? |
 | `product-development/analytics/data-catalog.yaml`, `analytics/metrics/{area}/`, `analytics/queries/{area}/` | What evidence is actually gettable this week — name real tables and queries in the contracts |
+| `product-development/engineering/code-repos.yaml` → `/code-qa` | What the implementation actually does — attack "the system already handles X" claims with repo@sha citations, not memory |
 
 **Degradation rule:** unfilled context is logged under **What I Couldn't Assess** — never invented, never silently skipped.
 

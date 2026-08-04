@@ -128,6 +128,29 @@ claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-
 
 ---
 
+## Setup Step 3: Connect Your Product Code (optional, 15 min)
+
+Without this, questions like "how does feature X actually work?" get answered from PRDs
+and memory. With it, `/code-qa` answers from the implementation itself — concise,
+PM-language, with file-line evidence held internally and shown on request.
+
+```bash
+claude "/connect-code"
+```
+
+The guided setup registers your repo(s) in `product-development/engineering/code-repos.yaml`
+(shared, committed), clones locally, and grants **read-only** access on this machine via
+the gitignored `.claude/settings.local.json` (machine-local, never committed). Mechanics:
+[claude-code/code-access.md](claude-code/code-access.md). Each teammate repeats the
+clone + grant on their own machine — the registry entry is shared.
+
+**Skip freely if your team has no code access yet** — `/code-qa` will say "no grounded
+code access" honestly instead of inventing answers from documents.
+
+✅ **Mark complete when:** `/code-qa` answers one question with a repo@sha citation in its evidence ("show the evidence")
+
+---
+
 ## Test 1: Basic Claude Interaction
 
 **What we're testing:** Claude Code can read files and respond
@@ -393,6 +416,7 @@ Go through this final checklist:
 - [ ] The Company & Product Fundamentals block in the root `CLAUDE.md` is filled out (no `[placeholders]` left)
 - [ ] You know where to add more context
 - [ ] You understand the folder structure
+- [ ] (Optional) Product code connected — `/code-qa` cites `repo@sha` in its evidence
 
 **Practical Output:**
 - [ ] Created at least one PRD
@@ -496,6 +520,9 @@ The repo maintains itself — confirm the machinery works before trusting it:
 5. **The gate demos both verdicts** — `/feature-launch-gate credit-usage-dashboard-v1`
    → PASS; `/feature-launch-gate tier-discount-promo` → BLOCKED (its PRD is deliberately
    missing).
+6. **Code grounding degrades honestly** — before connecting any real repo, ask
+   `/code-qa how does credit burn work?`. Expect a labeled refusal ("no grounded code
+   access — run /connect-code"), NOT an answer invented from the billing PRD/RFC.
 
 ---
 

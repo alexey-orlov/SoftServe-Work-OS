@@ -438,7 +438,7 @@ Every shared file gets copied to its team-OS destination, sanitized along the wa
 | Personal OS pattern | Team OS destination |
 |---|---|
 | `context-library/business-info*` | `product-development/product/strategy/business-context/business-info.md` (then hoist a summary into the root `CLAUDE.md` fundamentals block) |
-| `context-library/product-context*`, codebase overviews, design-system docs | `product-development/engineering/` (e.g. `codebase-overview.md`) |
+| `context-library/product-context*`, codebase overviews, design-system docs | `product-development/engineering/` — codebase overviews become SHA-stamped maps in `engineering/codebases/{repo-slug}.md` (re-generate via `/connect-code` rather than migrating stale text; register the repo in `engineering/code-repos.yaml`) |
 | Quarterly OKRs / current-quarter goals found anywhere | `product-development/product/strategy/current-quarter.md` |
 | Stakeholder profiles / maps (`stakeholder*`) | `product-development/product/strategy/business-context/stakeholders.md` (strip managing-up / how-they-evaluate-you notes — those stay personal) |
 | `context-library/competitive-intel/{name}.md` (flat) | `product-development/product/competitive-research/competitors/{name}/CLAUDE.md` (split flat → per-competitor folder) |

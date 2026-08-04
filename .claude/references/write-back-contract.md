@@ -90,9 +90,11 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 | `product-development/inbox/` | integrations (and humans) drop files; `/context-update` sweeps gate them; `/process-meeting` moves them out to their transcript home; humans clear junk (file + ledger line together) |
 | `customers/feature-requests/` records | created by `/process-meeting`; `tracker_ref` set only by `/create-tickets` push mode |
 | navigation list re-ordering | `/wiki-lint --fix` only |
+| `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
 
 ## Exempt skills
 
 `slack-message` (Slack is the artifact's home), `freshness-check` (deprecation stub),
 `context-update` and `wiki-lint` (they ARE the loop), `upgrade-to-team-os` (has its own
-scaffold machinery that generates navigation wholesale).
+scaffold machinery that generates navigation wholesale), `code-qa` (answers live in chat;
+durable findings route via `/context-update`; it writes nothing).

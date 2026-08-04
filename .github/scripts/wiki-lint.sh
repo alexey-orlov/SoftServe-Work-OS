@@ -137,7 +137,8 @@ done < <(find "$PD" .claude -name 'CLAUDE.md' 2>/dev/null)
 # ---- Check 10: YAML parse -------------------------------------------------------------
 if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; then
   for y in "$PD/feature-index.yaml" "$PD/analytics/data-catalog.yaml" \
-           "$PD/_meta/write-policy.yaml" "$PD/product/customers/accounts/portfolio.yaml"; do
+           "$PD/_meta/write-policy.yaml" "$PD/product/customers/accounts/portfolio.yaml" \
+           "$PD/engineering/code-repos.yaml"; do
     [ -f "$y" ] || { warn "yaml missing: $y"; continue; }
     python3 -c "import yaml,sys; yaml.safe_load(open('$y'))" 2>/dev/null \
       || fail "yaml does not parse: $y"

@@ -34,8 +34,9 @@ Connect to codebase and build initial implementation of a feature. Single-pass d
 
 **Check first:**
 1. `product-development/product/PRDs/{area}/` - PRD for requirements
-2. `product-development/engineering/codebase-overview.md` - Cached codebase context
-3. Codebase (`.git` directory, source files)
+2. `product-development/engineering/code-repos.yaml` - which repo owns the area, entry points, clone command
+3. `product-development/engineering/codebases/{repo-slug}.md` - cached codebase map, if one exists (routing hints only)
+4. Codebase (`.git` directory, source files)
 
 ---
 
@@ -52,9 +53,10 @@ ls -la | grep ".git"
 **If not in codebase:**
 - Ask: "Where's your codebase?"
 - Options:
-  1. "Navigate me there" (cd to directory)
-  2. "Clone from GitHub" (provide repo URL, the skill will clone with `gh repo clone`)
-  3. "Connect via MCP" (GitHub MCP for remote access)
+  1. "Run `/connect-code`" (registers the repo, clones, grants access — the durable setup)
+  2. "Navigate me there" (cd to directory)
+  3. "Clone from GitHub" (provide repo URL, the skill will clone with `gh repo clone`)
+  4. "Connect via MCP" (GitHub MCP for remote access)
 
 **Explore codebase:**
 ```bash
@@ -69,22 +71,11 @@ tree -L 2 -I 'node_modules|__pycache__|.git'
 ```
 
 **Save context:**
-Create `product-development/engineering/codebase-overview.md`:
-```markdown
-# Codebase Overview
-
-**Framework:** [React/Django/Rails/etc]
-**Key directories:**
-- `/src/components/` - UI components
-- `/src/api/` - API routes
-- `/src/services/` - Business logic
-
-**Patterns:**
-- [Pattern observed]
-
-**Tech stack:**
-- [Languages, frameworks, libraries]
-```
+Don't write your own overview file — durable codebase context lives in the SHA-stamped
+map at `product-development/engineering/codebases/{repo-slug}.md`, written by
+`/connect-code` (one writer per surface). If the repo isn't registered yet, or the map
+is missing/stale for what you just learned, suggest `/connect-code` (or `--refresh`) to
+the user; keep this session's exploration findings in-session.
 
 ---
 

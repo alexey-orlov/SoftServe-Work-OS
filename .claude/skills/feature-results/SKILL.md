@@ -36,6 +36,7 @@ Before generating a results analysis, verify the feature has actually shipped.
 **Check for launch signals:**
 - Does the PRD in `product-development/product/PRDs/{area}/` show status "Shipped" or "Launched"?
 - Does the PM mention actual results data (not projections)?
+- When `engineering/code-repos.yaml` has a reachable repo with a `deployed_ref:` — confirm what actually shipped via `/code-qa`'s is-it-in-production playbook; results attributed to code that isn't deployed are noise.
 
 **If the feature hasn't launched yet:**
 ```

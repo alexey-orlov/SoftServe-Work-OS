@@ -137,6 +137,7 @@ For each assumption, assess risk and plan mitigation:
 
 **Common de-risking actions:**
 - Old data → Work with analytics for fresh numbers
+- Driver-tree input assumes existing instrumentation → confirm the events exist in code (`/code-qa`, when `engineering/code-repos.yaml` is set up); otherwise record it as an assumption, not a given
 - Usability question → Test with prototype
 - Similar to competitors → Benchmark research
 - Industry standard → Collect benchmarks

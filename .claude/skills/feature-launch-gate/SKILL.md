@@ -53,6 +53,7 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
 - [ ] Engineering plan in `engineering/plans/{area}/`
 - [ ] Architectural decisions documented in `engineering/rfcs/{area}/` (if applicable)
 - [ ] Known limitations or edge cases documented
+- [ ] **Code reality** — when `engineering/code-repos.yaml` has ≥1 reachable non-placeholder repo: the feature flag/config and the analytics events named in the PRD and metric docs exist in code, verified via `/code-qa` with `repo@sha` citations (located by name/scout search — no feature→repo mapping assumed). NOT APPLICABLE when the registry is absent or all remotes are placeholders — mark N/A, not failed
 
 ### Navigation
 - [ ] All new files have entries in their folder's CLAUDE.md

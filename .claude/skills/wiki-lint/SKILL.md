@@ -1,12 +1,12 @@
 ---
 name: wiki-lint
-description: Health-check the team wiki — staleness by age tier, navigation coverage in both directions, broken cross-references, feature-index vs disk drift, initiative-page health, living-page registry checks, placeholder/truncation scan, ledger integrity, business-info mirror consistency, and protected-path audit. Absorbs the old /freshness-check (staleness is check #1 here). Writes a dated report to product-development/_meta/health/. --fix repairs mechanical drift only (missing nav lines, missing CLAUDE.md stubs, ledger sort) — never content. Use on /wiki-lint, "is the repo healthy?", "check the wiki", weekly as automation, or before quarterly planning.
+description: Health-check the team wiki — staleness by age tier, navigation coverage in both directions, broken cross-references, feature-index vs disk drift, initiative-page health, living-page registry checks, placeholder/truncation scan, ledger integrity, business-info mirror consistency, protected-path audit, and code-grounding registry drift. Absorbs the old /freshness-check (staleness is check #1 here). Writes a dated report to product-development/_meta/health/. --fix repairs mechanical drift only (missing nav lines, missing CLAUDE.md stubs, ledger sort) — never content. Use on /wiki-lint, "is the repo healthy?", "check the wiki", weekly as automation, or before quarterly planning.
 group: os-admin
 ---
 
 # wiki-lint — the repo's health check
 
-One engine, ten checks. The GitHub Action (`.github/workflows/wiki-lint.yml`) runs the
+One engine, eleven checks. The GitHub Action (`.github/workflows/wiki-lint.yml`) runs the
 mechanical subset on PRs and weekly via `.github/scripts/wiki-lint.sh`; this skill is the
 full pass — run the script first, then do the judgment checks the script can't.
 
@@ -20,7 +20,7 @@ full pass — run the script first, then do the judgment checks the script can't
 - **`--schema-drift`** — compare `analytics/schemas/` docs against the warehouse
   `INFORMATION_SCHEMA` (skip with a note when no warehouse access is configured).
 
-## The ten checks
+## The eleven checks
 
 1. **Staleness** *(absorbed from /freshness-check)* — last-modified via
    `git log -1 --format=%ct -- <file>` over `product-development/` and `os-installation/`.
@@ -65,7 +65,16 @@ full pass — run the script first, then do the judgment checks the script can't
    (report as "setup not finished" on a fresh clone, warning not failure); nav description
    lines that end mid-word (the truncation bug class).
 10. **YAML parse** — `feature-index.yaml`, `data-catalog.yaml`, `write-policy.yaml`,
-    `portfolio.yaml` all parse.
+    `portfolio.yaml`, `engineering/code-repos.yaml` all parse.
+11. **Code-grounding registry** *(judgment, skill only)* — when
+    `engineering/code-repos.yaml` exists: every `last_validated` within 90 days; IF
+    `feature_keys` are present they resolve in `feature-index.yaml` (the field is
+    optional — absence is fine); every `map.path` resolves on disk AND every file in
+    `engineering/codebases/` has a registry entry pointing at it (both directions); each
+    map carries its `{repo}@{full-sha}` stamp. Best-effort when a local clone is
+    reachable via `additionalDirectories`: report each map's commits-behind count vs the
+    clone's HEAD (the GitHub Action can't — no clones on the runner). Placeholder remotes
+    (`your-org`) → "code grounding: setup not finished" warning, not a failure.
 
 ## Output
 

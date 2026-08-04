@@ -68,6 +68,7 @@ Before we draft, the skill checks what context exists...
 - `product-development/product/customers/` for user validation
 - `product-development/product/strategy/business-context/business-info.md` for business context
 - `product-development/product/strategy/business-context/segmentation-matrix.md` for the target segment's account count and ARR
+- `product-development/engineering/code-repos.yaml` — current behavior of the touched area (run `/code-qa`) so "today it works like…" claims are code-grounded, not remembered
 - Stakeholder profiles for who needs to be involved
 
 ### Context Health Check

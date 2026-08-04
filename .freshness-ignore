@@ -14,7 +14,9 @@ product-development/analytics/investigations/billing/*
 product-development/product/decisions/2026-02-14-usage-based-pricing.md
 product-development/product/initiatives/credit-usage-dashboard-v1.md
 product-development/product/initiatives/tier-discount-promo.md
+product-development/engineering/codebases/beacon-app.md
 # Stable references — change intentionally, not on a schedule:
+product-development/product/decisions/2026-08-05-code-grounding-architecture.md
 product-development/product/strategy/frameworks/*
 product-development/product/processes/templates/*
 product-development/product/processes/writing-guides/*

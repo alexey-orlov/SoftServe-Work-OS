@@ -64,6 +64,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Why did we choose Z?"* | `product/decisions/` → the dated decision file |
 | *"How do we calculate metric M?"* | `analytics/metrics/{area}/` → linked query → schema only if column-level detail needed |
 | *"Where's the data for X?"* | `analytics/data-catalog.yaml` → schema doc only if needed |
+| *"What does the code actually do for feature X (behavior, limits, is it live)?"* | `engineering/code-repos.yaml` → run `/code-qa` — concise PM-language answer, evidence on request |
 | *"What framework should I use for this strategy call?"* | `product/strategy/frameworks/` → the named framework |
 | *"How should I write this?"* | `product/processes/writing-guides/{audience}.md` |
 | *"I'm new here"* | `os-installation/` → `first-session-checklist.md` |
@@ -85,12 +86,13 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
 | Processes | `product-development/product/processes/` | `templates/` (blank scaffolds — copy, don't edit), `writing-guides/`, `launches/` (filled launch checklists) |
 | Meetings | `product-development/product/meetings/` | Standup, sprint planning, bi-weekly — docs / transcripts / summaries; `retros/` for retrospective writeups; `digests/` for periodic rollups |
-| Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations (worked example only until real engineering work lands) |
+| Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations, code-repo registry + codebase maps (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
 | Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-review-panel` |
 | Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
 | Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
+| Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
 
 ## Three Rules
 

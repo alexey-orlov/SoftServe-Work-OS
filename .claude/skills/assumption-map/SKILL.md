@@ -96,8 +96,9 @@ Before surfacing assumptions, silently read what the repo already knows:
 | `product-development/product/competitive-research/` | Competitor moves — grounds differentiation and GTM beliefs |
 | `product-development/product/decisions/` | Has this been tried or explicitly rejected before? |
 | `product-development/feature-index.yaml` | Does a related feature already exist with artifacts? |
+| `product-development/engineering/code-repos.yaml` → `/code-qa` | What the code does today — grounds Feasibility with repo@sha evidence instead of engineering folklore |
 
-**Graceful degradation:** if a source is an unfilled template (bracketed placeholders), don't invent evidence — the Evidence column reads "none — business context unfilled". A map with honest "none" entries is still useful; a map with fabricated evidence is worse than no map.
+**Graceful degradation:** if a source is an unfilled template (bracketed placeholders), don't invent evidence — the Evidence column reads "none — business context unfilled" (for code claims: "none — no grounded code access (/connect-code)"). A map with honest "none" entries is still useful; a map with fabricated evidence is worse than no map.
 
 ### Step 3: Surface Assumptions
 
