@@ -1,0 +1,2 @@
+product-development/product/customers/accounts/acme-example/calls/transcripts/2026-07-30.md
+product-development/product/meetings/team-bi-weekly/transcripts/2026-07-28-team-bi-weekly-beacon.md

@@ -8,7 +8,7 @@ Cross-interview synthesis reports — `/process-meeting` (interview category) an
 
 ### Files
 
-_Empty. Add a one-line entry here for every report you add._
+- [2026-07-30-interview-insights.md](2026-07-30-interview-insights.md) — EXAMPLE (synthetic) — Acme discovery: Monday export rebuild + silent credit depletion; 2 feature-request records filed
 
 ### Created on demand
 

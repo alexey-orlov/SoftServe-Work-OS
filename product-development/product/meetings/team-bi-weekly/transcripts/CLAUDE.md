@@ -6,4 +6,4 @@ Raw transcripts. Open only when the summary is insufficient.
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+- [2026-07-28-team-bi-weekly-beacon.md](2026-07-28-team-bi-weekly-beacon.md) — EXAMPLE (synthetic) — raw transcript: dashboard follow-up, promo re-scope, Q3 preview

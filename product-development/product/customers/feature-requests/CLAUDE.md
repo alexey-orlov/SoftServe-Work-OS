@@ -28,4 +28,5 @@ the routed judgment across them.
 
 ### Files
 
-_Empty. Add a one-line entry here for every file you add._
+- [2026-07-30-acme-example-scheduled-csv-export.md](2026-07-30-acme-example-scheduled-csv-export.md) — EXAMPLE (synthetic) — scheduled CSV export with saved presets; must-have; pending push
+- [2026-07-30-acme-example-low-balance-alert.md](2026-07-30-acme-example-low-balance-alert.md) — EXAMPLE (synthetic) — configurable low-balance credit alert; must-have; pending push

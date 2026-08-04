@@ -6,4 +6,4 @@ Condensed summaries of the bi-weekly meeting itself — written by `/process-mee
 
 ## Contents
 
-_Empty. Add a one-line entry here for every file you add._
+- [2026-07-28-team-bi-weekly-beacon.md](2026-07-28-team-bi-weekly-beacon.md) — EXAMPLE (synthetic) — promo re-scoped (target 2026-09-15, in-app only); dashboard stable; Q3 preview

@@ -37,7 +37,7 @@ acme-example:
   use_cases: ["lead-enrichment"]
   renewal_date: 2027-01-15
   champion_role: "Head of Ops"
-  last_call: 2026-07-21
+  last_call: 2026-07-30
   risks: []
-  expansion_signals: []
-  last_updated: 2026-08-03
+  expansion_signals: ["EU ops team wants a regional workspace next quarter (2026-07-30 interview)"]
+  last_updated: 2026-08-05
