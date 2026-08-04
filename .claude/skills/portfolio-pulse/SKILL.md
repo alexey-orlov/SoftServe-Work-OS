@@ -8,7 +8,7 @@ group: communication-ops
 
 Exec-grade synthesis for the person watching the whole portfolio. Outputs priorities, account health rollup, top risks, expansion signals, and drafted messages.
 
-This is the morning-ritual / weekly-synthesis skill for hub-and-spoke usage. Pair with `/weekly-synthesis` (which covers repo-level changes) for the full picture.
+This is the morning-ritual / exec-digest skill for hub-and-spoke usage. Pair with `/weekly-synthesis` (the team's weekly digest of initiative movement and repo changes) for the full picture.
 
 ## Inputs
 
@@ -16,6 +16,7 @@ The skill reads:
 
 - `product-development/product/strategy/business-context/business-info.md` — ICP, pricing tiers, headline metrics. Needed to judge whether an account is on-profile, whether an expansion signal is real, and what "healthy" means for this business
 - `product-development/product/customers/accounts/portfolio.yaml` — primary input
+- `product-development/product/initiatives/` — active initiative pages (`_status:`, open loops, latest activity): the workstream side of the portfolio
 - `product-development/product/strategy/business-context/segmentation-matrix.md` — segment axes and ARR mix; lets the rollup say where risk and expansion concentrate (vertical / size band / use case), not just which accounts
 - Recent summaries in `accounts/{customer}/calls/summaries/` (last 14 days)
 - `product/decisions/` (recent)
@@ -55,7 +56,7 @@ If MCPs aren't connected, the skill still works on the YAML + markdown alone —
 
 ### Open Loops Aging > 7 Days
 
-| Account | Loop | Days open | Owner |
+| Account / Initiative | Loop | Days open | Owner |
 |---------|------|-----------|-------|
 | {Customer} | {Loop} | 9 | {Name} |
 ```
@@ -95,6 +96,8 @@ If MCPs aren't connected, the skill still works on the YAML + markdown alone —
 | Team A | 6 | 2 | 5 | 3 |
 | Team B | 4 | 1 | 3 | 1 |
 | Team C | 7 | 3 | 4 | 0 |
+
+(Active workstreams = initiative pages with `_status: active`.)
 
 ### Drafted Slack Messages (review before posting)
 
@@ -144,6 +147,6 @@ teams:
 
 ## Related
 
-- `/weekly-synthesis` — repo-level changes (decisions logged, files added, contributors); pair with portfolio-pulse for the full Friday afternoon read
+- `/weekly-synthesis` — the team's weekly digest (initiative movement, decisions, repo changes); pair with portfolio-pulse for the full Friday afternoon read
 - `customers/accounts/portfolio.yaml` — the registry this skill reads from
-- `workflows/cpo-morning-ritual/` — wraps portfolio-pulse with calendar pull and pre-meeting briefs
+- `product/initiatives/` — the workstream pages this skill reads for status, open loops, and activity

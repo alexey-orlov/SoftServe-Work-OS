@@ -59,12 +59,13 @@ Inspired by personal operating system patterns but tailored specifically for Pro
 ## Context Routing
 
 **Check these files first:**
-1. `product-development/product/strategy/` - Quarter priorities, OKRs, North Star
-2. `product-development/product/meetings/team-bi-weekly/docs/` - This week's priorities (if `/weekly-plan` was run)
-3. `product-development/product/PRDs/{area}/` - Active PRDs and their stages
-4. `product-development/product/processes/templates/stakeholder-*.md` - Stakeholder profiles and communication styles
-5. `product-development/product/meetings/{type}/summaries/` - Recent meeting context
-6. `product-development/product/processes/launches/` - Recently launched features (past 2 weeks)
+1. `product-development/product/initiatives/` - Active initiative pages: open loops with near due dates are today's candidate tasks; recent Activity gives meeting context
+2. `product-development/product/strategy/` - Quarter priorities, OKRs, North Star
+3. `product-development/product/meetings/team-bi-weekly/docs/` - This week's priorities (if `/weekly-plan` was run)
+4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages
+5. `product-development/product/processes/templates/stakeholder-*.md` - Stakeholder profiles and communication styles
+6. `product-development/product/meetings/{type}/summaries/` - Recent meeting context
+7. `product-development/product/processes/launches/` - Recently launched features (past 2 weeks)
 
 **Integration Options (Multiple Paths):**
 
@@ -104,7 +105,7 @@ Inspired by personal operating system patterns but tailored specifically for Pro
 
 **Fallback Strategy:**
 If no integrations available, the skill will:
-1. Use file-based data (meeting notes, task lists in the Team OS repo)
+1. Use file-based data (initiative open loops, meeting notes, task lists in the Team OS repo)
 2. Ask focused questions (5-6 quick inputs from you)
 3. Generate plan with placeholders you can fill in
 

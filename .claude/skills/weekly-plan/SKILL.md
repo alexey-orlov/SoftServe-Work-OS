@@ -18,11 +18,12 @@ Plan your week forward with clear priorities tied to quarterly goals. Sets the f
 ## Context Routing
 
 **Check these files first:**
-1. `product-development/product/strategy/` - Quarter OKRs, North Star, strategic pillars
-2. `product-development/product/meetings/team-bi-weekly/summaries/` - Last week's review (if exists)
-3. `product-development/product/PRDs/{area}/` - Active PRDs and their stages
-4. `product-development/product/processes/launches/` - Upcoming launches
-5. `product-development/product/meetings/team-bi-weekly/docs/` - Previous weekly plans (for pattern analysis)
+1. `product-development/product/initiatives/` - Active initiative pages: open loops (owned, dated) seed the week's candidate priorities; `_status:` shows momentum
+2. `product-development/product/strategy/` - Quarter OKRs, North Star, strategic pillars
+3. `product-development/product/meetings/team-bi-weekly/summaries/` - Last week's review (if exists)
+4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages (for work no initiative tracks)
+5. `product-development/product/processes/launches/` - Upcoming launches
+6. `product-development/product/meetings/team-bi-weekly/docs/` - Previous weekly plans (for pattern analysis)
 
 **MCP Queries (if available):**
 - **Calendar MCP** - Next week's meetings
@@ -82,7 +83,7 @@ Extract:
 
 **B. Active PRD Pipeline:**
 
-Scan `product-development/product/PRDs/{area}/`:
+Check `product-development/product/initiatives/` first — each active page's open loops and `_status:` give the pipeline at a glance. Then scan `product-development/product/PRDs/{area}/` for stage detail and for work no initiative tracks:
 
 For each active PRD:
 - Current stage

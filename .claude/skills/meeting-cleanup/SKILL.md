@@ -96,6 +96,7 @@ For each meeting processed, verify:
 - [ ] Calendar follow-up meetings
 - [ ] Send summary emails where needed
 - [ ] Update project docs
+- [ ] Append one dated Activity line to each initiative page named in an `Initiatives touched:` field, linking the summary (write-back contract rule 8)
 
 ---
 
@@ -127,6 +128,7 @@ For each meeting processed, verify:
 
 ## Meeting 1: [Title] ([Time])
 **Attendees:** [Names]
+**Initiatives touched:** [slug(s) from product-development/product/initiatives/, or "-"]
 **Summary:** [3 bullets]
 **Decisions:**
 - [Decision 1]
@@ -279,6 +281,7 @@ Before delivering the meeting cleanup, verify:
 - [ ] **Consolidated action list is complete** -- a single master list appears at the end with all items across all meetings
 - [ ] **Cross-meeting conflicts checked and flagged** -- timelines, scope, owners, and priorities are compared across meetings for contradictions
 - [ ] **Parking lot captured** -- unresolved questions and ideas that surfaced but were not actionable are noted
+- [ ] **Initiative joins made** -- every slug named in an `Initiatives touched:` field got its dated Activity line on that initiative page
 - [ ] **File saved correctly** -- output saved to `product-development/product/meetings/{type}/summaries/cleanup-[date].md`
 
 If any check fails, revise before delivering.

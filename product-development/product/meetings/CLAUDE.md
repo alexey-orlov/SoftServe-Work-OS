@@ -12,3 +12,4 @@ Standup, sprint planning, bi-weekly, and retrospective meeting artifacts.
 - [sprint-planning/](sprint-planning/) — Sprint planning artifacts
 - [standup/](standup/) — Daily standup artifacts
 - [team-bi-weekly/](team-bi-weekly/) — Bi-weekly team meeting and review artifacts
+- [digests/](digests/) — Periodic rollups (weekly review, portfolio pulse, status updates, batch-day digests)

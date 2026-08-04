@@ -32,6 +32,7 @@ When this skill is invoked, immediately check:
 
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
+| Active Initiatives | `product-development/product/initiatives/*.md` | initiative or feature being updated | Status snapshot, this week's activity, open loops (owned, dated) |
 | Recent PRDs | `product-development/product/PRDs/{area}/*.md` | feature being updated | Feature status and changes |
 | Meeting Notes | `product-development/product/meetings/*.md` | this week's meetings | Decisions, action items, blockers |
 | Action Items | `product-development/product/meetings/` | completed / in progress / blocked | Track completion of commitments |
@@ -58,6 +59,7 @@ When this skill is invoked, immediately check:
 Before drafting, first gather what happened...
 
 **Checking:**
+- `product-development/product/initiatives/` for the current state of active work (this week's activity, open loops)
 - `product-development/product/meetings/` for recent meetings this week/period
 - `product-development/product/PRDs/{area}/` for features you're working on
 - `product-development/analytics/metrics/{area}/` for recent metric changes
@@ -95,13 +97,15 @@ Before drafting, first gather what happened...
 
 ## When to Use
 
-- Weekly team updates
+- Audience-tailored weekly updates (for the team-wide weekly digest, use `/weekly-synthesis`)
 - Monthly progress reports to leadership
 - Daily standups (async)
 - Project milestone updates
 - Quarterly business reviews
 - Manager 1:1 prep
 - Stakeholder check-ins
+
+If another installed skill also answers to "stakeholder update" (e.g., from a plugin), prefer this one — it reads this workspace's initiatives, PRDs, and metrics.
 
 ---
 

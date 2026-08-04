@@ -299,7 +299,7 @@ Nothing is written in this case — `feature-requests.md` is created on the firs
 - `/decision-log-entry` - Log a contested decline
 - `/prd-draft` - Once a theme is sized and committed
 
-**The rollup triangle:** `/portfolio-pulse` rolls up **accounts**, `/weekly-synthesis` rolls up **repo changes**, this skill rolls up **demand**. Different units, no overlap.
+**The rollup triangle:** `/portfolio-pulse` rolls up **accounts**, `/weekly-synthesis` rolls up **the week** (initiative movement + repo changes), this skill rolls up **demand**. Different units, no overlap.
 
 ---
 

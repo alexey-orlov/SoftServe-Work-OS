@@ -28,14 +28,15 @@ End-of-week synthesis reviewing what you accomplished, what you learned, and wha
 ## Context Routing
 
 **Check these files first:**
-1. `product-development/product/meetings/team-bi-weekly/docs/` - This week's plan (what you intended)
-2. `product-development/product/meetings/standup/docs/` - Daily plans from this week (what actually happened)
-3. `product-development/product/PRDs/{area}/` - PRDs modified this week
-4. `product-development/product/meetings/{type}/summaries/` - Meeting notes from past 7 days
-5. `product-development/product/processes/launches/` - Launches that happened this week
-6. `product-development/product/decisions/` - Decisions made this week
-7. `product-development/product/customers/research-synthesis/` - Research conducted
-8. `product-development/product/strategy/` - Quarter goals (to track progress)
+1. `product-development/product/initiatives/` - Active initiative pages: Activity lines dated this week (the primary record of what happened) and open-loop deltas
+2. `product-development/product/meetings/team-bi-weekly/docs/` - This week's plan (what you intended)
+3. `product-development/product/meetings/standup/docs/` - Daily plans from this week
+4. `product-development/product/PRDs/{area}/` - PRDs modified this week (for work no initiative tracks)
+5. `product-development/product/meetings/{type}/summaries/` - Meeting notes from past 7 days
+6. `product-development/product/processes/launches/` - Launches that happened this week
+7. `product-development/product/decisions/` - Decisions made this week
+8. `product-development/product/customers/research-synthesis/` - Research conducted
+9. `product-development/product/strategy/` - Quarter goals (to track progress)
 
 **MCP Queries (if available):**
 - **Linear/Jira MCP** - Tasks completed this week
@@ -63,6 +64,8 @@ End-of-week synthesis reviewing what you accomplished, what you learned, and wha
 ---
 
 ### Step 2: Data Collection
+
+Start with `product-development/product/initiatives/`: Activity lines dated this week are the primary record of what happened, and open loops show what's still hanging. The scans below fill in work that no initiative tracks.
 
 **A. Weekly Plan (What Was Intended):**
 
