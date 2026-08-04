@@ -19,4 +19,4 @@ One folder, four writers, told apart by filename prefix (registry: `.claude/refe
 
 ### Files
 
-_Empty. Add a one-line entry here for every file you add._
+- [2026-W32-weekly-review.md](2026-W32-weekly-review.md) — EXAMPLE (synthetic) — promo re-scope decision, Acme interview insights, 2 requests awaiting tracker push
