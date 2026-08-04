@@ -32,7 +32,7 @@ When this skill is invoked, immediately check:
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | metrics, KPIs, growth model | Current revenue/retention/growth focus |
 | Metrics History | `product-development/analytics/metrics/{area}/*.md` | baseline, trends, benchmarks | Historical leading/lagging metric data |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | success metrics, measurement | Feature-level metric definitions |
-| Meetings | `product-development/product/meetings/*.md` | "metrics", "dashboard", "KPI" | Stakeholder metric priorities |
+| Meetings | `product-development/product/meetings/*/summaries/*.md` | "metrics", "dashboard", "KPI" | Stakeholder metric priorities |
 
 **Context Priority:**
 1. Business strategy and North Star FIRST

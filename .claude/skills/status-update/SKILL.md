@@ -34,7 +34,7 @@ When this skill is invoked, immediately check:
 |--------|---------------|--------------|-----------------|
 | Active Initiatives | `product-development/product/initiatives/*.md` | initiative or feature being updated | Status snapshot, this week's activity, open loops (owned, dated) |
 | Recent PRDs | `product-development/product/PRDs/{area}/*.md` | feature being updated | Feature status and changes |
-| Meeting Notes | `product-development/product/meetings/*.md` | this week's meetings | Decisions, action items, blockers |
+| Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | this week's meetings | Decisions, action items, blockers |
 | Action Items | `product-development/product/meetings/` | completed / in progress / blocked | Track completion of commitments |
 | Strategy | `product-development/product/strategy/*.md` | strategic pillars | Tie accomplishments to strategy |
 | Metrics | `product-development/analytics/metrics/{area}/*.md` | baseline, trends | Metric movement and progress |
@@ -47,7 +47,7 @@ When this skill is invoked, immediately check:
 4. Metrics and progress FOURTH
 
 **Cross-Skill Links:**
-- If action items from meetings → Reference `/meeting-notes`
+- If action items from meetings → Reference `/process-meeting`
 - If progress on features → Reference `/prd-draft` or `/feature-results`
 - If metric updates → Reference `/metrics-framework` and North Star
 - If blockers → Link to relevant skill for resolution (e.g., `/prd-draft` if scope unclear)
@@ -636,7 +636,7 @@ Call out teammates who helped you. Builds goodwill and visibility for them.
 ### After Meeting Notes
 
 ```
-Use `/meeting-notes` throughout the week.
+Use `/process-meeting` throughout the week.
 Then use `/status-update` on Friday.
 
 I'll pull:
@@ -842,7 +842,7 @@ After creating status update:
 - Strategy evaluation - Metric progress ties back to strategy
 
 **Pulls from:**
-- `/meeting-notes` - Recent decisions and action items from meetings
+- `/process-meeting` - Recent decisions and action items from meetings
 - `/prd-draft` - Feature status and progress on PRDs
 - `/feature-results` - Shipped feature performance
 - `/metrics-framework` - Current metric values and movement

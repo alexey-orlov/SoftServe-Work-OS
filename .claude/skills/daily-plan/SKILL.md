@@ -524,7 +524,7 @@ These tasks from today's list could be handled by someone on your team:
 
 *Generated: [Timestamp]*
 *MCPs used: [List which MCPs provided data]*
-*Next: Run `/meeting-notes` after meetings to capture outcomes*
+*Next: Run `/process-meeting` after meetings to capture outcomes*
 ```
 
 ---
@@ -896,7 +896,7 @@ Total time: 2 minutes
 - `/weekly-plan` - Sets weekly priorities that inform today's focus
 
 **After `/daily-plan`:**
-- `/meeting-notes` - Capture outcomes from today's meetings
+- `/process-meeting` - Capture outcomes from today's meetings
 - `/create-tickets` - Convert action items to Linear/Jira tasks
 - `/daily-review` - (If created) Reflect on what got done
 
@@ -939,7 +939,7 @@ Total time: 2 minutes
 - `/connect-mcps` - Connect to Calendar, Gmail, Linear
 
 **After this:**
-- `/meeting-notes` - Capture meeting outcomes
+- `/process-meeting` - Capture meeting outcomes
 - `/create-tickets` - Track action items
 - `/weekly-review` - End-of-week synthesis
 

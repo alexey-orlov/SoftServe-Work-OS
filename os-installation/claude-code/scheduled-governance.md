@@ -78,6 +78,6 @@ day-to-day auto-tier commits go straight to `main` and nothing here is required.
 The ingest engine (`/context-update`) is source-agnostic: anything that lands a file in
 a `transcripts/` folder gets folded on the next sweep, and anything pasted in chat folds
 immediately. If the team later wants automated capture (e.g. a Slack emoji-trigger that
-files a thread into the repo via the GitHub API, or a meeting-notes tool webhook), wire
+files a thread into the repo via the GitHub API, or a meeting-transcription tool webhook), wire
 it to write files into the appropriate `transcripts/` folder and let the sweep do the
 rest — schedulers stay thin, the skill stays the engine.

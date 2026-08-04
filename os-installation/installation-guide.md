@@ -97,7 +97,7 @@ You should see Claude read the master context file and explain the Team OS.
 
 ### Test 2: Use a Slash Command
 ```bash
-claude "Use /meeting-notes to process this transcript: 'Had a meeting with Sarah about the new dashboard. She wants faster load times and better mobile support. Action items: research competitors, prototype in Figma, schedule follow-up.'"
+claude "Use /process-meeting to process this transcript: 'Had a meeting with Sarah about the new dashboard. She wants faster load times and better mobile support. Action items: research competitors, prototype in Figma, schedule follow-up.'"
 ```
 
 Claude should format this into structured meeting notes with action items.

@@ -38,7 +38,7 @@ When this skill is invoked, immediately check:
 | Metrics/Analytics | `product-development/analytics/metrics/{area}/*.md` | NRR, "net revenue retention", expansion rate, upsell, churn, MRR | Existing expansion metrics, NRR benchmarks, churn by segment |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | pricing, tier, feature gate, monetization | Feature decisions tied to monetization, pricing rationale |
 | Strategy | `product-development/product/strategy/*.md` | "growth", "expansion", "pricing", "positioning" | Strategic approach, customer segmentation, market positioning |
-| Meeting Notes | `product-development/product/meetings/*.md` | pricing, customer expansion, upsell, enterprise, segment, revenue | Sales conversations, customer upgrade opportunities, pricing feedback |
+| Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | pricing, customer expansion, upsell, enterprise, segment, revenue | Sales conversations, customer upgrade opportunities, pricing feedback |
 
 **Context Priority:**
 1. Internal context FIRST (business info, existing metrics, PRDs)

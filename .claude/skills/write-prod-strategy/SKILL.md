@@ -31,7 +31,7 @@ When this skill is invoked, immediately check:
 | User Research | `product-development/product/customers/*.md` | user segments, JTBD, pain points | Users section and strategic fit |
 | Competitive Analysis | `product-development/product/competitive-research/competitive-*.md` | competitor positioning | Superpowers and differentiation |
 | Historical PRDs | `product-development/product/PRDs/{area}/*.md` | strategic features, decisions | Precedent for feature strategy alignment |
-| Meetings | `product-development/product/meetings/*.md` | strategy discussion, OKRs, board feedback | Stakeholder input and constraints |
+| Meetings | `product-development/product/meetings/*/summaries/*.md` | strategy discussion, OKRs, board feedback | Stakeholder input and constraints |
 
 **Context Priority:**
 1. Business model and company objectives FIRST

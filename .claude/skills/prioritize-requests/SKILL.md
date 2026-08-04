@@ -64,7 +64,7 @@ Both cluster customer input into themes. The seam is **the sample, not the techn
 
 The two are not rivals — they measure different things. A request is weak evidence about *truth* and valid evidence about *demand*. When a theme lands in Collect Signal, `/user-research-synthesis` is the instrument that resolves it, and its themes (carrying `% affected`, `Severity`, `Frequency: X out of Y`) are the strongest evidence this skill can read.
 
-**Handoff:** "[N] themes landed in Collect Signal — the demand is there but we've never watched anyone hit this problem. Want to run `/user-interview` on those, then `/user-research-synthesis`?"
+**Handoff:** "[N] themes landed in Collect Signal — the demand is there but we've never watched anyone hit this problem. Want to run interviews there (`/interview-guide` → `/process-meeting`), then `/user-research-synthesis`?"
 
 ### This Skill vs /impact-sizing
 
@@ -165,7 +165,7 @@ Fit `unknown` has no cell — the gate in Step 4 stops the run before routing. S
 | Verdict | Mandated treatment | Destination |
 |---------|-------------------|-------------|
 | **Act now** | Name the job, not the feature. Give a T-shirt effort (S/M/L/XL) as the ordering input — **order by demand first, effort second** | `strategy/roadmaps/{period}.md` → `### NOW` or `### NEXT`. Top theme → `/impact-sizing` |
-| **Collect signal** | Three lines, all required: **alternative solutions worth considering** (none of them the literal ask), **the highest-risk assumption**, **the cheapest test**. Then pick one instrument and say why | `roadmaps/{period}.md` → `### LATER` → `**Under Consideration:**`. Hand to `/assumption-map`, `/experiment-decision`, or `/user-interview` |
+| **Collect signal** | Three lines, all required: **alternative solutions worth considering** (none of them the literal ask), **the highest-risk assumption**, **the cheapest test**. Then pick one instrument and say why | `roadmaps/{period}.md` → `### LATER` → `**Under Consideration:**`. Hand to `/assumption-map`, `/experiment-decision`, or an interview pass (`/interview-guide` → `/process-meeting`) |
 | **Decline with reasons** | One sentence of reason — **strategy, not capacity** — plus the one condition that would change our mind. This is the hardest conversation: real demand, wrong strategy | `current-quarter.md` → `## Explicitly Not Doing` (exact format: `- **[Thing]** — [Why not, and what would change our mind]`). Also `product-development/product/strategy/roadmaps/{period}.md` → `LATER` → `**Explicitly NOT Doing:**`. Contested → `/decision-log-entry` |
 | **Park** | One line. No analysis. Revisit when the evidence axis moves — or next run if it is a cap overflow | Stays in `feature-requests.md` → `## Parked`, with a first-seen date |
 
@@ -210,7 +210,7 @@ Inbound demand, clustered by the job behind the ask, with a verdict per theme.
 - **Alternative solutions worth considering:** [2-3, none of them the literal ask]
 - **Highest-risk assumption:** [the one belief that, if wrong, makes this worthless]
 - **Cheapest test:** [one line]
-- **Next:** `/assumption-map` | `/experiment-decision` | `/user-interview` — [pick one, say why]
+- **Next:** `/assumption-map` | `/experiment-decision` | `/process-meeting` (interviews) — [pick one, say why]
 - Destination: `roadmaps/{period}.md` → LATER → Under Consideration (paste manually)
 
 ## Declined
@@ -262,7 +262,7 @@ Do not emit an empty report. Print this instead:
 >
 > Two ways forward:
 > - **Paste a pile** — a Zendesk or Intercom export, a CSV, a spreadsheet, or a Slack thread.
-> - **Build the corpus** — `/customer-call-summary` **Full variant** writes the Feature Requests tables this skill reads. The Quick variant only notes implied gaps in prose, which triage rates as weak evidence.
+> - **Build the corpus** — `/process-meeting` (customer-call, **Full variant**) writes the Feature Requests tables this skill reads. The Quick variant only notes implied gaps in prose, which triage rates as weak evidence.
 >
 > Either way, fill `current-quarter.md`'s Objectives, or add a NOW/NEXT theme to a roadmap file, first — without one of them there is no strategic-fit axis and this skill can only rank by demand.
 
@@ -289,13 +289,13 @@ Nothing is written in this case — `feature-requests.md` is created on the firs
 ## Related Skills
 
 **Before this:**
-- `/customer-call-summary` (Full variant) — writes the Feature Requests tables this skill reads
+- `/process-meeting` (customer-call Full variant) — writes the Feature Requests tables this skill reads
 - `/user-research-synthesis` — its themes are the strongest evidence available
 
 **After this:**
 - `/impact-sizing` - Size the top Act Now theme
 - `/assumption-map` or `/experiment-decision` - Resolve a Collect Signal theme
-- `/user-interview` - Go watch someone hit the problem
+- `/interview-guide` + `/process-meeting` - Go watch someone hit the problem, then file it
 - `/decision-log-entry` - Log a contested decline
 - `/prd-draft` - Once a theme is sized and committed
 

@@ -9,7 +9,7 @@ One folder per account: context, call summaries, raw transcripts.
 ### Subfolders
 
 - [accounts/](accounts/) — One subfolder per customer account, slugified. Also holds `portfolio.yaml`, the cross-account health registry read by `/portfolio-pulse`
-- [research-synthesis/](research-synthesis/) — Cross-interview synthesis reports from `/user-interview` and `/user-research-synthesis`
+- [research-synthesis/](research-synthesis/) — Cross-interview synthesis reports from `/process-meeting` (interviews) and `/user-research-synthesis`
 
 ### Created on demand
 

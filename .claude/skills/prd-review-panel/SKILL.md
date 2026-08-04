@@ -611,7 +611,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 
 **Before `/prd-review-panel`:**
 - `/prd-draft` - Create the initial PRD
-- `/user-interview` - Gather research to validate PRD
+- `/process-meeting` - Process validation interviews into evidence
 - `/impact-sizing` - Quantify expected value
 
 **After `/prd-review-panel`:**

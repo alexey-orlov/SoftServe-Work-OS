@@ -30,7 +30,7 @@ When this skill is invoked, immediately check:
 | Strategy Docs | `product-development/product/strategy/*.md` | objective, business goal, success metric | Current metric direction, if any |
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | revenue model, growth focus, metrics | What drives the business |
 | Metrics History | `product-development/analytics/metrics/{area}/*.md` | baseline, trends, retention data | Current metric baselines and movement |
-| Meetings | `product-development/product/meetings/*.md` | "North Star", "KPI", "success metric" | Stakeholder expectations |
+| Meetings | `product-development/product/meetings/*/summaries/*.md` | "North Star", "KPI", "success metric" | Stakeholder expectations |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | success metric, target | Feature-level success indicators |
 
 **Context Priority:**

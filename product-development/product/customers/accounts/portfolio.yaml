@@ -6,7 +6,7 @@
 # Read by  /portfolio-pulse   (daily / weekly account rollups) and the
 #            segmentation-matrix refresh — the segment fields below roll up into
 #            product/strategy/business-context/segmentation-matrix.md.
-# Updated by /customer-call   (sets all fields at account creation; after each
+# Updated by /process-meeting   (sets all fields at account creation; after each
 #            processed call: last_call, risks, expansion_signals) and
 #            /context-update (status, arr, segment fields, renewal_date when
 #            new facts land).

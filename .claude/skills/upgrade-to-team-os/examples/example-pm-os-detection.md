@@ -103,7 +103,7 @@ PRIVATE — staying in personal OS (10):
 
 REVIEW — please confirm (6 skills + 2 root docs):
   .claude/skills/prd-draft.md → sanitize and share?
-  .claude/skills/customer-call-summary.md → COLLISION with canonical Team OS skill — keep canonical, namespace personal as customer-call-summary-personal?
+  .claude/skills/customer-call-summary.md → semantic overlap with canonical `process-meeting` — keep canonical, namespace personal as customer-call-summary-personal?
   .claude/skills/competitive-research-summary.md → sanitize and share?
   .claude/skills/decision-log-entry.md → COLLISION — keep canonical?
   .claude/skills/status-update.md → looks personal-workflow (heavy first-person); recommend skip

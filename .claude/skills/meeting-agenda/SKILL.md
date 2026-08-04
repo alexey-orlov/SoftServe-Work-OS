@@ -657,8 +657,7 @@ Meeting focuses on discussing concerns, not rehashing basics.
 ## Integration with Other Skills
 
 **After the meeting:**
-- `/meeting-notes` - Document outcomes and action items
-- `/meeting-cleanup` - Process batch of meetings from one day
+- `/process-meeting` - Document outcomes and action items (batch mode for a whole day)
 - `/decision-doc` - Formalize decisions made in meeting
 
 **Before the meeting:**
@@ -675,7 +674,7 @@ Meeting focuses on discussing concerns, not rehashing basics.
 
 ## Post-Meeting: Pre-Formatted Notes Stub
 
-After generating the agenda, also create a matching meeting notes stub that can be used with `/meeting-notes` after the meeting. This saves time and ensures continuity between agenda and notes.
+After generating the agenda, also create a matching meeting notes stub that can be used with `/process-meeting` after the meeting. This saves time and ensures continuity between agenda and notes.
 
 ```markdown
 # Meeting Notes: [Meeting Title] - [Date]
@@ -724,7 +723,7 @@ After generating the agenda, also create a matching meeting notes stub that can 
 
 **Save locations (both files):**
 - Agenda: `product-development/product/meetings/{type}/docs/[YYYY-MM-DD]-[topic]-agenda.md`
-- Notes stub: `product-development/product/meetings/{type}/docs/[YYYY-MM-DD]-[topic]-notes-stub.md` — the input `/meeting-notes` expects after the meeting
+- Notes stub: `product-development/product/meetings/{type}/docs/[YYYY-MM-DD]-[topic]-notes-stub.md` — the input `/process-meeting` accepts after the meeting
 
 ## Write-back (mandatory)
 
@@ -802,6 +801,5 @@ When the PM uses `/meeting-agenda`, the skill automatically:
 
 ### 6. Route to Meeting Notes Post-Meeting
 **Routing logic:**
-- After meeting: Use `/meeting-notes` to capture outcomes
-- Multiple meetings: Use `/meeting-cleanup` at end of day
+- After meeting: Use `/process-meeting` to capture outcomes (batch mode at end of day)
 - Decision made in meeting: Route to `/decision-doc` if it needs formal documentation

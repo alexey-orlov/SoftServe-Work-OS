@@ -322,11 +322,11 @@ If sanitization removes >70% of body content, suggest skipping the skill (better
 
 ### 3.5 Skill-Name Collisions
 
-If a personal skill name collides with a canonical Team OS skill (`customer-call-summary`, `decision-log-entry`, `feature-launch-gate`, `freshness-check`, `weekly-synthesis`, `portfolio-pulse`):
+If a personal skill name collides with a canonical Team OS skill (`process-meeting`, `decision-log-entry`, `feature-launch-gate`, `freshness-check`, `weekly-review`, `portfolio-pulse`):
 
 1. **Default:** install the canonical Team OS skill **with full content** (not a stub). Namespace the personal version as `{name}-personal`.
 2. **Alternative:** offer to keep the personal version as the team's canonical (replaces the canonical install).
-3. **Always show the collision count** in the Step 8 summary: `"Collisions detected: 2 (customer-call-summary, decision-log-entry) — resolved by: namespace personal."`
+3. **Always show the collision count** in the Step 8 summary: `"Collisions detected: 2 (process-meeting, decision-log-entry) — resolved by: namespace personal."`
 
 Never silently shadow. Never install a stub that says "see canonical for full content" — copy the actual canonical SKILL.md content.
 
@@ -360,7 +360,8 @@ product-development/
 │   ├── strategy/{roadmaps,business-context,frameworks}/
 │   ├── decisions/
 │   ├── meetings/{standup,sprint-planning,team-bi-weekly}/{docs,transcripts,summaries}/
-│   ├── meetings/retros/        ← incl. lessons-learned.md (rolling)
+│   ├── meetings/retros/        ← incl. lessons-learned.md (rolling) + transcripts/
+│   ├── meetings/digests/       ← periodic rollups (weekly review, portfolio pulse, status updates, batch digests)
 │   └── processes/              ← templates incl. initiative-page-template.md
 ├── engineering/
 │   ├── plans/{area}/
@@ -385,7 +386,6 @@ os-installation/
 
 .claude/
 ├── skills/{name}/SKILL.md      ← incl. context-update + wiki-lint (the ingest/lint engines)
-├── commands/customer-call.md
 ├── references/write-back-contract.md
 ├── hooks/session-start.sh + write-guard.sh (+ docs)
 ├── team-learnings.md
@@ -499,15 +499,14 @@ Move (logical move — copy then mark for source-side cleanup the user must do m
 Copy these from this Team OS template (or any local Team OS reference) into `{output}/.claude/skills/`. **Full canonical content, not stubs.**
 
 Required:
-- `customer-call-summary` (folder + `examples/example-2026-01-27.md`)
+- `process-meeting` (folder + `references/`)
 - `decision-log-entry`
 - `feature-launch-gate`
 - `freshness-check`
-- `weekly-synthesis`
+- `weekly-review`
 - `portfolio-pulse`
 
 Plus:
-- `.claude/commands/customer-call.md`
 - `.claude/hooks/session-start.sh` + `.claude/hooks/session-start.md`, wired in `.claude/settings.json`
 
 Verify each must-exist path before continuing. Step 7.5 has the formal check.
@@ -577,13 +576,12 @@ Remaining hits → fail. Show line, suggest rewrite, re-run gate.
 ### 7.5.4 Canonical Must-Exist Gate
 
 Verify each of these exists with non-stub content (>20 lines):
-- `{output}/.claude/skills/customer-call-summary/SKILL.md`
+- `{output}/.claude/skills/process-meeting/SKILL.md`
 - `{output}/.claude/skills/decision-log-entry/SKILL.md`
 - `{output}/.claude/skills/feature-launch-gate/SKILL.md`
 - `{output}/.claude/skills/freshness-check/SKILL.md`
-- `{output}/.claude/skills/weekly-synthesis/SKILL.md`
+- `{output}/.claude/skills/weekly-review/SKILL.md`
 - `{output}/.claude/skills/portfolio-pulse/SKILL.md`
-- `{output}/.claude/commands/customer-call.md`
 - `{output}/CLAUDE.md`
 - `{output}/product-development/feature-index.yaml`
 - `{output}/product-development/analytics/data-catalog.yaml`

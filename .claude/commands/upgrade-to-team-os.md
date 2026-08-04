@@ -19,7 +19,7 @@ This command is a thin entry point. The full logic lives in the `upgrade-to-team
 3. **Sanitize** skills marked for sharing — strip owner names, emails, Slack IDs, first-person voice, personal anecdotes; produce a personal copy + a shared copy
 4. **Scaffold** the canonical Team OS structure at a sibling output path (never overwrite the personal OS)
 5. **Migrate** shared content with role-aware mapping (PRDs, decisions, customers, competitive intel, metrics, queries, schemas, RFCs, plans)
-6. **Add canonical Team OS skills** — customer-call-summary, decision-log-entry, feature-launch-gate, freshness-check, weekly-synthesis, portfolio-pulse — handling name collisions explicitly
+6. **Add canonical Team OS skills** — process-meeting, decision-log-entry, feature-launch-gate, freshness-check, weekly-review, portfolio-pulse — handling name collisions explicitly
 7. **Generate navigation files** — root CLAUDE.md + nested CLAUDE.md per folder
 8. **Print summary** with rollback instructions (`rm -rf {output}` — personal OS is untouched)
 

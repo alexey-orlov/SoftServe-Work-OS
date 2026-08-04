@@ -43,7 +43,7 @@ When this skill is invoked, immediately check:
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | metrics, revenue, North Star | Do success metrics ladder to the North Star? Are impact numbers realistic? |
 | Decisions | `product-development/product/decisions/*.md` | feature name, trade-offs | Has this been tried before? Are we repeating past mistakes? |
 | Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Is competitor positioning accurate or outdated? |
-| Previous Meetings | `product-development/product/meetings/*.md` | feature name, stakeholders | Were concerns raised that got swept under the rug? |
+| Previous Meetings | `product-development/product/meetings/*/summaries/*.md` | feature name, stakeholders | Were concerns raised that got swept under the rug? |
 
 **Context Priority:**
 1. Contradictions with strategy and past decisions FIRST

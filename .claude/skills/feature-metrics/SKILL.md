@@ -21,7 +21,7 @@ When this skill is invoked, immediately check:
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | business model, growth stage, metrics | Product strategy, current North Star |
 | Metrics Context | `product-development/analytics/metrics/{area}/*.md` | baseline numbers, historical data | Current metric baselines, ranges |
 | Strategy | `product-development/product/strategy/*.md` | feature related to strategic pillar | Strategic fit and expected outcomes |
-| Meetings | `product-development/product/meetings/*.md` | feature name, "success metrics" | Stakeholder expectations, past decisions |
+| Meetings | `product-development/product/meetings/*/summaries/*.md` | feature name, "success metrics" | Stakeholder expectations, past decisions |
 
 **Context Priority:**
 1. Current PRD and feature context FIRST

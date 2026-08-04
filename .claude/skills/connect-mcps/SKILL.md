@@ -155,19 +155,19 @@ Based on the MCP category, the skill automatically maps it to relevant skills:
 → feature-metrics, impact-sizing, retention-analysis, activation-analysis, feature-results, metrics-framework, experiment-metrics
 
 **Project Management MCPs** (Linear, Jira)
-→ create-tickets, meeting-notes, status-update
+→ create-tickets, process-meeting, status-update
 
 **Research MCPs** (Dovetail)
-→ user-interview, user-research-synthesis, interview-guide
+→ process-meeting, user-research-synthesis, interview-guide
 
 **Transcription MCPs** (Otter.ai, Fireflies)
-→ meeting-notes, meeting-cleanup, user-interview
+→ process-meeting (all meeting categories)
 
 **Communication MCPs** (Slack)
-→ slack-message, status-update, meeting-notes
+→ slack-message, status-update, process-meeting
 
 **Documentation MCPs** (Notion, Confluence)
-→ decision-doc, status-update, meeting-notes
+→ decision-doc, status-update, process-meeting
 
 **Design MCPs** (Figma)
 → generate-ai-prototype, napkin-sketch, prototype-feedback
@@ -341,11 +341,11 @@ search, browse, web, internet, competitor, market research
 
 **Linear MCP detected** →
 - Category: Project Management (keywords: issues, projects, tickets)
-- Maps to: create-tickets, meeting-notes, status-update
+- Maps to: create-tickets, process-meeting, status-update
 
 **Dovetail MCP detected** →
 - Category: Research + Transcription (keywords: research, interviews, transcripts, insights)
-- Maps to: user-interview, user-research-synthesis, interview-guide, meeting-notes
+- Maps to: process-meeting, user-research-synthesis, interview-guide
 
 ## Update Patterns & Templates
 
@@ -391,8 +391,8 @@ This ensures MCP integration info appears early but doesn't interrupt the skill'
 | MCP | Purpose | Category | Used In | Key Tools |
 |-----|---------|----------|---------|-----------|
 | Amplitude | Product analytics | Analytics | feature-metrics, impact-sizing, retention-analysis | query_insights, get_funnels, cohort_analysis |
-| Linear | Project management | PM Tools | create-tickets, meeting-notes, status-update | create_issue, update_issue, search_issues |
-| Dovetail | User research | Research | user-interview, user-research-synthesis | search_insights, get_themes, export_quotes |
+| Linear | Project management | PM Tools | create-tickets, process-meeting, status-update | create_issue, update_issue, search_issues |
+| Dovetail | User research | Research | process-meeting, user-research-synthesis | search_insights, get_themes, export_quotes |
 ```
 
 **Routing Logic:**
@@ -554,7 +554,7 @@ Testing connection... ✓ Connected successfully!
 
 **Integrating with Team OS skills...**
 ✓ create-tickets updated
-✓ meeting-notes updated
+✓ process-meeting updated
 ✓ status-update updated
 
 **Updating CLAUDE.md registry...**

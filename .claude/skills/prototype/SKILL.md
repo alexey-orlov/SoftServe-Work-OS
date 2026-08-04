@@ -570,7 +570,7 @@ If any are missing, ask before generating.
 
 **Related:**
 - `/prd-review-panel` - Validate with Designer sub-agent
-- `/user-interview` - Test prototype with real users
+- `/process-meeting` - Process user-testing interviews
 - `/ralph-wiggum` - Challenge whether this is the right solution
 
 ---
@@ -620,5 +620,5 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 - `/feature-results` - Measure impact post-launch
 
 **Parallel use:**
-- `/user-interview` - Test with real users
+- `/process-meeting` - Process user-testing interviews
 - `/ralph-wiggum` - Challenge the solution approach

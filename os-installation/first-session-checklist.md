@@ -155,7 +155,7 @@ claude "Read CLAUDE.md and summarize what this Team OS does in 2 sentences"
 **What we're testing:** Structured skills/commands work
 
 ```bash
-claude "/meeting-notes
+claude "/process-meeting
 
 'Had a sync with Sarah from Design and Mike from Engineering. Sarah showed mockups for the new dashboard—looks great but we need to validate load times. Mike mentioned the API refactor is almost done, should ship next Tuesday. Action items: I'll schedule usability testing for the dashboard, Sarah will send final Figma files by EOD, Mike will update us in Slack when API is live. Follow-up meeting scheduled for next Friday at 2pm.'
 "
@@ -448,7 +448,7 @@ cd team-os
 claude "Read CLAUDE.md, ready for PM work"
 
 # Process meeting notes
-claude "/meeting-notes - Process: [your transcript]"
+claude "/process-meeting - Process: [your transcript]"
 
 # Create a PRD
 claude "/prd-draft - Create a PRD for: [your feature]"

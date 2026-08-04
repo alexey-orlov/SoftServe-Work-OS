@@ -34,7 +34,7 @@ When this skill is invoked, immediately check:
 | Business Context | `product-development/product/strategy/business-context/business-info.md` | — (read the ICP, value proposition, positioning, and pricing sections) | Who we are competing *for*, our differentiators, our price points. Competitive analysis without this produces a feature grid instead of a strategy |
 | User Research | `product-development/product/customers/*.md` | competitor name, "switched to", "chose", "vs [competitor]", "competitor" | Customer quotes, pain points, feature comparisons |
 | Existing Analysis | `product-development/product/competitive-research/competitive-*.md` | competitor name | Past findings, dates, trends, avoid duplication |
-| Meeting Notes | `product-development/product/meetings/*.md` | competitor name, "lost deal", "churn", sales, CS | Sales losses, CS feedback, win/loss patterns |
+| Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | competitor name, "lost deal", "churn", sales, CS | Sales losses, CS feedback, win/loss patterns |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | competitor name, "competitive", "positioning" | Feature decisions, positioning rationale |
 | Strategy | `product-development/product/strategy/*.md` | competitor name, "positioning", "differentiation" | Strategic context, counter-positioning |
 | Metrics | `product-development/analytics/metrics/{area}/*.md` | "churn", "retention", competitor name | Churn to competitors, competitive benchmarks |

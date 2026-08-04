@@ -358,7 +358,7 @@ If keeping:
 **Automatic trigger:** Suggest a team meeting retrospective when ANY of these conditions are met:
 - 3+ meetings scored below 3.0 on the same dimension within 30 days
 - Same "meeting smell" detected in 3+ consecutive meetings of the same type
-- Action items from meetings are consistently not completed (tracked via /meeting-cleanup)
+- Action items from meetings are consistently not completed (tracked via /process-meeting batch mode)
 - A stakeholder gives feedback that meetings are unproductive
 
 **How to connect:** "Based on the last month of meeting feedback, [Dimension X] has scored below 3.0 in [N] meetings. This suggests a systemic issue rather than a one-off problem. Want to run a team retrospective focused on improving [Dimension X]?"
@@ -497,8 +497,7 @@ If not, what changes would justify the cost?
 - `/meeting-agenda` - Create structured agenda
 
 **After meeting:**
-- `/meeting-notes` - Document decisions and action items
-- `/meeting-cleanup` - Batch process day's meetings
+- `/process-meeting` - Document decisions and action items (batch mode for a whole day)
 
 **Recurring use:**
 - Run meeting-feedback monthly on recurring meetings
@@ -541,7 +540,7 @@ assigning a facilitator or using round-robin format.
 
 If no previous feedback exists, note: "This is the first feedback for this meeting. Future ratings will show trends."
 
-Save feedback files with consistent naming: `product-development/product/meetings/{type}/summaries/feedback-[meeting-name]-[date].md` to enable trend tracking.
+Save feedback files with consistent naming: `product-development/product/meetings/{type}/docs/feedback-[meeting-name]-[date].md` to enable trend tracking.
 
 ---
 
@@ -591,7 +590,7 @@ How to share meeting feedback constructively:
 ### Evaluating Meetings You Didn't Attend
 
 When asked to evaluate a meeting you weren't in (e.g., PM asks "how was my team's sprint retro?"):
-- **Use the meeting notes** as primary input (from /meeting-notes output or raw notes)
+- **Use the meeting notes** as primary input (from /process-meeting output or raw notes)
 - **Score only observable dimensions:** Decisions, Action Items, and Time Management can be assessed from notes. Participation and Preparation usually cannot -- note them as "Unable to assess from notes."
 - **Flag the limitation:** "Note: This evaluation is based on meeting notes, not direct observation. Participation and Preparation scores may not be accurate."
 - **Suggest:** "For a more complete assessment, ask an attendee to answer 3 quick questions about preparation and participation."
@@ -653,5 +652,5 @@ When the PM uses `/meeting-feedback`, the skill automatically:
 **Routing logic:**
 - **Individual meeting:** Quick feedback loop
 - **Recurring meeting:** Suggest changes for next occurrence
-- **Team pattern:** Suggest `/meeting-cleanup` to batch-process and identify systemic issues
+- **Team pattern:** Suggest `/process-meeting` batch mode to identify systemic issues
 - **Major issue:** Flag for leadership discussion or team retrospective

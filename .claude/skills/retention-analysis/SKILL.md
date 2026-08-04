@@ -35,7 +35,7 @@ When this skill is invoked, immediately check:
 |--------|---------------|--------------|-----------------|
 | Metrics/Analytics | `product-development/analytics/metrics/{area}/*.md` | D7, D30, retention, churn, cohort, "monthly active", DAU, WAU | Current retention curves, cohort performance, churn rates |
 | User Research | `product-development/product/customers/*.md` | churn, "stopped using", "didn't come back", "why I left", "why I switched" | Churn interview quotes, reasons users stop using product |
-| Meeting Notes | `product-development/product/meetings/*.md` | churn, "cancelled", "downgrade", lost deal, customer feedback | CS feedback on churn, customer complaints, drop-off patterns |
+| Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | churn, "cancelled", "downgrade", lost deal, customer feedback | CS feedback on churn, customer complaints, drop-off patterns |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | retention, sticky, habit, engagement, notification, reminder | Features built to improve retention |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | target user, use case, frequency, engagement, core activity | How often users should use product, what drives stickiness |
 | Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case | Segment denominators — churn and retention are reported by segment, never overall alone |
