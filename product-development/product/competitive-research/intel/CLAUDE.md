@@ -6,4 +6,4 @@ Monthly cross-competitor monitoring records — one dated file per `/competitor-
 
 ## Contents
 
-_Empty. Add a one-line entry (`- [{YYYY-MM}.md]({YYYY-MM}.md) — one-line summary`) for every record you add._
+_Empty. `/competitor-analysis` appends a line here for every record it writes — the dated `{YYYY-MM}.md` file, linked, with a one-line summary._
