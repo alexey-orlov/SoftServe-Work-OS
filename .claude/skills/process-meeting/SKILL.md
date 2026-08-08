@@ -79,7 +79,7 @@ use customer-call and give the discovery findings their own summary section.
    as relevant, before writing. A summary already existing for the same account+date or
    type+date → append to it (review its Open Action Items table first; ask about unclear
    statuses), don't create a duplicate. Input path already in
-   `product-development/_meta/processed.txt` → no-op; say so.
+   `governance/processed.txt` → no-op; say so.
 1. **File the raw transcript** (when one exists) verbatim at the category's transcript home
    (table below), with a header linking where the summary will live. Raw material is
    immutable from then on — corrections happen in the summary, never the transcript. An
@@ -100,7 +100,7 @@ use customer-call and give the discovery findings their own summary section.
    **in the same change**: `YYYY-MM-DD — [one-line outcome] ([summary](relative/path.md))`.
 6. **Navigation:** one line for each new file at the END of its folder's `CLAUDE.md` list.
 7. **Ledger:** append every transcript path filed this run (batch mode: every member) to
-   `product-development/_meta/processed.txt`, one repo-root-relative path per line, kept
+   `governance/processed.txt`, one repo-root-relative path per line, kept
    sorted — `/context-update` sweeps skip ledgered paths.
 8. **Run summary:** list every path written, records filed, refusals, and Tier-2
    confirmations asked. Nothing is handled silently.
@@ -207,20 +207,20 @@ conflicts — to `reports/{date}-daily-batch.md` per
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Add a one-line entry for the new file at the END of the file list in its folder's
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
 **Ledger (this is an ingest skill):** append the repo path of every transcript filed this
-run to `product-development/_meta/processed.txt` — one repo-root-relative path per line,
+run to `governance/processed.txt` — one repo-root-relative path per line,
 keep the file sorted — so `/context-update` sweeps know the artifact is handled.
 
 ## Related

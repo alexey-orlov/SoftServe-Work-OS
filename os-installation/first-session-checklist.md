@@ -518,7 +518,7 @@ The repo maintains itself — confirm the machinery works before trusting it:
    `product-development/product/strategy/business-context/business-info.md`. A
    confirmation prompt naming the write policy should appear BEFORE any change.
 4. **Lint is clean** — run `/wiki-lint`. Expect zero broken references and a dated report
-   in `product-development/_meta/health/`.
+   in `governance/health/`.
 5. **The gate demos both verdicts** — `/feature-launch-gate credit-usage-dashboard-v1`
    → PASS; `/feature-launch-gate tier-discount-promo` → BLOCKED (its PRD is deliberately
    missing).

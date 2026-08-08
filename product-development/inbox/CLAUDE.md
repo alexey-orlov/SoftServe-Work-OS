@@ -20,7 +20,7 @@ a file is sitting here.
   which detects the category, **moves** the file to its canonical `*/transcripts/` home,
   writes the summary, and ledgers the destination path. The inbox trends toward empty.
 - **Junk / duplicates** are ledgered under their inbox path and left here — delete the
-  file and its `_meta/processed.txt` line together.
+  file and its `governance/processed.txt` line together.
 - **Unclassifiable files** (unknown account, no matching meeting type) stay here, are
   named in every sweep's run summary, and keep the session-start fold-backlog count
   nonzero until someone renames, files, or deletes them.

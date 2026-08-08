@@ -630,19 +630,19 @@ All files will be saved to:
 
 **If the synthesis changes persona or ICP facts:** propose the exact edit to
 `product-development/product/strategy/business-context/business-info.md` (show the before/after)
-and apply it only after the user confirms — that file is Tier 2 in `_meta/write-policy.yaml`.
+and apply it only after the user confirms — that file is Tier 2 in `governance/write-policy.yaml`.
 Keep the root CLAUDE.md fundamentals block consistent with `business-info.md` in the same change.
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Add a one-line entry for the new file at the END of the file list in its folder's
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
@@ -650,7 +650,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 **Ledger (ingest clause):** when handed raw transcripts directly (not already processed by
 `/process-meeting`), file each one to the participant's account
 `calls/transcripts/{date}.md` and append its repo path to
-`product-development/_meta/processed.txt` (one repo-root-relative path per line, kept
+`governance/processed.txt` (one repo-root-relative path per line, kept
 sorted) — otherwise `/context-update` sweeps will re-discover them.
 
 ---

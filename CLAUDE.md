@@ -60,7 +60,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Starting or stress-testing a new bet / feature?"* | `product/handbook/de-risk-a-bet.md` → the stage skill for your moment |
 | *"Process this meeting / call transcript?"* | run `/process-meeting` — files transcript + summary, routes records, updates the ledger |
 | *"Something new worth keeping (thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
-| *"Is the repo healthy / what's stale?"* | run `/wiki-lint` → latest report in `product-development/_meta/health/` |
+| *"Is the repo healthy / what's stale?"* | run `/wiki-lint` → latest report in `governance/health/` |
 | *"What did customer Y say last call?"* | `product/customers/accounts/{Y}/calls/summaries/{latest}.md` → transcript only if the summary falls short |
 | *"Why did we choose Z?"* | `product/decisions/` → the dated decision file |
 | *"How do we calculate metric M?"* | `analytics/metrics/{area}/` → linked query → schema only if column-level detail needed |
@@ -75,8 +75,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 |------|------|-------------|
 | Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
 | Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
-| Wiki machinery | `product-development/_meta/` | `write-policy.yaml` (protected-paths registry), `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending Tier-2 changes) |
-| Write-back contract | `.claude/references/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
+| Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending confirm-tier changes) |
+| Write-back contract | `governance/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
 | Data catalog | `product-development/analytics/data-catalog.yaml` | Warehouse table registry — owner, refresh, upstream, used-by |
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences; `segmentation-matrix.md` — account counts + ARR by vertical × size band × use-case category. Living masters: edit in place, keep current |
 | Product | `product-development/product/CLAUDE.md` | Product context, PRDs, customers, decisions |
@@ -106,8 +106,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 
 ## Governance
 
-- **Write policy** — `product-development/_meta/write-policy.yaml` is the traceable registry of protected context. Default is **auto**: agents write and commit directly (transcripts, summaries, PRDs, analyses, decisions, navigation). **Confirm** tier (`business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `feature-index.yaml`, this file): show the exact before/after and get an in-session yes first; headless runs file a proposal in `_meta/proposals/` instead. **Admin** tier (skills, hooks, the contract, the registry itself): steward only. Enforced by the write-guard hook; optionally hard-stopped by a GitHub push ruleset; audited weekly.
-- **One writer per surface** — table in `.claude/references/write-back-contract.md`.
+- **Write policy** — `governance/write-policy.yaml` is the single authoritative registry of protected context: **auto** (default — agents write and commit directly), **confirm** (steering files — show the exact before/after and get an in-session yes first; headless runs file a proposal in `governance/proposals/` instead), **admin** (the system's own rules — steward only). Enforced by the write-guard hook; optionally hard-stopped by a GitHub push ruleset; audited weekly. Full map: `governance/CLAUDE.md`.
+- **One writer per surface** — table in `governance/write-back-contract.md`.
 - **Mirror rule** — the Fundamentals block above summarizes `business-info.md`; whoever changes one updates the other in the same change.
 - **Failure visibility** — an automation that can drop work must surface its own failure; a silent success-shaped exit is the bug.
 - **Commit prefixes** — `context:` for wiki folds and lint fixes; normal conventions otherwise.
@@ -137,7 +137,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 
 ## Enforcement on GitHub
 
-Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue), the push ruleset that hard-stops non-steward changes to protected paths (path list generated from the write policy), and branch protection for admin-tier changes. Day-to-day auto-tier work commits straight to `main` — no PR required.
+Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue), the push ruleset that hard-stops non-steward changes to protected paths (path list hand-maintained in sync with the write policy), and branch protection for admin-tier changes. Day-to-day auto-tier work commits straight to `main` — no PR required.
 
 ## Credits
 

@@ -25,14 +25,14 @@ Writing skills carry exactly this, after their save-location section:
 ```markdown
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Add a one-line entry for the new file at the END of the file list in its folder's
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
@@ -48,7 +48,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
    not multiplied. One home per item; other pages link, never restate.
 3. **Write policy applies to every write.** Auto-tier paths (the default) are written
    directly. Confirm-tier paths: show the exact before/after, get an in-session yes first;
-   headless runs write a proposal to `product-development/_meta/proposals/` instead.
+   headless runs write a proposal to `governance/proposals/` instead.
    Admin-tier paths: don't touch — tell the user to route the change through the steward.
 4. **Provenance.** Every non-obvious claim in a wiki page links to its source, relative to
    the page (a summary links its transcript; account-context links summaries; a distilled
@@ -56,7 +56,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
    inferences marked "(inferred)", dates as YYYY-MM-DD, "-" for empty sections.
 5. **Budgets.** Living pages ≤120 lines; folder CLAUDE.md ≤80 lines; root CLAUDE.md ≤150.
    When a page outgrows its budget, split a subpage and link it — don't let it sprawl.
-6. **The ledger** (`product-development/_meta/processed.txt`) is appended only by ingest
+6. **The ledger** (`governance/processed.txt`) is appended only by ingest
    skills — the ones that consume raw sources: `/context-update`, `/process-meeting`, and
    `/user-research-synthesis` (when handed raw transcripts directly). One repo-root-relative
    path per line, kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing
@@ -77,9 +77,9 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 |---|---|
 | `decisions/CLAUDE.md` "Recent Decisions" list | `/decision-log-entry` (and `/decision-doc` via the same rule) — append-only |
 | `feature-index.yaml` feature keys | `/prd-draft` and `/context-update` propose (Tier 2); other skills only append artifact rows to existing keys (also Tier 2) |
-| `product-development/_meta/processed.txt` | ingest skills (rule 6) |
-| `product-development/_meta/health/` | `/wiki-lint` |
-| `product-development/_meta/proposals/` | headless runs (created), humans (cleared) |
+| `governance/processed.txt` | ingest skills (rule 6) |
+| `governance/health/` | `/wiki-lint` |
+| `governance/proposals/` | headless runs (created), humans (cleared) |
 | root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change, by whoever edits either (Tier 2 confirm covers both) |
 | `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always Tier 2 confirm; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
 | `accounts/{c}/calls/` and `meetings/{type}/` transcripts + summaries (incl. `retros/transcripts/`) | `/process-meeting` — `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; it never writes call/meeting summaries itself |

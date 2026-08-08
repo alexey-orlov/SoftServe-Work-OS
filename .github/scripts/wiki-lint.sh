@@ -22,7 +22,7 @@ note "== wiki-lint (mechanical) =="
 # ---- Check 2a: every directory under product-development/ has a CLAUDE.md ----------
 while IFS= read -r d; do
   [ -f "$d/CLAUDE.md" ] || fail "missing CLAUDE.md: $d/"
-done < <(find "$PD" -type d ! -path '*/.git*')
+done < <(find "$PD" governance -type d ! -path '*/.git*')
 
 # ---- Check 2b: every nav link target exists ----------------------------------------
 # Scan CLAUDE.md files for markdown links to local paths; verify each resolves.
@@ -41,7 +41,7 @@ while IFS= read -r nav; do
       echo "$nav -> $t"
     fi
   done
-done < <(find "$PD" .claude -name 'CLAUDE.md' 2>/dev/null) | sort -u > "$NAVTMP"
+done < <(find "$PD" governance .claude -name 'CLAUDE.md' 2>/dev/null) | sort -u > "$NAVTMP"
 while IFS= read -r line; do
   [ -n "$line" ] && fail "nav link broken: $line"
 done < "$NAVTMP"
@@ -53,11 +53,11 @@ while IFS= read -r f; do
   dir=$(dirname "$f")
   case "$base" in CLAUDE.md|processed.txt|.*) continue ;; esac
   # queue folders hold transient files by design — no per-file nav requirement
-  case "$f" in "$PD"/inbox/*|"$PD"/_meta/proposals/*) continue ;; esac
+  case "$f" in "$PD"/inbox/*|governance/proposals/*) continue ;; esac
   if [ -f "$dir/CLAUDE.md" ] && ! grep -qF "$base" "$dir/CLAUDE.md"; then
     fail "file not in its folder's CLAUDE.md: $f"
   fi
-done < <(find "$PD" -type f ! -path '*/.git*')
+done < <(find "$PD" governance -type f ! -path '*/.git*')
 
 # ---- Check 3: feature-index ↔ disk --------------------------------------------------
 if command -v python3 >/dev/null 2>&1; then
@@ -110,7 +110,7 @@ else
 fi
 
 # ---- Check 8: ledger integrity -------------------------------------------------------
-LEDGER="$PD/_meta/processed.txt"
+LEDGER="governance/processed.txt"
 if [ -f "$LEDGER" ]; then
   while IFS= read -r p; do
     [ -z "$p" ] && continue
@@ -132,12 +132,12 @@ while IFS= read -r nav; do
       *" s"|*" a"|*" pri"|*:) warn "possible truncated nav line in $nav: ${line%%:*}" ;;
     esac
   done
-done < <(find "$PD" .claude -name 'CLAUDE.md' 2>/dev/null)
+done < <(find "$PD" governance .claude -name 'CLAUDE.md' 2>/dev/null)
 
 # ---- Check 10: YAML parse -------------------------------------------------------------
 if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; then
   for y in "$PD/feature-index.yaml" "$PD/analytics/data-catalog.yaml" \
-           "$PD/_meta/write-policy.yaml" "$PD/product/customers/accounts/portfolio.yaml" \
+           "governance/write-policy.yaml" "$PD/product/customers/accounts/portfolio.yaml" \
            "$PD/engineering/code-repos.yaml"; do
     [ -f "$y" ] || { warn "yaml missing: $y"; continue; }
     python3 -c "import yaml,sys; yaml.safe_load(open('$y'))" 2>/dev/null \

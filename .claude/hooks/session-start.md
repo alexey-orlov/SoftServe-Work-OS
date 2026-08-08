@@ -15,9 +15,9 @@ re-cats it:
 2. **Current priorities** — head of `strategy/current-quarter.md`
 3. **Active initiatives** — every `initiatives/*.md` with `_status: active`
 4. **Team learnings** — `.claude/team-learnings.md` (the agent-behavior rules; capped ~30 lines)
-5. **Latest health report** — head of the newest `_meta/health/*-wiki-lint.md`
+5. **Latest health report** — head of the newest `governance/health/*-wiki-lint.md`
 6. **Fold backlog** — count of transcripts not yet in the ledger ("run /context-update")
-   and pending Tier-2 proposals in `_meta/proposals/`
+   and pending Tier-2 proposals in `governance/proposals/`
 7. **Last session's unfinished work** — surfaced from `.claude/.last-session-state` if the
    optional session-end hook is enabled (below), then cleared
 
@@ -27,7 +27,7 @@ the script.
 ## 2. `write-guard.sh` — write-policy enforcement (PreToolUse)
 
 Fires on every `Edit|Write|MultiEdit|NotebookEdit` call. Looks the target path up in
-`product-development/_meta/write-policy.yaml`:
+`governance/write-policy.yaml`:
 
 - **auto** (not listed) → no output; the write proceeds normally.
 - **confirm** tier → returns `permissionDecision: "ask"` — Claude Code shows a native
@@ -42,7 +42,7 @@ audit are for (see `os-installation/claude-code/scheduled-governance.md`).
 ## 3. `auto-commit.sh` — commit / merge the turn's work (Stop) — **ships disabled**
 
 Fires when Claude finishes responding. Reads the `settings:` block of
-`product-development/_meta/write-policy.yaml`; with both switches `false` (the shipped
+`governance/write-policy.yaml`; with both switches `false` (the shipped
 state) it exits immediately and does nothing.
 
 - **`auto-commit`** — stages and commits the turn's changes. `scope: auto-tier` (the
@@ -127,7 +127,7 @@ wired — its value is modest, and every hook is a per-event process spawn.
 Claude consistently gets something wrong here, when the team agrees on a pattern, or when
 a working preference should persist. Keep it under ~30 lines — prune when adding. Process
 lessons belong in `meetings/retros/lessons-learned.md` instead; product choices in
-`decisions/` (routing table: `.claude/references/write-back-contract.md`).
+`decisions/` (routing table: `governance/write-back-contract.md`).
 
 ## Troubleshooting
 
@@ -136,4 +136,4 @@ lessons belong in `meetings/retros/lessons-learned.md` instead; product choices 
 - **Hook errors:** run `bash .claude/hooks/session-start.sh` standalone — it must exit 0
   even on a fresh clone with empty folders.
 - **Guard too eager / too quiet:** edit the patterns in
-  `product-development/_meta/write-policy.yaml` — the guard re-reads it on every call.
+  `governance/write-policy.yaml` — the guard re-reads it on every call.

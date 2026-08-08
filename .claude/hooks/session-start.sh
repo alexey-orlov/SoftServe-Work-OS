@@ -36,10 +36,10 @@ echo "--- Team learnings (.claude/team-learnings.md) ---"
 cat .claude/team-learnings.md 2>/dev/null || echo "none yet"
 
 echo "--- Latest health report ---"
-LATEST=$(ls "$PD/_meta/health" 2>/dev/null | grep -v 'CLAUDE' | sort | tail -1)
+LATEST=$(ls "governance/health" 2>/dev/null | grep -v 'CLAUDE' | sort | tail -1)
 if [ -n "$LATEST" ]; then
   echo "$LATEST:"
-  head -12 "$PD/_meta/health/$LATEST" 2>/dev/null | sed 's/^/    /'
+  head -12 "governance/health/$LATEST" 2>/dev/null | sed 's/^/    /'
 else
   echo "no lint report yet — run /wiki-lint"
 fi
@@ -52,16 +52,16 @@ BACKLOG=$(comm -23 \
          -type f \( -path '*/transcripts/*' -o -path '*/inbox/*' \) \
          \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
          ! -name 'CLAUDE.md' 2>/dev/null | sort) \
-  <(sort "$PD/_meta/processed.txt" 2>/dev/null) 2>/dev/null | wc -l | tr -d ' ')
+  <(sort "governance/processed.txt" 2>/dev/null) 2>/dev/null | wc -l | tr -d ' ')
 if [ "${BACKLOG:-0}" -gt 0 ] 2>/dev/null; then
   echo "$BACKLOG artifact(s) not yet folded — run /context-update"
 else
   echo "clean — nothing waiting to be folded"
 fi
 
-PROPOSALS=$(ls "$PD/_meta/proposals" 2>/dev/null | grep -vc 'CLAUDE' | tr -d ' ')
+PROPOSALS=$(ls "governance/proposals" 2>/dev/null | grep -vc 'CLAUDE' | tr -d ' ')
 if [ "${PROPOSALS:-0}" -gt 0 ] 2>/dev/null; then
-  echo "$PROPOSALS pending Tier-2 proposal(s) in $PD/_meta/proposals/ — review and apply or reject"
+  echo "$PROPOSALS pending Tier-2 proposal(s) in governance/proposals/ — review and apply or reject"
 fi
 
 if [ -f .claude/.last-session-state ]; then

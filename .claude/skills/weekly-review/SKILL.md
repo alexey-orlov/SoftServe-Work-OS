@@ -41,7 +41,7 @@ duplicate crons, nothing tied to one person's laptop):
    `customers/accounts/*/calls/summaries/`) — their `Initiatives touched:` headers route
    the same way.
 5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
-6. The latest report in `product-development/_meta/health/` — staleness count.
+6. The latest report in `governance/health/` — staleness count.
 7. `product-development/product/customers/feature-requests/` — records with `requested:`
    in the window, and their `tracker_ref` state (`"-"` = awaiting tracker push). When a
    tracker MCP is connected (Linear / Jira / Asana), cross-check tickets labeled
@@ -185,14 +185,14 @@ to `reports/CLAUDE.md` on first write of the week.
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Add a one-line entry for the new file at the END of the file list in its folder's
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.

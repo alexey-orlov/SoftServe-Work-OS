@@ -243,14 +243,14 @@ After successful integration, the skill:
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `.claude/references/write-back-contract.md`:
+After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Add a one-line entry for the new file at the END of the file list in its folder's
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `_meta/write-policy.yaml`).
+   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
@@ -258,7 +258,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 For this skill specifically: `os-installation/mcp-integration-logs/` is created on demand —
 writing the first log there is step 1's "new folder" case (create the 5-line CLAUDE.md stub
 inside it and list the folder in `os-installation/`'s CLAUDE.md). Step 8's edits to the root
-`CLAUDE.md` MCP registry and routing logic touch a Tier 2 file (`_meta/write-policy.yaml`):
+`CLAUDE.md` MCP registry and routing logic touch a Tier 2 file (`governance/write-policy.yaml`):
 propose those edits and apply them only after the user confirms in-session.
 
 ## MCP Intelligence Gathering

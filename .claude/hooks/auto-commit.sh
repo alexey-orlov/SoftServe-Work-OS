@@ -1,7 +1,7 @@
 #!/bin/bash
 # Team OS auto-commit / auto-merge — Stop hook.
 #
-# Reads the `settings:` block of product-development/_meta/write-policy.yaml and, when
+# Reads the `settings:` block of governance/write-policy.yaml and, when
 # enabled, commits the turn's work (and optionally merges it into the target branch).
 # Both features ship DISABLED — this script is a no-op until someone turns one on.
 #
@@ -16,7 +16,7 @@
 set -u
 cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || exit 0
 
-POLICY="product-development/_meta/write-policy.yaml"
+POLICY="governance/write-policy.yaml"
 [ -f "$POLICY" ] || exit 0
 command -v git >/dev/null 2>&1 || exit 0
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
@@ -136,7 +136,7 @@ MSG="$AC_PREFIX auto-commit — $COUNT file(s)
 Areas: ${AREAS:-repo root}
 
 Committed by .claude/hooks/auto-commit.sh (scope: $AC_SCOPE) per the settings block in
-product-development/_meta/write-policy.yaml."
+governance/write-policy.yaml."
 
 if ! git commit -q -m "$MSG" 2>/dev/null; then
   note "git commit FAILED — the turn's work is staged but not committed. Commit it by hand."

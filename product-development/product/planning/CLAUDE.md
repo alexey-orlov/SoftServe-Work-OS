@@ -6,7 +6,7 @@ meeting records; `/weekly-review` reads them back for plan-vs-actual.
 **Read this when:** You want today's plan, this week's priorities, or what was planned
 against what actually happened.
 
-Two writers, told apart by filename prefix (registry: `.claude/references/write-back-contract.md`, "One writer per surface"):
+Two writers, told apart by filename prefix (registry: `governance/write-back-contract.md`, "One writer per surface"):
 
 | Pattern | Writer |
 |---------|--------|

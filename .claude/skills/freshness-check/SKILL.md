@@ -15,7 +15,7 @@ Flag mapping:
 - `[PENDING:]` marker aging → `/wiki-lint` check #1 (still 14 days)
 
 `.freshness-ignore` in the repo root works unchanged. Reports land in
-`product-development/_meta/health/` instead of chat-only.
+`governance/health/` instead of chat-only.
 
 **If invoked: run `/wiki-lint` and say so.** This stub is removed once nothing references
 it — `/wiki-lint`'s broken-reference check will show when that day comes.

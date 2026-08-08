@@ -7,7 +7,7 @@ a single meeting: those live in [../meetings/](../meetings/).
 **Read this when:** You want last week's digest, the latest portfolio pulse, or a past
 status update.
 
-One folder, four writers, told apart by filename prefix (registry: `.claude/references/write-back-contract.md`, "One writer per surface"):
+One folder, four writers, told apart by filename prefix (registry: `governance/write-back-contract.md`, "One writer per surface"):
 
 | Pattern | Writer |
 |---------|--------|

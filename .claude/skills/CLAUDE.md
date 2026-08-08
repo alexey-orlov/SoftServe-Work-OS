@@ -108,7 +108,7 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 - [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, RFCs, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
 - [freshness-check/](freshness-check/) — Deprecation stub — superseded by /wiki-lint (staleness is check #1 there); kept one release for muscle memory
 - [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
-- [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `_meta/health/`; `--fix` repairs mechanical drift only
+- [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `governance/health/`; `--fix` repairs mechanical drift only
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 
 ## Gaps

@@ -3,8 +3,8 @@
 # This registry is the single traceable list of protected context. The OS admin
 # edits it here; everything that enforces the policy reads from here:
 #   - .claude/hooks/write-guard.sh   (in-session: native confirm prompt on protected paths)
-#   - GitHub push ruleset            (server-side hard stop; path list generated from this
-#                                     file — see os-installation/claude-code/scheduled-governance.md)
+#   - GitHub push ruleset            (server-side hard stop; path list hand-maintained in
+#                                     sync with this file — see os-installation/claude-code/scheduled-governance.md)
 #   - .github/workflows/wiki-lint.yml (weekly audit: lists commits that touched protected paths)
 #
 # Tier semantics:
@@ -13,7 +13,7 @@
 #             (PRDs, analyses), navigation CLAUDE.md files, the ledger, health reports.
 #   confirm — the distilled steering files. An agent must show the exact before/after and
 #             get an in-session yes BEFORE writing. Headless/scheduled runs cannot confirm:
-#             they write a proposal to product-development/_meta/proposals/ instead.
+#             they write a proposal to governance/proposals/ instead.
 #   admin   — the system's own rules. Only the steward changes these (via reviewed PR).
 #
 # Paths are repo-root-relative. Globs use shell fnmatch (`*` does not cross `/`, `**` does).
@@ -33,13 +33,14 @@ tiers:
     - product-development/product/strategy/current-quarter.md
 
   admin:
-    - product-development/_meta/write-policy.yaml                            # this file
+    - governance/write-policy.yaml                                           # this file
+    - governance/write-back-contract.md
     - .claude/references/**
     - .claude/settings.json
     - .claude/hooks/**
     - .claude/skills/**
     - .claude/agents/**
-    - .claude/commands/**
+    - .claude/team-learnings.md
     - .github/**
 
 # Living pages — edit-in-place current-truth files (auto tier unless listed above).

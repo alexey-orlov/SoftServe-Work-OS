@@ -1,6 +1,6 @@
 # proposals — pending Tier-2 changes from headless runs
 
-A scheduled or headless run may not edit confirm-tier files (`_meta/write-policy.yaml`).
+A scheduled or headless run may not edit confirm-tier files (`governance/write-policy.yaml`).
 When one derives a change to a protected file, it writes the proposal here instead:
 `{YYYY-MM-DD}-{slug}.md` containing the target path, the exact proposed before/after, and
 the source that motivated it.

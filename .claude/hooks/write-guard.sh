@@ -1,5 +1,5 @@
 #!/bin/bash
-# Team OS write-guard — PreToolUse hook enforcing product-development/_meta/write-policy.yaml.
+# Team OS write-guard — PreToolUse hook enforcing governance/write-policy.yaml.
 # Reads the tool-call JSON on stdin. If the target file matches a confirm- or admin-tier
 # pattern, returns permissionDecision "ask" so the user approves the write in-session.
 # Auto-tier paths (everything not listed) pass through silently (no output, exit 0).
@@ -8,7 +8,7 @@
 set -u
 INPUT=$(cat)
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
-POLICY="$ROOT/product-development/_meta/write-policy.yaml"
+POLICY="$ROOT/governance/write-policy.yaml"
 [ -f "$POLICY" ] || exit 0
 
 # --- extract the target path from the tool input ---------------------------------
@@ -60,9 +60,9 @@ done < "$POLICY"
 [ -z "$TIER" ] && exit 0
 
 if [ "$TIER" = "admin" ]; then
-  REASON="Admin-tier path per product-development/_meta/write-policy.yaml — the system rules. Route this change through the repo steward (reviewed PR); approve only if you are the steward."
+  REASON="Admin-tier path per governance/write-policy.yaml — the system rules. Route this change through the repo steward (reviewed PR); approve only if you are the steward."
 else
-  REASON="Confirm-tier path per product-development/_meta/write-policy.yaml — a steering file. The agent must show the exact before/after; approve only after reviewing it. Headless runs must file a proposal in product-development/_meta/proposals/ instead."
+  REASON="Confirm-tier path per governance/write-policy.yaml — a steering file. The agent must show the exact before/after; approve only after reviewing it. Headless runs must file a proposal in governance/proposals/ instead."
 fi
 
 printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$REASON"

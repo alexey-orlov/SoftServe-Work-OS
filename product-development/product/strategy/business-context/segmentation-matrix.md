@@ -72,7 +72,7 @@ Same shape as the General matrix, one section per use-case category — an accou
 
 ## Maintenance
 
-- **Confirm tier** (`product-development/_meta/write-policy.yaml`): every edit shows the exact before/after and gets an in-session yes; headless runs file a proposal in `_meta/proposals/` instead.
+- **Confirm tier** (`governance/write-policy.yaml`): every edit shows the exact before/after and gets an in-session yes; headless runs file a proposal in `governance/proposals/` instead.
 - **Refresh:** full refresh each quarter alongside `current-quarter.md`; between quarters `/context-update` refreshes the affected cells when an account lands, churns, or is re-segmented. Bump `_updated:` and the snapshot date on every change.
 - **Sources:** managed accounts carry `vertical`, `size_band`, and `use_cases` in [portfolio.yaml](../../customers/accounts/portfolio.yaml); a self-serve long tail comes from [billing export / warehouse query — register it in `analytics/queries/` and `data-catalog.yaml` when wired].
 - **Read by:** `/prd-draft`, `/impact-sizing`, `/prioritize-requests`, `/expansion-strategy`, `/retention-analysis`, `/activation-analysis`, `/strategy-sprint`, `/write-prod-strategy`, `/portfolio-pulse` — any work that needs segment denominators or revenue weighting.

@@ -10,7 +10,7 @@ to a GitHub remote.
   initiatives, team learnings, the latest health report, and the fold backlog.
 - **Write-guard** (`.claude/hooks/write-guard.sh`) forces an in-session confirmation
   whenever an agent tries to write a confirm- or admin-tier path from
-  `product-development/_meta/write-policy.yaml`.
+  `governance/write-policy.yaml`.
 - **Auto-commit / auto-merge** (`.claude/hooks/auto-commit.sh`, **ships disabled**) commits
   each turn's work and can merge it into `main`, scoped by the same tiers the write-guard
   enforces — protected paths are held back and reported, never swept in. Switches live in
@@ -36,7 +36,8 @@ Setup: repo → Settings → Rules → Rulesets → *New push ruleset*:
    product-development/feature-index.yaml
    product-development/product/strategy/business-context/**
    product-development/product/strategy/current-quarter.md
-   product-development/_meta/write-policy.yaml
+   governance/write-policy.yaml
+   governance/write-back-contract.md
    .claude/**
    .github/**
    ```
@@ -65,7 +66,7 @@ The script implements the mechanical subset of `.claude/skills/wiki-lint/SKILL.m
 skill is the spec of record; change a check there and the script in the same PR. The
 judgment checks (staleness triage with owners, contradiction sweep, initiative health)
 run via `/wiki-lint` in a session, which writes dated reports to
-`product-development/_meta/health/`.
+`governance/health/`.
 
 ## Branch protection (admin tier only)
 
@@ -115,7 +116,7 @@ the week's digest file in place; include the feature-request lines from
 `product-development/product/customers/feature-requests/`; post Part A via the team
 messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
 record only"; never edit confirm-tier files headlessly (file a proposal in
-`product-development/_meta/proposals/` instead); end with the run summary listing every
+`governance/proposals/` instead); end with the run summary listing every
 path written.
 
 **Team-neutral alternative — GitHub Action** (runs server-side under the repo, tied to no

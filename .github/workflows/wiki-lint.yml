@@ -41,7 +41,8 @@ jobs:
               product-development/feature-index.yaml \
               "product-development/product/strategy/business-context/*" \
               product-development/product/strategy/current-quarter.md \
-              product-development/_meta/write-policy.yaml \
+              governance/write-policy.yaml \
+              governance/write-back-contract.md \
               ".claude/**" \
               ".github/**" | sed '/^$/d' || true
           } | tee -a lint-report.txt

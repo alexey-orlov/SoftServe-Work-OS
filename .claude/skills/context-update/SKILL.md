@@ -11,7 +11,7 @@ by this skill — not re-derived per session, not left to humans to file.
 
 ## The model
 
-- **Four content classes** (full contract: `.claude/references/write-back-contract.md`):
+- **Four content classes** (full contract: `governance/write-back-contract.md`):
   raw material (`*/transcripts/`, source docs — read-only inputs, never edited; pages link
   INTO them), records (dated append-only streams: `decisions/`, `calls/summaries/`,
   experiment results), living pages (edit-in-place current truth: `account-context.md`,
@@ -19,12 +19,12 @@ by this skill — not re-derived per session, not left to humans to file.
   `initiatives/*.md`), deliverables (PRDs, analyses — functional folders).
 - **Index layer**: root `CLAUDE.md` (+ its business-fundamentals mirror block),
   `product-development/feature-index.yaml`, every folder's `CLAUDE.md` file list.
-- **Ledger**: `product-development/_meta/processed.txt` — one repo-root-relative path per
+- **Ledger**: `governance/processed.txt` — one repo-root-relative path per
   line = "already folded". Idempotency across runs, machines, and teammates.
-- **Write policy**: `product-development/_meta/write-policy.yaml`. Confirm-tier files
+- **Write policy**: `governance/write-policy.yaml`. Confirm-tier files
   (business-info, stakeholders, segmentation-matrix, current-quarter, feature-index, root
   CLAUDE.md) are edited only after showing the exact before/after and getting an in-session yes. Headless runs
-  write a proposal to `product-development/_meta/proposals/{date}-{slug}.md` instead.
+  write a proposal to `governance/proposals/{date}-{slug}.md` instead.
 - Invariant to protect: an agent that reads root CLAUDE.md plus one account page or one
   initiative page has working context for that thread without opening a transcript.
 
@@ -51,7 +51,7 @@ comm -23 <(find product-development/product/customers/accounts \
            -type f \( -path '*/transcripts/*' -o -path '*/inbox/*' \) \
            \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
            ! -name 'CLAUDE.md' 2>/dev/null | sort) \
-        <(sort product-development/_meta/processed.txt 2>/dev/null)
+        <(sort governance/processed.txt 2>/dev/null)
 ```
 (No shell globs on purpose — an unmatched `accounts/*/…` glob aborts the whole pipeline in
 zsh while the repo has no account folders yet; `-path` matching has no such failure mode
@@ -123,8 +123,8 @@ CLAUDE.md stub + a parent entry; feature-index changes are proposed and confirme
 
 **6. Ledger.** Append every handled path — folded, junk, and duplicate alike:
 ```bash
-printf '%s\n' "<repo-relative-path>" >> product-development/_meta/processed.txt \
-  && sort -o product-development/_meta/processed.txt product-development/_meta/processed.txt
+printf '%s\n' "<repo-relative-path>" >> governance/processed.txt \
+  && sort -o governance/processed.txt governance/processed.txt
 ```
 (Headless: Read the ledger, Write it back with the new line — no Bash.) Pasted content is
 never ledgered (no file exists).
@@ -137,7 +137,7 @@ git add -A && git commit -m "context: <one line on what changed>"
 ## Out of scope
 
 - Never edit raw material (`*/transcripts/`, source docs) — read-only inputs.
-- `_meta/health/` is `/wiki-lint`'s surface; `_meta/processed.txt` is appended here but
+- `governance/health/` is `/wiki-lint`'s surface; `governance/processed.txt` is appended here but
   never rewritten beyond sorting; admin-tier paths are never edited (propose to steward).
 - Deliverable *creation* belongs to its skill (`/prd-draft`, `/process-meeting`, …) —
   this skill folds facts and fixes the maps; it doesn't ghost-write PRDs or summaries from

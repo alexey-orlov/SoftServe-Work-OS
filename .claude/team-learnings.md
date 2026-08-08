@@ -10,7 +10,7 @@ pattern · someone confirms a working preference that should persist. One line e
 
 Not for process lessons (→ `product-development/product/meetings/retros/lessons-learned.md`)
 or product choices (→ `product-development/product/decisions/`). See the routing table in
-`.claude/references/write-back-contract.md`.
+`governance/write-back-contract.md`.
 
 ## Entries
 

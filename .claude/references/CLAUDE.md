@@ -8,5 +8,4 @@ Cross-skill standing rules. Skills point here instead of duplicating rule text.
 
 ### Files
 
-- [write-back-contract.md](write-back-contract.md) — The mandatory closing steps for every repo-writing skill: navigation entry, index proposal, source links, path listing. Includes the four content classes, write-policy tiers, one-writer-per-surface table, and ledger rules.
 - [code-grounding.md](code-grounding.md) — The access-tier chain, citation format, and honesty rules for any claim about what product code does. Includes repo resolution without feature mapping, the deployed-vs-HEAD check, the maps-route-never-prove rule, secrets masking, and the short block code-grounded skills paste.
