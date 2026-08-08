@@ -38,6 +38,7 @@ Generate comprehensive launch checklist ensuring nothing falls through the crack
 3. `product-development/product/strategy/` - GTM approach, stakeholders
 4. `product-development/product/processes/templates/stakeholder-*.md` - Who needs to be involved
 5. `product-development/product/processes/templates/launch-checklist-template.md` - Base template (if exists)
+6. `product-development/product/competitive-research/competitive-landscape.md` + `competitive-matrix.md` - Differentiation one-liner ("Unlike [competitor], we…") and positioning validation for the checklist's competitive items
 
 ---
 

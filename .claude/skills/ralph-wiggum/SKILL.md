@@ -42,7 +42,7 @@ When this skill is invoked, immediately check:
 | User Research | `product-development/product/customers/*.md` | problem claims, user quotes | Are claims actually supported by research? Are quotes cherry-picked? |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | metrics, revenue, North Star | Do success metrics ladder to the North Star? Are impact numbers realistic? |
 | Decisions | `product-development/product/decisions/*.md` | feature name, trade-offs | Has this been tried before? Are we repeating past mistakes? |
-| Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Is competitor positioning accurate or outdated? |
+| Competitor Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | feature name | Is competitor positioning accurate or outdated? |
 | Previous Meetings | `product-development/product/meetings/*/summaries/*.md` | feature name, stakeholders | Were concerns raised that got swept under the rug? |
 
 **Context Priority:**

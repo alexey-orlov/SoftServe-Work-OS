@@ -29,7 +29,7 @@ When this skill is invoked, immediately check:
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | TAM, revenue model, metrics | Objective anchor and North Star |
 | Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case, ARR | Where the business actually is today — grounds the Users and Objective components in real counts and ARR |
 | User Research | `product-development/product/customers/*.md` | user segments, JTBD, pain points | Users section and strategic fit |
-| Competitive Analysis | `product-development/product/competitive-research/competitive-*.md` | competitor positioning | Superpowers and differentiation |
+| Competitive Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | competitor positioning | Superpowers and differentiation |
 | Historical PRDs | `product-development/product/PRDs/{area}/*.md` | strategic features, decisions | Precedent for feature strategy alignment |
 | Meetings | `product-development/product/meetings/*/summaries/*.md` | strategy discussion, OKRs, board feedback | Stakeholder input and constraints |
 

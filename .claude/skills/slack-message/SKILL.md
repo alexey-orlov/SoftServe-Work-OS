@@ -16,6 +16,7 @@ When the PM types `/slack-message`, craft Slack messages that match their voice,
 - Sharing meeting recaps or decisions
 - Requesting help or unblocking yourself
 - Announcing product updates or launches
+- Sharing sales battlecards or competitive updates — pull from `product-development/product/competitive-research/competitive-matrix.md` and the competitor's `competitors/{slug}/teardown.md` "How we sell against them" section
 - Escalating issues tactfully
 - Following up on action items
 - Celebrating wins with the team

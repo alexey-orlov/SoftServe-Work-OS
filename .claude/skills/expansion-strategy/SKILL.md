@@ -588,7 +588,7 @@ Median days from signup to first upgrade
 - `/retention-analysis` - Which segments retain best (expansion potential)
 - `/activation-analysis` - When users are ready to expand (post-activation)
 - `/define-north-star` - Ensure expansion metrics align with North Star
-- `/competitive-analysis` - Competitor pricing and tier positioning
+- `/competitor-analysis` - Competitor pricing and tier positioning
 
 ### Key Questions to Revisit
 
@@ -694,7 +694,7 @@ When analyzing expansion opportunities, map your pricing against competitors:
 2. What features do competitors gate at each tier? (If a key feature is free at Competitor A but gated at your Business tier, that's churn risk)
 3. Is there a tier gap? (Price point where no option exists -- e.g., between $25 and $65/user, there's a $40 gap where users might feel stuck)
 
-Pull competitor pricing from `product-development/product/competitive-research/competitive-*.md` or `product-development/product/strategy/business-context/business-info.md` competitor sections.
+Pull competitor pricing from the `competitive-matrix.md` General table and `competitors/{slug}/teardown.md` pricing sections in `product-development/product/competitive-research/`, or `product-development/product/strategy/business-context/business-info.md` competitor sections.
 
 ---
 

@@ -20,7 +20,7 @@ Two modes: **Deep Analysis** (comprehensive one-time research) + **Ongoing Monit
 
 **Example:** "Analyze Competitor X -- we're losing enterprise deals to them"
 
-**Output:** `product-development/product/competitive-research/competitors/{competitor}/analysis-[name]-[date].md`
+**Output:** `product-development/product/competitive-research/competitors/{slug}/teardown.md` (living profile, refreshed in place) + updates to `competitive-matrix.md` and `competitive-landscape.md`
 
 **Time:** Deep Analysis: 2-4 hours | Monitoring: 30 min/month
 
@@ -33,7 +33,7 @@ When this skill is invoked, immediately check:
 |--------|---------------|--------------|-----------------|
 | Business Context | `product-development/product/strategy/business-context/business-info.md` | — (read the ICP, value proposition, positioning, and pricing sections) | Who we are competing *for*, our differentiators, our price points. Competitive analysis without this produces a feature grid instead of a strategy |
 | User Research | `product-development/product/customers/*.md` | competitor name, "switched to", "chose", "vs [competitor]", "competitor" | Customer quotes, pain points, feature comparisons |
-| Existing Analysis | `product-development/product/competitive-research/competitive-*.md` | competitor name | Past findings, dates, trends, avoid duplication |
+| Existing Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md`, `competitors/*/teardown.md` | competitor name | Current thesis, matrix cells, past findings — avoid duplication |
 | Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | competitor name, "lost deal", "churn", sales, CS | Sales losses, CS feedback, win/loss patterns |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | competitor name, "competitive", "positioning" | Feature decisions, positioning rationale |
 | Strategy | `product-development/product/strategy/*.md` | competitor name, "positioning", "differentiation" | Strategic context, counter-positioning |
@@ -57,7 +57,7 @@ Before diving into research, the skill checks what competitive intelligence alre
 
 **Checking:**
 - `product-development/product/customers/` for user interviews mentioning competitors
-- `product-development/product/competitive-research/competitive-*.md` for past competitive analysis
+- `product-development/product/competitive-research/` — `competitive-landscape.md`, `competitive-matrix.md`, and `competitors/*/teardown.md` for past competitive analysis
 - `product-development/product/meetings/` for sales/CS notes with competitive intel
 - `product-development/product/PRDs/{area}/` for competitive positioning decisions
 - `product-development/product/strategy/` for strategic context
@@ -124,10 +124,11 @@ Based on your objective and existing context:
 4. **SWOT Analysis** - Per competitor
 5. **Positioning Map** - Visual 2x2 showing market space
 6. **Strategic Recommendations** - Roadmap, pricing, GTM implications
+7. **Fold Through** - Refresh the teardowns, the matrix, and the landscape with what changed
 
 **Time:** 2-4 hours (depending on number of competitors)
 
-**Output:** Comprehensive report saved to `product-development/product/competitive-research/competitors/{competitor}/analysis-[date].md`
+**Output:** `competitors/{slug}/teardown.md` refreshed in place per competitor (stamp `_last-deep-analysis:`), the competitor's column in `competitive-matrix.md`, and the affected `competitive-landscape.md` sections
 
 ### Ongoing Monitoring Mode
 
@@ -140,12 +141,12 @@ Based on your objective and existing context:
 1. **Monthly Check-in** - Search competitor mentions in user feedback
 2. **Feature Tracking** - Monitor features appearing in customer requests
 3. **Win/Loss Trends** - Track patterns via sales team
-4. **Update Matrix** - Keep feature comparison current
+4. **Update Matrix** - Keep `competitive-matrix.md` current
 5. **Alert on Major Moves** - Flag significant changes
 
 **Time:** 30 minutes/month
 
-**Output:** Updates saved to `product-development/product/competitive-research/competitors/{competitor}/intel-[month].md`
+**Output:** One cross-competitor record `product-development/product/competitive-research/intel/{YYYY-MM}.md`, then material deltas folded into teardowns / matrix / landscape
 
 ---
 
@@ -364,9 +365,9 @@ Instead of complex Make.com automation, This skill helps you set up:
    - Google Alerts for funding/partnership news
 
 4. **Update Tracking**
-   - Update feature comparison matrix
-   - Note pricing changes
-   - Log significant moves
+   - Flip the affected cells in `competitive-matrix.md`
+   - Fold pricing changes and significant moves into the competitor's `teardown.md`
+   - Update `competitive-landscape.md` win/lose patterns when the picture shifts
 
 **Output Format:**
 
@@ -397,7 +398,7 @@ Instead of complex Make.com automation, This skill helps you set up:
 - [ ] [Action 2 with owner]
 ```
 
-Save to: `product-development/product/competitive-research/competitors/{competitor}/intel-[month].md`
+Save to: `product-development/product/competitive-research/intel/{YYYY-MM}.md` (one cross-competitor record per monthly run) + END-append its line in `intel/CLAUDE.md`
 
 ### Optional: Google Alerts Setup
 
@@ -414,11 +415,12 @@ This skill can help you set up:
 ### Where Files Go
 
 **Deep Analysis:**
-- Active work: `product-development/product/competitive-research/competitors/{competitor}/analysis-[name]-[date].md`
-- When finalized: Move to `product-development/product/customers/` for future reference
+- `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/processes/templates/competitor-teardown-template.md`); stamp `_last-deep-analysis:` and bump `_updated:`
+- Fold through: the competitor's column and cells in `competitive-matrix.md` + the affected `competitive-landscape.md` sections
 
 **Ongoing Monitoring:**
-- Save directly to: `product-development/product/competitive-research/competitors/{competitor}/intel-[month].md`
+- `product-development/product/competitive-research/intel/{YYYY-MM}.md` — one cross-competitor record per run, append-only
+- Fold through: matrix cells, teardown facts, and landscape win/lose patterns that materially changed
 
 ### Link to Other Work
 
@@ -458,10 +460,12 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 4. End your reply by listing every repo path you wrote or updated.
 
 For this skill, step 1's "new folder" case is concrete: analyzing a competitor for the first
-time creates `product-development/product/competitive-research/competitors/{competitor}/`.
-When that happens, create the competitor folder's 5-line CLAUDE.md stub, list the folder in
-`product-development/product/competitive-research/CLAUDE.md`, and add a row for the
-competitor to the competitor matrix.
+time creates `product-development/product/competitive-research/competitors/{slug}/` with a
+5-line CLAUDE.md stub and `teardown.md` copied from
+`product/processes/templates/competitor-teardown-template.md`. Then close the loop:
+END-append the folder in `competitors/CLAUDE.md`, add the competitor's column to
+`competitive-matrix.md`, add its at-a-glance line to `competitive-landscape.md`, and add it
+to the roster in `business-info.md`'s Competitive Landscape (confirm tier — in-session yes).
 
 ---
 

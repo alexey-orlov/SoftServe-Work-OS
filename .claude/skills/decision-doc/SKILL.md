@@ -864,7 +864,7 @@ When the PM uses `/decision-doc`, the skill automatically:
 - **Example:** If you've defined "activation rate" as key metric in past PRDs, the skill uses that metric in success criteria
 
 ### 5. Extract Competitive Context
-**Source:** `product-development/product/competitive-research/competitive-*.md`, web search if needed
+**Source:** `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md`, `competitors/{slug}/teardown.md`, web search if needed
 - **What What to look for:** Competitor moves, market trends, positioning implications
 - **How the skill uses it:** Include competitive rationale in decision reasoning
 - **Example:** "If Competitor X launches this first, we'll lose positioning advantage"

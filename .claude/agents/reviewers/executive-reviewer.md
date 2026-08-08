@@ -22,6 +22,8 @@ Read these before reviewing. You run in a fresh context, and "does this ladder t
 - `product-development/product/strategy/business-context/business-info.md` — business model, North Star, market positioning, mission and vision
 - `product-development/product/strategy/current-quarter.md` — this quarter's objectives and the explicit "not doing" list
 - `product-development/product/strategy/roadmaps/` — longer-range commitments
+- `product-development/product/competitive-research/competitive-landscape.md` — positioning map, differentiation thesis, win/lose patterns
+- `product-development/product/competitive-research/competitive-matrix.md` — capability parity per competitor (grounds "do competitors have this?")
 
 ---
 

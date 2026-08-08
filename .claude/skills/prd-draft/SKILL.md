@@ -41,7 +41,7 @@ When this skill is invoked, immediately check:
 | User Research | `product-development/product/customers/*.md` | problem related to feature | User pain points, quotes, validation |
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | pricing, revenue, metrics | Revenue impact, North Star alignment |
 | Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | target segment, vertical, size band, use case | How many accounts and how much ARR the target segment actually holds — grounds opportunity sizing |
-| Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Competitive positioning if relevant |
+| Competitor Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | feature name | Competitive positioning if relevant |
 | Stakeholder Context | Stakeholder profiles | key stakeholders for this feature | Who to involve, communication style |
 
 **Context Priority:**

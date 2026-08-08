@@ -29,6 +29,7 @@ Catches gaps, challenges assumptions, and surfaces conflicts before stakeholder 
 4. `.claude/agents/reviewers/` - The 7 reviewer personas
 5. `product-development/product/strategy/` - Strategic context for executive review, including `current-quarter.md`
 6. `product-development/product/customers/` - User research for UXR validation
+7. `product-development/product/competitive-research/` - `competitive-landscape.md` + `competitive-matrix.md` for the executive reviewer's competitive-positioning lens (its persona file loads them itself)
 
 **Sub-agents available:**
 1. **engineer-reviewer.md** - Technical feasibility, complexity, dependencies

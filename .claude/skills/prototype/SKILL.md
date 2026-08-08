@@ -52,7 +52,7 @@ When this skill is invoked, immediately check:
 | Napkin Sketches | `product-development/product/PRDs/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
 | Stakeholder Profiles | Stakeholder templates | design reviewers | Who will review this and what they care about |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | brand, product | Brand guidelines, product context, existing UI patterns |
-| Competitor Analysis | `product-development/product/competitive-research/competitive-*.md` | feature name | Competitor implementations for reference |
+| Competitor Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | feature name | Competitor implementations for reference |
 
 **Context Priority:**
 1. PRD requirements and user flows FIRST (what to build)
