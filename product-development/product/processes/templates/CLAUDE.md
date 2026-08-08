@@ -15,3 +15,5 @@ Living master files are *not* here: stakeholder profiles live in `../../strategy
 - [prd-template.md](prd-template.md) — PRD scaffold with per-stage guidance (kickoff → launch readiness); `/prd-draft` builds on it
 - [retrospective-template.md](retrospective-template.md) — Sprint/project retro scaffold: what went well, what didn't, action items
 - [initiative-page-template.md](initiative-page-template.md) — Living initiative page scaffold; copies go to `../../initiatives/{slug}.md`, one per initiative, edited in place
+- [competitor-teardown-template.md](competitor-teardown-template.md) — Living competitor profile scaffold; copies go to `../../competitive-research/competitors/{slug}/teardown.md`, one per competitor, edited in place
+- [competitive-area-matrix-template.md](competitive-area-matrix-template.md) — Per-area capability matrix scaffold; copies go to `../../competitive-research/competitive-matrix-{area}.md` when an area outgrows the main matrix
