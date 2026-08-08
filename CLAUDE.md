@@ -52,6 +52,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"What does the company / product actually do?"* | Fundamentals block above → `product/strategy/business-context/business-info.md` for the full picture |
 | *"Who are our customers, and what do they pay?"* | `product/strategy/business-context/business-info.md` (ICP, personas, pricing) → `product/customers/accounts/{Y}/` for a named account |
 | *"How many accounts / how much ARR sits in segment X (vertical, size band, use case)?"* | `product/strategy/business-context/segmentation-matrix.md` → `product/customers/accounts/portfolio.yaml` for the accounts behind a cell |
+| *"Who do we compete with / how do we compare on X?"* | `product/competitive-research/competitive-landscape.md` → `competitive-matrix.md` for capability detail → `competitors/{slug}/teardown.md` for one competitor |
 | *"What are this quarter's OKRs / priorities?"* | `product/strategy/current-quarter.md` → `product/strategy/okr-guide.md` only when writing new ones |
 | *"Who is stakeholder X, what do they care about, how do I get buy-in?"* | `product/strategy/business-context/stakeholders.md` → Team table above for handles |
 | *"What's the state of feature X?"* | `feature-index.yaml#X` → linked PRD, plan, latest experiment / investigation |

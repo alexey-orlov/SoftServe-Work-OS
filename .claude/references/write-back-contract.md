@@ -15,7 +15,7 @@ while the maps that make them findable rot. Unwritten-back work is unfinished wo
 |---|---|---|
 | **Raw material** | `*/transcripts/`, source docs | Immutable. Never edit; wiki pages link INTO them (provenance). `product-development/inbox/` is staging, not yet raw material — `/process-meeting`'s move into a `transcripts/` home is the filing act. |
 | **Records** | decision log, call/meeting summaries, digests, experiment results, health reports | Append-only dated streams. New file per event; never rewrite history. |
-| **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
+| **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md`, `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
 | **Deliverables** | PRDs, RFCs, analyses, prototypes, checklists | Work products that are team knowledge. Saved in their functional folder, registered in navigation, linked from their initiative page. |
 
 ## The uniform block (canonical text)
@@ -92,10 +92,11 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 | `customers/feature-requests/` records | created by `/process-meeting`; `tracker_ref` set only by `/create-tickets` push mode |
 | navigation list re-ordering | `/wiki-lint --fix` only |
 | `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
+| `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel |
+| `competitive-research/intel/` monthly records | `/competitor-analysis` monitoring mode only — append-only, one `{YYYY-MM}.md` per run |
 
 ## Exempt skills
 
 `slack-message` (Slack is the artifact's home), `freshness-check` (deprecation stub),
-`context-update` and `wiki-lint` (they ARE the loop), `upgrade-to-team-os` (has its own
-scaffold machinery that generates navigation wholesale), `code-qa` (answers live in chat;
+`context-update` and `wiki-lint` (they ARE the loop), `code-qa` (answers live in chat;
 durable findings route via `/context-update`; it writes nothing).

@@ -192,7 +192,7 @@ Keep this file to the durable fundamentals. If you find OKRs copied here, delete
 
 ### Competitive Landscape
 
-Per-competitor teardowns — positioning, strengths, weaknesses, pricing, market share — live in [product/competitive-research/](../../competitive-research/), one folder per competitor plus the comparison matrix. This section names who we compete with; that folder explains them.
+Per-competitor teardowns — positioning, strengths, weaknesses, pricing, market share — live in [product/competitive-research/](../../competitive-research/), one folder per competitor. The cross-competitor view sits beside them: [competitive-landscape.md](../../competitive-research/competitive-landscape.md) (positioning, win/lose patterns) and [competitive-matrix.md](../../competitive-research/competitive-matrix.md) (capability comparison). This section names who we compete with; those files explain them.
 
 **Direct:** [Competitor 1], [Competitor 2], [Competitor 3]
 
