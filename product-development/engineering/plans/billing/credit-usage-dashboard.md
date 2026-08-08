@@ -11,7 +11,7 @@
 | M1 | Rollup pipeline | Billing worker consumes Stripe webhooks + burn events; `org_balances` and `org_credit_rollups_hourly` in app Postgres; 90-day backfill from `BILLING_EVENTS` | Reconciliation diff vs warehouse < 0.1% for 7 straight days | 2026-03-02 |
 | M2 | Dashboard UI | Balance header, 30-day burn trend, burn by workspace / API key, projected depletion date, purchase shortcuts | p95 page load < 800 ms at 10x current billing-page traffic | 2026-03-09 |
 | M3 | Low-balance warning | Banner + email at 20% remaining, behind `low_balance_warning` flag with experiment assignment hooks | A/B assignment verified (SRM check passes); email deliverability > 99% | 2026-03-05 |
-| M4 | GA hardening | Rebuild-from-warehouse script, dashboards for pipeline lag, runbook | Gate passed ([verdict](../../../product/processes/launches/credit-usage-dashboard-v1-gate-2026-03-18.md)) | 2026-03-18 |
+| M4 | GA hardening | Rebuild-from-warehouse script, dashboards for pipeline lag, runbook | Gate passed ([verdict](../../../product/launches/credit-usage-dashboard-v1-gate-2026-03-18.md)) | 2026-03-18 |
 
 ## Feature Flags
 

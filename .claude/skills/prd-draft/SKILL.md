@@ -17,7 +17,7 @@ group: definition
 /prd-draft --ai                           → Include AI behavior specification sections
 ```
 
-**What you get:** A 1-2 page modern PRD with hypothesis, strategic fit, non-goals, success metrics, rollout plan, and optional behavior examples. Saved to `product-development/product/PRDs/{area}/[feature-name-kebab-case]-[stage].md`. Based on `product-development/product/processes/templates/prd-template.md`.
+**What you get:** A 1-2 page modern PRD with hypothesis, strategic fit, non-goals, success metrics, rollout plan, and optional behavior examples. Saved to `product-development/product/PRDs/{area}/[feature-name-kebab-case]-[stage].md`. Based on `product-development/product/handbook/templates/prd-template.md`.
 
 **Time:** 10-20 minutes for first draft. Then iterate.
 
@@ -95,7 +95,7 @@ This bet hasn't been assumption-mapped yet. Running /assumption-map first surfac
 1. **Map first** (recommended for new bets)
 2. **Draft anyway** - I'll flag unvalidated assumptions as we go
 ```
-(Full sequence and skip rules: `product-development/product/processes/de-risk-a-bet.md` — small changes and internal tools legitimately skip stages.)
+(Full sequence and skip rules: `product-development/product/handbook/de-risk-a-bet.md` — small changes and internal tools legitimately skip stages.)
 
 **Based on what found, This skill surfaces:**
 
@@ -208,7 +208,7 @@ Great, I have enough to draft a first version. This will be:
 - Focused on the key sections for this stage
 - At the [STAGE] stage of evolution
 - Using your [AUDIENCE] writing style
-- Based on product-development/product/processes/templates/prd-template.md
+- Based on product-development/product/handbook/templates/prd-template.md
 
 I'll create it now and save it to `product-development/product/PRDs/{area}/[feature-name-kebab-case]-[stage].md`.
 
@@ -217,7 +217,7 @@ After you review, we can iterate or get multi-perspective feedback.
 
 ### PRD Structure
 
-**Reference the full template at `product-development/product/processes/templates/prd-template.md`.** Include only sections relevant to the current stage. Use this structure:
+**Reference the full template at `product-development/product/handbook/templates/prd-template.md`.** Include only sections relevant to the current stage. Use this structure:
 
 ```markdown
 # [Feature Name]
@@ -331,7 +331,7 @@ If [scenario], we will [specific action].
 
 ## AI Behavior Contract (AI features only)
 
-> Include for AI/ML features. Delete for non-AI features. See `product-development/product/processes/templates/prd-template.md` Section 3 for the full contract format.
+> Include for AI/ML features. Delete for non-AI features. See `product-development/product/handbook/templates/prd-template.md` Section 3 for the full contract format.
 
 | Dimension | Specification |
 |-----------|--------------|
@@ -394,7 +394,7 @@ If [scenario], we will [specific action].
 ### Writing Guidelines for the Draft
 
 **Tone:**
-- Use the appropriate writing style from `product-development/product/processes/writing-guides/*.md`
+- Use the appropriate writing style from `product-development/product/handbook/writing-guides/*.md`
 - Write like the PM would write (human, not AI-generated)
 - Be direct and crisp
 
@@ -508,7 +508,7 @@ Want me to review this from multiple perspectives?
 Just let me know which perspectives would be helpful.
 ```
 
-**Also point downstream** (the de-risk chain): when the draft is ~80% done and before resources are committed, run `/red-team`; at stage milestones (kickoff, solution, launch-readiness) run `/prd-review-panel`. Full sequence with skip rules: `product-development/product/processes/de-risk-a-bet.md`.
+**Also point downstream** (the de-risk chain): when the draft is ~80% done and before resources are committed, run `/red-team`; at stage milestones (kickoff, solution, launch-readiness) run `/prd-review-panel`. Full sequence with skip rules: `product-development/product/handbook/de-risk-a-bet.md`.
 
 ### How to Run Multi-Agent Review
 
@@ -680,7 +680,7 @@ Great work! Your PRD is ready for review.
 A PRD is the anchor artifact — creating one is what registers new work in the wiki:
 
 1. **Feature index**: read `product-development/feature-index.yaml`; if the target feature has no key, draft the entry (`{area}: {feature-slug}: prd: <path>`); if it exists, add the PRD path to it. Either way this file is Tier 2 (`_meta/write-policy.yaml`): show the PM the exact addition and apply only after they confirm.
-2. **Initiative page**: check `product-development/product/initiatives/` for a page covering this work. None → create `{initiative-slug}.md` from `processes/templates/initiative-page-template.md` (status `active`, this PRD linked under Artifacts, target feature set), append its row to `initiatives/CLAUDE.md`, and include the feature's `initiatives:` list addition in the same confirmed index change. Exists → link this PRD from its Artifacts section and bump `_updated:`.
+2. **Initiative page**: check `product-development/product/initiatives/` for a page covering this work. None → create `{initiative-slug}.md` from `handbook/templates/initiative-page-template.md` (status `active`, this PRD linked under Artifacts, target feature set), append its row to `initiatives/CLAUDE.md`, and include the feature's `initiatives:` list addition in the same confirmed index change. Exists → link this PRD from its Artifacts section and bump `_updated:`.
 
 ## Write-back (mandatory)
 
@@ -984,4 +984,4 @@ Add this to the standard PRD for AI features:
 
 ## Chain Position
 
-Stage 2 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/assumption-map` · downstream: `/red-team` (draft ~80%), `/prd-review-panel` (stage milestones). Skip rules live in the chain doc.
+Stage 2 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/assumption-map` · downstream: `/red-team` (draft ~80%), `/prd-review-panel` (stage milestones). Skip rules live in the chain doc.

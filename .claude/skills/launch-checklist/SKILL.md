@@ -14,7 +14,7 @@ group: delivery
 
 **Example:** "Create a launch checklist for the checkout redesign, targeting March 15"
 
-**Output:** Saved to `product-development/product/processes/launches/[feature-name]-launch-checklist.md`
+**Output:** Saved to `product-development/product/launches/[feature-name]-launch-checklist.md`
 
 **Time:** 15-20 minutes to generate, then ongoing tracking
 
@@ -34,10 +34,10 @@ Generate comprehensive launch checklist ensuring nothing falls through the crack
 
 **Check these files first:**
 1. `product-development/product/PRDs/{area}/` - PRD for feature details
-2. `product-development/product/processes/launches/` - Past launch checklists (learn from history)
+2. `product-development/product/launches/` - Past launch checklists (learn from history)
 3. `product-development/product/strategy/` - GTM approach, stakeholders
-4. `product-development/product/processes/templates/stakeholder-*.md` - Who needs to be involved
-5. `product-development/product/processes/templates/launch-checklist-template.md` - Base template (if exists)
+4. `product-development/product/handbook/templates/stakeholder-*.md` - Who needs to be involved
+5. `product-development/product/handbook/templates/launch-checklist-template.md` - Base template (if exists)
 6. `product-development/product/competitive-research/competitive-landscape.md` + `competitive-matrix.md` - Differentiation one-liner ("Unlike [competitor], we…") and positioning validation for the checklist's competitive items
 
 ---
@@ -62,7 +62,7 @@ Generate comprehensive launch checklist ensuring nothing falls through the crack
 
 ### Step 2: Generate Checklist
 
-Create file: `product-development/product/processes/launches/[feature-name]-launch-checklist.md`
+Create file: `product-development/product/launches/[feature-name]-launch-checklist.md`
 
 **Template Structure:**
 
@@ -420,4 +420,4 @@ If any check fails, fix it before delivering. A launch checklist with missing ow
 
 ## Chain Position
 
-Stage 6 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/pre-mortem` · downstream: `/feature-launch-gate` (ship moment). Skip rules live in the chain doc.
+Stage 6 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/pre-mortem` · downstream: `/feature-launch-gate` (ship moment). Skip rules live in the chain doc.

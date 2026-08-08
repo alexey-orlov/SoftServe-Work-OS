@@ -19,8 +19,8 @@ Authored and maintained by [SoftServe](https://www.softserveinc.com).
 - **The self-updating loop**: every writing skill closes with the same write-back steps ([.claude/references/write-back-contract.md](.claude/references/write-back-contract.md)); a write policy ([product-development/_meta/write-policy.yaml](product-development/_meta/write-policy.yaml)) marks the few steering files that need human confirmation; session hooks brief every session and guard protected paths; a GitHub Action lints on every PR and weekly.
 - **7 reviewer personas** in `.claude/agents/reviewers/` — powering `/prd-review-panel`.
 - **7 strategy frameworks** in `product-development/product/strategy/frameworks/` — 7 Powers, JTBD, growth loops, PLG iceberg, counter-positioning, hook-retain-expand, AI product strategy.
-- **5 templates** in `product-development/product/processes/templates/` — PRD, retro, launch checklist, interview, initiative page.
-- **4 writing guides** in `product-development/product/processes/writing-guides/` — by audience.
+- **7 templates** in `product-development/product/handbook/templates/` — PRD, retro, launch checklist, interview, initiative page, competitor teardown, competitive area matrix.
+- **4 writing guides** in `product-development/product/handbook/writing-guides/` — by audience.
 
 ## Conventions
 

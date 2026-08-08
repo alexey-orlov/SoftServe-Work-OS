@@ -30,7 +30,7 @@
 
 ## Decision & Rollout
 
-Ship criteria met with no guardrail breach → `low_balance_warning` flag to 100% at dashboard GA on 2026-03-20 (see [engineering plan](../../../engineering/plans/billing/credit-usage-dashboard.md), flag table). Recorded in the launch gate [verdict](../../../product/processes/launches/credit-usage-dashboard-v1-gate-2026-03-18.md) as "results due after readout".
+Ship criteria met with no guardrail breach → `low_balance_warning` flag to 100% at dashboard GA on 2026-03-20 (see [engineering plan](../../../engineering/plans/billing/credit-usage-dashboard.md), flag table). Recorded in the launch gate [verdict](../../../product/launches/credit-usage-dashboard-v1-gate-2026-03-18.md) as "results due after readout".
 
 ## Caveats & Follow-ups
 

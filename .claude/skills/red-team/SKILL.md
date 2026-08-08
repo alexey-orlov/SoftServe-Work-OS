@@ -235,4 +235,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 3 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/prd-draft` · downstream: `/prd-review-panel`; doc-quality worry → `/ralph-wiggum` instead. Skip rules live in the chain doc.
+Stage 3 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-draft` · downstream: `/prd-review-panel`; doc-quality worry → `/ralph-wiggum` instead. Skip rules live in the chain doc.

@@ -22,7 +22,7 @@ Plan your week forward with clear priorities tied to quarterly goals. Sets the f
 2. `product-development/product/strategy/` - Quarter OKRs, North Star, strategic pillars
 3. `product-development/product/reports/` - Last week's review (if exists)
 4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages (for work no initiative tracks)
-5. `product-development/product/processes/launches/` - Upcoming launches
+5. `product-development/product/launches/` - Upcoming launches
 6. `product-development/product/planning/` - Previous weekly plans (for pattern analysis)
 
 **MCP Queries (if available):**
@@ -105,7 +105,7 @@ Identify: Which PRDs need to advance this week?
 
 **C. Upcoming Launches:**
 
-Check `product-development/product/processes/launches/`:
+Check `product-development/product/launches/`:
 - Features launching this week
 - Pre-launch checklists due
 - Post-launch monitoring needed

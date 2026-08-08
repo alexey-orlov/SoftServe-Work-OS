@@ -683,4 +683,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 4 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/red-team` · downstream: `/pre-mortem` (once committed, launch in sight). Skip rules live in the chain doc.
+Stage 4 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/red-team` · downstream: `/pre-mortem` (once committed, launch in sight). Skip rules live in the chain doc.

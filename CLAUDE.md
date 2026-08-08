@@ -57,7 +57,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Who is stakeholder X, what do they care about, how do I get buy-in?"* | `product/strategy/business-context/stakeholders.md` → Team table above for handles |
 | *"What's the state of feature X?"* | `feature-index.yaml#X` → linked PRD, plan, latest experiment / investigation |
 | *"What's the state of initiative Y (current work)?"* | `product/initiatives/{slug}.md` → its linked artifacts and decisions |
-| *"Starting or stress-testing a new bet / feature?"* | `product/processes/de-risk-a-bet.md` → the stage skill for your moment |
+| *"Starting or stress-testing a new bet / feature?"* | `product/handbook/de-risk-a-bet.md` → the stage skill for your moment |
 | *"Process this meeting / call transcript?"* | run `/process-meeting` — files transcript + summary, routes records, updates the ledger |
 | *"Something new worth keeping (thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
 | *"Is the repo healthy / what's stale?"* | run `/wiki-lint` → latest report in `product-development/_meta/health/` |
@@ -67,7 +67,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Where's the data for X?"* | `analytics/data-catalog.yaml` → schema doc only if needed |
 | *"What does the code actually do for feature X (behavior, limits, is it live)?"* | `engineering/code-repos.yaml` → run `/code-qa` — concise PM-language answer, evidence on request |
 | *"What framework should I use for this strategy call?"* | `product/strategy/frameworks/` → the named framework |
-| *"How should I write this?"* | `product/processes/writing-guides/{audience}.md` |
+| *"How should I write this?"* | `product/handbook/writing-guides/{audience}.md` |
 | *"I'm new here"* | `os-installation/` → `first-session-checklist.md` |
 | *"A transcript / recording arrived — process it"* | paste or path → `/process-meeting`; integration drops land in `product-development/inbox/` → swept by `/context-update` |
 
@@ -85,7 +85,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Competitive research | `product-development/product/competitive-research/CLAUDE.md` | Competitor matrix and per-competitor teardowns |
 | Strategy | `product-development/product/strategy/` | `current-quarter.md` (this quarter's OKRs), `roadmaps/`, `business-context/`, `frameworks/` |
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
-| Processes | `product-development/product/processes/` | `templates/` (blank scaffolds — copy, don't edit), `writing-guides/`, `launches/` (filled launch checklists) |
+| Handbook | `product-development/product/handbook/` | How we work — `templates/` (blank scaffolds — copy, don't edit), `writing-guides/` (by audience), `de-risk-a-bet.md` (canonical bet chain) |
 | Meetings | `product-development/product/meetings/` | Meeting records — recurring series (standup, sprint planning, bi-weekly — rename to your cadences) + event meetings (`kickoff/`, `stakeholder-review/`, `workshop/`, `other/`), each docs / transcripts / summaries; `retros/` for retrospective writeups |
 | Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations, code-repo registry + codebase maps (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
@@ -96,6 +96,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
 | Reports | `product-development/product/reports/` | Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests; writers split by filename prefix |
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
+| Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per feature — `/launch-checklist` writes here |
 
 ## Three Rules
 
@@ -132,7 +133,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 | Engineer | `engineering/plans/`, `engineering/rfcs/`, `engineering/bug-investigations/` | Plans, RFCs, bug investigations |
 | Designer | `product/PRDs/` (rationale sections) | Design rationale, UX findings (design artifacts live in Figma, linked from feature-index) |
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
-| Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/processes/` | Competitive intel, vision docs, processes |
+| Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/handbook/` | Competitive intel, vision docs, conventions |
 
 ## Enforcement on GitHub
 

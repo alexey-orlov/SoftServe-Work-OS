@@ -1,6 +1,6 @@
 # Product
 
-Product context, PRDs, customers, strategy, decisions, and operating processes.
+Product context, PRDs, customers, strategy, decisions, and the team handbook.
 
 **Read this when:** You need product context, a PRD, a decision rationale, or a customer account.
 
@@ -14,7 +14,8 @@ Product context, PRDs, customers, strategy, decisions, and operating processes.
 - [decisions/](decisions/) — Non-architectural decisions (pricing, GTM, scoping) with reasoning, options, and tradeoffs
 - [initiatives/](initiatives/) — One living page per current work effort; joins the feature's artifacts, decisions, and open loops across folders
 - [meetings/](meetings/) — Meeting records: recurring series (standup, sprint-planning, team-bi-weekly — rename to your cadences) + event meetings (kickoff, stakeholder-review, workshop, other), plus retros/
-- [processes/](processes/) — Operational processes, checklists, templates, and writing conventions
+- [handbook/](handbook/) — How we work: blank templates (copy, don't edit), writing guides by audience, and the canonical de-risk chain
 - [strategy/](strategy/) — Roadmaps, business context, and the strategy frameworks the team reasons with
 - [reports/](reports/) — Periodic rollups: weekly reviews, portfolio pulses, status updates, batch-day digests
 - [planning/](planning/) — Daily plans and weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review`
+- [launches/](launches/) — Filled launch checklists and gate records, one per feature; `/launch-checklist` writes here

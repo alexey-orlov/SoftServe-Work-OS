@@ -33,9 +33,9 @@
 
 ### VERDICT: PASS
 
-Navigation rows confirmed for every new file (folder CLAUDE.md files under `product/PRDs/billing/`, `engineering/*/billing/`, `analytics/*/billing/`). One-line confirmation posted to the team launch channel. Bug found mid-cycle ([double-charge](../../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md)) was resolved 2026-03-14 and did not block.
+Navigation rows confirmed for every new file (folder CLAUDE.md files under `product/PRDs/billing/`, `engineering/*/billing/`, `analytics/*/billing/`). One-line confirmation posted to the team launch channel. Bug found mid-cycle ([double-charge](../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md)) was resolved 2026-03-14 and did not block.
 
 ## Related
 
-- Initiative page: [credit-usage-dashboard-v1.md](../../initiatives/credit-usage-dashboard-v1.md)
-- Experiment results (filed post-readout as predicted): [low-balance-warning-2026-03-05-experiment-results.md](../../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md)
+- Initiative page: [credit-usage-dashboard-v1.md](../initiatives/credit-usage-dashboard-v1.md)
+- Experiment results (filed post-readout as predicted): [low-balance-warning-2026-03-05-experiment-results.md](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md)

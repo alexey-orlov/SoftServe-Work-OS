@@ -545,7 +545,7 @@ When the PM uses `/slack-message`, the skill automatically:
 - **Example:** If messaging a detail-oriented CFO, the skill will include numbers and source links. If messaging a busy CEO, the skill uses BLUF format.
 
 ### 2. Reference Writing Style
-**Source:** `product-development/product/processes/writing-guides/*.md`
+**Source:** `product-development/product/handbook/writing-guides/*.md`
 - **What What to look for:** Your preferred communication voice (formal/casual/direct/collaborative)
 - **How the skill uses it:** Match your authentic voice, not corporate-speak
 - **Example:** If your style is "conversational but professional," I won't use buzzwords like "leverage" or "synergize"

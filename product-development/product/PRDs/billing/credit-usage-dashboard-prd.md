@@ -1,6 +1,6 @@
 # EXAMPLE — Credit Usage Dashboard PRD
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Every number below is invented. Use this as a shape reference next to [the blank template](../../processes/templates/prd-template.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/prd-template.md).
 
 **DRI:** PM (see team roster in root CLAUDE.md) · **Stage:** Impact Review · **Status:** Shipped 2026-03-20 · **Last updated:** 2026-03-18
 

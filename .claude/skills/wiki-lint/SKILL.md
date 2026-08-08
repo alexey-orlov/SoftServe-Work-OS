@@ -61,7 +61,7 @@ full pass — run the script first, then do the judgment checks the script can't
    proposals in `_meta/proposals/` older than 14 days flagged. Inbox arrivals are ledgered
    under their destination path after the move (junk under its inbox path).
 9. **Placeholder / truncation scan** — `[Your `, `[FILL IN]`, `[NEED:` outside
-   `processes/templates/`, `PRDs/examples/`, and the root-CLAUDE.md setup blocks
+   `handbook/templates/`, `PRDs/examples/`, and the root-CLAUDE.md setup blocks
    (report as "setup not finished" on a fresh clone, warning not failure); nav description
    lines that end mid-word (the truncation bug class).
 10. **YAML parse** — `feature-index.yaml`, `data-catalog.yaml`, `write-policy.yaml`,

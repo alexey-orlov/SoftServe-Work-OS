@@ -13,7 +13,7 @@ The canonical sequence for stress-testing a bet from first idea to shipped featu
 | 3. Attack | `/red-team` | Draft ~80% done, before committing resources | Would this survive a fair adversary? | `PRDs/{area}/reviews/{slug}-red-team.md` |
 | 4. Review | `/prd-review-panel` | Stage milestones (kickoff, solution, launch-readiness) | What do 7 perspectives see that I don't? | `PRDs/{area}/reviews/{slug}-review-synthesis.md` |
 | 5. Rehearse | `/pre-mortem` | Committed, launch date in sight | If the launch fails, why? | `PRDs/{area}/reviews/{slug}-premortem.md` |
-| 6. Plan | `/launch-checklist` | 4–6 weeks out | Who does what, when? | `processes/launches/{slug}-launch-checklist.md` |
+| 6. Plan | `/launch-checklist` | 4–6 weeks out | Who does what, when? | `launches/{slug}-launch-checklist.md` |
 | 7. Gate | `/feature-launch-gate` | Ship moment | Is the repo updated? (the only verdict) | Gate report, posted to the launch channel |
 
 Paths are relative to `product-development/product/`.

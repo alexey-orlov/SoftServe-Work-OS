@@ -78,7 +78,7 @@ Read what exists before imagining what fails:
 | Source | What to Extract |
 |--------|-----------------|
 | The PRD (`product-development/product/PRDs/{area}/`) | Scope, success metrics, kill criteria, §7 Risks and Recovery, rollout plan |
-| `product-development/product/processes/launches/{feature-name}-launch-checklist.md` (if it exists) | Planned tasks, owners, timeline |
+| `product-development/product/launches/{feature-name}-launch-checklist.md` (if it exists) | Planned tasks, owners, timeline |
 | `product-development/feature-index.yaml` | What artifacts exist; what's conspicuously missing |
 | Past pre-mortems in `product-development/product/PRDs/*/reviews/` | Risks that recur across this team's launches |
 | `product-development/product/decisions/` | Post-launch learnings from earlier features — what actually went wrong last time |
@@ -237,4 +237,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 5 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/prd-review-panel` · downstream: `/launch-checklist` (4–6 weeks out). Skip rules live in the chain doc.
+Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-review-panel` · downstream: `/launch-checklist` (4–6 weeks out). Skip rules live in the chain doc.

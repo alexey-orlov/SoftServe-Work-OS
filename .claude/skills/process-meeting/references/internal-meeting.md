@@ -60,7 +60,7 @@ action-item checkboxes with owner + date, one key quote, next step.
 Full notes: [repo link]
 ```
 
-Match tone to `product-development/product/processes/writing-guides/` when the audience is
+Match tone to `product-development/product/handbook/writing-guides/` when the audience is
 named (internal vs executive).
 
 ## Per-type emphasis

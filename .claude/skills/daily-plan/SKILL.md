@@ -63,9 +63,9 @@ Inspired by personal operating system patterns but tailored specifically for Pro
 2. `product-development/product/strategy/` - Quarter priorities, OKRs, North Star
 3. `product-development/product/planning/` - This week's priorities (if `/weekly-plan` was run)
 4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages
-5. `product-development/product/processes/templates/stakeholder-*.md` - Stakeholder profiles and communication styles
+5. `product-development/product/handbook/templates/stakeholder-*.md` - Stakeholder profiles and communication styles
 6. `product-development/product/meetings/{type}/summaries/` - Recent meeting context
-7. `product-development/product/processes/launches/` - Recently launched features (past 2 weeks)
+7. `product-development/product/launches/` - Recently launched features (past 2 weeks)
 
 **Integration Options (Multiple Paths):**
 
@@ -156,7 +156,7 @@ Extract:
 ```
 
 For each meeting:
-- Look up attendees in `product-development/product/processes/templates/stakeholder-*.md`
+- Look up attendees in `product-development/product/handbook/templates/stakeholder-*.md`
 - Scan `product-development/product/meetings/{type}/summaries/` for recent interactions with each person
 - Note: What was discussed last time, open action items
 
@@ -239,7 +239,7 @@ Categorize:
 
 **E. Metrics to Monitor (Analytics MCP or files):**
 
-Check `product-development/product/processes/launches/` for features launched in past 2 weeks.
+Check `product-development/product/launches/` for features launched in past 2 weeks.
 
 For each recent launch:
 If Analytics MCP available:
@@ -265,7 +265,7 @@ Flag:
 For each person you're meeting today:
 
 1. **Profile lookup:**
-   - Read `product-development/product/processes/templates/stakeholder-*.md` if exists
+   - Read `product-development/product/handbook/templates/stakeholder-*.md` if exists
    - Extract: Role, communication style, priorities, pet peeves
 
 2. **Recent interaction history:**
@@ -826,7 +826,7 @@ Total time: 2 minutes
 **The skill will then:**
 - Look up each named attendee in stakeholder profiles (if they exist)
 - Check PRD X in `product-development/product/PRDs/{area}/`
-- Find Feature Z in `product-development/product/processes/launches/`
+- Find Feature Z in `product-development/product/launches/`
 - Generate full daily plan with all context
 
 **Trade-off:**

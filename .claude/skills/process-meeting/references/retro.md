@@ -6,7 +6,7 @@ deliberately flat, with raw recordings one level down in `retros/transcripts/`.
 ## Files
 
 - **Writeup** → `product-development/product/meetings/retros/{YYYY-MM-DD}-retro.md`, built
-  from `product-development/product/processes/templates/retrospective-template.md` (copy the
+  from `product-development/product/handbook/templates/retrospective-template.md` (copy the
   template's sections — What Went Well / What Could Have Gone Better / What Will We Do
   Differently (action table) / Key Metrics / Shoutouts — don't restate them here). Add
   `**Initiatives touched:** {slug(s) or "-"}` to the header.

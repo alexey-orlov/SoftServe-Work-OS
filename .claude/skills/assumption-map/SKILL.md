@@ -265,4 +265,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 1 of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: — (chain entry) · downstream: `/prd-draft`; riskiest assumptions → `/experiment-decision`. Skip rules live in the chain doc.
+Stage 1 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: — (chain entry) · downstream: `/prd-draft`; riskiest assumptions → `/experiment-decision`. Skip rules live in the chain doc.

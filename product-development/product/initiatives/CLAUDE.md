@@ -9,7 +9,7 @@ decisions, and open loops — in one page, without grepping six folders.
 
 ## Rules
 
-- **Create** a page (copy `../processes/templates/initiative-page-template.md`) when an
+- **Create** a page (copy `../handbook/templates/initiative-page-template.md`) when an
   initiative starts — first PRD draft, first scoped work. `/prd-draft` and `/context-update`
   do this; check this folder for an existing page before creating (one page per initiative).
 - **Slug** is kebab-case and immutable; the page name IS the initiative's id everywhere

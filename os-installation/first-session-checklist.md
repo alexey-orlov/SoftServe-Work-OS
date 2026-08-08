@@ -60,7 +60,7 @@ Please read each one and organize them into the appropriate folders in product-d
 - User research → product-development/product/customers/
 - Competitive analysis → product-development/product/competitive-research/
 - Decision logs/trade-off docs → product-development/product/decisions/
-- Launch plans/release notes → product-development/product/processes/launches/
+- Launch plans/release notes → product-development/product/launches/
 - Analytics reports/A/B tests → product-development/analytics/metrics/{area}/
 - Meeting notes/retros → product-development/product/meetings/
 - Status updates/weekly reports → product-development/product/reports/
@@ -122,7 +122,7 @@ claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-
 - This quarter's goals (`product-development/product/strategy/current-quarter.md`)
 - Stakeholder profiles (`product-development/product/strategy/business-context/stakeholders.md`)
 - Segmentation matrix — account counts and ARR by vertical × size band (`product-development/product/strategy/business-context/segmentation-matrix.md`); B2B teams only, delete the use-case sections if single-product
-- Team writing conventions (`product-development/product/processes/writing-guides/*.md`)
+- Team writing conventions (`product-development/product/handbook/writing-guides/*.md`)
 
 > Personal context and working preferences stay in your **personal** OS — they are never committed here. See the Privacy Contract in [CLAUDE.md](../CLAUDE.md).
 
@@ -532,7 +532,7 @@ The repo maintains itself — confirm the machinery works before trusting it:
 
 - **Documentation:** README.md and CLAUDE.md
 - **Examples:** Check product-development/product/PRDs/examples/ and the two worked initiative pages in product-development/product/initiatives/
-- **Templates:** Browse product-development/product/processes/templates/
+- **Templates:** Browse product-development/product/handbook/templates/
 - **Workflows:** See `.claude/skills/` for slash command workflows
 - **Governance:** os-installation/claude-code/scheduled-governance.md once on GitHub
 

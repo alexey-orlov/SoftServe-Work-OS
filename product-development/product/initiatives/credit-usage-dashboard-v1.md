@@ -27,7 +27,7 @@ _owner: [PM] (roster placeholder)_
 - Metrics: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
 - Experiments: [design](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md) · [results](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md)
 - Investigation: [2026-03-10-credit-depletion-churn-analysis.md](../../analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md)
-- Launch checklist / gate verdict: [credit-usage-dashboard-v1-gate-2026-03-18.md](../processes/launches/credit-usage-dashboard-v1-gate-2026-03-18.md) — **PASS**
+- Launch checklist / gate verdict: [credit-usage-dashboard-v1-gate-2026-03-18.md](../launches/credit-usage-dashboard-v1-gate-2026-03-18.md) — **PASS**
 
 ## Decisions
 

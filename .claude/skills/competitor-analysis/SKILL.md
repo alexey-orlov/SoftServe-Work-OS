@@ -415,7 +415,7 @@ This skill can help you set up:
 ### Where Files Go
 
 **Deep Analysis:**
-- `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/processes/templates/competitor-teardown-template.md`); stamp `_last-deep-analysis:` and bump `_updated:`
+- `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/handbook/templates/competitor-teardown-template.md`); stamp `_last-deep-analysis:` and bump `_updated:`
 - Fold through: the competitor's column and cells in `competitive-matrix.md` + the affected `competitive-landscape.md` sections
 
 **Ongoing Monitoring:**
@@ -462,7 +462,7 @@ After saving, close the loop — full contract: `.claude/references/write-back-c
 For this skill, step 1's "new folder" case is concrete: analyzing a competitor for the first
 time creates `product-development/product/competitive-research/competitors/{slug}/` with a
 5-line CLAUDE.md stub and `teardown.md` copied from
-`product/processes/templates/competitor-teardown-template.md`. Then close the loop:
+`product/handbook/templates/competitor-teardown-template.md`. Then close the loop:
 END-append the folder in `competitors/CLAUDE.md`, add the competitor's column to
 `competitive-matrix.md`, add its at-a-glance line to `competitive-landscape.md`, and add it
 to the roster in `business-info.md`'s Competitive Landscape (confirm tier — in-session yes).

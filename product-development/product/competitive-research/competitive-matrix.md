@@ -39,7 +39,7 @@ One table per folder under `../PRDs/` — same area names. Add a section as each
 
 ## Maintenance
 
-- **Auto tier** — living page, edit in place, bump `_updated:` on every change; ≤120 lines. If an area outgrows the budget, copy [competitive-area-matrix-template.md](../processes/templates/competitive-area-matrix-template.md) to `competitive-matrix-{area}.md` beside this file and link it from the area's section — the prefix keeps splits discoverable by the `competitive-*.md` pattern skills read.
+- **Auto tier** — living page, edit in place, bump `_updated:` on every change; ≤120 lines. If an area outgrows the budget, copy [competitive-area-matrix-template.md](../handbook/templates/competitive-area-matrix-template.md) to `competitive-matrix-{area}.md` beside this file and link it from the area's section — the prefix keeps splits discoverable by the `competitive-*.md` pattern skills read.
 - **Refresh:** `/competitor-analysis` (deep analysis fills columns; monthly monitoring flips cells); `/context-update` and `/process-meeting` refresh rows when call-borne intel warrants.
 - **Sources:** `competitors/{slug}/teardown.md` · [intel/](intel/) monthly records.
 - **Read by:** the same roster as [competitive-landscape.md](competitive-landscape.md) — PRD, strategy, launch, review, and battlecard skills.

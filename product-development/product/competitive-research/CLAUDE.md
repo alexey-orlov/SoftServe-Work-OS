@@ -18,5 +18,5 @@ Competitor matrix and per-competitor teardowns.
 
 ### Created on demand
 
-- `competitors/{slug}/teardown.md` — one living profile per competitor, from `../processes/templates/competitor-teardown-template.md`; slug is kebab-case and equals the folder name
-- `competitive-matrix-{area}.md` — per-area matrix split from `../processes/templates/competitive-area-matrix-template.md`; {area} matches a `../PRDs/` folder name
+- `competitors/{slug}/teardown.md` — one living profile per competitor, from `../handbook/templates/competitor-teardown-template.md`; slug is kebab-case and equals the folder name
+- `competitive-matrix-{area}.md` — per-area matrix split from `../handbook/templates/competitive-area-matrix-template.md`; {area} matches a `../PRDs/` folder name

@@ -94,14 +94,14 @@ For small changes that don't add new metrics, tables, or features:
 ### VERDICT: {PASS / BLOCKED}
 {If BLOCKED: list specific files that need creation or updates with full paths}
 
-Verdict saved to: product-development/product/processes/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md
+Verdict saved to: product-development/product/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md
 ```
 
 ## Persist the verdict (mandatory)
 
 The gate run is a record, not just a chat message. After every run (PASS or BLOCKED):
 
-1. Save the filled checklist + verdict to `product-development/product/processes/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md`.
+1. Save the filled checklist + verdict to `product-development/product/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md`.
 2. Append its row to the END of the file list in `launches/CLAUDE.md`.
 3. Link the verdict from the initiative's page (`Artifacts → Launch checklist / gate verdict`); on PASS for a shipping initiative, that page's `_status:` moves to `shipped YYYY-MM-DD — …`.
 4. End your reply listing every repo path written or updated.
@@ -122,4 +122,4 @@ Without this, there is no way to audit whether the gate was actually run before 
 
 ## Chain Position
 
-Stage 7 (final) of the de-risk-a-bet chain (`product-development/product/processes/de-risk-a-bet.md`) — upstream: `/launch-checklist` · downstream: — (post-launch: `/feature-results`). Skip rules live in the chain doc.
+Stage 7 (final) of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/launch-checklist` · downstream: — (post-launch: `/feature-results`). Skip rules live in the chain doc.
