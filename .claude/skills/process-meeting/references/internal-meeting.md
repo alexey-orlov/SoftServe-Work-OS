@@ -1,8 +1,9 @@
 # Category: internal meeting
 
-Format for standups, sprint planning, bi-weekly, and one-off internal meetings (design
-reviews, stakeholder syncs, engineering syncs). `{type}` comes from the closed enum in
-SKILL.md Step 1 — the emphasis sections below shape *content*, never the folder.
+Format for internal meetings — recurring series (standup, sprint planning, team bi-weekly,
+…) and event meetings (kickoffs, stakeholder reviews, workshops, `other`). `{type}` comes
+from the closed enum in SKILL.md Step 1 — the emphasis sections below shape *content*,
+never the folder.
 
 ## Standard format (default)
 
@@ -11,7 +12,7 @@ SKILL.md Step 1 — the emphasis sections below shape *content*, never the folde
 
 **Date:** [YYYY-MM-DD]
 **Attendees:** [Names]
-**Meeting Type:** [Sprint Planning / Standup / Bi-weekly / Design Review / …]
+**Meeting Type:** [Standup / Sprint Planning / Bi-weekly / Kickoff / Stakeholder Review / Workshop / …]
 **Initiatives touched:** [slug(s) from product/initiatives/, or "-"]
 
 ## Summary
@@ -69,7 +70,9 @@ named (internal vs executive).
 | **Standup** | Minimal format; blockers first; carry-over items from yesterday's plan |
 | **Sprint planning** | Action items + ownership, estimated effort, dependencies between tasks, commitments made |
 | **Team bi-weekly** | Decisions + cross-team asks; link the customer-call-synthesis section when calls were reviewed |
-| **Stakeholder review / sync** | Lead with decisions and approvals needed; "Concerns Raised" section; note objections and political dynamics |
+| **Kickoff** | Scope and goals as agreed; roles and ownership; milestones with dates; success criteria; known risks; the communication cadence agreed |
+| **Stakeholder review** | Lead with the verdict — approved / approved-with-changes / revise; feedback items with who raised them; commitments made back to stakeholders; "Concerns Raised" section; note objections and political dynamics |
+| **Workshop** | What was produced (link the artifacts — maps, drafts, boards); options kept alive vs discarded; parking lot; next-step owners |
 | **Design review** | "Design Decisions" + alternatives considered; open design questions; link Figma/prototypes |
 | **Engineering sync** | Technical decisions and tradeoffs; "Technical Debt" section; architectural implications; spikes needed |
 

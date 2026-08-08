@@ -821,7 +821,7 @@ Given the extra time, we could:
 ### Where Files Go
 
 **Status updates:**
-- Weekly/recurring: Save to `product-development/product/meetings/digests/[YYYY-MM-DD]-status-[audience].md` (records stay where they land — no archive move)
+- Weekly/recurring: Save to `product-development/product/reports/[YYYY-MM-DD]-status-[audience].md` (records stay where they land — no archive move)
 - Share: Send directly or paste into Slack/email
 
 ### Link to Other Work

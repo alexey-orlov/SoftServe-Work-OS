@@ -1,7 +1,8 @@
-# Digests
+# Reports
 
-Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests. Not
-minutes of any single meeting: those live in the sibling type folders.
+Periodic synthesis reports — weekly reviews, portfolio pulses, status updates, batch-day
+digests. Rollups *over* the week, the portfolio, or a batch of meetings — never minutes of
+a single meeting: those live in [../meetings/](../meetings/).
 
 **Read this when:** You want last week's digest, the latest portfolio pulse, or a past
 status update.

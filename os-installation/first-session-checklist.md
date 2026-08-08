@@ -62,6 +62,7 @@ Please read each one and organize them into the appropriate folders in product-d
 - Launch plans/release notes → product-development/product/processes/launches/
 - Analytics reports/A/B tests → product-development/analytics/metrics/{area}/
 - Meeting notes/retros → product-development/product/meetings/
+- Status updates/weekly reports → product-development/product/reports/
 - Other docs → run /context-update to route them by type
 "
 ```

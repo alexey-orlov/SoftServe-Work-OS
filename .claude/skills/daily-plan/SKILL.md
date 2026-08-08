@@ -61,7 +61,7 @@ Inspired by personal operating system patterns but tailored specifically for Pro
 **Check these files first:**
 1. `product-development/product/initiatives/` - Active initiative pages: open loops with near due dates are today's candidate tasks; recent Activity gives meeting context
 2. `product-development/product/strategy/` - Quarter priorities, OKRs, North Star
-3. `product-development/product/meetings/team-bi-weekly/docs/` - This week's priorities (if `/weekly-plan` was run)
+3. `product-development/product/planning/` - This week's priorities (if `/weekly-plan` was run)
 4. `product-development/product/PRDs/{area}/` - Active PRDs and their stages
 5. `product-development/product/processes/templates/stakeholder-*.md` - Stakeholder profiles and communication styles
 6. `product-development/product/meetings/{type}/summaries/` - Recent meeting context
@@ -121,7 +121,7 @@ If no integrations available, the skill will:
    - Calculate day of week, week number
 
 2. **Check for yesterday's plan (carry-over):**
-   - Read `product-development/product/meetings/standup/docs/` for yesterday's plan file
+   - Read `product-development/product/planning/` for yesterday's plan file
    - If found: Identify which items were likely completed vs. deferred based on:
      - Items with checkboxes still unchecked
      - P0 tasks that had no time blocked
@@ -130,7 +130,7 @@ If no integrations available, the skill will:
    - If no previous plan exists, skip this step.
 
 3. **Check for weekly plan:**
-   - Read `product-development/product/meetings/team-bi-weekly/docs/YYYY-WXX-weekly-plan.md` for current week
+   - Read `product-development/product/planning/YYYY-WXX-weekly-plan.md` for current week
    - If exists: Extract this week's Top 3 priorities
    - If missing: Note that week isn't planned (suggest `/weekly-plan`)
 
@@ -325,7 +325,7 @@ If light meeting day (< 2 hours):
 
 ### Step 4: Generate Daily Plan
 
-Create file: `product-development/product/meetings/standup/docs/YYYY-MM-DD-daily-plan.md`
+Create file: `product-development/product/planning/YYYY-MM-DD-daily-plan.md`
 
 **Template:**
 
@@ -541,7 +541,7 @@ Before presenting the daily plan, verify:
 - [ ] **Stakeholder profiles used:** If profiles exist, attendee context references them (not generic)
 - [ ] **Strategic alignment present:** At least one task or meeting connects to weekly/quarterly goals
 - [ ] **Delegation section:** Included with stated reason (e.g., "you manage 3 reports") OR excluded because PM is IC / no reports found
-- [ ] **File saved:** Plan saved to `product-development/product/meetings/standup/docs/YYYY-MM-DD-daily-plan.md`
+- [ ] **File saved:** Plan saved to `product-development/product/planning/YYYY-MM-DD-daily-plan.md`
 
 ---
 
@@ -586,7 +586,7 @@ When user runs `/daily-plan tomorrow`:
    - Check what got done (if daily plan exists for today)
    - Identify what's carrying over
 3. **Generate tomorrow's draft plan**
-4. **Save as:** `product-development/product/meetings/standup/docs/YYYY-MM-DD-draft.md`
+4. **Save as:** `product-development/product/planning/YYYY-MM-DD-draft.md`
 5. **Prompt:** "Tomorrow's plan is ready. Want to adjust priorities before end of day?"
 
 ---

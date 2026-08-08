@@ -94,7 +94,7 @@ that files a thread the same way is the same pattern.
 `/weekly-review --digest` is the weekly team report (decisions, customer insights,
 feature-request status, initiative movement). It is safe to automate because it is
 **idempotent by design**: the output is one file per ISO week
-(`meetings/digests/{YYYY}-W{XX}-weekly-review.md`), updated in place within the week —
+(`product/reports/{YYYY}-W{XX}-weekly-review.md`), updated in place within the week —
 duplicate or concurrent runs converge on the same file, and past weeks are never
 rewritten.
 

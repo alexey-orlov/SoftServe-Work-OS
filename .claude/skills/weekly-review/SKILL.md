@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: Close out the week in one run — Part A, the team digest (initiative-by-initiative movement, stalls, next week's due items, repo health; Slack-ready), then Part B, your execution review (plan vs actual on the week's priorities, learnings, draft priorities for /weekly-plan). --digest runs Part A alone, headless-safe for a Friday cron. One data pass feeds both. Saves to meetings/digests/{YYYY}-W{XX}-weekly-review.md. Absorbs the old /weekly-synthesis. Run Friday afternoon or Monday morning. Not the account/ARR rollup (/portfolio-pulse), not audience-tailored updates (/status-update), not demand triage (/prioritize-requests).
+description: Close out the week in one run — Part A, the team digest (initiative-by-initiative movement, stalls, next week's due items, repo health; Slack-ready), then Part B, your execution review (plan vs actual on the week's priorities, learnings, draft priorities for /weekly-plan). --digest runs Part A alone, headless-safe for a Friday cron. One data pass feeds both. Saves to product/reports/{YYYY}-W{XX}-weekly-review.md. Absorbs the old /weekly-synthesis. Run Friday afternoon or Monday morning. Not the account/ARR rollup (/portfolio-pulse), not audience-tailored updates (/status-update), not demand triage (/prioritize-requests).
 group: communication-ops
 ---
 
@@ -47,9 +47,9 @@ duplicate crons, nothing tied to one person's laptop):
    tracker MCP is connected (Linear / Jira / Asana), cross-check tickets labeled
    `customer-request` created in the window.
 
-**Part B additionally:** `meetings/team-bi-weekly/docs/{YYYY}-W{XX}-weekly-plan.md` (what
+**Part B additionally:** `planning/{YYYY}-W{XX}-weekly-plan.md` (what
 you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
-suggest `/weekly-plan` Monday), `meetings/standup/docs/` daily plans (what actually
+suggest `/weekly-plan` Monday), `planning/` daily plans (what actually
 happened), PRDs modified this week (for work no initiative tracks),
 `processes/launches/`, `customers/research-synthesis/` (research conducted). MCPs when
 connected: Linear/Jira for completed tasks, analytics for launched-feature metrics.
@@ -157,9 +157,9 @@ analysis (recurring blockers, underestimated task types, best deep-work windows)
 
 ## Save
 
-`product-development/product/meetings/digests/{YYYY}-W{XX}-weekly-review.md` — one file per
+`product-development/product/reports/{YYYY}-W{XX}-weekly-review.md` — one file per
 ISO week (frontmatter: `week:`, `week_start:`, `week_end:`, `quarter:`). Append the nav row
-to `digests/CLAUDE.md` on first write of the week.
+to `reports/CLAUDE.md` on first write of the week.
 
 ## Boundaries
 
@@ -181,7 +181,7 @@ to `digests/CLAUDE.md` on first write of the week.
 - [ ] Next-week draft priorities grounded in this week's outcomes; blockers have owners and
       a Monday action
 - [ ] Nothing restated across parts — decisions live in Part A, links elsewhere
-- [ ] File saved to `digests/`, nav row appended, `/weekly-plan` offered
+- [ ] File saved to `reports/`, nav row appended, `/weekly-plan` offered
 
 ## Write-back (mandatory)
 

@@ -15,8 +15,8 @@ with a one-line refusal note. This file defines what comes *after* the loop.
 
 ## The daily digest
 
-Save to `product-development/product/meetings/digests/{YYYY-MM-DD}-daily-batch.md`
-(+ nav line in `digests/CLAUDE.md`):
+Save to `product-development/product/reports/{YYYY-MM-DD}-daily-batch.md`
+(+ nav line in `reports/CLAUDE.md`):
 
 ```markdown
 # Daily Batch — {YYYY-MM-DD}

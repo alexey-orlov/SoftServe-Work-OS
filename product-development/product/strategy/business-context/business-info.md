@@ -336,7 +336,7 @@ The roster — names, GitHub handles, Slack IDs, after-hours escalation — live
 
 **Slack channels:** listed in the root `CLAUDE.md` with IDs, visibility, and purpose. Don't duplicate them here.
 
-**Meeting cadence:** agendas, transcripts, and summaries live in [product/meetings/](../../meetings/) — one folder per recurring meeting (`standup/`, `sprint-planning/`, `team-bi-weekly/`, plus `retros/`).
+**Meeting cadence:** agendas, transcripts, and summaries live in [product/meetings/](../../meetings/) — one folder per recurring series (`standup/`, `sprint-planning/`, `team-bi-weekly/` — template examples, renamed to the team's real cadences), event-meeting folders (`kickoff/`, `stakeholder-review/`, `workshop/`, `other/`), plus `retros/`. Periodic rollups live in [product/reports/](../../reports/).
 
 ---
 

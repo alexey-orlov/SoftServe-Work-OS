@@ -1,6 +1,6 @@
 ---
 name: process-meeting
-description: Process any meeting record into the wiki — customer calls, user interviews, internal meetings (standup, sprint-planning, team-bi-weekly), retros, or a whole day's batch — from a transcript, notes, or dictation. Files the raw transcript, writes the summary to the right home (accounts/{c}/calls/, meetings/{type}/, or research-synthesis/), routes decisions to /decision-log-entry and lessons to lessons-learned.md, updates account-context.md and portfolio.yaml, declares initiative joins, appends the ledger. PII-safe — customer-side speakers by role only; refuses 1:1s per the privacy contract. Use on /process-meeting, "process this transcript/call", "summarize my sprint planning", "here are today's meetings", "process these 3 interviews". NOT for creating agendas (/meeting-agenda), rating meeting effectiveness (/meeting-feedback), synthesizing 4+ interviews (/user-research-synthesis), folding non-meeting artifacts (/context-update), or weekly/exec rollups (/weekly-review, /portfolio-pulse).
+description: Process any meeting record into the wiki — customer calls, user interviews, internal meetings (recurring series like standup / sprint-planning / team-bi-weekly, plus kickoffs, stakeholder reviews, workshops), retros, or a whole day's batch — from a transcript, notes, or dictation. Files the raw transcript, writes the summary to the right home (accounts/{c}/calls/, meetings/{type}/, or research-synthesis/), routes decisions to /decision-log-entry and lessons to lessons-learned.md, updates account-context.md and portfolio.yaml, declares initiative joins, appends the ledger. PII-safe — customer-side speakers by role only; refuses 1:1s per the privacy contract. Use on /process-meeting, "process this transcript/call", "summarize my sprint planning", "here are today's meetings", "process these 3 interviews". NOT for creating agendas (/meeting-agenda), rating meeting effectiveness (/meeting-feedback), synthesizing 4+ interviews (/user-research-synthesis), folding non-meeting artifacts (/context-update), or weekly/exec rollups (/weekly-review, /portfolio-pulse).
 group: communication-ops
 ---
 
@@ -49,12 +49,25 @@ segment matters most. A paste over ~30KB → save the transcript file via chunke
 | 5 | Retro ceremony — went-well / didn't-go-well, sprint retro | **retro** → [references/retro.md](references/retro.md) |
 | 6 | Internal meeting | **internal** → [references/internal-meeting.md](references/internal-meeting.md), `{type}` from the enum below |
 
-**The `{type}` enum is closed:** `standup` | `sprint-planning` | `team-bi-weekly`
-(canonical list and the add-a-type procedure live in
-`product-development/product/meetings/CLAUDE.md`). If no type fits, **ask the user — never
-infer a new folder from a meeting title**. A genuinely new recurring series gets its folder
-triad through the documented procedure with the user's confirmation; a one-off meeting
-(design review, stakeholder sync) files under the closest existing type.
+**The `{type}` enum is closed** (canonical list and the add-a-series procedure live in
+`product-development/product/meetings/CLAUDE.md`), two kinds:
+
+- **Recurring series** — the meeting belongs to a cadence this team runs: `standup` |
+  `sprint-planning` | `team-bi-weekly` in the template. These are example folders — teams
+  rename them to their real cadences, so match against the series folders that exist on
+  disk. A meeting that belongs to an existing series always files with its series — a
+  sprint review inside the sprint cadence goes to `sprint-planning`, not
+  `stakeholder-review`.
+- **Event meetings** — routed by *function*, never by calendar title: `kickoff` (something
+  is starting — an initiative, project, phase, engagement) · `stakeholder-review` (work
+  presented for feedback, approval, or sign-off — steering, gate review, demo-and-feedback,
+  exec review) · `workshop` (the group produced something together — discovery,
+  requirements, mapping, design sessions) · `other` (nothing fits — all-hands, vendor
+  calls, trainings, one-off cross-team syncs).
+
+**Never invent a new folder from a meeting title.** Nothing matches → file under `other`
+and say so in the run summary. The same meeting landing in `other` twice is the signal to
+propose its series folder via the documented procedure (the user confirms first).
 
 **Gate 3 vs 4 tiebreak:** interview = we're learning from them (discovery goal, no account
 thread); call = we're running the account (status, asks, renewal). When one call does both,
@@ -104,7 +117,7 @@ use customer-call and give the discovery findings their own summary section.
 | customer-interview | participant's account folder, same as above | report: `product-development/product/customers/research-synthesis/{date}-interview-insights.md` |
 | internal (`{type}` ∈ enum) | `product-development/product/meetings/{type}/transcripts/{date}-{topic}.md` | `…/meetings/{type}/summaries/{date}-{topic}.md` |
 | retro | `product-development/product/meetings/retros/transcripts/{date}-retro.md` | writeup: `…/meetings/retros/{date}-retro.md` |
-| batch-day | per member, as its category above | per member, plus digest: `…/meetings/digests/{date}-daily-batch.md` |
+| batch-day | per member, as its category above | per member, plus digest: `…/reports/{date}-daily-batch.md` |
 
 ## Step 3 — Route records by type (type beats location)
 
@@ -165,7 +178,7 @@ refuse to file, point to the personal OS.
 Batch = the shared pipeline in a loop. Classify each member through gates 1 and 3–6 (1:1s
 skipped with a refusal note); each member gets its own transcript file, summary, and ledger
 line. Then write the cross-meeting digest —consolidated action items, recurring topics,
-conflicts — to `meetings/digests/{date}-daily-batch.md` per
+conflicts — to `reports/{date}-daily-batch.md` per
 [references/batch-day.md](references/batch-day.md).
 
 ## Reference files — load exactly one
@@ -175,7 +188,7 @@ conflicts — to `meetings/digests/{date}-daily-batch.md` per
 | [references/customer-call.md](references/customer-call.md) | Account calls — check-in, escalation, renewal, QBR, demo. Quick + Full variants, account write-backs |
 | [references/example-customer-call.md](references/example-customer-call.md) | Linked from customer-call.md for the expected level of detail — don't load separately |
 | [references/customer-interview.md](references/customer-interview.md) | Discovery/research interviews, 1–3 per session |
-| [references/internal-meeting.md](references/internal-meeting.md) | Standup, sprint planning, bi-weekly, and other internal meetings |
+| [references/internal-meeting.md](references/internal-meeting.md) | Internal meetings — recurring series (standup, sprint planning, …) and event meetings (kickoff, stakeholder review, workshop, other) |
 | [references/batch-day.md](references/batch-day.md) | The digest layer on top of a multi-meeting batch |
 | [references/retro.md](references/retro.md) | Retro ceremonies — writeup + lessons |
 

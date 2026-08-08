@@ -85,7 +85,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Strategy | `product-development/product/strategy/` | `current-quarter.md` (this quarter's OKRs), `roadmaps/`, `business-context/`, `frameworks/` |
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
 | Processes | `product-development/product/processes/` | `templates/` (blank scaffolds — copy, don't edit), `writing-guides/`, `launches/` (filled launch checklists) |
-| Meetings | `product-development/product/meetings/` | Standup, sprint planning, bi-weekly — docs / transcripts / summaries; `retros/` for retrospective writeups; `digests/` for periodic rollups |
+| Meetings | `product-development/product/meetings/` | Meeting records — recurring series (standup, sprint planning, bi-weekly — rename to your cadences) + event meetings (`kickoff/`, `stakeholder-review/`, `workshop/`, `other/`), each docs / transcripts / summaries; `retros/` for retrospective writeups |
 | Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations, code-repo registry + codebase maps (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
@@ -93,6 +93,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
 | Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
+| Reports | `product-development/product/reports/` | Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests; writers split by filename prefix |
+| Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
 
 ## Three Rules
 
