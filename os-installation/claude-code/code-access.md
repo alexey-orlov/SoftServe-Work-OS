@@ -15,6 +15,19 @@ code search is rate-limited to ~10 requests/minute and indexes the default branc
 and pre-generated docs drift from the code silently. So: clone locally, grant read access,
 let the agent search live files.
 
+## Who does what, once
+
+Setting a repo up is two different jobs, and only the first touches the shared repo:
+
+| | **OS admin** — once per repo | **Every teammate** — once per machine |
+|---|---|---|
+| Does | registers the repo in `code-repos.yaml`, commits it | clones the code, grants read access |
+| Result | shared: the team now knows the repo exists | machine-local: this laptop can read it |
+
+A teammate never edits the registry — they read the entry the admin committed. Both jobs
+run through `/connect-code`, which picks the right one by checking whether the entry
+already exists.
+
 ## Granting access: `additionalDirectories`
 
 Per teammate, per machine — in the **gitignored** `.claude/settings.local.json` at the
@@ -74,8 +87,12 @@ git clone --filter=blob:none <remote>
   they break the history-based answers ("why was this changed?", "is it deployed?").
 - **Monorepo:** add `--sparse`, then `git sparse-checkout set <the dirs the team asks
   about>` — only those directories hit disk.
-- **Clone under the repo's registry slug** (e.g. `~/code/beacon-app` for the `beacon-app`
-  entry) — sessions match access grants to registry entries by directory basename.
+- **Where the clone lives is yours to choose** — `~/code/`, `~/dev/`, an external drive.
+  No committed file records it, so teammates never have to agree on a path.
+- **The directory's NAME must equal the registry key** (`beacon-app` →
+  `<anywhere>/beacon-app`) — sessions match access grants to registry entries by directory
+  basename, never by full path. That is exactly what lets one committed entry serve every
+  machine. Rename the folder and it silently stops matching.
 - **Auth is your existing git setup** (ssh key or credential helper). Nothing new is
   stored, no tokens anywhere in this repo.
 

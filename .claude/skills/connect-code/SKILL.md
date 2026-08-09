@@ -1,6 +1,6 @@
 ---
 name: connect-code
-description: Set up grounded code access for the team — register product repos in engineering/code-repos.yaml (purpose and covers keywords in the team's own words, entry points, optional deployed ref), guide the blob-filtered clone (sparse for monorepos), grant machine-local read access via permissions.additionalDirectories in the gitignored .claude/settings.local.json with read-only deny rules, and optionally generate a SHA-stamped codebase map for large repos. --refresh re-pulls clones, regenerates drifted maps, and bumps last_validated. Machine-local paths and tokens never land in the shared repo. Use on /connect-code, "connect our codebase / product code", "set up code access", "refresh the code maps", or when /code-qa reports no grounded access. NOT for connecting MCP tool servers (/connect-mcps) or answering code questions (/code-qa).
+description: Set up grounded code access for the team — run once by the OS admin to register a repo in engineering/code-repos.yaml (committed), then once per teammate to clone and grant access on their own machine (never committed, clone location free). Registers product repos in engineering/code-repos.yaml (purpose and covers keywords in the team's own words, entry points, optional deployed ref), guides the blob-filtered clone (sparse for monorepos), grants machine-local read access via permissions.additionalDirectories in the gitignored .claude/settings.local.json with read-only deny rules, and optionally generates a SHA-stamped codebase map for large repos. --refresh re-pulls clones, regenerates drifted maps, and bumps last_validated. Machine-local paths and tokens never land in the shared repo. Use on /connect-code, "connect our codebase / product code", "set up code access", "refresh the code maps", or when /code-qa reports no grounded access. NOT for connecting MCP tool servers (/connect-mcps) or answering code questions (/code-qa).
 modifies-workspace: true
 group: os-admin
 ---
@@ -15,14 +15,30 @@ chain live in `governance/code-grounding.md`; this skill implements them.
 ## Quick Start
 
 ```
-/connect-code                → guided setup for a new repo (Steps 1–6)
-/connect-code --refresh      → re-pull clones, regenerate drifted maps, bump last_validated
-/connect-code <repo-url>     → guided setup, remote pre-filled
+/connect-code                → guided setup; picks admin or teammate run automatically
+/connect-code --refresh      → re-pull clones; admin run also refreshes maps + last_validated
+/connect-code <repo-url>     → same, remote pre-filled
 ```
 
-**Teammate fast path:** when `engineering/code-repos.yaml` already has the entry (someone
-else registered it), skip to Steps 2–3 and finish with Step 6 — clone + grant on this
-machine only; the registry is untouched.
+## Two kinds of run — decide this first
+
+Read `product-development/engineering/code-repos.yaml` BEFORE anything else. Whether the
+repo already has an entry decides which run this is:
+
+| | **Admin run** — repo not registered yet | **Teammate run** — entry already there |
+|---|---|---|
+| Who | the OS admin, once per repo | everyone else, once per machine |
+| Steps | 1 → 6 | 2, 3, 6 only |
+| Writes (committed) | the registry entry, + a map for large repos | **nothing** |
+| Writes (machine-local) | clone + access grant | clone + access grant |
+
+The admin run ends by **committing** the registry entry — that is the only way teammates
+receive it. A teammate run never touches the registry: it reads the entry someone else
+committed, then clones and grants on this machine alone. Same repo, and each teammate's
+own clone location.
+
+Say which run it is in the first line of your reply, so the user knows whether this
+session will change the shared repo.
 
 ## When to Use / When NOT
 
@@ -37,7 +53,7 @@ machine only; the registry is untouched.
   stores a token anywhere.
 - The repo's https or ssh URL and read permission on it.
 
-## Step 1 — Inventory the repo
+## Step 1 — Inventory the repo *(admin run only)*
 
 Read `product-development/engineering/code-repos.yaml` (create from its header conventions
 if missing). For the new repo, elicit in the team's own words:
@@ -63,8 +79,12 @@ git clone --filter=blob:none <remote>
 - Never `--depth=1` — a shallow clone breaks the git-history playbooks (`why does it work
   this way`, `is it live in production`).
 - Monorepo: add `--sparse`, then `git sparse-checkout set <dirs the team asks about>`.
-- Clone **under the repo slug name**, in a stable location (suggest `~/code/`), so
-  sessions can match the access grant to the registry entry by basename.
+- **Where it goes is each teammate's own choice** — `~/code/`, `~/dev/`, an external
+  drive. No shared file ever records it, so teammates never need to agree on a path.
+- **The one rule: the directory's NAME must equal the registry key** (`beacon-app` →
+  `<anywhere>/beacon-app`). Sessions match an access grant to its registry entry by
+  directory basename, never by full path — that is what lets the same committed entry
+  serve every machine. A renamed folder silently stops matching.
 
 ## Step 3 — Grant machine-local access (per teammate, never committed)
 
@@ -96,7 +116,7 @@ create the file if missing, merge keys if present, never drop existing entries):
   (workspace trust) — cron jobs must pass `--add-dir` explicitly. Details:
   `os-installation/claude-code/code-access.md`.
 
-## Step 4 — Registry entry (committed)
+## Step 4 — Registry entry *(admin run only — committed)*
 
 Fill the entry per the conventions header in `code-repos.yaml`: remote, default_branch,
 language, purpose, covers, access_tier (the best tier now genuinely set up), entry_points
@@ -104,7 +124,7 @@ language, purpose, covers, access_tier (the best tier now genuinely set up), ent
 `deployed_ref:` — ONLY a ref the team's release process already maintains (release branch
 or tag pattern); nothing to invent, nothing to hand-copy. `last_validated:` today.
 
-## Step 5 — Map (optional; large repos only)
+## Step 5 — Map *(admin run only; optional, large repos only)*
 
 Offer a map only when grep-first navigation will genuinely hurt: monorepo, >12 top-level
 dirs, or a root file listing in the thousands. Otherwise skip — most repos need none.
@@ -126,6 +146,11 @@ Per registered repo with a local clone on this machine: `git pull` (or fetch + s
 report if the working tree is dirty) → compare each map's `generated_at_sha` to the new
 HEAD and regenerate drifted maps (Step 5 format) → re-resolve `deployed_ref` sanity →
 bump `last_validated`. Report per-repo: pulled / map regenerated / skipped and why.
+
+Run-aware, same split as above: **pulling clones is machine-local and anyone may do it.**
+Regenerating maps and bumping `last_validated` writes the shared registry — admin run
+only. A teammate `--refresh` pulls, reports any drift it spots, and leaves the registry to
+the admin; otherwise every teammate generates competing commits on the same lines.
 
 ## Rules
 
@@ -151,7 +176,12 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
-4. End your reply by listing every repo path you wrote or updated.
+4. **Admin run — commit** the registry entry (and any map + nav lines) with a
+   `context:` prefix. Uncommitted, no teammate ever receives it and every one of them is
+   forced into a needless admin run. Teammate run: commit nothing, and confirm
+   `git status` shows the shared repo clean.
+5. End your reply by listing every repo path you wrote or updated — committed and
+   machine-local under separate headings, so nobody mistakes a local path for shared state.
 
 ## Related
 
@@ -161,9 +191,13 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 ## Quality self-check (before presenting)
 
+- [ ] The run was named (admin or teammate) and the steps taken match that run
+- [ ] Clone directory's basename == the registry key, whatever the parent path
 - [ ] `.claude/settings.local.json` written, valid JSON, and NOT tracked by git
 - [ ] Edit/Write denies present for every granted product repo (read-only stance)
-- [ ] Registry entry parses (YAML), `last_validated` = today, tier is honest
+- [ ] **Admin run:** registry entry parses (YAML), `last_validated` = today, tier is
+      honest, and the entry is **committed**
+- [ ] **Teammate run:** `git status` clean — the registry was read, never written
 - [ ] Map (if generated) ≤150 lines, stamped `{repo}@{full-sha}` + date, registered in `map:`
 - [ ] Navigation rows appended at the END of their lists
 - [ ] Run summary lists every path written — committed and machine-local separately
