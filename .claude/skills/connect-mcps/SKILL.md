@@ -1025,7 +1025,7 @@ Not required day one, but add these once core setup is done.
 
 > For code-grounded product Q&A, prefer the **local-first** path — `/connect-code`
 > (registry + clone + grounded `repo@sha` citations; contract in
-> `.claude/references/code-grounding.md`). The GitHub MCP is the fallback tier when no
+> `governance/code-grounding.md`). The GitHub MCP is the fallback tier when no
 > local access is possible, and the home of PR/issue metadata either way.
 
 **What you can do:**

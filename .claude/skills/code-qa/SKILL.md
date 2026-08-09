@@ -48,7 +48,7 @@ are complete (`/feature-launch-gate`) · drafting what the product *should* do
 ## Step 1 — Resolve the repo and the access tier
 
 Read `product-development/engineering/code-repos.yaml` FIRST, always (Tier 0 — the
-registry). Then, per the contract (`.claude/references/code-grounding.md`):
+registry). Then, per the contract (`governance/code-grounding.md`):
 
 1. **Which repo(s)?** One registered repo → done. Else match the question's terms against
    each entry's `purpose:` / `covers:` / `entry_points:`. Still ambiguous → **scout**:
@@ -139,19 +139,6 @@ Answers live in chat; **this skill writes no files**. When an answer surfaces so
 durable — a PRD-vs-code discrepancy, a real limit worth recording, a "why" worth history —
 offer `/context-update`, which routes it by type (with citations; written records always
 carry provenance).
-
-## Code grounding
-
-When a claim describes what the product's code does, ground it — full contract:
-`.claude/references/code-grounding.md`:
-
-1. Resolve repo + access tier in `product-development/engineering/code-repos.yaml` first
-   (purpose/covers keywords + scout greps — never assume a feature→repo mapping exists).
-2. Cite lines actually read as `repo@sha path:L1-L2` — via /code-qa (full pipeline) or a
-   direct code-explorer dispatch (single check); label anything weaker
-   ("default branch as of {date}" / "map only, generated at {sha}").
-3. Maps route, never prove. No grounded access → say "no grounded access — /connect-code",
-   never answer from PRD/docs as implementation truth.
 
 ## Rules
 

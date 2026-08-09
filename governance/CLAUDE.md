@@ -1,7 +1,8 @@
 # Governance — the admin surface of the Team OS
 
-Everything that runs the repo, in one folder: the write rules, the writing contract, and
-the machine state (ingestion ledger, health reports, pending proposals). Content lives in
+Everything that runs the repo, in one folder: the write rules, the writing and
+code-grounding contracts, and the machine state (ingestion ledger, health reports,
+pending proposals). Content lives in
 `product-development/`; the machinery that keeps it trustworthy lives here.
 
 **Read this when:** You are the steward, the write-guard just prompted you, or you need to
@@ -18,7 +19,7 @@ not copy path lists into other docs; point here.
   context, current quarter). An agent shows the exact before/after and gets an in-session
   yes BEFORE writing. Headless runs cannot confirm — they file a proposal in
   [proposals/](proposals/) instead. Older skill prose calls this tier "Tier 2" — same thing.
-- **admin** — the system's own rules: this folder's two rule files, `.claude/` machinery,
+- **admin** — the system's own rules: this folder's three rule files, `.claude/` machinery,
   `.github/`. Steward only, via reviewed PR.
 
 ## The enforcement chain
@@ -45,6 +46,7 @@ together in one change: [write-policy.yaml](write-policy.yaml), the ruleset bloc
 - [write-policy.yaml](write-policy.yaml) — Which paths agents change freely (auto), which need an in-session yes (confirm), which are steward-only (admin). Its `settings:` block also holds the auto-commit / auto-merge switches (both ship off), so the automation and the tiers it respects live in one file.
 - [write-back-contract.md](write-back-contract.md) — The rules every repo-writing skill follows when it saves work: the four content classes, the mandatory closing steps, the one-writer-per-surface table, and the ledger rules.
 - [processed.txt](processed.txt) — The ingestion ledger: one repo-root-relative path per line, kept sorted. A path here = already folded by `/context-update` (junk and duplicates are ledgered too). Merge conflicts: keep both sides, then `sort -u`. Written only by ingest skills.
+- [code-grounding.md](code-grounding.md) — The rules every claim about product code follows: the access-tier chain, `repo@sha` citation format, honesty rules, secrets masking, and the short block code-claiming skills paste. Implemented by `/code-qa` and `/connect-code`.
 
 ### Subfolders
 

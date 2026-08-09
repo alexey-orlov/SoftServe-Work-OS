@@ -13,7 +13,7 @@
 
 ## Decision
 
-Option 2 — the access-tier chain in `.claude/references/code-grounding.md`: registry (`engineering/code-repos.yaml`) as Tier 0, local clone + `code-explorer` as the default, remote fetch and maps as labeled degradations, refusal over invention. PM sessions are read-only toward product repos (Edit/Write deny rules). Repo resolution uses `purpose:`/`covers:` keywords plus scout searches — no feature→repo mapping is required or maintained. "Is it live?" resolves against an optional `deployed_ref:` the team's release process already maintains — never a hand-copied SHA.
+Option 2 — the access-tier chain in `governance/code-grounding.md`: registry (`engineering/code-repos.yaml`) as Tier 0, local clone + `code-explorer` as the default, remote fetch and maps as labeled degradations, refusal over invention. PM sessions are read-only toward product repos (Edit/Write deny rules). Repo resolution uses `purpose:`/`covers:` keywords plus scout searches — no feature→repo mapping is required or maintained. "Is it live?" resolves against an optional `deployed_ref:` the team's release process already maintains — never a hand-copied SHA.
 
 ## Reasoning
 
@@ -30,7 +30,7 @@ Per-machine setup (clone + `additionalDirectories` grant, per teammate) and regi
 
 ## Related
 
-- Contract: `.claude/references/code-grounding.md`
+- Contract: `governance/code-grounding.md`
 - Registry: [code-repos.yaml](../../engineering/code-repos.yaml) · maps: [codebases/](../../engineering/codebases/)
 - Skills: `/code-qa`, `/connect-code` · agent: `.claude/agents/code-explorer.md`
 - Setup mechanics: [code-access.md](../../../os-installation/claude-code/code-access.md)

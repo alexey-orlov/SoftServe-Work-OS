@@ -6,7 +6,7 @@ SHA-stamped tables of contents for the *large* repos in [../code-repos.yaml](../
 
 Rules:
 
-- Maps route, they never prove — cite code lines, not map lines (contract: `.claude/references/code-grounding.md`).
+- Maps route, they never prove — cite code lines, not map lines (contract: `governance/code-grounding.md`).
 - Every map header stamps `{repo}@{full-sha}` + generation date. Written only by `/connect-code` (including `--refresh`).
 - Keep each map ≤150 lines — it is a table of contents, not documentation.
 

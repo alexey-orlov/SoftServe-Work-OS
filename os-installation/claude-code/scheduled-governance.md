@@ -38,6 +38,7 @@ Setup: repo → Settings → Rules → Rulesets → *New push ruleset*:
    product-development/product/strategy/current-quarter.md
    governance/write-policy.yaml
    governance/write-back-contract.md
+   governance/code-grounding.md
    .claude/**
    .github/**
    ```

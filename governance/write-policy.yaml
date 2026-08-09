@@ -35,7 +35,7 @@ tiers:
   admin:
     - governance/write-policy.yaml                                           # this file
     - governance/write-back-contract.md
-    - .claude/references/**
+    - governance/code-grounding.md
     - .claude/settings.json
     - .claude/hooks/**
     - .claude/skills/**
