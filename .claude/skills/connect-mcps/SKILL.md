@@ -1,6 +1,6 @@
 ---
 name: connect-mcps
-description: Connect MCPs for real-time tool integration
+description: Connect MCP tool servers so skills read live tools instead of manual exports — guided setup one tool at a time (/connect-mcps connect to linear) or batch to walk several in one run. Remote-first — searches for an official hosted server and hands you the claude mcp add --transport http [tool] [url] command plus /mcp authentication, falling back to a local NPM/Docker server and only then to manual OAuth/API-token setup. Then tests the connection, discovers the tool catalog, categorizes the MCP (analytics, project management, research, transcription, communication, docs, design, search), adds an integration section with an offline fallback to every skill that benefits, proposes the root CLAUDE.md registry and query-routing updates (Tier 2 — confirm before applying), and logs the run to os-installation/mcp-integration-logs/. Credentials go to the MCP system, never into repo files. Use on /connect-mcps, "connect Amplitude / Linear / Notion / Figma", "connect our tools", "set up MCPs", "batch connect", "reconnect — my token expired", or when a skill reports no live data source. NOT for connecting the product code repo (/connect-code — repo registry and local clone access, not MCP tool servers), answering code questions (/code-qa), or routing an already-connected MCP (that happens automatically from the CLAUDE.md registry).
 argument-hint: "[tool name | batch]"
 group: os-admin
 ---

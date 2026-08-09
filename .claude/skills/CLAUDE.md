@@ -120,7 +120,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 
 `group: os-admin` — Setting the OS up, and keeping the repo honest before and after a feature ships.
 
-- [connect-mcps/](connect-mcps/) — Connect MCPs for real-time tool integration
+- [connect-mcps/](connect-mcps/) — Connect MCP tool servers (analytics, PM, research, docs, design) one at a time or in batch; remote-first via `claude mcp add --transport http`, then local server, then manual auth; wires them into the skills that benefit and the CLAUDE.md routing registry
 - [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
 - [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
 - [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `governance/health/`; `--fix` repairs mechanical drift only
