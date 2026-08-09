@@ -57,10 +57,13 @@ full pass — run the script first, then do the judgment checks the script can't
    both, and every `portfolio.yaml` segment label (`vertical`, `size_band`, `use_cases`)
    vs the matrix's canonical axes; `current-quarter.md`'s quarter label vs today's date;
    "Decided by" names in recent decisions vs the team roster.
-8. **Ledger integrity** — every ledger path exists on disk; ledger is sorted and
-   duplicate-free; unprocessed backlog count (the `/context-update` discovery `comm`);
-   proposals in `governance/proposals/` older than 14 days flagged. Inbox arrivals are ledgered
-   under their destination path after the move (junk under its inbox path).
+8. **Ledger integrity + learning loop** — every ledger path exists on disk; ledger is
+   sorted and duplicate-free; unprocessed backlog count (the `/context-update` discovery
+   `comm`); proposals in `governance/proposals/` older than 14 days flagged. Inbox arrivals
+   are ledgered under their destination path after the move (junk under its inbox path).
+   Learning loop: `.claude/team-learnings.md` entry lines over the ~30 cap flagged
+   (capture-loop rule: prune the weakest), and entries older than 180 days flagged for
+   re-validation.
 9. **Placeholder / truncation scan** — `[Your `, `[FILL IN]`, `[NEED:` outside
    `handbook/templates/`, `PRDs/examples/`, and the root-CLAUDE.md setup blocks
    (report as "setup not finished" on a fresh clone, warning not failure); nav description

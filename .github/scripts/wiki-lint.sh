@@ -123,6 +123,22 @@ else
   warn "no ledger at $LEDGER"
 fi
 
+# ---- Check 8b: learning loop (team-learnings cap + entry age) ------------------------
+TL=".claude/team-learnings.md"
+if [ -f "$TL" ]; then
+  TL_COUNT=$(grep -c '^- 20' "$TL" 2>/dev/null)
+  [ "${TL_COUNT:-0}" -gt 30 ] && warn "team-learnings over its ~30-entry cap ($TL_COUNT) — prune the weakest (capture-loop rule)"
+  CUTOFF=$(date -d "180 days ago" +%Y-%m-%d 2>/dev/null || date -v-180d +%Y-%m-%d 2>/dev/null)
+  if [ -n "${CUTOFF:-}" ]; then
+    while IFS= read -r tl_line; do
+      d=$(printf '%s' "$tl_line" | sed -n 's/^- \([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\).*/\1/p')
+      if [ -n "$d" ] && [ "$(printf '%s' "$d" | tr -d -)" -lt "$(printf '%s' "$CUTOFF" | tr -d -)" ]; then
+        warn "team-learnings entry older than 180d — re-validate or prune: $(printf '%.80s' "$tl_line")"
+      fi
+    done < <(grep '^- 20' "$TL" 2>/dev/null)
+  fi
+fi
+
 # ---- Check 9: truncation scan (nav description lines ending mid-word) ---------------
 while IFS= read -r nav; do
   grep -nE '^\- \[.*\] — .*[a-z]$' "$nav" 2>/dev/null | while IFS= read -r line; do
