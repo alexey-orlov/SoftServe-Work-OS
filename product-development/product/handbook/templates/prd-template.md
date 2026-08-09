@@ -1,8 +1,10 @@
 # PRD Template
 
-> **How to use:** Copy this template for your feature. Delete sections that don't apply. Expand sections as the PRD matures through stages. For guided creation, run `/prd-draft` in Claude Code.
+> **How to use:** Copy this template for your feature as `PRDs/{area}/{slug}-prd.md`. Delete sections that don't apply. Expand sections as the PRD matures through stages. For guided creation, run `/prd-draft` in Claude Code — it drafts, marks gaps, and tracks readiness run over run.
 >
 > **Stage guidance:** Start short. A Team Kickoff PRD is 300-500 words. A Launch Readiness PRD is 1500-2000 words. Expand as you learn, not before.
+>
+> **Gap convention:** Never leave a section silently thin. A claim with no evidence behind it gets an explicit marker: `[GAP: what's missing — how to close it]` (e.g. `[GAP: no churn baseline — run /retention-analysis]`). `/wiki-lint` ages these markers and `/feature-launch-gate` blocks a launch while any remain.
 
 ---
 
@@ -12,6 +14,7 @@
 |-------|-------|
 | **Feature / Experiment** | [Name] |
 | **DRI (PM)** | [Your name] |
+| **Initiative** | [link to `product/initiatives/{slug}.md`] |
 | **Stage** | Draft / Team Kickoff / Planning Review / XFN Kickoff / Solution Review / Launch Readiness / Impact Review |
 | **Last Updated** | [Date] |
 | **Status** | Draft / In Review / Approved / Shipped |
@@ -19,25 +22,50 @@
 
 ---
 
-## 1) Problem and Hypothesis
+## 1) Customer Value
+
+**Segments** (who exactly — from `strategy/business-context/segmentation-matrix.md`):
+[Vertical / size band / use case, with the account count and ARR behind it. "Everyone" is not a segment.]
 
 **Problem** (2 sentences max):
-[What user pain exists? Be specific about who feels it and how often.]
+[What user pain exists? Be specific about who feels it.]
 
-**Hypothesis:**
-If we [build X], then [Y metric] will [change by Z], because [assumption about user behavior].
+**Frequency** (how often it bites):
+[Per user or per account, per day/week/month — with the source. "Often" is not a frequency.]
 
-**Strategy Fit:**
-This supports [specific strategic bet/pillar] because [why now, not later].
+**Criticality** (how badly it hurts):
+[What it costs them when it hits — lost money, lost time, risk, workflow dead-end. Severity from research, not adjectives.]
+
+**Today's alternative** (what they do about it now):
+[Workaround, spreadsheet, competitor, or nothing-and-suffer. This is what the solution must beat — see section 4.]
 
 **Supporting Evidence:**
 - [User quote or data point]
 - [User quote or data point]
-- [Competitive pressure or market signal, if relevant]
 
 ---
 
-## 2) Scope and Non-Goals
+## 2) Business Value
+
+**Strategy Fit:**
+This supports [specific strategic bet/pillar] because [why now, not later].
+
+**Hypothesis:**
+If we [build X], then [Y metric] will [change by Z], because [assumption about user behavior].
+
+**Impact by lever** — name **at most two primary levers**; mark the rest "not what this bet is for." Each named lever needs a number built as *reach × baseline × expected change* (method: `/impact-sizing`); a lever with no baseline gets a `[GAP:]`, not a guess.
+
+| Lever | Primary? | Estimate | Basis |
+|-------|----------|----------|-------|
+| Acquisition | yes / no / not this bet | [new accounts / conversion Δ] | [source or `[GAP:]`] |
+| Activation | yes / no / not this bet | [Δ in reaching value] | [source or `[GAP:]`] |
+| Retention | yes / no / not this bet | [ARR retained] | [source or `[GAP:]`] |
+| Expansion / LTV | yes / no / not this bet | [ARR added] | [source or `[GAP:]`] |
+| Cost to serve | yes / no / not this bet | [cost avoided] | [source or `[GAP:]`] |
+
+---
+
+## 3) Scope and Non-Goals
 
 **In Scope:**
 - [What we're building in v1]
@@ -53,9 +81,27 @@ This supports [specific strategic bet/pillar] because [why now, not later].
 
 ---
 
-## 3) AI Behavior Contract
+## 4) Solution
 
-> **Include this section for AI/ML features only.** Delete for non-AI features.
+**Key Elements:**
+- [The 2-4 elements that make this solution work — what it is, not how it's coded]
+
+**Why this beats today's alternative** (the alternative named in section 1):
+- [When and for whom our solution wins over the current workaround/competitor — and when it doesn't]
+
+**User Flow:**
+1. [Step 1: User does X]
+2. [Step 2: System responds with Y]
+3. [Step 3: User completes Z]
+
+**Edge Cases:**
+- [Edge case]: [How we handle it]
+
+**Mockup/Prototype:** [Link or embed]
+
+### AI Behavior Contract
+
+> **Include this sub-section for AI/ML features only** (and drop User Flow above if the contract covers it). Full guidance: `.claude/skills/prd-draft/reference/ai-prd.md`.
 
 | Dimension | Specification |
 |-----------|--------------|
@@ -73,25 +119,6 @@ This supports [specific strategic bet/pillar] because [why now, not later].
 | Happy path | [Example] | [What should happen] | N/A |
 | Edge case | [Example] | [Graceful handling] | N/A |
 | Should reject | [Example] | [Error/refusal message] | [Why rejected] |
-
----
-
-## 4) Solution Overview
-
-> **Include this section for non-AI features.** Delete for AI features (use Behavior Contract above instead).
-
-**User Flow:**
-1. [Step 1: User does X]
-2. [Step 2: System responds with Y]
-3. [Step 3: User completes Z]
-
-**Key Interactions:**
-- [Interaction]: [What happens and why]
-
-**Edge Cases:**
-- [Edge case]: [How we handle it]
-
-**Mockup/Prototype:** [Link or embed]
 
 ---
 
@@ -159,6 +186,8 @@ If [specific condition], we will [rollback/pause/iterate].
 - [ ] [Question] -- @[owner]
 - [ ] [Question] -- @[owner]
 
+> `/prd-challenge` writes its ranked unverified assumptions here — each with the next research step and its owner.
+
 **Next Milestones:**
 
 | Target Date | Milestone | Exit Criteria |
@@ -176,7 +205,7 @@ If [specific condition], we will [rollback/pause/iterate].
 |------|--------|-----|
 | [date] | [what changed] | [name] |
 
-**Impact Sizing Detail:**
+**Impact Sizing Detail** (funnel feeding section 2's reach numbers):
 
 | Funnel Stage | Users | Drop-off Reason |
 |-------------|-------|-----------------|
@@ -185,7 +214,7 @@ If [specific condition], we will [rollback/pause/iterate].
 | Engage | [number] | [friction] |
 | Complete | [number] | [friction] |
 
-**Alternatives Considered:**
+**Alternatives Considered** (options *we* evaluated and rejected — not the customer's current alternative, which lives in section 1):
 - [Alternative A]: Not doing because [reason]
 - [Alternative B]: Not doing because [reason]
 
@@ -195,21 +224,31 @@ If [specific condition], we will [rollback/pause/iterate].
 
 ## PRD Quality Checklist
 
-> Use this to self-review before sharing. Check items relevant to your current stage.
+> The single quality checklist — `/prd-draft` checks against it before presenting a draft; use it yourself before sharing. Check items relevant to your current stage.
+
+### Every stage (hygiene)
+- [ ] Filename is `{slug}-prd.md`, saved under `product-development/product/PRDs/{area}/` (not `examples/`)
+- [ ] Registered: folder CLAUDE.md row appended; feature-index entry proposed; initiative page created or updated
+- [ ] Word count matches the stage (see Stage guidance at top)
+- [ ] Every thin section carries an explicit `[GAP:]` marker, not silence
+- [ ] Sounds human — read it aloud; specific numbers and quotes, no corporate filler
 
 ### Planning Stage
 - [ ] Problem clearly defined in 1-2 sentences
-- [ ] Current state described (how the problem goes unaddressed today)
-- [ ] Business metrics identified (what this moves)
+- [ ] Segment named with account count / ARR behind it
+- [ ] Frequency and criticality stated with a source
+- [ ] Today's alternative described (what the solution must beat)
+- [ ] Hypothesis is testable ("If we... then... because...")
+- [ ] At most two primary impact levers named, others marked "not this bet"
 - [ ] Qualitative evidence included (user quotes, research)
 - [ ] Competitive landscape surveyed
-- [ ] User insight or anecdote that motivates the feature
 - [ ] Gaps in understanding identified with owners and deadlines
 
 ### Kickoff Stage
 - [ ] Solution mock or description added
+- [ ] Why-we-beat-the-alternative stated (when we win, when we don't)
 - [ ] North-star, secondary, and guardrail metrics defined
-- [ ] Impact sizing modeled (input and output metrics)
+- [ ] Impact sizing modeled (reach × baseline × change, per named lever)
 
 ### Solution Review Stage
 - [ ] Edge cases documented
@@ -218,6 +257,8 @@ If [specific condition], we will [rollback/pause/iterate].
 - [ ] Tracking and analytics requirements specified
 - [ ] Go-to-market strategy addressed
 - [ ] Risks and mitigation identified
+- [ ] Non-goals are specific, each with a why
+- [ ] `/prd-challenge` run; its ranked assumptions sit in Open Questions with owners
 
 ### Launch Readiness Stage
 - [ ] All eng concerns addressed
@@ -226,8 +267,9 @@ If [specific condition], we will [rollback/pause/iterate].
 - [ ] GTM teams enabled (sales, marketing, CS)
 - [ ] User adoption plan ready (not just build it)
 - [ ] Financial costs reviewed
-- [ ] Kill criteria and rollback plan documented
+- [ ] Kill criteria and rollback plan documented — would the team actually pull the plug at this threshold?
 - [ ] QA/test plan ready
+- [ ] No `[GAP:]` markers remain (the launch gate blocks on them)
 
 ### Impact Review Stage
 - [ ] No blind spots that would make you regret shipping
@@ -238,5 +280,3 @@ If [specific condition], we will [rollback/pause/iterate].
 ---
 
 > **Tip:** You don't need every section at every stage. A Team Kickoff PRD might only have sections 0, 1, 2, and 8. Expand as the feature matures. The checklist tells you what to add at each stage.
->
-> **Tip:** For guided PRD creation with automatic context from your workspace (strategy docs, user research, stakeholder profiles), run `/prd-draft` instead of filling this template manually.

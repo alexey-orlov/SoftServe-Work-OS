@@ -170,7 +170,7 @@ Based on the MCP category, the skill automatically maps it to relevant skills:
 → decision-doc, status-update, process-meeting
 
 **Design MCPs** (Figma)
-→ generate-ai-prototype, napkin-sketch, prototype-feedback
+→ prototype, napkin-sketch, prototype-feedback
 
 **Web Search MCPs**
 → competitor-analysis, competitive-intel

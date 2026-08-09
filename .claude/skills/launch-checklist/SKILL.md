@@ -1,6 +1,6 @@
 ---
 name: launch-checklist
-description: Comprehensive product launch planning
+description: Plan a launch end to end — generate a prioritized (P0/P1/P2), dependency-mapped checklist sized to the launch (small / major / regulatory), importing the pre-mortem's launch-blocking risks into its mitigation section. Writes product/launches/{slug}-launch-checklist.md. Stage 6 of the de-risk chain. NOT for the ship verdict (/feature-launch-gate) or generating risks (/pre-mortem — run it first).
 group: delivery
 ---
 
@@ -371,7 +371,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 **Before `/launch-checklist`:**
 - `/prd-draft` - Define what's launching
-- `/prd-review-panel` - Ensure PRD is solid
+- `/prd-challenge` - Ensure the PRD survived the full critique
 - `/prototype` - Validate solution before building
 
 **After `/launch-checklist`:**
@@ -389,7 +389,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 **Before this:**
 - `/prd-draft` - Create PRD
-- `/prd-review-panel` - Validate approach
+- `/prd-challenge` - Validate approach
 - `/impact-sizing` - Estimate value
 
 **After this:**

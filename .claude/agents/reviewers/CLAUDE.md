@@ -1,6 +1,6 @@
 # Reviewer Personas
 
-Seven review perspectives used by `/prd-review-panel`, `/prd-draft`, `/strategy-sprint`, and `/ralph-wiggum`.
+Seven review perspectives used by `/prd-challenge` (as its four-risks lens) and `/strategy-sprint`.
 
 **Read this when:** You are running a multi-perspective document review.
 

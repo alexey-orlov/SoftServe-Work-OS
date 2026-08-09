@@ -18,6 +18,12 @@ _owner: [Name from team roster]_
 ## Artifacts
 
 - PRD: [PENDING: product/PRDs/[area]/[slug]-prd.md]
+- Assumption map: -
+- Challenge report: -
+- Impact sizing: -
+- User research: -
+- Competitive analysis: -
+- Pre-mortem: -
 - Eng plan: -
 - Metrics: -
 - Experiments: -

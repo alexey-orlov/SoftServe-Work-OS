@@ -1,6 +1,6 @@
 ---
 name: retention-analysis
-description: Cohort analysis and retention optimization framework. Identifies retention drivers and churn factors.
+description: Cohort analysis and retention optimization framework. Identifies retention drivers and churn factors. Diagnostic — describes retention as it is now and supplies churn baselines; forecasting a feature's retention impact is /impact-sizing's job, using those baselines.
 disable-model-invocation: false
 user-invocable: true
 group: discovery-analytics

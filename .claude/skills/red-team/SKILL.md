@@ -1,6 +1,6 @@
 ---
 name: red-team
-description: Attack the load-bearing claims of a PRD, strategy, or decision doc before reality does. Steelmans each claim then attacks the steelman, returning 3-5 ranked kill-assumptions with the evidence to get this week, a kill criterion, and the cheapest test — grounded in repo decisions, business context, and real analytics tables. Not a document review (/ralph-wiggum) and not a failure rehearsal (/pre-mortem).
+description: Attack the load-bearing claims of a PRD, strategy, or decision doc before reality does. Steelmans each claim then attacks the steelman, returning 3-5 ranked kill-assumptions with the evidence to get this week, a kill criterion, and the cheapest test — grounded in repo decisions, business context, and real analytics tables. Not an assumption inventory (/assumption-map) and not a failure rehearsal (/pre-mortem). Runs standalone on strategy and decision docs; for a PRD it also runs as the attack lens inside /prd-challenge.
 group: definition
 ---
 
@@ -26,7 +26,7 @@ Most plans only survived polite feedback. This skill is a **sharp, fair adversar
 
 The goal is a sharper decision, not a longer risk list. **Five real kill-assumptions with tests beat twenty generic risks.**
 
-This is a **procedure, not a persona** — no humor, no character. For the memorable doc-quality roast, that's `/ralph-wiggum`.
+This is a **procedure, not a persona** — no humor, no character, kill criteria instead of edit suggestions.
 
 ---
 
@@ -40,43 +40,26 @@ This is a **procedure, not a persona** — no humor, no character. For the memor
 **When NOT to use:**
 
 - No document yet — mapping a bare idea's assumptions → `/assumption-map`
-- Document-quality pass (logic, evidence, scope, contradictions with the repo) → `/ralph-wiggum`
 - Rehearsing how a launch fails → `/pre-mortem`
-- Stage-milestone breadth review from 7 perspectives → `/prd-review-panel`
+- The full multi-lens critique of a PRD (this attack included) → `/prd-challenge`
 
 ---
 
 ## Scope Boundaries
 
-### This Skill vs /ralph-wiggum
-
-**Use /ralph-wiggum when:**
-- You want the whole document reviewed across 7 dimensions (logic, evidence, scope, metrics…)
-- You want contradictions with existing repo context hunted down
-- The doc is about to be shared and you want the embarrassing gaps caught first
-- Output: Severity-bucketed review (CRITICAL/IMPORTANT/MINOR) with personality
-
-**Use /red-team when:**
-- The bet itself needs attacking, not the document's craft
-- You want each claim steelmanned before it's attacked — decision-grade, no humor
-- You need kill criteria and this-week tests, not edit suggestions
-- Output: 3–5 kill-assumption contracts (Fails if / Evidence to get this week / Kill criterion / Cheapest test)
-
-**Handoff:** "Ralph flagged dimension 3 (Assumptions & Risks) as the core problem — want `/red-team` to run the full attack?"
-
 ### This Skill vs /pre-mortem
 
 A pre-mortem imagines the plan **already failed** and narrates why. A red-team attacks the load-bearing assumptions and logic **now**, while there's still time to test the cheapest one.
 
-**Use /pre-mortem when:** a launch date exists and you want the failure rehearsed into owned, dated mitigations.
+**Use /pre-mortem when:** a ship moment exists and you want the failure rehearsed into owned, dated mitigations.
 **Use /red-team when:** you're deciding whether to commit at all, and want the riskiest claim tested this week.
 
 **Handoff:** "The attack survived — if you're proceeding to launch, `/pre-mortem` rehearses what could still go wrong operationally."
 
-### This Skill vs /prd-review-panel and /assumption-map
+### This Skill vs /prd-challenge and /assumption-map
 
-- `/prd-review-panel` = **breadth at milestones** (7 perspectives, one synthesis). `/red-team` = **depth on demand** (one adversary, the 3–5 claims that matter).
-- `/assumption-map` = the **exhaustive inventory** of everything a plan assumes. `/red-team` = the **selective attack** on the claims a doc rests on. Map first, attack later.
+- `/prd-challenge` = **the full parallel critique of a PRD** — this attack plus the assumption inventory, the 7 personas, and the failure rehearsal, synthesised into one report. On a PRD, prefer it; run `/red-team` alone for depth on demand between challenges, or on any non-PRD doc.
+- `/assumption-map` = the **exhaustive inventory** of everything a plan assumes. `/red-team` = the **selective attack** on the claims a doc rests on. Map first, attack later — the challenge runs both in parallel, blind to each other.
 
 ---
 
@@ -215,8 +198,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 - `/prd-draft` - Rewrite the riskiest section to address what survived
 
 **Complements:**
-- `/ralph-wiggum` - Doc-quality skepticism with personality; run either, or both on big bets
-- `/prd-review-panel` - Milestone breadth from 7 perspectives
+- `/prd-challenge` - The full parallel critique; this skill is its attack lens
 
 ---
 
@@ -235,4 +217,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 3 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-draft` · downstream: `/prd-review-panel`; doc-quality worry → `/ralph-wiggum` instead. Skip rules live in the chain doc.
+Stage 3 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-draft` · downstream: `/prd-challenge` (which also invokes this skill as its attack lens). Skip rules live in the chain doc.

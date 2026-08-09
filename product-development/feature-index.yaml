@@ -13,6 +13,14 @@
 #   user before writing — see governance/write-policy.yaml.
 # - Paths are relative to product-development/.
 # - tickets references your tracker (Linear / Jira / Asana). Pick one format.
+# - Recognized artifact keys: prd, eng-rfc, eng-plan, figma, tickets, table-schemas,
+#   queries, metrics, dashboards, experiments, investigations, bug-investigations,
+#   decisions, initiatives — plus:
+#     reviews:          review artifacts in product/PRDs/{area}/reviews/ (assumption map,
+#                       red-team, challenge reports, pre-mortem), listed as they land
+#     impact-sizing:    analytics/investigations/{area}/impact-sizing-*.md
+#     launch-checklist: product/launches/{slug}-launch-checklist.md
+#     launch-gate:      product/launches/{slug}-gate-{date}.md verdict
 # - Omit keys that don't apply yet. Add them when artifacts exist.
 
 # Replace these examples with your own product areas. Keep one or two as a

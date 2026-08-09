@@ -1,6 +1,6 @@
 ---
 name: experiment-metrics
-description: STEDII framework for selecting trustworthy experiment metrics. Ensures metric validity and reliability.
+description: STEDII framework (Sensitive, Timely, Efficient, Debuggable, Interpretable, Isolated) for selecting trustworthy experiment metrics. Ensures metric validity and reliability before an A/B test runs. NOT for defining what success means for a feature — that is /feature-metrics; this skill validates that experiment metrics can be trusted.
 disable-model-invocation: false
 user-invocable: true
 group: definition

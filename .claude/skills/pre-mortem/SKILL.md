@@ -237,4 +237,4 @@ Before presenting output to the PM, verify:
 
 ## Chain Position
 
-Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-review-panel` · downstream: `/launch-checklist` (4–6 weeks out). Skip rules live in the chain doc.
+Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-challenge` (which also invokes this skill as a lens once a solution and rollout exist) · downstream: `/launch-checklist` (4–6 weeks out). Skip rules live in the chain doc.

@@ -1,6 +1,6 @@
 ---
 name: feature-metrics
-description: Define success metrics using the STEDII framework for trustworthy experiment metrics.
+description: Define a feature's success metrics — primary metric, guardrails, kill criteria — each vetted against six checks (sensitive, timely, easy to understand, directional, implementable, independent). Writes the definitions to analytics/metrics/{area}/. NOT for validating experiment metrics — that is /experiment-metrics (the STEDII framework); this skill defines what success means for a feature.
 disable-model-invocation: false
 user-invocable: true
 group: definition
@@ -8,7 +8,9 @@ group: definition
 
 # /feature-metrics - Define Success Metrics
 
-Select trustworthy metrics using the STEDII framework.
+Define what success means for a feature, and vet every metric against six checks.
+
+**Boundary:** this skill defines a feature's success metrics; `/experiment-metrics` (STEDII) validates metrics for experiment trustworthiness. Both write to `analytics/metrics/{area}/` under different filename prefixes.
 
 ## Context Routing Logic (Internal - for Claude)
 
@@ -90,9 +92,9 @@ Before we define metrics, the skill checks what context already exists...
 
 ---
 
-## STEDII Framework
+## The Six Checks
 
-Every good metric should pass these 6 criteria:
+Every good metric should pass all six:
 
 ### S - Sensitive
 Can the metric detect changes from your feature?
@@ -132,7 +134,7 @@ Does it avoid external factors?
 When PM types `/feature-metrics`, respond:
 
 ```
-Let's define metrics for your feature. I'll use the STEDII framework.
+Let's define metrics for your feature. I'll vet each against the six checks.
 
 Tell me:
 1. What feature are we measuring?
@@ -149,7 +151,7 @@ I'll help you select primary metrics, guardrails, and kill criteria.
 ### Primary Metric
 The one metric that defines success.
 - Directly tied to feature goal
-- Must pass all STEDII criteria
+- Must pass all six checks
 - Single source of truth for go/no-go
 
 ### Guardrail Metrics
@@ -178,7 +180,7 @@ When to stop the experiment early.
 **Target:** [Y] ([+/- Z%])
 **Timeline:** [When we expect to see impact]
 
-**STEDII Check:**
+**Six checks:**
 - [x] Sensitive - [why]
 - [x] Timely - [why]
 - [x] Easy to understand - [why]
@@ -224,14 +226,14 @@ If any of these occur, immediately rollback:
 ### Where Files Go
 
 **Feature metrics definitions:**
-- Active work: Add to PRD in `Strategic Fit` section
-- When finalized: Reference in `/experiment-decision` for A/B testing approach
-- Archive: Store final metrics in `product-development/analytics/metrics/{area}/[feature-name]-baseline.md` for historical reference
+- Saved to: `product-development/analytics/metrics/{area}/feature-metrics-[feature-name]-[date].md` — the one canonical location (the launch gate checks this folder)
+- Referenced from: the PRD's Success Metrics section (link, don't restate)
+- Fed to: `/experiment-decision` for the A/B-test-vs-ship call
 
 ### Link to Other Work
 
 After defining metrics:
-- **Reference in PRDs** - "Success is defined as [primary metric] reaching [target] based on STEDII framework"
+- **Reference in PRDs** - "Success is defined as [primary metric] reaching [target]"
 - **Use in experiments** - Feature metrics become primary metric in `/experiment-decision`
 - **Track progress** - Monitor against baseline in weekly status updates
 - **Feed retention analysis** - If tracking retention, pass metric definitions to `/retention-analysis`
@@ -284,7 +286,7 @@ Before presenting output to the PM, verify:
 
 - [ ] **File saved to correct location:** Output saved to `product-development/analytics/metrics/{area}/feature-metrics-[feature-name]-[date].md`
 - [ ] **Context routing table was checked:** Reviewed `product-development/product/PRDs/{area}/` for feature context, `product-development/product/strategy/business-context/business-info.md` for North Star metric, and `product-development/analytics/metrics/{area}/` for existing dashboards and baselines
-- [ ] **Metrics pass STEDII framework:** Each proposed metric is evaluated against all 6 STEDII dimensions (Sensitive, Timely, Easy to understand, Directional, Implementable, Independent) with pass/fail reasoning
+- [ ] **Metrics pass the six checks:** Each proposed metric is evaluated against all six (sensitive, timely, easy to understand, directional, implementable, independent) with pass/fail reasoning
 - [ ] **Primary metric has baseline and target:** The primary metric includes a current baseline number and a specific target value with timeline (not "improve" or "increase")
 - [ ] **Guardrail metrics defined:** At least 1 guardrail metric is specified with an acceptable range and explanation of what it protects against
 - [ ] **Metrics ladder to North Star:** The output explicitly shows how the primary metric connects upward to the company's North Star metric from `product-development/product/strategy/business-context/business-info.md`

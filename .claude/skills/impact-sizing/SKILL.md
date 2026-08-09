@@ -1,6 +1,6 @@
 ---
 name: impact-sizing
-description: Quantify feature value with driver trees, confidence levels, and the 4-step sizing framework.
+description: Quantify feature value with driver trees, confidence levels, and the 4-step sizing framework — impact stated by business lever (acquisition, activation, retention, expansion/LTV, cost to serve) as reach × baseline × expected change, every factor sourced or marked [GAP:]. The one forecasting skill — diagnostic skills (/retention-analysis, /activation-analysis, /expansion-strategy) supply its baselines, never forecasts.
 disable-model-invocation: false
 user-invocable: true
 group: definition
@@ -108,24 +108,33 @@ Users who complete action: [number]
 - How often will users be exposed?
 - What's the expected adoption curve?
 
-### Step 2: Calculate Impact
+### Step 2: Calculate Impact — by business lever
 
-Progress through three levels:
+State impact in the lever the bet actually moves, not accounting buckets. Every lever is the
+same three-part sum: **reach × baseline rate × expected change**. Reach comes from Step 1's
+funnel; the baseline comes from a named repo source — never from memory.
 
-**Engagement Impact:**
-- DAU/MAU change
-- Retention rate change
-- Session frequency/duration
+| Lever | The sum | Baseline from |
+|-------|---------|---------------|
+| **Acquisition** | addressable accounts × win/conversion rate × expected lift | `strategy/business-context/segmentation-matrix.md`, `analytics/metrics/{area}/` |
+| **Activation** | new accounts per period × activation gap × expected lift | latest `/activation-analysis` investigation |
+| **Retention** | accounts in segment × churn attributable to *this* problem × share the feature removes → **ARR retained** | latest `/retention-analysis` investigation |
+| **Expansion / LTV** | accounts × ARR per account × expected uplift (seats, tier, cross-sell) → **ARR added** | latest `/expansion-strategy` analysis, `segmentation-matrix.md` |
+| **Cost to serve** | volume of the manual action × cost per action × share removed → **cost avoided** | support data, `/code-qa` for what's manual today |
 
-**Top-Line Impact:**
-- Revenue change
-- GMV change
-- Conversion rate change
+**Rules:**
 
-**Bottom-Line Impact:**
-- Contribution margin
-- Customer acquisition cost
-- Lifetime value change
+1. **At most two primary levers.** Everything can't improve; pick the levers the bet is *for*
+   and mark the rest "not what this bet is for." (The PRD's Business Value table enforces the
+   same cap.)
+2. **A factor with no repo source becomes a `[GAP: what's missing — how to get it]`** — a
+   query to run, a diagnostic skill to run, or a human estimate to collect. Never an invented
+   number.
+3. **Diagnostic skills supply baselines, not forecasts.** `/retention-analysis`,
+   `/activation-analysis`, `/expansion-strategy` describe what is happening now; the forecast
+   (expected change × that baseline) is built here, and owns its confidence rating.
+4. **Show the math.** Every estimate is a visible product of its three factors, each factor
+   sourced or gapped.
 
 ### Step 3: Identify & De-Risk Assumptions
 
@@ -182,23 +191,15 @@ Once you share this, I'll help build the funnel and calculate impact.
 | Engage | [X] | [Y%] | [reason] |
 | Complete | [X] | [Y%] | [reason] |
 
-## Impact Estimates
+## Impact Estimates — by lever
 
-**Engagement Impact:**
-- Metric: [metric]
-- Current: [baseline]
-- Expected change: [+/- X%]
-- Confidence: [High/Med/Low]
+| Lever | Primary? | Reach | Baseline (source) | Expected change | Result | Confidence |
+|-------|----------|-------|-------------------|-----------------|--------|------------|
+| [e.g. Retention] | yes | [accounts in segment] | [churn rate — path to investigation] | [share removed] | [ARR retained] | [High/Med/Low] |
+| [e.g. Expansion] | yes | [accounts] | [ARR/account — segmentation-matrix.md] | [uplift %] | [ARR added] | [High/Med/Low] |
+| [others] | not this bet | - | - | - | - | - |
 
-**Top-Line Impact:**
-- Metric: [revenue/GMV]
-- Expected change: [$X / +Y%]
-- Confidence: [High/Med/Low]
-
-**Bottom-Line Impact:**
-- Metric: [margin/LTV]
-- Expected change: [$X / +Y%]
-- Confidence: [High/Med/Low]
+[Any factor without a source: `[GAP: what's missing — how to get it]`]
 
 ## Confidence Assessment
 | Assumption | Confidence | De-risking Action |

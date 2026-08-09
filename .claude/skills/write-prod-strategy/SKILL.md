@@ -298,7 +298,7 @@ Example:
 - User flow in future state
 - Before/after comparison
 
-[Or generate using `/generate-ai-prototype` or `/napkin-sketch`]
+[Or generate using `/prototype` or `/napkin-sketch`]
 
 ### What Changes?
 

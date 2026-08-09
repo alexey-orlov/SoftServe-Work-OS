@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Advanced prototyping (Artifacts/Figma/Lovable/v0/Bolt)
+description: Make the solution visible before engineering commits — routes to the right prototyping tool ($1-$10-$100 rule) and generates the copy-paste prompt or spec: v0.dev, Lovable, Bolt.new, Claude Artifacts, Figma handoff, or static HTML. Saves every prompt to PRDs/prototypes/. NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), or collecting structured feedback on the built prototype (/prototype-feedback).
 disable-model-invocation: false
 user-invocable: true
 group: prototyping
@@ -64,7 +64,7 @@ When this skill is invoked, immediately check:
 - If no PRD exists --> suggest `/prd-draft` first ("Prototype without requirements = guessing")
 - If no user research --> suggest `/interview-guide` ("Who are you designing for?")
 - After prototype is built --> suggest `/prototype-feedback` for structured review
-- If prototype needs AI behavior --> link to `/generate-ai-prototype` for prompt generation
+- If the prototyped feature is AI-powered --> spec its behavior via `.claude/skills/prd-draft/reference/ai-prd.md` (behavior contract + examples) before prompting
 - If starting from scratch visually --> suggest `/napkin-sketch` first for quick layout
 
 ---
@@ -487,7 +487,7 @@ Prototype ready! Saved to product-development/product/PRDs/prototypes/[filename]
 - Generate a second option with a different approach?
 - Create a `/napkin-sketch` for a different screen in this flow?
 - Draft talking points for presenting this prototype?
-- Run `/generate-ai-prototype` for AI-specific behavior prompts?
+- Add AI behavior examples to the prompt (per `.claude/skills/prd-draft/reference/ai-prd.md`)?
 ```
 
 ---
@@ -561,7 +561,6 @@ If any are missing, ask before generating.
 **Before:**
 - `/prd-draft` - Define requirements (most important input)
 - `/napkin-sketch` - Quick ASCII wireframe to establish layout
-- `/generate-ai-prototype` - Generate AI-specific prompt behavior
 
 **After:**
 - `/prototype-feedback` - Structured review and iteration loop
@@ -569,9 +568,8 @@ If any are missing, ask before generating.
 - `/create-tickets` - Turn approved prototype into engineering tasks
 
 **Related:**
-- `/prd-review-panel` - Validate with Designer sub-agent
+- `/prd-challenge` - Full multi-lens critique, including whether this is the right solution
 - `/process-meeting` - Process user-testing interviews
-- `/ralph-wiggum` - Challenge whether this is the right solution
 
 ---
 
@@ -612,7 +610,6 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 **Before this:**
 - `/prd-draft` - Clear requirements
 - `/napkin-sketch` - Quick wireframe first
-- `/generate-ai-prototype` - AI behavior prompts
 
 **After this:**
 - `/prototype-feedback` - Structured review loop
@@ -621,4 +618,4 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 **Parallel use:**
 - `/process-meeting` - Process user-testing interviews
-- `/ralph-wiggum` - Challenge the solution approach
+- `/prd-challenge` - Challenge the solution approach

@@ -1,6 +1,6 @@
 ---
 name: code-first-draft
-description: Initial feature implementation
+description: Build the first-pass implementation of a PRD in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. Writes real code plus a summary in PRDs/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
 group: delivery
 ---
 
@@ -185,7 +185,7 @@ Save to `product-development/product/PRDs/prototypes/[feature]-first-draft.md`:
 
 - Run tests
 - Manual QA
-- For complex features: Consider `/ralph-wiggum` for autonomous iteration
+- For complex features: consider an autonomous iteration loop (`os-installation/claude-code/ralph-wiggum.md`)
 ```
 
 ---
@@ -303,12 +303,11 @@ Generate tests using the detected testing framework. If no testing framework is 
 - `/prototype` - Validate UX first
 
 **After:**
-- `/ralph-wiggum` - If needs autonomous iteration
 - `/launch-checklist` - Prepare for launch
 - `/create-tickets` - Track remaining work
 
 **Related:**
-- `/prd-review-panel` - Get engineering review
+- `/prd-challenge` - Full multi-lens review of the spec this draft implements
 
 ---
 

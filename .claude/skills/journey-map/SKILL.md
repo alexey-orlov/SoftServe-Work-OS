@@ -152,6 +152,8 @@ For each phase, document:
 
 ### Output Format (User Journey Map)
 
+Save to: `product-development/product/customers/research-synthesis/journey-maps/[journey-name]-[date].md` (both modes — the one canonical location).
+
 ```markdown
 # User Journey Map: [Journey Name]
 

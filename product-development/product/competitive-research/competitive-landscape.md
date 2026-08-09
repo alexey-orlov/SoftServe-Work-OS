@@ -64,4 +64,4 @@ Patterns, not anecdotes — add a row when ≥2 pieces of evidence agree; retire
 - **Roster canon:** [business-info.md](../strategy/business-context/business-info.md) Competitive Landscape (confirm tier). Add or remove competitors there first; this page and the root `CLAUDE.md` fundamentals line follow in the same session.
 - **Refresh:** `/competitor-analysis` (deep analysis and monthly monitoring both fold through here); `/context-update` and `/process-meeting` update win/lose patterns and at-a-glance lines when call-borne intel warrants.
 - **Sources:** `competitors/{slug}/teardown.md` · [intel/](intel/) monthly records · account call summaries.
-- **Read by:** `/prd-draft`, `/write-prod-strategy`, `/strategy-sprint`, `/launch-checklist`, `/slack-message`, `/decision-doc`, `/expansion-strategy`, `/prototype`, `/ralph-wiggum`, `/red-team`, `/assumption-map`, and the executive reviewer in `/prd-review-panel`.
+- **Read by:** `/prd-draft`, `/write-prod-strategy`, `/strategy-sprint`, `/launch-checklist`, `/slack-message`, `/decision-doc`, `/expansion-strategy`, `/prototype`, `/red-team`, `/assumption-map`, and the executive reviewer in `/prd-challenge`.

@@ -1,6 +1,6 @@
 ---
 name: wiki-lint
-description: Health-check the team wiki — staleness by age tier, navigation coverage in both directions, broken cross-references, feature-index vs disk drift, initiative-page health, living-page registry checks, placeholder/truncation scan, ledger integrity, business-info mirror consistency, protected-path audit, and code-grounding registry drift. Absorbs the old /freshness-check (staleness is check #1 here). Writes a dated report to governance/health/. --fix repairs mechanical drift only (missing nav lines, missing CLAUDE.md stubs, ledger sort) — never content. Use on /wiki-lint, "is the repo healthy?", "check the wiki", weekly as automation, or before quarterly planning.
+description: Health-check the team wiki — staleness by age tier (including [PENDING:] and [GAP:] marker aging), navigation coverage in both directions, broken cross-references, feature-index vs disk drift, initiative-page health, living-page registry checks, placeholder/truncation scan, ledger integrity, business-info mirror consistency, protected-path audit, and code-grounding registry drift. Writes a dated report to governance/health/. --fix repairs mechanical drift only (missing nav lines, missing CLAUDE.md stubs, ledger sort) — never content. Use on /wiki-lint, "is the repo healthy?", "check the wiki", weekly as automation, or before quarterly planning.
 group: os-admin
 ---
 
@@ -22,14 +22,15 @@ full pass — run the script first, then do the judgment checks the script can't
 
 ## The eleven checks
 
-1. **Staleness** *(absorbed from /freshness-check)* — last-modified via
+1. **Staleness** — last-modified via
    `git log -1 --format=%ct -- <file>` over `product-development/`, `governance/`, and `os-installation/`.
    Tiers: Fresh <30d ✅ · Aging 30–90d 🟡 · Stale 90–180d 🟠 · Archive candidate 180+d 🔴.
    Skip paths in `.freshness-ignore` (wildcards ok) and stable references
    (`analytics/schemas/`, `os-installation/`, `.claude/`, `LICENSE`) — note those as
    "stable reference material". Cross-reference `feature-index.yaml`: a metrics/queries file
    untouched since its feature shipped is flagged "should-have-been-updated". Flag
-   `[PENDING:]` markers older than 14 days.
+   `[PENDING:]` and `[GAP:]` markers older than 14 days (same aging rule — a gap named
+   two weeks ago and never closed is drift, not intent).
 2. **Navigation coverage, both directions** — every directory under `product-development/`
    and `governance/` has a `CLAUDE.md`; every content file appears in its folder's CLAUDE.md list; every nav
    line's target exists on disk. Queue folders with transient contents

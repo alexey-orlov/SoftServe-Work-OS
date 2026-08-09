@@ -1,6 +1,6 @@
 ---
 name: create-tickets
-description: Break PRDs into dev-backlog tickets, or push customer feature-request records as 1:1 intake tickets — via the connected tracker MCP (Linear / Jira / Asana) or formatted text fallback
+description: Break an agreed PRD into dev-backlog tickets (estimates, dependencies, sprint suggestion), or push customer feature-request records as 1:1 intake tickets — via the connected tracker MCP (Linear / Jira / Asana) or formatted text fallback. Run after the PRD survives /prd-challenge, not before. NOT for deciding which requests deserve building (/prioritize-requests) or writing the spec itself (/prd-draft).
 group: delivery
 ---
 

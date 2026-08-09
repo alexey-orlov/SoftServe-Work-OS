@@ -168,10 +168,10 @@ Now you can just type `teamos` to start a session!
 team-os/
 ├── CLAUDE.md                    ← Master context + governance rules (loads every session)
 ├── .claude/
-│   ├── skills/                  ← 49 slash-command skills (flat; grouped via skills/CLAUDE.md)
+│   ├── skills/                  ← 45 slash-command skills (flat; grouped via skills/CLAUDE.md)
 │   ├── hooks/                   ← session-start briefing + write-guard (wired in settings.json)
 │   ├── references/              ← code-grounding contract (cross-skill rules)
-│   ├── agents/reviewers/        ← reviewer perspectives for /prd-review-panel
+│   ├── agents/reviewers/        ← reviewer perspectives for /prd-challenge
 │   └── team-learnings.md        ← agent-behavior rules, injected each session
 ├── product-development/         ← the wiki: all product, eng, analytics, design artifacts
 │   ├── feature-index.yaml       ← the product map (protected — changes confirmed)

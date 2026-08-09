@@ -4,13 +4,23 @@ Rules for how agents must behave in THIS repo — corrections that should never 
 Injected into every session start by `.claude/hooks/session-start.sh`, so this file is a
 context tax: **hard cap ~30 lines of entries. When adding, prune the weakest.**
 
-Add an entry when: Claude consistently gets something wrong here · the team agrees on a
-pattern · someone confirms a working preference that should persist. One line each:
-`- YYYY-MM-DD — rule (why, if not obvious)`.
+## The capture loop (how entries get here)
 
-Not for process lessons (→ `product-development/product/meetings/retros/lessons-learned.md`)
-or product choices (→ `product-development/product/decisions/`). See the routing table in
-`governance/write-back-contract.md`.
+When the user corrects/rejects/redirects output or states a standing preference, or a
+durable gap surfaces mid-work — run the loop in the moment, not only when asked:
+generalize to the root cause (fix the class of mistake, not the single instance) → apply
+to the work in hand → persist only if it's likely to recur and isn't covered (sharpen an
+existing rule before adding) → route by narrowest scope (canonical routing table:
+`governance/write-back-contract.md` — skill/agent-specific rules go to that skill's
+self-check, NOT here; this file is the last resort, for cross-cutting rules only) →
+close the loop out loud (one line in the reply: what was generalized, where it went).
+Admin-tier targets (this file, skills, agents, templates, structural changes) are applied
+only via the steward's in-session yes — otherwise file the exact change in
+`governance/proposals/`. At a session's natural wrap-up, offer a one-line sweep:
+"N takeaways from this session look durable — file them?"
+
+Entry format, one line each: `- YYYY-MM-DD — rule (why, if not obvious)`. Adding at the
+cap means naming the weakest entry to prune in the same proposal.
 
 ## Entries
 

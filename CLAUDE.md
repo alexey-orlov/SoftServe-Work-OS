@@ -90,7 +90,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations, code-repo registry + codebase maps (worked example only until real engineering work lands) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
-| Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-review-panel` |
+| Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-challenge` and `/strategy-sprint` |
 | Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
 | Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
@@ -98,11 +98,12 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
 | Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per feature — `/launch-checklist` writes here |
 
-## Three Rules
+## Four Rules
 
 1. **Summaries first, raw data in subfolders.** A one-hour call becomes a 500-token summary in `summaries/`. Raw transcripts sit in `transcripts/` for when the summary isn't enough. Every level of nesting is a context-saving decision.
 2. **Every folder has a CLAUDE.md navigation file.** Update it when you add files — append new entries to the END of the list, never re-sort (re-sorting causes merge conflicts; only `/wiki-lint --fix` re-orders).
 3. **The repo gets updated before a feature ships.** Run `/feature-launch-gate`. No exceptions. *"The feature is not rolled out until the repository is updated."* Between launches, `/wiki-lint` (weekly + on every PR) catches what slipped.
+4. **Corrections become rules.** When the user corrects agent behavior or a durable takeaway surfaces, run the capture loop in `.claude/team-learnings.md` — generalize to the root cause, route by narrowest scope, propose through the write policy.
 
 ## Governance
 

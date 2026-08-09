@@ -1,6 +1,6 @@
 ---
 name: expansion-strategy
-description: Upsell, cross-sell, and account growth tactics. Framework for revenue expansion.
+description: Upsell, cross-sell, and account growth tactics. Framework for revenue expansion. Diagnostic and strategic — describes expansion patterns as they are now and supplies NRR/ARR-per-account baselines; forecasting a feature's expansion or LTV impact is /impact-sizing's job, using those baselines.
 disable-model-invocation: false
 user-invocable: true
 group: definition
@@ -564,7 +564,7 @@ Median days from signup to first upgrade
 ### Where to Save Your Expansion Strategy
 
 **Strategy Documents:**
-- Save to: `product-development/analytics/investigations/{area}/expansion-strategy-[quarter].md`
+- Save to: `product-development/analytics/investigations/{area}/expansion-strategy-[date].md`
 - When finalized: Move to `product-development/product/strategy/expansion-strategy-[quarter].md` for reference
 
 **Pricing Changes & Experiments:**

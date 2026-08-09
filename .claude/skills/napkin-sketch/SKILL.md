@@ -14,7 +14,7 @@ Create quick wireframes as ASCII art OR capture existing UI from browser to matc
 2. You'll be asked: **New design** (ASCII wireframe) or **Match existing** (browser capture)?
 3. For new designs, the skill asks about layout, key components, and states
 4. The skill generates ASCII wireframes with annotations and state variations
-5. Use the wireframe in PRDs, tickets, or as input for `/generate-ai-prototype`
+5. Use the wireframe in PRDs, tickets, or as input for `/prototype`
 
 **Example:** "Sketch a settings page with tabs for Profile, Security, and Billing"
 
@@ -549,7 +549,7 @@ Common UI:
 
 **Feeds into:**
 - `/prd-draft` - Include wireframes in PRDs
-- `/generate-ai-prototype` - Use as reference for AI prototype prompts
+- `/prototype` - Use as reference for v0/Lovable/Bolt prompt generation
 - `/create-tickets` - Engineers see wireframe in ticket
 
 **Follows:**
@@ -592,7 +592,7 @@ Before delivering the napkin sketch, verify:
 - [ ] **Mobile variant included** -- If feature is mobile/responsive, a mobile wireframe is provided
 - [ ] **Flow diagram present** -- For multi-screen features, screen-to-screen navigation is shown
 - [ ] **Context checked** -- PRD requirements, user research, and past prototypes referenced before wireframing
-- [ ] **Actionable for next step** -- Wireframe is clear enough to feed into `/generate-ai-prototype` or `/create-tickets`
+- [ ] **Actionable for next step** -- Wireframe is clear enough to feed into `/prototype` or `/create-tickets`
 
 If any check fails, fix it before delivering. A 5-minute wireframe should save hours of miscommunication.
 

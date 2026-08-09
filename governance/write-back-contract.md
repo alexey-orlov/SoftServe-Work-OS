@@ -18,6 +18,29 @@ while the maps that make them findable rot. Unwritten-back work is unfinished wo
 | **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md`, `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
 | **Deliverables** | PRDs, RFCs, analyses, prototypes, checklists | Work products that are team knowledge. Saved in their functional folder, registered in navigation, linked from their initiative page. |
 
+## Routing by content type
+
+The canonical table for any durable takeaway — used by the capture loop
+(`.claude/team-learnings.md` header), `/context-update`, `/process-meeting`, and
+`/session-retro`. Narrowest scope wins; the target path's tier in
+`governance/write-policy.yaml` decides the mechanics — the loop never invents its own
+permission model.
+
+| Content | Destination | Tier → action |
+|---|---|---|
+| Skill- or agent-specific rule / gotcha | that skill's SKILL.md self-check (or the agent file under `.claude/agents/`) | admin — propose the exact diff; large reworks flag "eval-first" |
+| Cross-cutting agent-behavior rule | `.claude/team-learnings.md` | admin — propose one line; at the ~30-line cap, name the weakest entry to prune |
+| Team-process lesson | `product/meetings/retros/lessons-learned.md` | auto — append dated line with source |
+| Product choice / hindsight | `product/decisions/` | auto — dated entry |
+| Business / steering fact | its confirm-tier file (`write-policy.yaml#confirm`) | confirm — exact before/after + in-session yes; headless → proposal |
+| Structural change — folders created/renamed/dissolved, templates, what-goes-where conventions | the structure itself | admin mechanics ALWAYS — propose, never apply (templates are admin by policy glob; folder conventions by this rule). Routine per-file nav appends (step 1 of the uniform block) stay auto |
+| Personal preference / private content | personal OS | never this repo (privacy contract) |
+
+Admin- and confirm-tier proposals that can't be approved in-session land as files in
+`governance/proposals/` (format in that folder's CLAUDE.md). The gate itself — this file,
+`write-policy.yaml`, hooks — may be *proposed* against but is applied only by the steward
+via PR, never in-session.
+
 ## The uniform block (canonical text)
 
 Writing skills carry exactly this, after their save-location section:
@@ -49,7 +72,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 3. **Write policy applies to every write.** Auto-tier paths (the default) are written
    directly. Confirm-tier paths: show the exact before/after, get an in-session yes first;
    headless runs write a proposal to `governance/proposals/` instead.
-   Admin-tier paths: don't touch — tell the user to route the change through the steward.
+   Admin-tier paths: never edit on your own initiative — show the exact change; the
+   steward's in-session yes (the write-guard prompt) applies it, otherwise file it as a
+   proposal in `governance/proposals/` for the steward to land via PR.
 4. **Provenance.** Every non-obvious claim in a wiki page links to its source, relative to
    the page (a summary links its transcript; account-context links summaries; a distilled
    chat fact cites `(chat, YYYY-MM-DD)`). Evidence-bound register: specific, no filler,
@@ -80,7 +105,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `governance/processed.txt` | ingest skills (rule 6) |
 | `governance/health/` | `/wiki-lint` |
 | `governance/proposals/` | headless runs (created), humans (cleared) |
-| root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change, by whoever edits either (Tier 2 confirm covers both) |
+| root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change — `business-info.md` is Tier 2 confirm; the root block is admin: the steward approves both together in-session; a headless or non-steward change to business-info files the matching root-block proposal in the same run |
 | `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always Tier 2 confirm; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
 | `accounts/{c}/calls/` and `meetings/{type}/` transcripts + summaries (incl. `retros/transcripts/`) | `/process-meeting` — `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; it never writes call/meeting summaries itself |
 | `customers/research-synthesis/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview) — distinct filename patterns |
@@ -94,9 +119,15 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
 | `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel |
 | `competitive-research/intel/` monthly records | `/competitor-analysis` monitoring mode only — append-only, one `{YYYY-MM}.md` per run |
+| `product/PRDs/{area}/` PRD files (`{slug}-prd.md`) | `/prd-draft` — creates and iterates; other skills link, never edit the PRD body |
+| `product/PRDs/{area}/reviews/` | by filename suffix: `{slug}-assumption-map.md` → `/assumption-map` · `{slug}-red-team.md` → `/red-team` · `{slug}-challenge-{YYYY-MM-DD}.md` → `/prd-challenge` (dated, one per run) · `{slug}-premortem.md` → `/pre-mortem` — the skills also run as `/prd-challenge` lenses and keep these same filenames |
+| `product/PRDs/prototypes/` | by filename suffix: `*-napkin-sketch.md` → `/napkin-sketch` · `*-{v0,lovable,bolt}-prompt.md`, `*-artifacts-v[N].md`, `*-figma-handoff.md` → `/prototype` · `*-feedback-round-[N].md` → `/prototype-feedback` · `*-first-draft.md`, `*-reference-impl/` → `/code-first-draft` |
+| `product/launches/` | `{slug}-launch-checklist.md` → `/launch-checklist` · `{slug}-gate-{date}.md` verdicts → `/feature-launch-gate` |
+| `analytics/metrics/{area}/` | by filename prefix: `feature-metrics-*` → `/feature-metrics` · `{feature}-experiment-metrics.md` → `/experiment-metrics` · `north-star-*` → `/define-north-star` · `metrics-framework-*` / `metric-hierarchy-*` → `/metrics-framework` |
+| `.claude/team-learnings.md` | steward only (admin tier) — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`; never edit directly |
 
 ## Exempt skills
 
-`slack-message` (Slack is the artifact's home), `freshness-check` (deprecation stub),
+`slack-message` (Slack is the artifact's home),
 `context-update` and `wiki-lint` (they ARE the loop), `code-qa` (answers live in chat;
 durable findings route via `/context-update`; it writes nothing).

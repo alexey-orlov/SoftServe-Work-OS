@@ -15,12 +15,17 @@ not copy path lists into other docs; point here.
 
 - **auto** — the default for any path not listed. Agents write and commit directly:
   transcripts, summaries, decisions, PRDs, analyses, navigation files, the ledger, health reports.
-- **confirm** — the distilled steering files (root CLAUDE.md, feature-index, business
-  context, current quarter). An agent shows the exact before/after and gets an in-session
+- **confirm** — the distilled steering files (feature-index, business context, current
+  quarter). An agent shows the exact before/after and gets an in-session
   yes BEFORE writing. Headless runs cannot confirm — they file a proposal in
   [proposals/](proposals/) instead. Older skill prose calls this tier "Tier 2" — same thing.
-- **admin** — the system's own rules: this folder's three rule files, `.claude/` machinery,
-  `.github/`. Steward only, via reviewed PR.
+- **admin** — the system's own rules and every-session steering: this folder's three rule
+  files, `.claude/` machinery (including `team-learnings.md`), root CLAUDE.md, handbook
+  templates, `.github/`. Steward only — via reviewed PR or an in-session steward yes at
+  the write-guard prompt. Agents never edit these on their own initiative: they file the
+  exact proposed diff in [proposals/](proposals/) instead (when: the capture loop in
+  `.claude/team-learnings.md` and the routing table in
+  [write-back-contract.md](write-back-contract.md)).
 
 ## The enforcement chain
 
@@ -51,4 +56,4 @@ together in one change: [write-policy.yaml](write-policy.yaml), the ruleset bloc
 ### Subfolders
 
 - [health/](health/) — Dated `/wiki-lint` reports. Written only by wiki-lint.
-- [proposals/](proposals/) — Pending confirm-tier change proposals from headless runs (a scheduled job may not edit confirm-tier files; it files the proposed diff here instead). Surfaced by the session-start hook; delete a proposal after applying or rejecting it.
+- [proposals/](proposals/) — Pending protected-tier change proposals: confirm-tier changes from headless runs, and admin-tier changes (capture-loop takeaways, skill/template diffs) from any run without the steward's in-session yes. Surfaced by the session-start hook; apply/reject then delete — admin-tier ones land via steward PR.

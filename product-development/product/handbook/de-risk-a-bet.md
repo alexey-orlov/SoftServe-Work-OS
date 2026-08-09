@@ -11,8 +11,8 @@ The canonical sequence for stress-testing a bet from first idea to shipped featu
 | 1. Map | `/assumption-map` | Idea stage, pre-PRD | What are we betting on; what to test first? | `PRDs/{area}/reviews/{slug}-assumption-map.md` |
 | 2. Draft | `/prd-draft` | Assumptions mapped | What exactly are we building? | `PRDs/{area}/{slug}-prd.md` |
 | 3. Attack | `/red-team` | Draft ~80% done, before committing resources | Would this survive a fair adversary? | `PRDs/{area}/reviews/{slug}-red-team.md` |
-| 4. Review | `/prd-review-panel` | Stage milestones (kickoff, solution, launch-readiness) | What do 7 perspectives see that I don't? | `PRDs/{area}/reviews/{slug}-review-synthesis.md` |
-| 5. Rehearse | `/pre-mortem` | Committed, launch date in sight | If the launch fails, why? | `PRDs/{area}/reviews/{slug}-premortem.md` |
+| 4. Challenge | `/prd-challenge` | Stage milestones, or when the PRD's gap count drops materially | What do all lenses see that I don't? (runs stages 1 and 3 as parallel lenses, plus the 7 personas and — once a solution exists — stage 5) | `PRDs/{area}/reviews/{slug}-challenge-{YYYY-MM-DD}.md` |
+| 5. Rehearse | `/pre-mortem` | Committed, ship moment in sight | If the launch fails, why? | `PRDs/{area}/reviews/{slug}-premortem.md` |
 | 6. Plan | `/launch-checklist` | 4–6 weeks out | Who does what, when? | `launches/{slug}-launch-checklist.md` |
 | 7. Gate | `/feature-launch-gate` | Ship moment | Is the repo updated? (the only verdict) | Gate report, posted to the launch channel |
 
@@ -29,5 +29,5 @@ Paths are relative to `product-development/product/`.
 
 - **Small change** (bug fix, copy update): skip 1–6, run `/feature-launch-gate --lightweight`.
 - **Internal tool, no stakeholder circulation:** skip stage 4.
-- **No ship moment** (strategy or direction doc): stop after stage 3 — `/red-team` is the last stop; `/pre-mortem` needs a launch to rehearse.
-- **Doc quality worry, not bet risk:** `/ralph-wiggum` at any point between stages 2 and 4.
+- **No ship moment** (strategy or direction doc): stop after stage 3 — `/red-team` is the last stop; `/pre-mortem` needs a ship moment to rehearse.
+- **Stages 1, 3, and 5 also run inside stage 4** — `/prd-challenge` invokes them as parallel lenses; run them standalone for a bare idea (1), a non-PRD doc (3), or near ship (5).

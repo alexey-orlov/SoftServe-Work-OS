@@ -54,7 +54,6 @@ When this skill is invoked, immediately check:
 - After interview → Link to `/user-research-synthesis` for deeper synthesis
 - If extracting insights → Link to `/user-research-synthesis` for analysis
 - If developing strategy from findings → Link to `/write-prod-strategy`
-- Note: `/interview-prep` is for PM job interviews, not user research
 
 ---
 

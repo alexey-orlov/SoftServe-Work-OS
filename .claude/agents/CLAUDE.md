@@ -8,7 +8,7 @@ Subagent definitions.
 
 ### Subfolders
 
-- [reviewers/](reviewers/) — Seven review perspectives used by /prd-review-panel, /prd-draft, /strategy-sprint, and /ralph-wiggum
+- [reviewers/](reviewers/) — Seven review perspectives used by /prd-challenge and /strategy-sprint
 
 ### Files
 

@@ -22,7 +22,7 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
 
 ### Product Context
 - [ ] PRD exists in `product-development/product/PRDs/{area}/` for this feature
-  - PRD passes content checks: covers all 6 sections (Hypothesis / Problem / Strategic fit / Solution / Success metrics / Non-goals), no `[FILL IN]` / `[NEED:]` / `[Your X]` placeholder tokens remain, ≥ 400 words. *File-existence alone is not enough — placeholder PRDs fail this check.*
+  - PRD passes content checks: covers all 6 sections (Hypothesis / Problem / Strategic fit / Solution / Success metrics / Non-goals), no `[FILL IN]` / `[NEED:]` / `[Your X]` / `[GAP:` placeholder tokens remain, ≥ 400 words. *File-existence alone is not enough — placeholder PRDs fail this check, and a `[GAP:]` marker means the evidence behind a section is still missing.*
 - [ ] Decisions made during development are logged in `product-development/product/decisions/`
 - [ ] Pre-mortem exists at `product-development/product/PRDs/{area}/reviews/{feature-name}-premortem.md` and no Launch-Blocking Tiger row is missing Mitigation / Owner / Due (NOT APPLICABLE in lightweight mode or when no launch checklist exists for the feature)
 - [ ] Feature is registered in `product-development/feature-index.yaml` with all related artifacts
@@ -116,7 +116,7 @@ Without this, there is no way to audit whether the gate was actually run before 
 4. The PM owns resolving failures. They can delegate but own completion.
 5. Items that genuinely don't apply (no new tables = no schema needed) should be marked NOT APPLICABLE, not FAILED.
 6. After a successful gate, post a one-line confirmation to the team's launch channel.
-7. PRD content check uses these placeholder tokens to fail: `[FILL IN]`, `[NEED:`, `[Your `, `[Replace `, `[Add `, `[Description]`, `[Priority 1]`. If any of those are still present in the PRD, fail with the specific token list and line numbers.
+7. PRD content check uses these placeholder tokens to fail: `[FILL IN]`, `[NEED:`, `[Your `, `[Replace `, `[Add `, `[Description]`, `[Priority 1]`, `[GAP:`. If any of those are still present in the PRD, fail with the specific token list and line numbers. `[GAP:` failures name the missing evidence and the close-it action from the marker text itself.
 
 ---
 

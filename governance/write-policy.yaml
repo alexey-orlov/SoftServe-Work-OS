@@ -25,7 +25,6 @@ steward: "[Your Name]"   # ← fill during setup (see Team table in root CLAUDE.
 
 tiers:
   confirm:
-    - CLAUDE.md                                                              # root — carries the business-fundamentals mirror block
     - product-development/feature-index.yaml                                 # the product map
     - product-development/product/strategy/business-context/business-info.md
     - product-development/product/strategy/business-context/segmentation-matrix.md
@@ -33,6 +32,8 @@ tiers:
     - product-development/product/strategy/current-quarter.md
 
   admin:
+    - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
+    - product-development/product/handbook/templates/**                      # templates shape every future document
     - governance/write-policy.yaml                                           # this file
     - governance/write-back-contract.md
     - governance/code-grounding.md

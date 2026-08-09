@@ -1,6 +1,6 @@
 ---
 name: decision-log-entry
-description: Record a team decision with reasoning, options, and tradeoffs. Two variants — full entry for debated decisions, quick entry for fast ones. Saves ~25 minutes the next time someone asks "why did we choose X?"
+description: Record a decision AFTER it is made — reasoning, options considered, tradeoff accepted, who was in the room. Two variants: full entry for debated decisions, quick entry for fast ones. Saves ~25 minutes the next time someone asks "why did we choose X?". NOT for deliberating a decision still open — that is /decision-doc; purely architectural calls go in engineering/rfcs/ instead.
 group: communication-ops
 ---
 
@@ -116,7 +116,7 @@ If your decision cites a file that hasn't been written yet (a customer-call summ
 - `../PRDs/examples/example-prd.md` — PRD that already exists, linked normally
 ```
 
-The `/freshness-check` skill flags `[PENDING:]` markers older than 14 days so they don't rot indefinitely.
+`/wiki-lint` (check #1, staleness) flags `[PENDING:]` markers older than 14 days so they don't rot indefinitely.
 
 ## Rules
 

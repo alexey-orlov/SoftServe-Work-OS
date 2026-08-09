@@ -36,6 +36,7 @@ Setup: repo → Settings → Rules → Rulesets → *New push ruleset*:
    product-development/feature-index.yaml
    product-development/product/strategy/business-context/**
    product-development/product/strategy/current-quarter.md
+   product-development/product/handbook/templates/**
    governance/write-policy.yaml
    governance/write-back-contract.md
    governance/code-grounding.md

@@ -24,11 +24,13 @@ line appended to `product-development/product/meetings/retros/lessons-learned.md
 - YYYY-MM-DD — lesson (source: [retro](YYYY-MM-DD-retro.md))
 ```
 
-Scope guard (from that file's header):
+Scope guard (canonical routing table: `governance/write-back-contract.md#routing-by-content-type`):
 - Team-process lessons only → `lessons-learned.md`
 - Product learnings → `product-development/product/decisions/` as hindsight notes
-- Agent-behavior rules → `.claude/team-learnings.md` is admin tier — propose the line to
-  the steward, don't edit
+- Agent-behavior rules → narrowest scope first: a skill-specific rule goes to that skill's
+  self-check, cross-cutting ones to `.claude/team-learnings.md` — both admin tier: the
+  steward's in-session yes applies the exact line, otherwise file it in
+  `governance/proposals/`
 
 ## Action items
 
