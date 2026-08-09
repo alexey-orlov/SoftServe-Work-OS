@@ -2,7 +2,7 @@
 
 How a session in this Team OS gets read access to your product repositories. This page is
 the *mechanics*; the rules for what counts as a grounded answer (the access-tier chain,
-citation format, honesty rules) live in `governance/code-grounding.md` — one
+citation format, honesty rules) live in `product-development/engineering/code-grounding.md` — one
 source of truth, don't restate it. Guided setup: `/connect-code`. Registry of repos:
 `product-development/engineering/code-repos.yaml`.
 
@@ -117,5 +117,5 @@ a local clone is the only grounded path.
 
 - `/connect-code` — guided version of everything above, plus registry entry and maps
 - `/code-qa` — the PM-facing questions this access exists for
-- `governance/code-grounding.md` — the rules every code claim follows
+- `product-development/engineering/code-grounding.md` — the rules every code claim follows
 - `product-development/engineering/code-repos.yaml` — the shared repo registry

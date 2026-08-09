@@ -3,11 +3,10 @@
 The landing spot for changes agents may not apply themselves. Two cases:
 
 - **Confirm-tier, headless** — a scheduled/headless run derived a change to a confirm-tier
-  file (`governance/write-policy.yaml`) and cannot ask in-session.
+  file (the list in `governance/write-policy.yaml#confirm`) and cannot ask in-session.
 - **Admin-tier, any run** — a capture-loop takeaway or discovery targets an admin path
   (skills, agents, `.claude/team-learnings.md`, templates, structural changes) and the
-  steward's in-session yes wasn't available. Gate files (`write-policy.yaml`,
-  `write-back-contract.md`, hooks) are ALWAYS proposed, never applied in-session.
+  steward's in-session yes wasn't available.
 
 One file per proposal: `{YYYY-MM-DD}-{slug}.md` containing the target path, its tier, the
 exact proposed before/after, the evidence/source that motivated it, and the proposer

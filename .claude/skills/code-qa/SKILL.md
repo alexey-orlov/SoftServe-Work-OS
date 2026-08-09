@@ -49,7 +49,7 @@ are complete (`/feature-launch-gate`) · drafting what the product *should* do
 ## Step 1 — Resolve the repo and the access tier
 
 Read `product-development/engineering/code-repos.yaml` FIRST, always (Tier 0 — the
-registry). Then, per the contract (`governance/code-grounding.md`):
+registry). Then, per the contract (`product-development/engineering/code-grounding.md`):
 
 1. **Which repo(s)?** One registered repo → done. Else match the question's terms against
    each entry's `purpose:` / `covers:` / `entry_points:`. Still ambiguous → **scout**:

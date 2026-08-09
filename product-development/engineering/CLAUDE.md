@@ -1,6 +1,6 @@
 # Engineering
 
-Implementation plans, plus the code-repo registry and codebase maps that ground product answers in real code.
+Implementation plans, plus the code-repo registry, the code-grounding contract, and the codebase maps that ground product answers in real code.
 
 **Read this when:** You need to know how a feature will be built, or which repo implements what.
 
@@ -16,3 +16,4 @@ Implementation plans, plus the code-repo registry and codebase maps that ground 
 ### Files
 
 - [code-repos.yaml](code-repos.yaml) — Registry of product code repos: remote, coverage, entry points, deployed ref, access tier — Tier 0 of code grounding (`/code-qa`)
+- [code-grounding.md](code-grounding.md) — The rules every claim about product code follows: the access-tier chain, `repo@sha` citation format, honesty rules, secrets masking, and the short block code-claiming skills paste. Implemented by `/code-qa` and `/connect-code`

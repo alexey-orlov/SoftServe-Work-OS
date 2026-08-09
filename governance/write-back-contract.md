@@ -3,6 +3,9 @@
 Every skill that writes a file into this repo closes the loop in the same way. This file is
 the contract's source of truth; each writing skill carries a short "Write-back (mandatory)"
 block that points here. Change the contract here — the blocks in skills stay stable.
+Exempt (nothing to write back): `slack-message` (Slack is the artifact's home),
+`context-update` and `wiki-lint` (they ARE the loop), `code-qa` (answers live in chat;
+durable findings route via `/context-update`).
 
 **Why this exists:** the repo is a self-updating wiki. A file without a navigation entry is
 invisible to every future session; an index nobody produces goes stale the day it's written.
@@ -15,7 +18,7 @@ while the maps that make them findable rot. Unwritten-back work is unfinished wo
 |---|---|---|
 | **Raw material** | `*/transcripts/`, source docs | Immutable. Never edit; wiki pages link INTO them (provenance). `product-development/inbox/` is staging, not yet raw material — `/process-meeting`'s move into a `transcripts/` home is the filing act. |
 | **Records** | decision log, call/meeting summaries, digests, experiment results, health reports | Append-only dated streams. New file per event; never rewrite history. |
-| **Living pages** | `business-info.md`, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md`, `account-context.md`, `initiatives/*.md`, `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
+| **Living pages** | registry: `write-policy.yaml#living-pages` — e.g. `business-info.md`, `account-context.md`, `initiatives/*.md`, `competitors/*/teardown.md` | Edit in place to current truth. Never stack "UPDATE:" lines — a newer fact replaces the older one; if the change itself matters, it becomes a decision-log entry or an Activity line. Bump the page's `_updated:` date. |
 | **Deliverables** | PRDs, RFCs, analyses, prototypes, checklists | Work products that are team knowledge. Saved in their functional folder, registered in navigation, linked from their initiative page. |
 
 ## Routing by content type
@@ -36,10 +39,8 @@ permission model.
 | Structural change — folders created/renamed/dissolved, templates, what-goes-where conventions | the structure itself | admin mechanics ALWAYS — propose, never apply (templates are admin by policy glob; folder conventions by this rule). Routine per-file nav appends (step 1 of the uniform block) stay auto |
 | Personal preference / private content | personal OS | never this repo (privacy contract) |
 
-Admin- and confirm-tier proposals that can't be approved in-session land as files in
-`governance/proposals/` (format in that folder's CLAUDE.md). The gate itself — this file,
-`write-policy.yaml`, hooks — may be *proposed* against but is applied only by the steward
-via PR, never in-session.
+Admin- and confirm-tier changes that can't be approved in-session land as proposal files
+in `governance/proposals/` (format in that folder's CLAUDE.md).
 
 ## The uniform block (canonical text)
 
@@ -69,18 +70,18 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 2. **Check before creating.** Before adding a feature key to `feature-index.yaml` or
    creating an initiative page, read the existing keys/pages — near-duplicates are merged,
    not multiplied. One home per item; other pages link, never restate.
-3. **Write policy applies to every write.** Auto-tier paths (the default) are written
-   directly. Confirm-tier paths: show the exact before/after, get an in-session yes first;
-   headless runs write a proposal to `governance/proposals/` instead.
-   Admin-tier paths: never edit on your own initiative — show the exact change; the
-   steward's in-session yes (the write-guard prompt) applies it, otherwise file it as a
-   proposal in `governance/proposals/` for the steward to land via PR.
+3. **Write policy applies to every write.** The tier mechanics are stated once, in the
+   header of `governance/write-policy.yaml` — auto: write directly; confirm: exact
+   before/after + in-session yes (headless → proposal); admin: steward only (agents
+   always propose). Point there; never restate.
 4. **Provenance.** Every non-obvious claim in a wiki page links to its source, relative to
    the page (a summary links its transcript; account-context links summaries; a distilled
    chat fact cites `(chat, YYYY-MM-DD)`). Evidence-bound register: specific, no filler,
    inferences marked "(inferred)", dates as YYYY-MM-DD, "-" for empty sections.
-5. **Budgets.** Living pages ≤120 lines; folder CLAUDE.md ≤80 lines; root CLAUDE.md ≤150.
-   When a page outgrows its budget, split a subpage and link it — don't let it sprawl.
+5. **Budgets.** Living pages ≤120 lines (`segmentation-matrix.md` ≤200 — table-heavy by
+   design); folder CLAUDE.md ≤80 lines; root CLAUDE.md ≤150. When a page outgrows its
+   budget, split a subpage and link it — don't let it sprawl. `/wiki-lint` check 6
+   enforces the same numbers — change them here and there in the same change.
 6. **The ledger** (`governance/processed.txt`) is appended only by ingest
    skills — the ones that consume raw sources: `/context-update`, `/process-meeting`, and
    `/user-research-synthesis` (when handed raw transcripts directly). One repo-root-relative
@@ -125,9 +126,3 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `product/launches/` | `{slug}-launch-checklist.md` → `/launch-checklist` · `{slug}-gate-{date}.md` verdicts → `/feature-launch-gate` |
 | `analytics/metrics/{area}/` | by filename prefix: `feature-metrics-*` → `/feature-metrics` · `{feature}-experiment-metrics.md` → `/experiment-metrics` · `north-star-*` → `/define-north-star` · `metrics-framework-*` / `metric-hierarchy-*` → `/metrics-framework` |
 | `.claude/team-learnings.md` | steward only (admin tier) — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`; never edit directly |
-
-## Exempt skills
-
-`slack-message` (Slack is the artifact's home),
-`context-update` and `wiki-lint` (they ARE the loop), `code-qa` (answers live in chat;
-durable findings route via `/context-update`; it writes nothing).

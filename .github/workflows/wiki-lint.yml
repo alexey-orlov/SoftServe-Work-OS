@@ -44,7 +44,7 @@ jobs:
               "product-development/product/handbook/templates/**" \
               governance/write-policy.yaml \
               governance/write-back-contract.md \
-              governance/code-grounding.md \
+              product-development/engineering/code-grounding.md \
               ".claude/**" \
               ".github/**" | sed '/^$/d' || true
           } | tee -a lint-report.txt

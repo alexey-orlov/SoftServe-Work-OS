@@ -1,31 +1,22 @@
 # Governance — the admin surface of the Team OS
 
-Everything that runs the repo, in one folder: the write rules, the writing and
-code-grounding contracts, and the machine state (ingestion ledger, health reports,
-pending proposals). Content lives in
-`product-development/`; the machinery that keeps it trustworthy lives here.
+Everything that runs the repo, in one folder: the write rules, the write-back contract,
+and the machine state (ingestion ledger, health reports, pending proposals). Content
+lives in `product-development/`; the machinery that keeps it trustworthy lives here.
+(The code-grounding contract — evidence rules for claims about product code — lives with
+its registry in `product-development/engineering/`.)
 
 **Read this when:** You are the steward, the write-guard just prompted you, or you need to
 know what is protected, what has been ingested, or how healthy the repo is.
 
 ## The three tiers
 
-Defined in [write-policy.yaml](write-policy.yaml) — the only authoritative path list. Do
-not copy path lists into other docs; point here.
-
-- **auto** — the default for any path not listed. Agents write and commit directly:
-  transcripts, summaries, decisions, PRDs, analyses, navigation files, the ledger, health reports.
-- **confirm** — the distilled steering files (feature-index, business context, current
-  quarter). An agent shows the exact before/after and gets an in-session
-  yes BEFORE writing. Headless runs cannot confirm — they file a proposal in
-  [proposals/](proposals/) instead. Older skill prose calls this tier "Tier 2" — same thing.
-- **admin** — the system's own rules and every-session steering: this folder's three rule
-  files, `.claude/` machinery (including `team-learnings.md`), root CLAUDE.md, handbook
-  templates, `.github/`. Steward only — via reviewed PR or an in-session steward yes at
-  the write-guard prompt. Agents never edit these on their own initiative: they file the
-  exact proposed diff in [proposals/](proposals/) instead (when: the capture loop in
-  `.claude/team-learnings.md` and the routing table in
-  [write-back-contract.md](write-back-contract.md)).
+Defined in [write-policy.yaml](write-policy.yaml) — the only authoritative registry for
+BOTH the path lists and the tier mechanics (its header comment). Do not copy either into
+other docs; point there. Orientation only: **auto** (default — agents write and commit
+directly) · **confirm** (steering files — exact before/after + in-session yes; headless
+runs file a proposal in [proposals/](proposals/)) · **admin** (the system's own rules —
+steward only; agents file proposals).
 
 ## The enforcement chain
 
@@ -51,7 +42,6 @@ together in one change: [write-policy.yaml](write-policy.yaml), the ruleset bloc
 - [write-policy.yaml](write-policy.yaml) — Which paths agents change freely (auto), which need an in-session yes (confirm), which are steward-only (admin). Its `settings:` block also holds the auto-commit / auto-merge switches (both ship off), so the automation and the tiers it respects live in one file.
 - [write-back-contract.md](write-back-contract.md) — The rules every repo-writing skill follows when it saves work: the four content classes, the mandatory closing steps, the one-writer-per-surface table, and the ledger rules.
 - [processed.txt](processed.txt) — The ingestion ledger: one repo-root-relative path per line, kept sorted. A path here = already folded by `/context-update` (junk and duplicates are ledgered too). Merge conflicts: keep both sides, then `sort -u`. Written only by ingest skills.
-- [code-grounding.md](code-grounding.md) — The rules every claim about product code follows: the access-tier chain, `repo@sha` citation format, honesty rules, secrets masking, and the short block code-claiming skills paste. Implemented by `/code-qa` and `/connect-code`.
 
 ### Subfolders
 

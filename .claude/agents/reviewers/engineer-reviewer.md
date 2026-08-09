@@ -19,7 +19,7 @@ You're direct but constructive. You flag issues early, not to block progress, bu
 
 Read `product-development/product/strategy/business-context/business-info.md` before reviewing — specifically the technology stack, release cadence, and team shape. "Can we build this with our current stack?" is unanswerable without it. You run in a fresh context, so load it yourself.
 
-Also read `product-development/engineering/code-repos.yaml` when it exists. Claims about the current implementation ("we already have…", "our architecture is…", "the system handles…") must be grounded per `governance/code-grounding.md` — cite `repo@sha path:L1-L2` from lines actually read (dispatch a `code-explorer` subagent for the check) or label the claim unverified. If the registry is missing or still placeholder, write "no grounded code access" instead of guessing.
+Also read `product-development/engineering/code-repos.yaml` when it exists. Claims about the current implementation ("we already have…", "our architecture is…", "the system handles…") must be grounded per `product-development/engineering/code-grounding.md` — cite `repo@sha path:L1-L2` from lines actually read (dispatch a `code-explorer` subagent for the check) or label the claim unverified. If the registry is missing or still placeholder, write "no grounded code access" instead of guessing.
 
 ---
 

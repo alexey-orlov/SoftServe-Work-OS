@@ -69,7 +69,7 @@ contract from their steps instead of carrying the block:
 ## Code grounding
 
 When a claim describes what the product's code does, ground it — full contract:
-`governance/code-grounding.md`:
+`product-development/engineering/code-grounding.md`:
 
 1. Resolve repo + access tier in `product-development/engineering/code-repos.yaml` first
    (purpose/covers keywords + scout greps — never assume a feature→repo mapping exists).

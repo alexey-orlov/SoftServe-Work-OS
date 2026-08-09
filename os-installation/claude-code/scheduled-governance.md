@@ -39,16 +39,18 @@ Setup: repo → Settings → Rules → Rulesets → *New push ruleset*:
    product-development/product/handbook/templates/**
    governance/write-policy.yaml
    governance/write-back-contract.md
-   governance/code-grounding.md
+   product-development/engineering/code-grounding.md
    .claude/**
    .github/**
    ```
 3. Enforcement: Active.
 
 Keep this list in sync with `write-policy.yaml` — when you change the registry, change
-the ruleset (both are one screen). Teammates then land protected changes via a PR that
-the steward merges (their bypass applies), while all auto-tier work pushes straight to
-`main` with no ceremony.
+the ruleset (both are one screen). Note the ruleset blocks matching pushes on EVERY
+branch (and across the fork network), so a non-bypass teammate cannot even stage a PR
+touching these paths — their channel is a proposal file in `governance/proposals/`,
+which the steward applies (their bypass lets them push) and then deletes. Auto-tier work
+pushes straight to `main` with no ceremony.
 
 **No Team plan?** Fall back to layers 1 + 3, or classic branch protection (below) if you
 accept PR-for-everything — we don't recommend that trade for day-to-day flow.

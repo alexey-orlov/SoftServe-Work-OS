@@ -10,7 +10,7 @@ group: os-admin
 `/code-qa` can only cite code it can reach. This skill does the reaching: one shared
 registry entry per repo (committed), one machine-local access grant per teammate (never
 committed), and — only for large repos — a SHA-stamped map. Access rules and the tier
-chain live in `governance/code-grounding.md`; this skill implements them.
+chain live in `product-development/engineering/code-grounding.md`; this skill implements them.
 
 ## Quick Start
 

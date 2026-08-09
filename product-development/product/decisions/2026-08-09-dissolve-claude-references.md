@@ -3,7 +3,7 @@
 **Date:** 2026-08-09
 **Decided by:** [Steward] (roster placeholder)
 **Initiative:** -
-**Status:** Active
+**Status:** Partially superseded — the destination was revised the same day (contract moved on to `product-development/engineering/`, see [2026-08-09-governance-slimdown.md](2026-08-09-governance-slimdown.md)); the `.claude/references/` dissolution itself stands
 
 ## Options Considered
 
@@ -25,6 +25,6 @@ The push-ruleset and weekly-audit path lists now enumerate three governance file
 
 ## Related
 
-- Contract: `governance/code-grounding.md` (was `.claude/references/code-grounding.md`)
+- Contract: `product-development/engineering/code-grounding.md` (was `governance/code-grounding.md` for part of 2026-08-09; `.claude/references/code-grounding.md` before that)
 - Prior consolidation: commit `5e46276` (write-back contract → `governance/`, 2026-08-08)
 - Consumers: `/code-qa`, `/connect-code`, `/connect-mcps`, `.claude/agents/reviewers/engineer-reviewer.md`

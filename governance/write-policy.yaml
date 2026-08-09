@@ -7,14 +7,19 @@
 #                                     sync with this file — see os-installation/claude-code/scheduled-governance.md)
 #   - .github/workflows/wiki-lint.yml (weekly audit: lists commits that touched protected paths)
 #
-# Tier semantics:
+# Tier semantics — THE canonical statement. Other docs (governance/CLAUDE.md, the
+# write-back contract, proposals/CLAUDE.md) point here and never restate it:
 #   auto    — DEFAULT for any path not listed below. Agents write and commit directly.
 #             Covers raw material, records (summaries, decisions, results), deliverables
 #             (PRDs, analyses), navigation CLAUDE.md files, the ledger, health reports.
 #   confirm — the distilled steering files. An agent must show the exact before/after and
 #             get an in-session yes BEFORE writing. Headless/scheduled runs cannot confirm:
-#             they write a proposal to governance/proposals/ instead.
-#   admin   — the system's own rules. Only the steward changes these (via reviewed PR).
+#             they write a proposal to governance/proposals/ instead. (Older skill prose
+#             calls this tier "Tier 2" — same thing.)
+#   admin   — the system's own rules. Steward only: applied on the steward's in-session
+#             yes at the write-guard prompt, or via a reviewed PR. Agents never edit these
+#             on their own initiative — they file the exact diff as a proposal in
+#             governance/proposals/ instead.
 #
 # Paths are repo-root-relative. Globs use shell fnmatch (`*` does not cross `/`, `**` does).
 
@@ -36,7 +41,7 @@ tiers:
     - product-development/product/handbook/templates/**                      # templates shape every future document
     - governance/write-policy.yaml                                           # this file
     - governance/write-back-contract.md
-    - governance/code-grounding.md
+    - product-development/engineering/code-grounding.md                      # evidence contract — lives beside its registry
     - .claude/settings.json
     - .claude/hooks/**
     - .claude/skills/**
@@ -56,6 +61,7 @@ living-pages:
   - product-development/product/strategy/current-quarter.md
   - product-development/product/competitive-research/competitive-landscape.md
   - product-development/product/competitive-research/competitive-matrix*.md
+  - product-development/product/competitive-research/competitors/*/teardown.md   # none on a fresh install — fine
 
 # ---------------------------------------------------------------------------
 # Automation settings
