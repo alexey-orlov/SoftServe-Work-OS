@@ -9,7 +9,7 @@ Root of all product, engineering, and analytics artifacts.
 ### Subfolders
 
 - [analytics/](analytics/) — Metrics, queries, schemas, dashboards, experiments, and investigations
-- [engineering/](engineering/) — Engineering plans, RFCs, bug investigations, the code-repo registry, and codebase maps
+- [engineering/](engineering/) — Implementation plans, the code-repo registry, and codebase maps — code grounding for `/code-qa`
 - [product/](product/) — Product context, PRDs, customers, strategy, decisions, and the team handbook
 - [inbox/](inbox/) — Integration drop zone: transcripts land here; /context-update sweeps gate them and /process-meeting files them out
 

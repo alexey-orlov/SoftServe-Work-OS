@@ -30,10 +30,10 @@
 
 ## Decision & Rollout
 
-Ship criteria met with no guardrail breach → `low_balance_warning` flag to 100% at dashboard GA on 2026-03-20 (see [engineering plan](../../../engineering/plans/billing/credit-usage-dashboard.md), flag table). Recorded in the launch gate [verdict](../../../product/launches/credit-usage-dashboard-v1-gate-2026-03-18.md) as "results due after readout".
+Ship criteria met with no guardrail breach → `low_balance_warning` flag to 100% at dashboard GA on 2026-03-20. Recorded in the launch gate [verdict](../../../product/launches/credit-usage-dashboard-v1-gate-2026-03-18.md) as "results due after readout".
 
 ## Caveats & Follow-ups
 
 - Effect is measured on beta orgs (earlier adopters); GA effect may be smaller — re-read `low_balance_topup_rate` from [churn_by_segment.sql](../../queries/billing/churn_by_segment.sql) one month post-GA.
-- Duplicate-burn events from the [double-charge bug](../../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md) overlapped days 3–7; readout used `event_id` dedupe, and a sensitivity pass excluding affected orgs moved the lift by < 0.3 pp.
+- Duplicate-burn events from the double-charge bug overlapped days 3–7; readout used `event_id` dedupe, and a sensitivity pass excluding affected orgs moved the lift by < 0.3 pp.
 - Iterate candidate for Q2: test a 30% threshold for Scale-tier orgs whose burn is spikier.

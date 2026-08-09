@@ -22,8 +22,6 @@ _owner: [PM] (roster placeholder)_
 ## Artifacts
 
 - PRD: [credit-usage-dashboard-prd.md](../PRDs/billing/credit-usage-dashboard-prd.md)
-- Eng RFC: [credit-usage-dashboard-rfc.md](../../engineering/rfcs/billing/credit-usage-dashboard-rfc.md)
-- Eng plan: [credit-usage-dashboard.md](../../engineering/plans/billing/credit-usage-dashboard.md)
 - Metrics: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
 - Experiments: [design](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md) · [results](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md)
 - Investigation: [2026-03-10-credit-depletion-churn-analysis.md](../../analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md)
@@ -43,7 +41,7 @@ _owner: [PM] (roster placeholder)_
 - 2026-03-20 — GA for all tiers; page closed as shipped.
 - 2026-03-19 — experiment readout: +5.5 pp top-up lift, SHIP.
 - 2026-03-18 — launch gate run: PASS.
-- 2026-03-14 — double-charge bug resolved ([investigation](../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md)); credits restored.
+- 2026-03-14 — double-charge bug resolved; credits restored.
 - 2026-03-10 — depletion-churn analysis quantified the 3.8x multiplier.
 - 2026-03-05 — low-balance warning A/B started on beta cohort.
 - 2026-02-24 — serving RFC accepted (hourly rollups over live warehouse reads).

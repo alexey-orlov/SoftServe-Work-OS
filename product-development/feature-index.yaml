@@ -13,8 +13,8 @@
 #   user before writing — see governance/write-policy.yaml.
 # - Paths are relative to product-development/.
 # - tickets references your tracker (Linear / Jira / Asana). Pick one format.
-# - Recognized artifact keys: prd, eng-rfc, eng-plan, figma, tickets, table-schemas,
-#   queries, metrics, dashboards, experiments, investigations, bug-investigations,
+# - Recognized artifact keys: prd, eng-plan, figma, tickets, table-schemas,
+#   queries, metrics, dashboards, experiments, investigations,
 #   decisions, initiatives — plus:
 #     reviews:          review artifacts in product/PRDs/{area}/reviews/ (assumption map,
 #                       red-team, challenge reports, pre-mortem), listed as they land
@@ -31,8 +31,6 @@ billing:
     # The starter template ships every artifact for this feature so the
     # /feature-launch-gate gate passes on the example out of the box.
     prd: product/PRDs/billing/credit-usage-dashboard-prd.md
-    eng-rfc: engineering/rfcs/billing/credit-usage-dashboard-rfc.md
-    eng-plan: engineering/plans/billing/credit-usage-dashboard.md
     # Figma references. Use file IDs (the abc123 in the URL), not display
     # names — file IDs survive renames. For specific frames, add a node-id:
     # https://figma.com/file/abc123/?node-id=42:128
@@ -56,8 +54,6 @@ billing:
       - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md
     investigations:
       - analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md
-    bug-investigations:
-      - engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md
     decisions:
       - product/decisions/2026-02-14-usage-based-pricing.md
     initiatives: [credit-usage-dashboard-v1]

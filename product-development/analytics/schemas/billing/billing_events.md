@@ -33,7 +33,7 @@
 
 ## Gotchas
 
-- Duplicate `credit_burn` rows exist for 2026-03-08 → 2026-03-12 (retry path lacked an idempotency key — [bug investigation](../../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md)). Always `QUALIFY ROW_NUMBER() OVER (PARTITION BY event_id ORDER BY created_at) = 1`.
+- Duplicate `credit_burn` rows exist for 2026-03-08 → 2026-03-12 (retry path lacked an idempotency key; fixed 2026-03-14). Always `QUALIFY ROW_NUMBER() OVER (PARTITION BY event_id ORDER BY created_at) = 1`.
 - `balance_after` is authoritative only within a single org's event ordering; never sum it across orgs.
 - Refunds carry positive `credits_delta` and negative `amount_usd`.
 

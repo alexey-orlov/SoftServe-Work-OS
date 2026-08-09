@@ -1,13 +1,9 @@
 # Engineering Plans
 
-Implementation plans by product area.
+Implementation plans by product area. Also the text-fallback home for `/create-tickets` output (`{area}/[feature]-tickets.md`) when no tracker MCP is connected.
 
 **Read this when:** You need to know how a feature will be built.
 
-> The only contents are the synthetic billing worked example. The structure is ready — file real plans into it as engineering work lands.
-
 ## Contents
 
-### Subfolders
-
-- [billing/](billing/) — EXAMPLE (synthetic) — implementation plan for the credit usage dashboard
+_Empty — subfolders appear per product area as engineering work lands._

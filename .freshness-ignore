@@ -2,9 +2,6 @@
 # Worked examples — reference material, not live content:
 product-development/product/PRDs/examples/*
 product-development/product/PRDs/billing/*
-product-development/engineering/rfcs/billing/*
-product-development/engineering/plans/billing/*
-product-development/engineering/bug-investigations/billing/*
 product-development/analytics/schemas/billing/*
 product-development/analytics/queries/billing/*
 product-development/analytics/metrics/billing/*
@@ -18,6 +15,6 @@ product-development/engineering/codebases/beacon-app.md
 # Stable references — change intentionally, not on a schedule:
 product-development/product/decisions/2026-08-05-code-grounding-architecture.md
 product-development/product/strategy/frameworks/*
-product-development/product/processes/templates/*
-product-development/product/processes/writing-guides/*
+product-development/product/handbook/templates/*
+product-development/product/handbook/writing-guides/*
 os-installation/*

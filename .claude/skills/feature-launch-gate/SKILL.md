@@ -1,6 +1,6 @@
 ---
 name: feature-launch-gate
-description: Pre-launch repo completeness check. Verifies PRD, RFCs, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships. Two modes — full gate for major launches, lightweight for small changes.
+description: Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships. Two modes — full gate for major launches, lightweight for small changes.
 group: os-admin
 ---
 
@@ -50,8 +50,6 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
   - PM can override with `--no-experiment` flag with explicit reason in the gate output
 
 ### Engineering
-- [ ] Engineering plan in `engineering/plans/{area}/`
-- [ ] Architectural decisions documented in `engineering/rfcs/{area}/` (if applicable)
 - [ ] Known limitations or edge cases documented
 - [ ] **Code reality** — when `engineering/code-repos.yaml` has ≥1 reachable non-placeholder repo: the feature flag/config and the analytics events named in the PRD and metric docs exist in code, verified via `/code-qa` with `repo@sha` citations (located by name/scout search — no feature→repo mapping assumed). NOT APPLICABLE when the registry is absent or all remotes are placeholders — mark N/A, not failed
 

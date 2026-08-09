@@ -113,7 +113,7 @@ Determine Repo or Paste mode, then ask only the intake questions the repo can't 
 
 ### Step 2: Read the pile and cluster by the job
 
-**First, split out defects.** A report that the product fails at its stated job — times out, errors, loses data — is a bug, not demand. Those go to `product-development/engineering/bug-investigations/` and are listed under `## Defects, Not Demand`. They must not compete for Act Now slots against genuine feature demand.
+**First, split out defects.** A report that the product fails at its stated job — times out, errors, loses data — is a bug, not demand. Those are handed to engineering through the tracker (a bug ticket, not a feature request) and are listed under `## Defects, Not Demand`. They must not compete for Act Now slots against genuine feature demand.
 
 Each remaining theme is named for **the outcome the customer wants**, never the solution they proposed. "Add dark mode" becomes "reduce eye strain in long sessions." "Add a CSV export button" becomes "get our data into our own reporting stack."
 
@@ -231,7 +231,7 @@ Destination for these rows: `current-quarter.md` → `## Explicitly Not Doing` (
 
 ## Defects, Not Demand
 
-- [Report] — `[account]` — routed to `product-development/engineering/bug-investigations/`, not triaged as demand
+- [Report] — `[account]` — routed to engineering as a bug ticket, not triaged as demand
 
 ## Already Ships
 

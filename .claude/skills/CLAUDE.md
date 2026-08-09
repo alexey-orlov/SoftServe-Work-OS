@@ -103,7 +103,7 @@ When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to o
 `group: os-admin` — Setting the OS up, and keeping the repo honest before and after a feature ships.
 
 - [connect-mcps/](connect-mcps/) — Connect MCPs for real-time tool integration
-- [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, RFCs, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
+- [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
 - [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
 - [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `governance/health/`; `--fix` repairs mechanical drift only
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current

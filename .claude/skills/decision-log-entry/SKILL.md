@@ -1,6 +1,6 @@
 ---
 name: decision-log-entry
-description: Record a decision AFTER it is made — reasoning, options considered, tradeoff accepted, who was in the room. Two variants: full entry for debated decisions, quick entry for fast ones. Saves ~25 minutes the next time someone asks "why did we choose X?". NOT for deliberating a decision still open — that is /decision-doc; purely architectural calls go in engineering/rfcs/ instead.
+description: Record a decision AFTER it is made — reasoning, options considered, tradeoff accepted, who was in the room. Two variants: full entry for debated decisions, quick entry for fast ones. Saves ~25 minutes the next time someone asks "why did we choose X?". NOT for deliberating a decision still open — that is /decision-doc. Architectural decisions land in product/decisions/ with everything else — this team keeps no separate RFC folder.
 group: communication-ops
 ---
 
@@ -84,9 +84,9 @@ For decisions made quickly without formal deliberation:
 **Context:** [What prompted this decision. One sentence.]
 ```
 
-## Relationship to RFCs and PRDs
+## Relationship to PRDs
 
-Architectural rationale is logged in RFCs and design rationale in PRDs. The decisions/ folder covers decisions that fit neither — pricing, GTM, scoping, prioritization, vendor selection. If your decision is purely architectural, log it in `engineering/rfcs/{area}/{slug}-rfc.md` instead.
+Design rationale is logged in PRDs. The decisions/ folder covers everything else — pricing, GTM, scoping, prioritization, vendor selection, and architectural calls worth a record (this team keeps no separate RFC folder).
 
 ## Hindsight Notes (Add as the Decision Ages)
 

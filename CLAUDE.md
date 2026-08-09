@@ -87,7 +87,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
 | Handbook | `product-development/product/handbook/` | How we work — `templates/` (blank scaffolds — copy, don't edit), `writing-guides/` (by audience), `de-risk-a-bet.md` (canonical bet chain) |
 | Meetings | `product-development/product/meetings/` | Meeting records — recurring series (standup, sprint planning, bi-weekly — rename to your cadences) + event meetings (`kickoff/`, `stakeholder-review/`, `workshop/`, `other/`), each docs / transcripts / summaries; `retros/` for retrospective writeups |
-| Engineering | `product-development/engineering/CLAUDE.md` | Plans, RFCs, bug investigations, code-repo registry + codebase maps (worked example only until real engineering work lands) |
+| Engineering | `product-development/engineering/CLAUDE.md` | Implementation plans, code-repo registry + codebase maps — code grounding for `/code-qa` (worked example until real repos land) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
 | Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-challenge` and `/strategy-sprint` |
@@ -131,7 +131,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 | Role | Primary Folders | What to Check In |
 |------|----------------|------------------|
 | PM | `product/decisions/`, `product/customers/accounts/`, `product/PRDs/`, `product/strategy/` | Decision logs, call summaries, PRDs, strategy |
-| Engineer | `engineering/plans/`, `engineering/rfcs/`, `engineering/bug-investigations/` | Plans, RFCs, bug investigations |
+| Engineer | `engineering/plans/` | Implementation plans |
 | Designer | `product/PRDs/` (rationale sections) | Design rationale, UX findings (design artifacts live in Figma, linked from feature-index) |
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
 | Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/handbook/` | Competitive intel, vision docs, conventions |

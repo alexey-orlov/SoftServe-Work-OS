@@ -524,7 +524,7 @@ The repo maintains itself — confirm the machinery works before trusting it:
    missing).
 6. **Code grounding degrades honestly** — before connecting any real repo, ask
    `/code-qa how does credit burn work?`. Expect a labeled refusal ("no grounded code
-   access — run /connect-code"), NOT an answer invented from the billing PRD/RFC.
+   access — run /connect-code"), NOT an answer invented from the billing PRD.
 
 ---
 

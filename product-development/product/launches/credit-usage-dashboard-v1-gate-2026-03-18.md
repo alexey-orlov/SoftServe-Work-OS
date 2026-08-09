@@ -5,7 +5,7 @@
 ## Feature Launch Gate: Credit Usage Dashboard
 ## Mode: Full
 
-### PASSED (12/12)
+### PASSED (11/11)
 
 - ✅ PRD exists and passes content checks (6 sections, no placeholder tokens, ≥ 400 words): `product/PRDs/billing/credit-usage-dashboard-prd.md`
 - ✅ Decision logged: `product/decisions/2026-02-14-usage-based-pricing.md`
@@ -18,9 +18,8 @@
 - ✅ Table registered in `analytics/data-catalog.yaml` (`billing_events`, all required fields)
 - ✅ Dashboard registry updated: `analytics/dashboards/billing/credit-usage-dashboards.md`
 - ✅ Experiment keywords detected in PRD → pre-registered design exists: `analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md` (results file due after readout, expected 2026-03-19)
-- ✅ Engineering plan (with RFC + known limitations): `engineering/plans/billing/credit-usage-dashboard.md` · `engineering/rfcs/billing/credit-usage-dashboard-rfc.md`
 
-### FAILED (0/12)
+### FAILED (0/11)
 
 - none
 
@@ -33,7 +32,7 @@
 
 ### VERDICT: PASS
 
-Navigation rows confirmed for every new file (folder CLAUDE.md files under `product/PRDs/billing/`, `engineering/*/billing/`, `analytics/*/billing/`). One-line confirmation posted to the team launch channel. Bug found mid-cycle ([double-charge](../../engineering/bug-investigations/billing/bug-03-12-2026-credit-double-charge/investigation-plan.md)) was resolved 2026-03-14 and did not block.
+Navigation rows confirmed for every new file (folder CLAUDE.md files under `product/PRDs/billing/` and `analytics/*/billing/`). One-line confirmation posted to the team launch channel. Bug found mid-cycle (double-charge) was resolved 2026-03-14 and did not block.
 
 ## Related
 
