@@ -1,8 +1,7 @@
 ---
 name: status-update
 description: Generate stakeholder status updates. Creates clear, concise progress reports for different audiences.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[audience] [period]"
 group: communication-ops
 ---
 

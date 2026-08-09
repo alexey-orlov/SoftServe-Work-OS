@@ -1,8 +1,7 @@
 ---
 name: experiment-decision
 description: Decide when to A/B test vs just ship. Framework for experiment planning and prioritization.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[feature or change]"
 group: definition
 ---
 

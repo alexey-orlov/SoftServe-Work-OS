@@ -1,6 +1,7 @@
 ---
 name: wiki-lint
 description: Health-check the team wiki — staleness by age tier (including [PENDING:] and [GAP:] marker aging), navigation coverage in both directions, broken cross-references, feature-index vs disk drift, initiative-page health, living-page registry checks, placeholder/truncation scan, ledger integrity, business-info mirror consistency, protected-path audit, and code-grounding registry drift. Writes a dated report to governance/health/. --fix repairs mechanical drift only (missing nav lines, missing CLAUDE.md stubs, ledger sort) — never content. Use on /wiki-lint, "is the repo healthy?", "check the wiki", weekly as automation, or before quarterly planning.
+argument-hint: "[--fix] [--schema-drift]"
 group: os-admin
 ---
 

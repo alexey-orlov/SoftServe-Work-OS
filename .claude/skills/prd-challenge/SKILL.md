@@ -1,6 +1,7 @@
 ---
 name: prd-challenge
 description: The one challenge command for a PRD — orchestrates every critique lens in parallel and blind to each other (assumption mapping via /assumption-map, steelmanned attack via /red-team, Cagan's four risks via the 7 reviewer personas, failure rehearsal via /pre-mortem when a solution and rollout exist), then synthesises one deduplicated report that leads with the ranked unverified assumptions and the next research step for each. Invokes the real skills — never reimplements them; each writes its own artifact as always. Use on /prd-challenge, "challenge this PRD", "review the PRD from all sides". NOT for a bare idea with no document (/assumption-map), a strategy or decision doc (/red-team directly), or the launch-readiness completeness verdict (/feature-launch-gate).
+argument-hint: "[PRD slug or path] [--lenses ...]"
 group: definition
 ---
 

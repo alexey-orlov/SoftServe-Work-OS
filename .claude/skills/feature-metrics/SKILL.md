@@ -1,8 +1,7 @@
 ---
 name: feature-metrics
 description: Define a feature's success metrics — primary metric, guardrails, kill criteria — each vetted against six checks (sensitive, timely, easy to understand, directional, implementable, independent). Writes the definitions to analytics/metrics/{area}/. NOT for validating experiment metrics — that is /experiment-metrics (the STEDII framework); this skill defines what success means for a feature.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[feature]"
 group: definition
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: decision-log-entry
 description: Record a decision AFTER it is made — reasoning, options considered, tradeoff accepted, who was in the room. Two variants: full entry for debated decisions, quick entry for fast ones. Saves ~25 minutes the next time someone asks "why did we choose X?". NOT for deliberating a decision still open — that is /decision-doc. Architectural decisions land in product/decisions/ with everything else — this team keeps no separate RFC folder.
+argument-hint: "[decision]"
 group: communication-ops
 ---
 

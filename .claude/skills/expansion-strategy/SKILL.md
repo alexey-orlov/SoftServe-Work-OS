@@ -1,8 +1,7 @@
 ---
 name: expansion-strategy
 description: Upsell, cross-sell, and account growth tactics. Framework for revenue expansion. Diagnostic and strategic — describes expansion patterns as they are now and supplies NRR/ARR-per-account baselines; forecasting a feature's expansion or LTV impact is /impact-sizing's job, using those baselines.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[upsell | cross-sell | seat expansion]"
 group: definition
 ---
 

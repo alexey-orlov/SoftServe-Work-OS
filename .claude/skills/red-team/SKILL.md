@@ -1,6 +1,7 @@
 ---
 name: red-team
 description: Attack the load-bearing claims of a PRD, strategy, or decision doc before reality does. Steelmans each claim then attacks the steelman, returning 3-5 ranked kill-assumptions with the evidence to get this week, a kill criterion, and the cheapest test — grounded in repo decisions, business context, and real analytics tables. Not an assumption inventory (/assumption-map) and not a failure rehearsal (/pre-mortem). Runs standalone on strategy and decision docs; for a PRD it also runs as the attack lens inside /prd-challenge.
+argument-hint: "[doc path, paste, or claim]"
 group: definition
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: weekly-review
 description: Close out the week in one run — Part A, the team digest (initiative-by-initiative movement, stalls, next week's due items, repo health; Slack-ready), then Part B, your execution review (plan vs actual on the week's priorities, learnings, draft priorities for /weekly-plan). --digest runs Part A alone, headless-safe for a Friday cron. One data pass feeds both. Saves to product/reports/{YYYY}-W{XX}-weekly-review.md. Absorbs the old /weekly-synthesis. Run Friday afternoon or Monday morning. Not the account/ARR rollup (/portfolio-pulse), not audience-tailored updates (/status-update), not demand triage (/prioritize-requests).
+argument-hint: "[--digest] [last-week]"
 group: communication-ops
 ---
 

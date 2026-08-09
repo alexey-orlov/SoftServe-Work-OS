@@ -1,6 +1,7 @@
 ---
 name: journey-map
 description: Create user journey maps and customer journey maps (dual mode)
+argument-hint: "[journey name] [user | customer]"
 group: prototyping
 ---
 

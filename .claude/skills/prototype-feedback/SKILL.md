@@ -1,8 +1,7 @@
 ---
 name: prototype-feedback
 description: Build → review → iterate prototype workflow. Structured feedback collection and iteration.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[prototype link]"
 group: prototyping
 ---
 

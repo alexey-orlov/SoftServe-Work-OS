@@ -1,8 +1,7 @@
 ---
 name: decision-doc
 description: Deliberate a decision BEFORE it is made — frame it, lay out options with tradeoffs, force a recommendation, route sign-off (Standard / DACI / one-way-door formats). Ends by filing the record in /decision-log-entry's format once the call is made. NOT for recording a decision already made — that is /decision-log-entry.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[decision]"
 group: communication-ops
 ---
 

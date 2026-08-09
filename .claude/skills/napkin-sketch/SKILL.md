@@ -1,6 +1,7 @@
 ---
 name: napkin-sketch
 description: ASCII wireframes + browser capture for design matching
+argument-hint: "[screen or feature]"
 group: prototyping
 ---
 

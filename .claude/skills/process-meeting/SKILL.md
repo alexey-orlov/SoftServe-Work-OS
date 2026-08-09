@@ -1,6 +1,7 @@
 ---
 name: process-meeting
 description: Process any meeting record into the wiki — customer calls, user interviews, internal meetings (recurring series like standup / sprint-planning / team-bi-weekly, plus kickoffs, stakeholder reviews, workshops), retros, or a whole day's batch — from a transcript, notes, or dictation. Files the raw transcript, writes the summary to the right home (accounts/{c}/calls/, meetings/{type}/, or research-synthesis/), routes decisions to /decision-log-entry and lessons to lessons-learned.md, updates account-context.md and portfolio.yaml, declares initiative joins, appends the ledger. PII-safe — customer-side speakers by role only; refuses 1:1s per the privacy contract. Use on /process-meeting, "process this transcript/call", "summarize my sprint planning", "here are today's meetings", "process these 3 interviews". NOT for creating agendas (/meeting-agenda), rating meeting effectiveness (/meeting-feedback), synthesizing 4+ interviews (/user-research-synthesis), folding non-meeting artifacts (/context-update), or weekly/exec rollups (/weekly-review, /portfolio-pulse).
+argument-hint: "[transcript path or paste]"
 group: communication-ops
 ---
 

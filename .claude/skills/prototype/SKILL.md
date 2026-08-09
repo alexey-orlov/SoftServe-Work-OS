@@ -1,8 +1,7 @@
 ---
 name: prototype
 description: Make the solution visible before engineering commits — routes to the right prototyping tool ($1-$10-$100 rule) and generates the copy-paste prompt or spec: v0.dev, Lovable, Bolt.new, Claude Artifacts, Figma handoff, or static HTML. Saves every prompt to PRDs/prototypes/. NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), or collecting structured feedback on the built prototype (/prototype-feedback).
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[lovable | v0 | bolt | artifacts | figma]"
 group: prototyping
 ---
 

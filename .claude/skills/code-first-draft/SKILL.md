@@ -1,6 +1,7 @@
 ---
 name: code-first-draft
 description: Build the first-pass implementation of a PRD in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. Writes real code plus a summary in PRDs/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
+argument-hint: "[PRD or feature] [--explore-only]"
 group: delivery
 ---
 

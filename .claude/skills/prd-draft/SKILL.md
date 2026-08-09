@@ -1,8 +1,7 @@
 ---
 name: prd-draft
 description: Draft and iterate a PRD as the living spine of feature definition. Every run re-reads the initiative's attached evidence, updates the draft, marks unbacked sections with [GAP:] markers instead of stopping, auto-runs the research that closes agent-closable gaps (bounded — up to three closers per run, only where the source exists), and ends with a readiness readout — what closed this run, what's backed, what's still assumed, what only humans can do, what's waiting on someone else. First run creates the initiative page and proposes the feature-index entry. Use on /prd-draft, "write the PRD", "update the PRD", "where does this feature stand?". NOT for challenging a finished draft (/prd-challenge — deliberately never auto-run), or turning an agreed PRD into tickets (/create-tickets).
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[idea or slug] [--draft-only] [--ai]"
 group: definition
 ---
 

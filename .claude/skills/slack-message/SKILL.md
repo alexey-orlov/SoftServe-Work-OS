@@ -1,8 +1,7 @@
 ---
 name: slack-message
 description: Draft team communications for Slack. Creates clear, actionable messages for different contexts.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[what you need to say]"
 group: communication-ops
 ---
 

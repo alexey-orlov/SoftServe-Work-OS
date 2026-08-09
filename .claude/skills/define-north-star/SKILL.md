@@ -1,8 +1,7 @@
 ---
 name: define-north-star
 description: Identify and validate your North Star Metric. Aligns product strategy with key business metric.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[define | validate]"
 group: definition
 ---
 

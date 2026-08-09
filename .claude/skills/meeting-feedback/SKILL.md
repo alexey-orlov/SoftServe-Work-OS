@@ -1,6 +1,7 @@
 ---
 name: meeting-feedback
 description: Post-meeting effectiveness feedback and continuous improvement
+argument-hint: "[meeting name] [rating and notes]"
 group: communication-ops
 ---
 

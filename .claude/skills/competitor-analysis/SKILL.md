@@ -1,8 +1,7 @@
 ---
 name: competitor-analysis
 description: Deep competitive analysis + ongoing monitoring. Checks user research for competitor mentions, sales notes, existing analysis. Integrates with retention-analysis and user-research-synthesis.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[competitor]"
 group: discovery-market
 ---
 

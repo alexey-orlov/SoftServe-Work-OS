@@ -1,6 +1,7 @@
 ---
 name: launch-checklist
 description: Plan a launch end to end — generate a prioritized (P0/P1/P2), dependency-mapped checklist sized to the launch (small / major / regulatory), importing the pre-mortem's launch-blocking risks into its mitigation section. Writes product/launches/{slug}-launch-checklist.md. Stage 6 of the de-risk chain. NOT for the ship verdict (/feature-launch-gate) or generating risks (/pre-mortem — run it first).
+argument-hint: "[feature or PRD] [--template small|major|regulatory]"
 group: delivery
 ---
 

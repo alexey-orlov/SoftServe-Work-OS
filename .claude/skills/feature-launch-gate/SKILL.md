@@ -1,6 +1,7 @@
 ---
 name: feature-launch-gate
 description: Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships. Two modes — full gate for major launches, lightweight for small changes.
+argument-hint: "[feature] [--lightweight] [--no-experiment]"
 group: os-admin
 ---
 

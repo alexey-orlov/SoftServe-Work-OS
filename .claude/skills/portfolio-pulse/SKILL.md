@@ -1,6 +1,7 @@
 ---
 name: portfolio-pulse
 description: Exec-grade daily / weekly synthesis across all managed accounts and active features. Rolls up account health, risks, expansion signals, top 3 priorities, and drafted Slack messages. Designed for CPO / Head-of-Product hub-and-spoke usage.
+argument-hint: "[--mode=daily|weekly|board]"
 group: communication-ops
 ---
 

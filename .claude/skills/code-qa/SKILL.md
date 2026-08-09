@@ -1,6 +1,7 @@
 ---
 name: code-qa
 description: Answer product questions from the code itself — where a feature lives, how it works today, what limits and parameters are enforced, whether Y is supported, why it works this way, what changed recently, and whether it's live in production. Resolves the repo in engineering/code-repos.yaml by purpose/covers keywords and scout searches (no feature mapping required), dispatches read-only code-explorer subagents at the best available access tier (local clone → GitHub MCP fetch → SHA-stamped map, every degradation labeled), re-verifies every citation, and answers the way a trusted senior engineer answers a PM — concise and plain-language, zero code jargon, actual limits with their business meaning, a paste-ready engineer question when confidence is below High; the repo@sha path:L1-L2 evidence behind every claim is verified internally from lines actually read and shown only when asked (--evidence, "show the evidence"). Reads code only, writes nothing. Use on /code-qa, "how does X actually work?", "does the product support Y?", "what's the limit on Z?", "is that fix live in prod?", "where is X implemented?". NOT for writing code (/code-first-draft), pre-launch completeness (/feature-launch-gate), drafting requirements (/prd-draft), or setting up repo access (/connect-code — run it first when code-repos.yaml is missing or unfilled).
+argument-hint: "[question] [--evidence]"
 group: delivery
 ---
 

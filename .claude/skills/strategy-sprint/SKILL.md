@@ -1,8 +1,7 @@
 ---
 name: strategy-sprint
 description: Create product strategy in 1 day, 1 week, or 1 month timeframes. Progressive strategy development framework.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[topic] [1-day | 1-week | 1-month]"
 group: definition
 ---
 

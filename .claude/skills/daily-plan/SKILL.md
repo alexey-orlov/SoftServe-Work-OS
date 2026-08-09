@@ -1,8 +1,7 @@
 ---
 name: daily-plan
 description: Generate PM daily plan with context
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[full | tomorrow]"
 group: communication-ops
 ---
 

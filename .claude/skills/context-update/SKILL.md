@@ -1,6 +1,7 @@
 ---
 name: context-update
 description: Fold new artifacts into the team wiki — transcripts, pasted threads, documents, session facts — routing each piece by TYPE (customer insight, decision, lesson, metric change, competitor intel, stakeholder fact, business fact, initiative material, junk) to its proper page, updating navigation and indexes, and recording every handled file in the ledger. Three modes — sweep (no args: process everything new in product-development/inbox/ and under */transcripts/ via the ledger), single artifact (a path), pasted content ("fold this in"). Detects new initiatives/accounts/competitors and scaffolds their pages, respects the write policy (Tier-2 files need in-session confirmation), skips junk, and always ends with a run summary. Use on /context-update, "fold this in / into context", "update the repo from this thread/doc", after sharing a meeting outcome or document worth remembering, or when the repo looks behind reality. For a meeting or call transcript use /process-meeting instead — sweeps gate transcripts and delegate them to it.
+argument-hint: "[path or pasted content]"
 group: os-admin
 ---
 

@@ -8,7 +8,25 @@
 
 Every skill sits **directly** under `.claude/skills/{skill-name}/SKILL.md`. Do not move skills into group subfolders — Claude Code scans exactly one level deep and takes the `/`-command from the directory name, so a skill at `.claude/skills/{group}/{skill}/SKILL.md` is **not discovered at all** (it silently disappears from autocomplete rather than degrading). Grouping therefore lives in this index and in the `group:` frontmatter key, not in the directory tree.
 
-When you add a skill: create `.claude/skills/{name}/SKILL.md`, set `group:` to one of the eight groups below, and add a line to that group here.
+When you add a skill: create `.claude/skills/{name}/SKILL.md`, follow the frontmatter convention below, set `group:` to one of the eight groups below, and add a line to that group here.
+
+## Frontmatter convention
+
+Uniform across all skills — exactly these keys, in this order:
+
+```yaml
+---
+name: <folder-name>      # display label; the /-command always comes from the folder name
+description: <...>       # the routing contract — what it does, when to use it, NOT-for boundaries
+argument-hint: "[...]"   # only when the skill takes arguments or flags; always double-quoted
+group: <one-of-eight>    # repo convention consumed by this index; Claude Code ignores unknown keys
+---
+```
+
+- **No restated defaults.** `disable-model-invocation` and `user-invocable` are omitted: every skill here is deliberately both user- and model-invocable — descriptions are the natural-language router, cron runs (`/weekly-review --digest`, `/wiki-lint`) and skill-to-skill orchestration (`/prd-challenge`, `/context-update` → `/process-meeting`) require model invocation, and `disable-model-invocation: true` would also drop the description from context and block scheduled/subagent use. Set a non-default flag only when a new skill genuinely needs it (external side effects on explicit user timing → `disable-model-invocation: true`; background knowledge with no meaningful command → `user-invocable: false`) and record the reason here.
+- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: code-qa at ~1,355).
+- **`argument-hint` is always double-quoted** — unquoted `[...]` parses as a YAML list.
+- **No other keys.** `group` is the only custom key; if tooling ever needs machine-readable extras, use the Agent Skills spec's `metadata:` map instead of new top-level keys.
 
 ## Groups
 

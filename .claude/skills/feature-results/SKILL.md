@@ -1,8 +1,7 @@
 ---
 name: feature-results
 description: Post-launch analysis and results documentation. Document what shipped and what we learned.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[feature]"
 group: delivery
 ---
 

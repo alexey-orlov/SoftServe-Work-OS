@@ -1,8 +1,7 @@
 ---
 name: metrics-framework
 description: Set up leading vs lagging indicators for product decisions. Framework for metric selection and tracking.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[product or feature]"
 group: definition
 ---
 

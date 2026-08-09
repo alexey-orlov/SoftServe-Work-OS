@@ -1,6 +1,7 @@
 ---
 name: prioritize-requests
 description: Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park. Reads the repo's call summaries or a pasted pile from support and sales, grounds every verdict in current-quarter objectives, and keeps declined themes settled so they stop coming back.
+argument-hint: "[paste list or export path]"
 group: delivery
 ---
 

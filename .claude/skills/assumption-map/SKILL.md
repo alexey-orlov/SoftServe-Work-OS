@@ -1,6 +1,7 @@
 ---
 name: assumption-map
 description: Surface every assumption a plan rests on, then rank them by impact-if-wrong and uncertainty to decide what to test first. Dual mode — feature in an existing product (Value/Usability/Viability/Feasibility) or new product / major initiative (adds Ethics, Go-to-Market, Strategy & Objectives, Team & Org). Grounds each assumption in repo evidence and hands the riskiest to /experiment-decision.
+argument-hint: "[idea, PRD path, or draft]"
 group: definition
 ---
 

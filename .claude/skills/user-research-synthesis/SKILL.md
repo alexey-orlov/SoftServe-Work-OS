@@ -1,8 +1,7 @@
 ---
 name: user-research-synthesis
 description: Turn user interviews into actionable insights. Advanced synthesis techniques and frameworks.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[interview notes or topic]"
 group: discovery-customers
 ---
 

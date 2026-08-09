@@ -1,7 +1,7 @@
 ---
 name: connect-code
 description: Set up grounded code access for the team — run once by the OS admin to register a repo in engineering/code-repos.yaml (committed), then once per teammate to clone and grant access on their own machine (never committed, clone location free). Registers product repos in engineering/code-repos.yaml (purpose and covers keywords in the team's own words, entry points, optional deployed ref), guides the blob-filtered clone (sparse for monorepos), grants machine-local read access via permissions.additionalDirectories in the gitignored .claude/settings.local.json with read-only deny rules, and optionally generates a SHA-stamped codebase map for large repos. --refresh re-pulls clones, regenerates drifted maps, and bumps last_validated. Machine-local paths and tokens never land in the shared repo. Use on /connect-code, "connect our codebase / product code", "set up code access", "refresh the code maps", or when /code-qa reports no grounded access. NOT for connecting MCP tool servers (/connect-mcps) or answering code questions (/code-qa).
-modifies-workspace: true
+argument-hint: "[repo url] [--refresh]"
 group: os-admin
 ---
 

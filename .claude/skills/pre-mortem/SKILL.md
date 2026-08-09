@@ -1,6 +1,7 @@
 ---
 name: pre-mortem
 description: Rehearse the failed launch before it happens. Imagines the launch failed, generates risks across five categories, classifies them as Tigers (real — act), Paper Tigers (overblown — document with triggers), and Elephants (known but undiscussed — surface), then turns launch-blocking Tigers into owned, dated action plans that feed /launch-checklist and /feature-launch-gate.
+argument-hint: "[feature, PRD path, or launch]"
 group: definition
 ---
 

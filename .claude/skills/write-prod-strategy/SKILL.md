@@ -1,6 +1,7 @@
 ---
 name: write-prod-strategy
 description: Product strategy docs using 7-component framework
+argument-hint: "[product or initiative]"
 group: definition
 ---
 

@@ -1,8 +1,7 @@
 ---
 name: impact-sizing
 description: Quantify feature value with driver trees, confidence levels, and the 4-step sizing framework — impact stated by business lever (acquisition, activation, retention, expansion/LTV, cost to serve) as reach × baseline × expected change, every factor sourced or marked [GAP:]. The one forecasting skill — diagnostic skills (/retention-analysis, /activation-analysis, /expansion-strategy) supply its baselines, never forecasts.
-disable-model-invocation: false
-user-invocable: true
+argument-hint: "[feature]"
 group: definition
 ---
 

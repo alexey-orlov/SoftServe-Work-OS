@@ -1,8 +1,6 @@
 ---
 name: activation-analysis
 description: Analyze user activation using Setup → Aha → Habit framework. Identifies activation bottlenecks. Diagnostic — describes activation as it is now and supplies stage-rate baselines; forecasting a feature's activation impact is /impact-sizing's job, using those baselines.
-disable-model-invocation: false
-user-invocable: true
 group: discovery-analytics
 ---
 

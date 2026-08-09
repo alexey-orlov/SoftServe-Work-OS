@@ -1,9 +1,7 @@
 ---
 name: connect-mcps
 description: Connect MCPs for real-time tool integration
-version: 1.0
-user-invocable: true
-modifies-workspace: true
+argument-hint: "[tool name | batch]"
 group: os-admin
 ---
 
