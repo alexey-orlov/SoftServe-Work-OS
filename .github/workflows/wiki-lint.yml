@@ -33,20 +33,24 @@ jobs:
         run: |
           {
             echo ""
-            echo "== protected-path commits (last 8 days) =="
-            # Paths from write-policy.yaml tiers (confirm + admin) — keep in sync via
-            # os-installation/claude-code/scheduled-governance.md
-            git log --since="8 days ago" --name-only --pretty="format:%h %an %s" -- \
-              CLAUDE.md \
-              product-development/feature-index.yaml \
-              "product-development/product/strategy/business-context/*" \
-              product-development/product/strategy/current-quarter.md \
-              "product-development/product/handbook/templates/**" \
-              governance/write-policy.yaml \
-              governance/write-back-contract.md \
-              product-development/engineering/code-grounding.md \
-              ".claude/**" \
-              ".github/**" | sed '/^$/d' || true
+            echo "== gated-path commits (last 8 days) =="
+            # Path list derived from governance/write-policy.yaml (tiers → gated) at
+            # run time — the policy is the single source; nothing to keep in sync.
+            PATHS=$(awk '
+              /^tiers:/ { t=1; next }
+              /^[a-zA-Z]/ { t=0; g=0 }
+              t && /^  gated:/ { g=1; next }
+              t && g && /^  [a-zA-Z]/ { g=0 }
+              t && g && /^ *- / {
+                sub(/^ *- */, ""); sub(/[ \t]*#.*/, ""); sub(/\/\*\*$/, "/")
+                if (length($0)) print
+              }' governance/write-policy.yaml)
+            if [ -n "$PATHS" ]; then
+              # shellcheck disable=SC2086
+              git log --since="8 days ago" --name-only --pretty="format:%h %an %s" -- $PATHS | sed '/^$/d' || true
+            else
+              echo "WARNING: no gated paths parsed from governance/write-policy.yaml — audit ran on an empty list"
+            fi
           } | tee -a lint-report.txt
 
       - name: Open/update weekly health issue

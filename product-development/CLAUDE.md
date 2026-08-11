@@ -15,4 +15,4 @@ Root of all product, engineering, and analytics artifacts.
 
 ### Files
 
-- [feature-index.yaml](feature-index.yaml) — Master lookup mapping every feature to its artifacts and current initiatives (Tier 2 — changes need user confirmation)
+- [feature-index.yaml](feature-index.yaml) — Master lookup mapping every feature to its artifacts and current initiatives (gated — changes need your in-session yes)

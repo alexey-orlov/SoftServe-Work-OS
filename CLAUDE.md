@@ -75,7 +75,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 |------|------|-------------|
 | Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
 | Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
-| Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending confirm-tier changes) |
+| Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry + auto-sync switches), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending gated-change proposals) |
 | Write-back contract | `governance/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
 | Data catalog | `product-development/analytics/data-catalog.yaml` | Warehouse table registry — owner, refresh, upstream, used-by |
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences; `segmentation-matrix.md` — account counts + ARR by vertical × size band × use-case category. Living masters: edit in place, keep current |
@@ -107,7 +107,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 
 ## Governance
 
-- **Write policy** — `governance/write-policy.yaml` is the single authoritative registry of protected context: **auto** (default — agents write and commit directly), **confirm** (steering files — show the exact before/after and get an in-session yes first; headless runs file a proposal in `governance/proposals/` instead), **admin** (the system's own rules — steward only). Enforced by the write-guard hook; optionally hard-stopped by a GitHub push ruleset; audited weekly. Full map: `governance/CLAUDE.md`.
+- **Write policy** — `governance/write-policy.yaml` is the single authoritative registry of protected context, two tiers: **auto** (default — agents write and commit directly; with auto-sync on, each turn also lands on `main` and pushes to origin) and **gated** (steering files + system rules — approve the exact change at the native write prompt; auto-sync never commits or pushes them, you land them deliberately; headless runs file a proposal in `governance/proposals/` instead). Flip the automation with `/auto-sync on|off`. Enforced by the write-guard and auto-commit hooks; audited weekly. Full map: `governance/CLAUDE.md`.
 - **One writer per surface** — table in `governance/write-back-contract.md`.
 - **Mirror rule** — the Fundamentals block above summarizes `business-info.md`; whoever changes one updates the other in the same change.
 - **Failure visibility** — an automation that can drop work must surface its own failure; a silent success-shaped exit is the bug.
@@ -138,7 +138,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 
 ## Enforcement on GitHub
 
-Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue), the push ruleset that hard-stops non-steward changes to protected paths (path list hand-maintained in sync with the write policy), and branch protection for admin-tier changes. Day-to-day auto-tier work commits straight to `main` — no PR required.
+Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue; its gated-path audit derives the list from the write policy at run time), plus two optional, currently-unused layers — a push ruleset that hard-stops non-steward changes to gated paths (the one manual mirror of the list, refreshed at setup) and branch protection. Day-to-day auto-tier work commits straight to `main` — no PR required; with `/auto-sync on` it is pushed automatically too.
 
 ## Credits
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Team OS write-guard — PreToolUse hook enforcing governance/write-policy.yaml.
-# Reads the tool-call JSON on stdin. If the target file matches a confirm- or admin-tier
-# pattern, returns permissionDecision "ask" so the user approves the write in-session.
+# Reads the tool-call JSON on stdin. If the target file matches a gated pattern,
+# returns permissionDecision "ask" so the user approves the write in-session.
 # Auto-tier paths (everything not listed) pass through silently (no output, exit 0).
 # Wired via .claude/settings.json on matcher "Edit|Write|MultiEdit|NotebookEdit".
 
@@ -32,14 +32,13 @@ fi
 # Repo-relative form for matching
 REL="${FILE#"$ROOT"/}"
 
-# --- match against confirm:/admin: patterns from the policy ----------------------
+# --- match against the gated patterns from the policy ----------------------------
 TIER=""
 SECTION=""
 while IFS= read -r line; do
   case "$line" in
-    *confirm:*)      SECTION="confirm" ; continue ;;
-    *admin:*)        SECTION="admin"   ; continue ;;
-    *living-pages:*) SECTION=""        ; continue ;;
+    *gated:*)                          SECTION="gated" ; continue ;;
+    living-pages:*|settings:*|tiers:*) SECTION=""      ; continue ;;
   esac
   case "$line" in
     *"- "*)
@@ -59,11 +58,7 @@ done < "$POLICY"
 
 [ -z "$TIER" ] && exit 0
 
-if [ "$TIER" = "admin" ]; then
-  REASON="Admin-tier path per governance/write-policy.yaml — the system rules. Route this change through the repo steward (reviewed PR); approve only if you are the steward."
-else
-  REASON="Confirm-tier path per governance/write-policy.yaml — a steering file. The agent must show the exact before/after; approve only after reviewing it. Headless runs must file a proposal in governance/proposals/ instead."
-fi
+REASON="Gated path per governance/write-policy.yaml — review the exact change, then approve to write it. Auto-sync never commits or pushes gated files: land it afterwards by saying 'commit and push the gated changes' (or with git yourself). Headless runs file a proposal in governance/proposals/ instead of writing."
 
 printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$REASON"
 exit 0

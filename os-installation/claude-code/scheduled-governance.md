@@ -9,14 +9,13 @@ to a GitHub remote.
 - **Session-start briefing** injects recent decisions, quarter priorities, active
   initiatives, team learnings, the latest health report, and the fold backlog.
 - **Write-guard** (`.claude/hooks/write-guard.sh`) forces an in-session confirmation
-  whenever an agent tries to write a confirm- or admin-tier path from
+  whenever an agent tries to write a gated path from
   `governance/write-policy.yaml`.
-- **Auto-commit / auto-merge** (`.claude/hooks/auto-commit.sh`, **ships disabled**) commits
-  each turn's work and can merge it into `main`, scoped by the same tiers the write-guard
-  enforces — protected paths are held back and reported, never swept in. Switches live in
-  the `settings:` block of `write-policy.yaml`. Turn it on when the team wants the
-  "agents write and commit directly" default to be literally true; leave it off to keep a
-  human shaping every commit.
+- **Auto-sync** (`.claude/hooks/auto-commit.sh`, off until `/auto-sync on`) commits each
+  turn's work on `main`, merges side branches in, and pushes to origin — scoped by the
+  same gated list the write-guard enforces: gated paths are held back and reported,
+  never swept in. Switches live in the `settings:` block of `write-policy.yaml`; flip
+  them with `/auto-sync on|off`. Leave it off to keep a human shaping every commit.
 
 Limit: hooks bind agent sessions only — not a human in a text editor, not bash
 redirection. That's what layers 2–3 are for. Details: `.claude/hooks/session-start.md`.
@@ -30,23 +29,14 @@ Availability: private/internal repos on GitHub Team plan or above (GA since Sept
 Setup: repo → Settings → Rules → Rulesets → *New push ruleset*:
 
 1. **Bypass list**: the repo steward (see `write-policy.yaml#steward`) and any trusted bot.
-2. **Restrict file paths** — mirror the write policy's confirm + admin tiers:
-   ```
-   CLAUDE.md
-   product-development/feature-index.yaml
-   product-development/product/strategy/business-context/**
-   product-development/product/strategy/current-quarter.md
-   product-development/product/handbook/templates/**
-   governance/write-policy.yaml
-   governance/write-back-contract.md
-   product-development/engineering/code-grounding.md
-   .claude/**
-   .github/**
-   ```
+2. **Restrict file paths** — mirror the gated list from `governance/write-policy.yaml`
+   (`tiers:` block): copy its entries as-is; the ruleset's path syntax accepts the same
+   glob style.
 3. Enforcement: Active.
 
-Keep this list in sync with `write-policy.yaml` — when you change the registry, change
-the ruleset (both are one screen). Note the ruleset blocks matching pushes on EVERY
+The ruleset is the ONE manual mirror of the gated list — when you change the registry,
+refresh the ruleset (both are one screen; the weekly audit needs no sync, it derives its
+list from the policy at run time). Note the ruleset blocks matching pushes on EVERY
 branch (and across the fork network), so a non-bypass teammate cannot even stage a PR
 touching these paths — their channel is a proposal file in `governance/proposals/`,
 which the steward applies (their bypass lets them push) and then deletes. Auto-tier work
@@ -62,9 +52,10 @@ accept PR-for-everything — we don't recommend that trade for day-to-day flow.
 - **On every PR** — mechanical checks fail the PR before review: nav coverage both
   directions, broken links, feature-index ↔ disk (incl. initiative slugs), ledger
   integrity, truncation scan, YAML parse.
-- **Weekly (Mon 06:00 UTC) + manual dispatch** — same checks plus the **protected-path
-  audit**: every commit from the last 8 days that touched a confirm/admin-tier path,
-  posted into a rolling "Weekly wiki-lint report" issue for the steward to review.
+- **Weekly (Mon 06:00 UTC) + manual dispatch** — same checks plus the **gated-path
+  audit**: every commit from the last 8 days that touched a gated path (list derived
+  from `write-policy.yaml` at run time), posted into a rolling "Weekly wiki-lint
+  report" issue for the steward to review.
 
 The script implements the mechanical subset of `.claude/skills/wiki-lint/SKILL.md` — the
 skill is the spec of record; change a check there and the script in the same PR. The
@@ -72,10 +63,10 @@ judgment checks (staleness triage with owners, contradiction sweep, initiative h
 run via `/wiki-lint` in a session, which writes dated reports to
 `governance/health/`.
 
-## Branch protection (admin tier only)
+## Branch protection (gated system changes only)
 
 Settings → Branches → rule for `main` — needed only if you want PR review enforced for
-admin-tier changes when push rulesets aren't available. With a push ruleset in place,
+gated system changes when push rulesets aren't available. With a push ruleset in place,
 day-to-day auto-tier commits go straight to `main` and nothing here is required.
 
 ## Capture integrations (optional, later)
@@ -119,7 +110,7 @@ The task's prompt: run `/weekly-review --digest` for the current ISO week; write
 the week's digest file in place; include the feature-request lines from
 `product-development/product/customers/feature-requests/`; post Part A via the team
 messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
-record only"; never edit confirm-tier files headlessly (file a proposal in
+record only"; never edit gated files headlessly (file a proposal in
 `governance/proposals/` instead); end with the run summary listing every
 path written.
 

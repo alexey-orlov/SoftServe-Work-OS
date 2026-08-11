@@ -1,6 +1,6 @@
 # Skills
 
-46 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+47 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -39,7 +39,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 4 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 6 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 7 |
 
 ### Communication & ops
 
@@ -126,6 +126,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [wiki-lint/](wiki-lint/) — The health engine: eleven checks (staleness, nav coverage, broken refs, index drift, mirror consistency, code-grounding registry drift, …); dated reports to `governance/health/`; `--fix` repairs mechanical drift only
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 - [session-retro/](session-retro/) — End-of-session sweep of the live conversation for durable takeaways + the curation pass (team-learnings cap, entry staleness, stale proposals); routes per the contract table, admin targets by steward yes or proposal
+- [auto-sync/](auto-sync/) — One switch for hands-off git: autocommit + autopush of main for everything except gated files (write prompt + held from landing); on|off|status
 
 ## Gaps
 

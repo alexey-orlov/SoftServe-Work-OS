@@ -61,7 +61,7 @@ fi
 
 PROPOSALS=$(ls "governance/proposals" 2>/dev/null | grep -vc 'CLAUDE' | tr -d ' ')
 if [ "${PROPOSALS:-0}" -gt 0 ] 2>/dev/null; then
-  echo "$PROPOSALS pending proposal(s) in governance/proposals/ — review and apply or reject (admin-tier ones land via steward PR)"
+  echo "$PROPOSALS pending proposal(s) in governance/proposals/ — review and apply or reject (gated: apply with an in-session yes, then land deliberately)"
 fi
 
 if [ -f .claude/.last-session-state ]; then

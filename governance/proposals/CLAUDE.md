@@ -1,21 +1,22 @@
-# proposals — pending protected-tier changes
+# proposals — pending gated changes
 
 The landing spot for changes agents may not apply themselves. Two cases:
 
-- **Confirm-tier, headless** — a scheduled/headless run derived a change to a confirm-tier
-  file (the list in `governance/write-policy.yaml#confirm`) and cannot ask in-session.
-- **Admin-tier, any run** — a capture-loop takeaway or discovery targets an admin path
+- **Headless** — a scheduled/headless run derived a change to a gated file (the list in
+  `governance/write-policy.yaml`) and cannot ask for the in-session yes.
+- **No in-session yes** — a capture-loop takeaway or discovery targets a gated path
   (skills, agents, `.claude/team-learnings.md`, templates, structural changes) and the
-  steward's in-session yes wasn't available.
+  user's in-session yes wasn't available.
 
-One file per proposal: `{YYYY-MM-DD}-{slug}.md` containing the target path, its tier, the
-exact proposed before/after, the evidence/source that motivated it, and the proposer
-(skill or session). Surfaced by the session-start briefing; `/wiki-lint` flags proposals
-older than 14 days.
+One file per proposal: `{YYYY-MM-DD}-{slug}.md` containing the target path, the exact
+proposed before/after, the evidence/source that motivated it, and the proposer (skill or
+session). Surfaced by the session-start briefing; `/wiki-lint` flags proposals older
+than 14 days.
 
-**Read this when:** The session-start briefing says proposals are pending. Confirm-tier:
-apply or reject in an interactive session. Admin-tier: the steward applies via reviewed
-PR (or an in-session yes). Delete the proposal file after applying or rejecting it.
+**Read this when:** The session-start briefing says proposals are pending. Apply or
+reject in an interactive session — approving the write prompt IS the yes. Applied files
+are still gated: auto-sync never commits or pushes them, so land them deliberately.
+Delete the proposal file after applying or rejecting it.
 
 ## Contents
 

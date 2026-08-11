@@ -1,9 +1,11 @@
 #!/bin/bash
-# Team OS auto-commit / auto-merge — Stop hook.
+# Team OS auto-commit / auto-push — Stop hook. The auto-sync engine.
 #
-# Reads the `settings:` block of governance/write-policy.yaml and, when
-# enabled, commits the turn's work (and optionally merges it into the target branch).
-# Both features ship DISABLED — this script is a no-op until someone turns one on.
+# Reads the `settings:` block of governance/write-policy.yaml and, when enabled,
+# commits the turn's work, lands it on the target branch (merging only when the
+# session runs on a side branch), and pushes it to origin. Gated paths are ALWAYS
+# held back for the user. Ships disabled — a no-op until /auto-sync on flips the
+# settings; it re-reads them at every turn end, so flips apply without a restart.
 #
 # Contract with Claude Code:
 #   - Stop hooks take NO matcher. Wired via .claude/settings.json as a bare group.
@@ -15,6 +17,7 @@
 
 set -u
 cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || exit 0
+export GIT_TERMINAL_PROMPT=0   # never hang on a credential prompt inside a hook
 
 POLICY="governance/write-policy.yaml"
 [ -f "$POLICY" ] || exit 0
@@ -25,7 +28,7 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
 # JSON strings take no raw newlines or control characters — escape before emitting,
 # or Claude Code discards the whole object and the report is lost silently.
 note() {
-  printf '{"hookSpecificOutput":{"hookEventName":"Stop","additionalContext":"[auto-commit] %s"}}\n' \
+  printf '{"hookSpecificOutput":{"hookEventName":"Stop","additionalContext":"[auto-sync] %s"}}\n' \
     "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g' | awk '{ printf "%s%s", sep, $0; sep="\\n" }')"
   exit 0
 }
@@ -67,14 +70,13 @@ done
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 [ "$BRANCH" = "HEAD" ] && note "skipped: detached HEAD. Nothing was committed."
 
-# --- does a path match a confirm/admin pattern in the policy? ----------------------
+# --- does a path match a gated pattern in the policy? -------------------------------
 is_protected() {
   local rel="$1" section="" pat glob
   while IFS= read -r line; do
     case "$line" in
-      *confirm:*) section="p"; continue ;;
-      *admin:*)   section="p"; continue ;;
-      living-pages:*|settings:*|tiers:*) section=""; continue ;;
+      *gated:*)                          section="p"; continue ;;
+      living-pages:*|settings:*|tiers:*) section="";  continue ;;
     esac
     case "$line" in
       *"- "*)
@@ -116,7 +118,7 @@ ALLOWED=$(printf '%s' "$ALLOWED" | sed '/^$/d')
 HELD=$(printf '%s' "$HELD" | sed '/^$/d')
 
 if [ -z "$ALLOWED" ]; then
-  [ -n "$HELD" ] && note "nothing auto-committed — every change is a protected path under scope '$AC_SCOPE'. Left for you to commit:
+  [ -n "$HELD" ] && note "nothing auto-committed — every change is on a gated path under scope '$AC_SCOPE'. Land these yourself (or say: commit and push the gated changes):
 $HELD"
   exit 0
 fi
@@ -145,76 +147,86 @@ COMMITTED=$(git rev-parse --short HEAD)
 
 REPORT="committed $COMMITTED ($COUNT file(s)) on $BRANCH"
 [ -n "$HELD" ] && REPORT="$REPORT
-Left uncommitted (protected paths, commit these yourself):
+Held back (gated paths — land them yourself, or say: commit and push the gated changes):
 $HELD"
 
-# --- merge -------------------------------------------------------------------------
-[ "${AM_ENABLED:-false}" = "true" ] || { [ -n "$HELD" ] && note "$REPORT"; exit 0; }
-[ "$BRANCH" = "$AM_TARGET" ] && { [ -n "$HELD" ] && note "$REPORT"; exit 0; }
-
-if ! git show-ref --verify --quiet "refs/heads/$AM_TARGET"; then
-  note "$REPORT
-merge skipped: branch '$AM_TARGET' does not exist."
+# --- land it: merge only when on a side branch, then push ---------------------------
+if [ "${AM_ENABLED:-false}" != "true" ]; then
+  [ -n "$HELD" ] && note "$REPORT"
+  exit 0
 fi
 
-# Refuse to merge a branch that touched protected paths anywhere in its history.
-if [ "$AM_BLOCK" = "true" ]; then
-  TOUCHED=$(git diff --name-only "$AM_TARGET...HEAD" 2>/dev/null)
-  PROT=""
-  while IFS= read -r f; do
-    [ -z "$f" ] && continue
-    is_protected "$f" && PROT="$PROT$f
+SAY=""
+[ -n "$HELD" ] && SAY=y
+
+if [ "$BRANCH" != "$AM_TARGET" ]; then
+  if ! git show-ref --verify --quiet "refs/heads/$AM_TARGET"; then
+    note "$REPORT
+merge skipped: branch '$AM_TARGET' does not exist."
+  fi
+
+  # Refuse to merge a branch that touched gated paths anywhere in its history.
+  if [ "$AM_BLOCK" = "true" ]; then
+    TOUCHED=$(git diff --name-only "$AM_TARGET...HEAD" 2>/dev/null)
+    PROT=""
+    while IFS= read -r f; do
+      [ -z "$f" ] && continue
+      is_protected "$f" && PROT="$PROT$f
 "
-  done <<EOF
+    done <<EOF
 $TOUCHED
 EOF
-  PROT=$(printf '%s' "$PROT" | sed '/^$/d')
-  [ -n "$PROT" ] && note "$REPORT
-merge skipped: this branch touches protected paths, which land via reviewed PR:
+    PROT=$(printf '%s' "$PROT" | sed '/^$/d')
+    [ -n "$PROT" ] && note "$REPORT
+merge skipped: this branch touches gated paths, which you land deliberately:
 $PROT"
-fi
+  fi
 
-case "$AM_STRATEGY" in
-  merge-commit)
-    # Needs a checkout. Restore the caller's branch whatever happens.
-    if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
-      note "$REPORT
+  case "$AM_STRATEGY" in
+    merge-commit)
+      # Needs a checkout. Restore the caller's branch whatever happens.
+      if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+        note "$REPORT
 merge skipped: working tree still has uncommitted changes."
-    fi
-    if ! git checkout -q "$AM_TARGET" 2>/dev/null; then
-      note "$REPORT
+      fi
+      if ! git checkout -q "$AM_TARGET" 2>/dev/null; then
+        note "$REPORT
 merge skipped: could not check out '$AM_TARGET'."
-    fi
-    if git merge --no-ff -q -m "$AC_PREFIX merge $BRANCH into $AM_TARGET" "$BRANCH" 2>/dev/null; then
-      MERGED=yes
-    else
-      git merge --abort 2>/dev/null
-      MERGED=no
-    fi
-    git checkout -q "$BRANCH" 2>/dev/null
-    [ "$MERGED" = "no" ] && note "$REPORT
+      fi
+      if git merge --no-ff -q -m "$AC_PREFIX merge $BRANCH into $AM_TARGET" "$BRANCH" 2>/dev/null; then
+        MERGED=yes
+      else
+        git merge --abort 2>/dev/null
+        MERGED=no
+      fi
+      git checkout -q "$BRANCH" 2>/dev/null
+      [ "$MERGED" = "no" ] && note "$REPORT
 merge FAILED: '$BRANCH' does not merge cleanly into '$AM_TARGET'. Aborted; you are still on $BRANCH."
-    ;;
-  ff-only|*)
-    # No checkout at all: fast-forward the target ref straight from HEAD.
-    if ! git fetch -q . "HEAD:$AM_TARGET" 2>/dev/null; then
-      note "$REPORT
+      ;;
+    ff-only|*)
+      # No checkout at all: fast-forward the target ref straight from HEAD.
+      if ! git fetch -q . "HEAD:$AM_TARGET" 2>/dev/null; then
+        note "$REPORT
 merge skipped: '$AM_TARGET' cannot fast-forward from '$BRANCH' (it has commits this branch lacks). Merge it by hand, or set strategy: merge-commit."
-    fi
-    ;;
-esac
+      fi
+      ;;
+  esac
 
-REPORT="$REPORT
+  REPORT="$REPORT
 merged into $AM_TARGET ($AM_STRATEGY)"
+  SAY=y
+fi
 
 # --- push --------------------------------------------------------------------------
 if [ "${AM_PUSH:-false}" = "true" ]; then
   if git remote get-url origin >/dev/null 2>&1; then
     if git push -q origin "$AM_TARGET" 2>/dev/null; then
-      REPORT="$REPORT; pushed to origin/$AM_TARGET"
+      REPORT="$REPORT
+pushed to origin/$AM_TARGET"
+      SAY=y
     else
       note "$REPORT
-push FAILED: '$AM_TARGET' is merged locally but not pushed. Push it by hand."
+push FAILED: '$AM_TARGET' is committed locally but not pushed (remote ahead, or auth). Fix: git pull --rebase origin $AM_TARGET && git push origin $AM_TARGET."
     fi
   else
     note "$REPORT
@@ -222,5 +234,6 @@ push skipped: no 'origin' remote configured."
   fi
 fi
 
-# Merging moves the default branch — always worth saying out loud.
-note "$REPORT"
+# Landing work on the target branch or origin is always worth saying out loud.
+[ "$SAY" = "y" ] && note "$REPORT"
+exit 0

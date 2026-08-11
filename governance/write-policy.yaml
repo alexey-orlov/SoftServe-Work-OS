@@ -2,41 +2,46 @@
 #
 # This registry is the single traceable list of protected context. The OS admin
 # edits it here; everything that enforces the policy reads from here:
-#   - .claude/hooks/write-guard.sh   (in-session: native confirm prompt on protected paths)
-#   - GitHub push ruleset            (server-side hard stop; path list hand-maintained in
-#                                     sync with this file — see os-installation/claude-code/scheduled-governance.md)
-#   - .github/workflows/wiki-lint.yml (weekly audit: lists commits that touched protected paths)
+#   - .claude/hooks/write-guard.sh    (write time: native approval prompt on gated paths)
+#   - .claude/hooks/auto-commit.sh    (turn end: auto-commits/pushes auto-tier work,
+#                                      HOLDS gated paths for you — the auto-sync engine)
+#   - .github/workflows/wiki-lint.yml (weekly audit: derives its path list from this
+#                                      file at run time — nothing to keep in sync)
 #
 # Tier semantics — THE canonical statement. Other docs (governance/CLAUDE.md, the
 # write-back contract, proposals/CLAUDE.md) point here and never restate it:
-#   auto    — DEFAULT for any path not listed below. Agents write and commit directly.
-#             Covers raw material, records (summaries, decisions, results), deliverables
-#             (PRDs, analyses), navigation CLAUDE.md files, the ledger, health reports.
-#   confirm — the distilled steering files. An agent must show the exact before/after and
-#             get an in-session yes BEFORE writing. Headless/scheduled runs cannot confirm:
-#             they write a proposal to governance/proposals/ instead. (Older skill prose
-#             calls this tier "Tier 2" — same thing.)
-#   admin   — the system's own rules. Steward only: applied on the steward's in-session
-#             yes at the write-guard prompt, or via a reviewed PR. Agents never edit these
-#             on their own initiative — they file the exact diff as a proposal in
-#             governance/proposals/ instead.
+#   auto  — DEFAULT for any path not listed below. Agents write and commit directly,
+#           and push directly while auto-sync is on. Covers raw material, records
+#           (summaries, decisions, results), deliverables (PRDs, analyses), navigation
+#           CLAUDE.md files, the ledger, health reports.
+#   gated — the steering files and the system's own rules, one list, two gates:
+#           (1) write time — the agent shows the change and you approve Claude Code's
+#               native prompt BEFORE anything is written;
+#           (2) land time — auto-sync never commits or pushes these paths; you land
+#               them deliberately (say "commit and push the gated changes", or use
+#               git yourself).
+#           Headless/scheduled runs cannot ask: they file a proposal in
+#           governance/proposals/ instead of writing.
+#           Historical names — "confirm tier" / "Tier 2" and "admin tier" — were
+#           collapsed into this single gated tier on 2026-08-11; older skill prose
+#           still using those names means this tier.
 #
 # Paths are repo-root-relative. Globs use shell fnmatch (`*` does not cross `/`, `**` does).
 
-version: 1
+version: 2
 
-# Who approves admin-tier changes and reviews the weekly protected-path audit.
+# Who reviews the weekly protected-path audit and owns changes to this file.
 steward: "[Your Name]"   # ← fill during setup (see Team table in root CLAUDE.md)
 
 tiers:
-  confirm:
+  gated:
+    # Steering files — the distilled context every session leans on.
     - product-development/feature-index.yaml                                 # the product map
     - product-development/product/strategy/business-context/business-info.md
     - product-development/product/strategy/business-context/segmentation-matrix.md
     - product-development/product/strategy/business-context/stakeholders.md
     - product-development/product/strategy/current-quarter.md
-
-  admin:
+    # System rules — the OS itself.
     - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
     - product-development/product/handbook/templates/**                      # templates shape every future document
     - governance/write-policy.yaml                                           # this file
@@ -64,13 +69,14 @@ living-pages:
   - product-development/product/competitive-research/competitors/*/teardown.md   # none on a fresh install — fine
 
 # ---------------------------------------------------------------------------
-# Automation settings
+# Automation settings — the auto-sync switchboard.
 #
-# Read by .claude/hooks/auto-commit.sh when a turn ends. They live here, next to
-# the tiers they refer to, so the rule and the behaviour cannot drift apart.
+# Read by .claude/hooks/auto-commit.sh at every turn end (no restart needed).
+# They live here, next to the tier list they respect, so the rule and the
+# behaviour cannot drift apart.
 #
-# BOTH SHIP DISABLED. Turn one on by setting `enabled: true`. Changing anything
-# here is an admin-tier change (this file) — steward only.
+# Flip them with /auto-sync on|off (recommended) or by hand — this file is
+# itself in the list above, so either way the change needs your in-session yes.
 # ---------------------------------------------------------------------------
 settings:
 
@@ -79,9 +85,9 @@ settings:
     enabled: false
 
     # Which changed files may be committed:
-    #   auto-tier           — only paths NOT matched by tiers.confirm / tiers.admin
-    #                         above. Steering files and system rules still need a
-    #                         human. This is the setting that matches the write-guard.
+    #   auto-tier           — only paths NOT in the list above. Protected files are
+    #                         held back for you to land. This is the setting that
+    #                         matches the write-guard.
     #   product-development — everything under product-development/, any tier
     #   all                 — every tracked change in the repo
     scope: auto-tier
@@ -89,9 +95,10 @@ settings:
     # Commit subject prefix — see "Commit prefixes" in the root CLAUDE.md.
     message-prefix: "context:"
 
-  # Merge the working branch into the target branch after a successful commit.
-  # Does nothing unless auto-commit is enabled, and nothing when already on the
-  # target branch (auto-commit alone has already landed the work there).
+  # After a successful commit: land the work on the target branch and push it.
+  # Already on the target (the normal case — sessions run on main): nothing to
+  # merge, this block only governs the push. On a side branch (worktree
+  # sessions): merge into the target first, then push.
   auto-merge:
     enabled: false
     target-branch: main
@@ -102,10 +109,11 @@ settings:
     #                  out and back; the hook restores your branch on any failure.
     strategy: ff-only
 
-    # Refuse to merge a branch whose commits touched confirm- or admin-tier paths,
-    # even if `scope` above allowed committing them. Those land via reviewed PR.
+    # Refuse to merge a side branch whose commits touched protected paths, even
+    # if `scope` above allowed committing them. Those land deliberately, by you.
     block-protected-tiers: true
 
-    # Push the target branch after a successful merge. Off by default: pushing
-    # publishes, and that stays a deliberate act.
+    # Push the target branch to origin after each commit (and merge, if any).
+    # /auto-sync on sets this true; pushing publishes, so the flip itself always
+    # goes through the write prompt.
     push: false

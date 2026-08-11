@@ -14,8 +14,8 @@ existing rule before adding) → route by narrowest scope (canonical routing tab
 `governance/write-back-contract.md` — skill/agent-specific rules go to that skill's
 self-check, NOT here; this file is the last resort, for cross-cutting rules only) →
 close the loop out loud (one line in the reply: what was generalized, where it went).
-Admin-tier targets (this file, skills, agents, templates, structural changes) are applied
-only via the steward's in-session yes — otherwise file the exact change in
+Gated targets (this file, skills, agents, templates, structural changes) are applied
+only via your in-session yes at the write prompt — otherwise file the exact change in
 `governance/proposals/`. At a session's natural wrap-up, offer a one-line sweep:
 "N takeaways from this session look durable — file them?"
 

@@ -2,7 +2,7 @@
 
 Three hooks ship installed and wired via `.claude/settings.json` — no setup needed beyond
 `chmod +x .claude/hooks/*.sh` after cloning. The first two run on every session; the third
-(auto-commit) ships disabled.
+(auto-commit) is the auto-sync engine — off until `/auto-sync on`.
 
 ## 1. `session-start.sh` — the briefing (SessionStart)
 
@@ -17,7 +17,7 @@ re-cats it:
 4. **Team learnings** — `.claude/team-learnings.md` (the agent-behavior rules; capped ~30 lines)
 5. **Latest health report** — head of the newest `governance/health/*-wiki-lint.md`
 6. **Fold backlog** — count of transcripts not yet in the ledger ("run /context-update")
-   and pending Tier-2 proposals in `governance/proposals/`
+   and pending proposals in `governance/proposals/`
 7. **Last session's unfinished work** — surfaced from `.claude/.last-session-state` if the
    optional session-end hook is enabled (below), then cleared
 
@@ -30,16 +30,16 @@ Fires on every `Edit|Write|MultiEdit|NotebookEdit` call. Looks the target path u
 `governance/write-policy.yaml`:
 
 - **auto** (not listed) → no output; the write proceeds normally.
-- **confirm** tier → returns `permissionDecision: "ask"` — Claude Code shows a native
-  confirmation naming the file and the policy; the user approves after seeing the change.
-- **admin** tier → same prompt, with a "route through the steward" reason.
+- **gated** → returns `permissionDecision: "ask"` — Claude Code shows a native
+  confirmation naming the file and the policy; the user approves after seeing the
+  change. (The same paths are also held back from auto-sync — hook 3.)
 
 This is what makes the write policy enforcement rather than prose: it binds every agent
 session in the repo, regardless of which skill is running. It does NOT bind humans in a
 text editor or bash redirections — that's what the GitHub push ruleset and the weekly
 audit are for (see `os-installation/claude-code/scheduled-governance.md`).
 
-## 3. `auto-commit.sh` — commit / merge the turn's work (Stop) — **ships disabled**
+## 3. `auto-commit.sh` — the auto-sync engine (Stop) — **off until `/auto-sync on`**
 
 Fires when Claude finishes responding. Reads the `settings:` block of
 `governance/write-policy.yaml`; with both switches `false` (the shipped
@@ -47,17 +47,19 @@ state) it exits immediately and does nothing.
 
 - **`auto-commit`** — stages and commits the turn's changes. `scope: auto-tier` (the
   default) commits only paths the write-guard would have let through unprompted; anything
-  matching a confirm- or admin-tier pattern is left in your working tree and named in the
+  matching a gated pattern is left in your working tree and named in the
   report. `product-development` and `all` widen that if you want them.
-- **`auto-merge`** — merges the working branch into `target-branch` afterwards. Does
-  nothing when you are already on the target. `strategy: ff-only` (the default) moves the
-  target ref straight from HEAD, so there is **no checkout and nothing to leave half-done**;
-  `merge-commit` checks the target out and back, restoring your branch on any failure.
-  `block-protected-tiers: true` refuses to merge a branch whose history touched a protected
-  path — those land via a reviewed PR. `push` is off: pushing publishes.
+- **`auto-merge`** — lands the commit on `target-branch`, then pushes. Already on the
+  target (the normal case — sessions run on main): skips straight to the push. On a side
+  branch: `strategy: ff-only` (the default) moves the target ref straight from HEAD, so
+  there is **no checkout and nothing to leave half-done**; `merge-commit` checks the
+  target out and back, restoring your branch on any failure. `block-protected-tiers: true`
+  refuses to merge a branch whose history touched a gated path — land those deliberately.
+  `push: true` pushes the target to origin after each commit — the auto-push half of
+  auto-sync.
 
-Why the tiers and the switches share one file: the hook resolves scope against the same
-`confirm:` / `admin:` patterns the write-guard enforces, so the rule and the automation
+Why the tier list and the switches share one file: the hook resolves scope against the
+same `gated:` list the write-guard enforces, so the rule and the automation
 cannot drift apart.
 
 **Reporting.** Silent on a clean run with nothing held back. Anything else — files left
@@ -65,8 +67,9 @@ uncommitted, a merge it refused, a push that failed — comes back as a non-bloc
 the session, per the repo's failure-visibility rule. It never returns `decision: block` and
 never exits 2: a blocking Stop hook can trap the session in a loop.
 
-Turn it on by editing the `settings:` block (admin tier — steward change), then start a new
-session; hooks load at session start.
+Turn it on with `/auto-sync on` (or edit the `settings:` block by hand — gated either
+way). The Stop hook is already wired and re-reads the policy at every turn end, so flips
+apply immediately — no new session needed.
 
 ## Configuration reference (`.claude/settings.json`)
 

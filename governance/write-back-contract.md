@@ -31,15 +31,15 @@ permission model.
 
 | Content | Destination | Tier → action |
 |---|---|---|
-| Skill- or agent-specific rule / gotcha | that skill's SKILL.md self-check (or the agent file under `.claude/agents/`) | admin — propose the exact diff; large reworks flag "eval-first" |
-| Cross-cutting agent-behavior rule | `.claude/team-learnings.md` | admin — propose one line; at the ~30-line cap, name the weakest entry to prune |
+| Skill- or agent-specific rule / gotcha | that skill's SKILL.md self-check (or the agent file under `.claude/agents/`) | gated — propose the exact diff, apply on the user's in-session yes; large reworks flag "eval-first" |
+| Cross-cutting agent-behavior rule | `.claude/team-learnings.md` | gated — propose one line, apply on the user's in-session yes; at the ~30-line cap, name the weakest entry to prune |
 | Team-process lesson | `product/meetings/retros/lessons-learned.md` | auto — append dated line with source |
 | Product choice / hindsight | `product/decisions/` | auto — dated entry |
-| Business / steering fact | its confirm-tier file (`write-policy.yaml#confirm`) | confirm — exact before/after + in-session yes; headless → proposal |
-| Structural change — folders created/renamed/dissolved, templates, what-goes-where conventions | the structure itself | admin mechanics ALWAYS — propose, never apply (templates are admin by policy glob; folder conventions by this rule). Routine per-file nav appends (step 1 of the uniform block) stay auto |
+| Business / steering fact | its gated steering file (listed in `write-policy.yaml`) | gated — exact before/after + in-session yes; headless → proposal |
+| Structural change — folders created/renamed/dissolved, templates, what-goes-where conventions | the structure itself | gated mechanics ALWAYS — propose, apply only on an in-session yes (templates are gated by policy glob; folder conventions by this rule). Routine per-file nav appends (step 1 of the uniform block) stay auto |
 | Personal preference / private content | personal OS | never this repo (privacy contract) |
 
-Admin- and confirm-tier changes that can't be approved in-session land as proposal files
+Gated changes that can't be approved in-session land as proposal files
 in `governance/proposals/` (format in that folder's CLAUDE.md).
 
 ## The uniform block (canonical text)
@@ -56,7 +56,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
 2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
+   and apply it only after the user confirms (gated in `governance/write-policy.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
@@ -71,9 +71,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    creating an initiative page, read the existing keys/pages — near-duplicates are merged,
    not multiplied. One home per item; other pages link, never restate.
 3. **Write policy applies to every write.** The tier mechanics are stated once, in the
-   header of `governance/write-policy.yaml` — auto: write directly; confirm: exact
-   before/after + in-session yes (headless → proposal); admin: steward only (agents
-   always propose). Point there; never restate.
+   header of `governance/write-policy.yaml` — auto: write directly; gated: exact
+   before/after + the user's in-session yes at the write prompt, and never
+   auto-committed or pushed (headless → proposal). Point there; never restate.
 4. **Provenance.** Every non-obvious claim in a wiki page links to its source, relative to
    the page (a summary links its transcript; account-context links summaries; a distilled
    chat fact cites `(chat, YYYY-MM-DD)`). Evidence-bound register: specific, no filler,
@@ -102,12 +102,12 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | Surface | Only writer |
 |---|---|
 | `decisions/CLAUDE.md` "Recent Decisions" list | `/decision-log-entry` (and `/decision-doc` via the same rule) — append-only |
-| `feature-index.yaml` feature keys | `/prd-draft` and `/context-update` propose (Tier 2); other skills only append artifact rows to existing keys (also Tier 2) |
+| `feature-index.yaml` feature keys | `/prd-draft` and `/context-update` propose (gated); other skills only append artifact rows to existing keys (also gated) |
 | `governance/processed.txt` | ingest skills (rule 6) |
 | `governance/health/` | `/wiki-lint` |
 | `governance/proposals/` | headless runs (created), humans (cleared) |
-| root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change — `business-info.md` is Tier 2 confirm; the root block is admin: the steward approves both together in-session; a headless or non-steward change to business-info files the matching root-block proposal in the same run |
-| `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always Tier 2 confirm; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
+| root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change — both gated: the user approves both together in-session; a headless change to business-info files the matching root-block proposal in the same run |
+| `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always gated; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
 | `accounts/{c}/calls/` and `meetings/{type}/` transcripts + summaries (incl. `retros/transcripts/`) | `/process-meeting` — `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; it never writes call/meeting summaries itself |
 | `customers/research-synthesis/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview) — distinct filename patterns |
 | `reports/` (periodic rollups) | by filename prefix: `*-weekly-review.md` → `/weekly-review` · `*-portfolio-pulse-*.md` → `/portfolio-pulse` · `*-status-*.md` → `/status-update` · `*-daily-batch.md` → `/process-meeting` |
@@ -125,4 +125,4 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `product/PRDs/prototypes/` | by filename suffix: `*-napkin-sketch.md` → `/napkin-sketch` · `*-{v0,lovable,bolt}-prompt.md`, `*-artifacts-v[N].md`, `*-figma-handoff.md` → `/prototype` · `*-feedback-round-[N].md` → `/prototype-feedback` · `*-first-draft.md`, `*-reference-impl/` → `/code-first-draft` |
 | `product/launches/` | `{slug}-launch-checklist.md` → `/launch-checklist` · `{slug}-gate-{date}.md` verdicts → `/feature-launch-gate` |
 | `analytics/metrics/{area}/` | by filename prefix: `feature-metrics-*` → `/feature-metrics` · `{feature}-experiment-metrics.md` → `/experiment-metrics` · `north-star-*` → `/define-north-star` · `metrics-framework-*` / `metric-hierarchy-*` → `/metrics-framework` |
-| `.claude/team-learnings.md` | steward only (admin tier) — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`; never edit directly |
+| `.claude/team-learnings.md` | gated — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`, applied only on the user's in-session yes |
