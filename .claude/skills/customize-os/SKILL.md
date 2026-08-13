@@ -1,6 +1,6 @@
 ---
 name: customize-os
-description: Adapt a deployed instance of this OS to a customer or org — interactive and resumable. Reads customization state first, asks only for missing inputs (targeted follow-ups mid-run), derives customized context files from the org's real artifacts, installs behind the gated write prompt, and ends every run with a readout — what changed and where it lives now, plus what's still needed split into Critical (blocks closing the step) and Other (improves quality, not blocking). Progress persists in os-installation/customization-status.md so customization continues across sessions (/customize-os continue). Implemented targets - the house PRD/brief template, the house jobs-breakdown template, and the house job-spec template (each derived from 2–4 example documents: blanked skeleton, guidance layer routing the owning skill's slot contract, subagent fidelity validation); further targets plug into the same lifecycle. House formats land in customer instances only — in the master repo it stages output outside the repo. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "continue customization", "where does customization stand?". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
+description: Adapt a deployed instance of this OS to a customer or org — interactive and resumable. Opens by confirming artifact naming (PRD / jobs / job specs — keep, or map to the org's terms; a mapping is executed repo-wide by the naming-conventions target: conventions block in business-info.md plus the full prose sweep, with machine identifiers and slash commands kept canonical). Reads customization state first, asks only for missing inputs, derives customized context files from the org's real artifacts, installs behind the gated write prompt, and ends every run with a readout — what changed and where, plus what's still needed (Critical / Other). Progress persists in os-installation/customization-status.md across sessions (/customize-os continue). Template targets — house PRD, jobs-breakdown, and job-spec formats (each derived from 2–4 example documents: blanked skeleton, guidance layer routing the owning skill's slot contract, subagent fidelity validation); pre-existing templates that entered the repo outside the skill are flagged, captured as inputs, and removed with approval. House formats land in customer instances only — in the master repo it stages output outside the repo. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "rename PRDs/jobs to our terms", "continue customization", "where does customization stand?". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
 argument-hint: "[target|continue|status] [example file paths...]"
 group: os-admin
 ---
@@ -11,6 +11,7 @@ group: os-admin
 /customize-os                        → read state; resume the top in-progress target, or start guided
 /customize-os continue               → same, explicit
 /customize-os status                 → report progress across all targets; change nothing
+/customize-os naming-conventions     → adopt the org's own terms for PRD / jobs / job specs, repo-wide
 /customize-os prd-template ~/a.docx ~/b.docx   → run one target with inputs up front
 ```
 
@@ -40,7 +41,7 @@ not started → gathering → derived → validated → installed → complete
 
 ```markdown
 # Customization Status — {Org}
-_updated: YYYY-MM-DD · mode: instance | staging ({path})_
+_updated: YYYY-MM-DD · mode: instance | staging ({path}) · naming: canonical (confirmed YYYY-MM-DD) | house — {OS term → house term, …} (mapped YYYY-MM-DD)_
 
 ## {target}
 - **Phase:** gathering | derived | validated | installed | complete
@@ -67,6 +68,19 @@ House formats belong to the customer instance **only** — the master repo stays
 - **Customer instance** → install targets at their consuming paths, gated prompt per file.
 - **SoftServe master** (placeholders like `[Your Product]` in root CLAUDE.md, SoftServe credits) → never overwrite universal defaults. Derive and validate as normal, **stage** outputs in the engagement's project folder (ask where, once) with an "Install as:" header naming the instance path.
 
+## Step 0 — Confirm artifact naming (once per status file, before any target)
+
+The OS ships three artifact names, used across templates, guidance, readouts, and navigation:
+
+- **PRD** — the initiative-level definition of a larger feature, written so the bet maps to business outcomes (problem, value, proof — not implementation detail). `/prd-draft` → `PRDs/{area}/{slug}-prd.md`.
+- **Jobs** — the independently shippable slices an agreed initiative is cut into, sequenced riskiest-first. `/jobs-breakdown` → `{slug}-jobs-breakdown.md`.
+- **Job specs** — the per-job buildable contract between PRD and tickets (rules, ACs, states, scope priorities). `/job-spec-draft` → `{slug}-{job}-job-spec.md`.
+
+**Trigger:** the status file's header has no `naming:` field — first run, or first run since this step existed. Runs before Step 1 in every mode except `status` (which only reports the field). Explain the ladder above in the org's context, then ask ONE question: keep these names, or map any of them to the org's own terms (brief, one-pager, epic, slice, feature spec, story spec — partial maps are fine)? State the boundary honestly BEFORE they choose: a mapping changes every human-facing surface — document titles, headings, prose, readouts — while slash commands (`/prd-draft`, `/jobs-breakdown`, `/job-spec-draft`) and machine identifiers (file and folder names such as `PRDs/` and `*-job-spec.md`, template filenames, feature-index keys) keep the OS names, because master-maintained skills read those literally and renaming them would fork every skill for one instance — the same rule that keeps a house format a template swap, never a skill fork. Net effect: their team types `/prd-draft` and gets a document titled with THEIR word.
+
+- **Keep** → write `naming: canonical (confirmed YYYY-MM-DD)` into the status file header. Never ask again.
+- **Map** → a complete mapping, collected in the same question — not re-asked later: singular and plural of each house term, the compound document names the mapping implies (the jobs-breakdown document — default "{Jobs-term} Breakdown"), and the casing policy (proper noun everywhere, or lowercase mid-sentence — default: follow the org's own written usage; unseen, lowercase mid-sentence). Record it all in the header and make `naming-conventions` this run's target (an originally requested target queues as next — name that in the readout). Until that target is `installed`, other targets take the mapping as an input (derived templates title with house terms) but repo prose still carries OS names — say so rather than letting it surprise.
+
 ## Step 1 — Resolve the target
 
 From args, the status file, or by asking. One target per run.
@@ -76,6 +90,7 @@ From args, the status file, or by asking. One target per run.
 | `prd-template` — house PRD/brief format | **Implemented** (Steps 2–5) | Derive `product-development/product/handbook/templates/prd-template.md` from example documents; `/prd-draft` follows it from the next run |
 | `jobs-breakdown-template` — house format for the initiative→jobs cut | **Implemented** (Steps 2–5) | Derive `product-development/product/handbook/templates/jobs-breakdown-template.md` from the org's real breakdown/release-plan/epic-cut documents; `/jobs-breakdown` follows it from the next run |
 | `job-spec-template` — house format for the per-job buildable contract | **Implemented** (Steps 2–5) | Derive `product-development/product/handbook/templates/job-spec-template.md` from the org's real per-job requirement documents (their micro-job / feature-spec / story-spec equivalents); `/job-spec-draft` follows it from the next run |
+| `naming-conventions` — the org's own artifact terms | **Implemented** (Step 3 note + Steps 4–5) | Execute the Step 0 mapping: Document Naming Conventions block in `business-info.md`, then the full prose sweep — inventory → classify → audit → apply → verify; machine identifiers and slash commands stay canonical |
 | `metric-conventions` — KPI tier names, required fields, artifact name | Manual (guided) | Fill `business-info.md` → "Metric Reporting Conventions" from the org's KPI docs; offer to draft the block from an example |
 | `fundamentals` — business-info, segmentation, stakeholders | Manual (pointer) | Route to `os-installation/` install guide and the living masters in `strategy/business-context/` |
 
@@ -83,9 +98,11 @@ From args, the status file, or by asking. One target per run.
 
 ## Step 2 — Gather (ask only what's missing)
 
+**Pre-existing template check — template targets, before gathering.** Scan for house-format templates that entered the repo outside this skill: (a) the consuming path's file carries org-specific content (real org/product names, house sections) with no derivation top matter and no status-file record for the target; (b) overlapping extras — org template files for the same artifact under `handbook/templates/`, `product-development/inbox/`, `PRDs/`, or the repo root. (Stock scaffolds — bracketed placeholders, no org content — are the OS's defaults, never flagged.) Found → surface each and **strongly recommend removal**, with the three reasons stated: it bypassed derivation — no slot routing, so owning skills silently drop evidence slots with no named home, and no fidelity validation; it competes with the consuming path — the owning skill reads exactly one file, so edits to a stray copy never reach a draft and the two formats drift apart; and it is invisible to customization state, freshness audits, and the write-policy trail. Capture before removing: record it under **Inputs received** and run the Step 3.1 extraction on it — a stray house template is usually the best structure source (item 3 below). Then, with the user's explicit yes in this session: remove extras now (`git rm`; copy an untracked file beside the status file first — never destroy what git can't restore). A stray **at the consuming path** is never deleted early — the owning skill needs a template present — it is replaced at install (Step 5). Declined → keep it, record **Open — Other** naming the drift risk, and continue. Nothing found → say nothing and move on.
+
 1. **Org name** — for the status file, staging filenames, derivation headers.
 2. **2–4 reference examples** — real, filled documents in the house format (paths; `.docx` via `textutil -convert txt` or `pandoc`, `.pdf` read directly). Filled examples beat blank templates — they show voice in use. One example: accept with a warning (n=1 structure is fragile → record as Open — Other). More than 4: ask which are canonical.
-3. **An existing house template, if one exists** — wins on intended structure; examples still supply voice.
+3. **An existing house template, if one exists** — wins on intended structure; examples still supply voice. A stray flagged by the pre-existing check lands here automatically — captured first, removed per that check.
 4. **House rules the examples can't show** — approval ladder, confidentiality footer, naming conventions. Check the org's SOP first; confirm rather than re-ask.
 
 Record everything received under **Inputs received**; phase → `gathering` until the minimum (≥1 example or a house template) is in hand.
@@ -100,15 +117,26 @@ Work from structure outward; never carry content. Phase → `derived` when the d
 4. **Write the guidance layer** — per-section `>` blocks (marked "never emitted"), carrying: slot routing from the owning skill's contract — ALL of its slot groups get a named home, never silently dropped (`prd-template` → `/prd-draft` Step 3's problem/value/solution/proof-side slots; `jobs-breakdown-template` → `/jobs-breakdown`'s backbone / gated job table with Type-Priority-Status columns / sequencing rationale / cross-job decisions / coverage check; `job-spec-template` → `/job-spec-draft`'s 16 core sections, however the house format names or merges them, plus the method rules that survive ANY house format: two-register ACs with no widgets in a Then, the mandatory variations verdict, cross-cutting rows answered-or-deferred, evidence labels, the quality gate as the single checklist); voice rules observed in the examples (tone, reading level, role-neutral naming, how the org writes honest unknowns — paired with the OS's `[GAP:]` convention); cross-links into the instance (metric sections → `business-info.md` conventions + `/feature-metrics`; decisions → `/decision-log-entry`; launch conditions → `/launch-checklist`; job-level constraint sections → `platform-model.md` + `tech-constraints.md`).
 5. **Top matter:** "Install as:" header, derivation date + source names, drafting quality checklist at the bottom.
 
+**`naming-conventions` derivation** — replaces the numbered flow above for this target:
+
+1. **Conventions block:** draft **Document Naming Conventions** for `business-info.md` → Product Development → Development Process (same pattern as Metric Reporting Conventions): the mapping table (OS term → house term → one-line definition) plus three application rules — house terms in every human-facing surface agents write (titles, headings, prose, readouts, tickets, Slack drafts); OS terms unchanged in machine surfaces (slash commands, file and folder names, template filenames, feature-index keys — enumerate them in the block); either term from the user resolves to the same artifact.
+2. **Inventory, then classify — before editing anything.** `rg -n -i` every old-term variant (acronym, plural, possessive, hyphenated, spaced: `PRD(s)`, `job spec(s)` / `job-spec`, `jobs breakdown` / `jobs-breakdown`, bare `job(s)` where it means a delivery slice). Classify EVERY hit: **rename** (prose in the mapped sense) · **keep — machine identifier** (paths, filenames, index keys, slash commands, backticked tokens naming them) · **keep — different sense** (jobs-to-be-done / JTBD research language, the customer's "job" in discovery and prioritization contexts, unrelated uses) · **out of scope** (`.claude/**` — skills, agents, and hooks are master-maintained and stay universal; their readouts will still say the OS word — the conventions block is the bridge; note that to the user once). The counts per class are this target's derived artifact — record them in the status file.
+3. **The sense rule that will bite:** a jobs→{X} mapping never touches jobs-to-be-done language. "The job behind the request", JTBD interview guides, and journey maps speak of the *customer's* job; only the delivery objects `/jobs-breakdown` and `/job-spec-draft` produce get renamed. When one sentence carries both senses, rename only the delivery one.
+4. **Apply file by file** — this is the install act (Step 5): gated files (root `CLAUDE.md`, `handbook/templates/**`, `business-info.md`, `feature-index.yaml` comment lines — never its keys, `governance/write-back-contract.md`) each pass the write prompt; auto-tier prose (folder `CLAUDE.md`s, handbook docs, worked examples, initiative pages, `os-installation/` guides, README) writes directly. Prose around a canonical token renames; the token stays verbatim: "cut the initiative into epics with `/jobs-breakdown`".
+5. **Already-installed house templates** get their title and heading lines updated in the same run; not-yet-derived template targets record the mapping under **Inputs received**.
+
 ## Step 4 — Validate (skip only on explicit user request)
 
 Spawn a subagent given ONLY (a) the owning skill's drafting contract (`prd-template` → `/prd-draft` Step 3; `jobs-breakdown-template` → `/jobs-breakdown` Steps 2–6; `job-spec-template` → `/job-spec-draft` Steps 3–9), (b) the derived template, (c) a synthetic scenario with deliberate evidence holes — reference examples withheld. Judge against a fidelity checklist derived from the real examples (sections/order/naming, meta completeness, sub-blocks, voice, honest-TBD + `[GAP:]` pairing, zero invented numbers, zero guidance leakage). Fix failures **template-side**, re-run once if fixes were made, record the score. Phase → `validated`.
+
+**`naming-conventions` validation** — audit the classification BEFORE applying: spawn a fresh-context subagent given only the mapping, the boundary rules from the conventions block, and the classified inventory (not your reasoning). It re-greps independently and hunts four failure modes: sense errors (JTBD or customer-job hits classed rename), boundary errors (machine identifiers classed rename), missed variants (case, plural, possessive, spaced/hyphenated forms absent from the inventory), and files the inventory never visited. Fold fixes into the classification, re-run once if anything changed, record the result. Phase → `validated` only then; the post-apply verify lives in Step 5.
 
 ## Step 5 — Install
 
 1. Show the derived artifact and validation result.
 2. **Instance:** write to the consuming path (gated, native prompt). **Staging:** write beside the status file with the "Install as:" header. Phase → `installed`.
 3. Offer companions in the same run: the KPI section implies tier names → offer to fill `business-info.md` → "Metric Reporting Conventions" (gated); offer `/decision-log-entry` ("Adopted {org} house format for {target}", sources + score). All companions done → `complete`.
+4. **`naming-conventions`:** install = the Step 3 apply pass, then **post-apply verify** — re-run the full inventory; every remaining hit must fall in a keep or out-of-scope class, anything else gets fixed before the readout, and the residual counts by class go in the status file. A stray template the pre-existing check left at a consuming path is replaced here. Companions: `/decision-log-entry` ("Adopted house naming: {map}" — boundary line included); house-template titles aligned or queued. **Master repo: never sweep the master** — record the mapping, stage the conventions block with its "Install as:" header, and say in the readout that the sweep executes in the instance.
 
 ## Step 6 — Record and close (mandatory, every run — including interrupted ones)
 
@@ -163,3 +191,6 @@ Before presenting to the user, verify:
 - [ ] **Every slot routed:** all of the owning skill's slot groups (`/prd-draft`'s four, `/jobs-breakdown`'s five, `/job-spec-draft`'s sixteen) have a named home in the guidance layer
 - [ ] **Validation ran** (or the user explicitly skipped it — recorded as Open — Other) with score + failures reported
 - [ ] **Right repo:** installed in an instance, or staged outside the master — never overwrote the master's universal defaults
+- [ ] **Naming resolved first:** the status file header carries a `naming:` field (canonical or the mapping) before any target work ran this session
+- [ ] **Pre-existing templates handled** (template targets): the check ran — strays captured as inputs then removed on a yes, or declined and recorded as Open — Other; never silently kept, never silently deleted
+- [ ] **Sweep audited then verified** (naming-conventions): classification audited by a fresh-context subagent before applying; post-apply re-grep left only classified keeps — machine identifiers, different-sense, out-of-scope
