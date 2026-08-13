@@ -41,6 +41,8 @@ tiers:
     - product-development/product/strategy/business-context/segmentation-matrix.md
     - product-development/product/strategy/business-context/stakeholders.md
     - product-development/product/strategy/current-quarter.md
+    - product-development/product/strategy/business-context/platform-model.md  # platform facts feature briefs must respect
+    - product-development/engineering/tech-constraints.md                      # build realities feature briefs must respect — Engineer-owned
     # System rules — the OS itself.
     - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
     - product-development/product/handbook/templates/**                      # templates shape every future document
@@ -67,6 +69,8 @@ living-pages:
   - product-development/product/competitive-research/competitive-landscape.md
   - product-development/product/competitive-research/competitive-matrix*.md
   - product-development/product/competitive-research/competitors/*/teardown.md   # none on a fresh install — fine
+  - product-development/product/strategy/business-context/platform-model.md
+  - product-development/engineering/tech-constraints.md
 
 # ---------------------------------------------------------------------------
 # Automation settings — the auto-sync switchboard.
