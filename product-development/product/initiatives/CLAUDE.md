@@ -27,5 +27,6 @@ decisions, and open loops — in one page, without grepping six folders.
 
 - [credit-usage-dashboard-v1.md](credit-usage-dashboard-v1.md) — EXAMPLE (synthetic) — shipped 2026-03-20; worked example of a closed initiative with a full artifact trail and a PASS gate verdict
 - [tier-discount-promo.md](tier-discount-promo.md) — EXAMPLE (synthetic) — active; deliberately demos the BLOCKED-gate state (PRD + eng plan still `[PENDING:]`)
+- [time-off-requests.md](time-off-requests.md) — EXAMPLE (synthetic) — active; demos the definition→delivery bridge (PRD → /feature-breakdown → /feature-brief)
 
 _Append a one-line entry to the end of this list for every initiative page you create._

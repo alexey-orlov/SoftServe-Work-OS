@@ -9,7 +9,7 @@
 # Conventions
 # - Keep this file authoritative. Whenever a feature ships, the launch gate
 #   verifies its entry here.
-# - This file is Tier 2 in the write policy: agents confirm changes with the
+# - This file is gated in the write policy: agents confirm changes with the
 #   user before writing — see governance/write-policy.yaml.
 # - Paths are relative to product-development/.
 # - tickets references your tracker (Linear / Jira / Asana). Pick one format.
@@ -17,10 +17,12 @@
 #   queries, metrics, dashboards, experiments, investigations,
 #   decisions, initiatives — plus:
 #     reviews:          review artifacts in product/PRDs/{area}/reviews/ (assumption map,
-#                       red-team, challenge reports, pre-mortem), listed as they land
+#                       red-team, challenge reports, pre-mortem, brief reviews), listed as they land
 #     impact-sizing:    analytics/investigations/{area}/impact-sizing-*.md
 #     launch-checklist: product/launches/{slug}-launch-checklist.md
 #     launch-gate:      product/launches/{slug}-gate-{date}.md verdict
+#     breakdown:        product/PRDs/{area}/{initiative-slug}-breakdown.md (/feature-breakdown)
+#     briefs:           list of product/PRDs/{area}/{initiative-slug}-{feature-slug}-brief.md (/feature-brief)
 # - Omit keys that don't apply yet. Add them when artifacts exist.
 
 # Replace these examples with your own product areas. Keep one or two as a
@@ -69,6 +71,16 @@ billing:
     metrics:
       - analytics/metrics/billing/tier-discount-promo-metrics.md
     initiatives: [tier-discount-promo]
+
+workforce:
+  time-off-requests:
+    # EXAMPLE (synthetic, fictional product Beacon) — the worked example of the
+    # definition→delivery bridge: PRD → /feature-breakdown → /feature-brief.
+    prd: product/PRDs/workforce/time-off-requests-prd.md
+    breakdown: product/PRDs/workforce/time-off-requests-breakdown.md
+    briefs:
+      - product/PRDs/workforce/time-off-requests-request-approval-brief.md   # F-1 request-approval
+    initiatives: [time-off-requests]
 
 # Add more product areas here. Common starting set:
 # onboarding:

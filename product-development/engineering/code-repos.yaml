@@ -55,7 +55,7 @@ repos:
     default_branch: main
     language: TypeScript (Next.js web + Node services)
     purpose: Monorepo for the Beacon web app and the billing worker behind the credit usage dashboard
-    covers: billing, credits, dashboards, workspaces, web app
+    covers: billing, credits, dashboards, workspaces, web app, team time-off & coverage, notification routing
     access_tier: local
     clone_command: git clone --filter=blob:none --sparse https://github.com/your-org/beacon-app && cd beacon-app && git sparse-checkout set apps/web services/billing-worker packages/shared
     deployed_ref: "tag: prod-*"   # latest prod-* tag = what customers run
@@ -71,6 +71,7 @@ repos:
     feature_keys:                 # optional — present here because the mapping is clean
       - billing.credit-usage-dashboard
       - billing.tier-discount-promo
+      - workforce.time-off-requests
     map:
       path: codebases/beacon-app.md
       generated_at_sha: 4f2a9c1d8e7b6a5f4e3d2c1b0a9f8e7d6c5b4a39
