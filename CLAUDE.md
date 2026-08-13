@@ -90,7 +90,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Engineering | `product-development/engineering/CLAUDE.md` | Implementation plans, code-repo registry + codebase maps — code grounding for `/code-qa` (worked example until real repos land) |
 | Analytics | `product-development/analytics/CLAUDE.md` | Metrics, queries, schemas, dashboards, experiments, investigations |
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
-| Reviewer personas | `.claude/agents/reviewers/` | Seven review lenses for `/prd-challenge` and `/strategy-sprint` |
+| Reviewer personas | `.claude/agents/reviewers/` | Nine review lenses for `/prd-challenge`, `/strategy-sprint`, and `/job-spec-challenge` |
 | Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
 | Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |

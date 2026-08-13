@@ -1,6 +1,6 @@
 # Skills
 
-50 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+51 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -33,7 +33,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 | Group | Covers | Skills |
 |-------|--------|--------|
 | [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 11 |
-| [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 16 |
+| [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 17 |
 | [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in. | 6 |
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
@@ -76,7 +76,8 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [strategy-sprint/](strategy-sprint/) — Create product strategy in 1 day, 1 week, or 1 month timeframes. Progressive strategy development framework
 - [write-prod-strategy/](write-prod-strategy/) — Product strategy docs using 7-component framework
 - [jobs-breakdown/](jobs-breakdown/) — Cut an agreed initiative into shippable jobs: backbone, gated + sequenced job table with dependency rationale; the definition→delivery bridge, part one
-- [job-spec-draft/](job-spec-draft/) — The per-job buildable contract between PRD and tickets: variation scan, four sweep subagents, grounded priorities, research routing, eng-confirmation list; challenge mode pressure-tests existing drafts
+- [job-spec-draft/](job-spec-draft/) — The per-job buildable contract between PRD and tickets: variation scan, four sweep subagents, grounded priorities, research routing, eng-confirmation list; the spec file's one writer — accepted challenge verdicts fold back through it
+- [job-spec-challenge/](job-spec-challenge/) — The one challenge command for a job spec: S1–S4 sweeps + the three-amigos panel (PO/BA, QA Lead, Eng Lead) + conditional legal/designer seats, parallel and blind, one deduplicated report with a readiness-for-tickets verdict; never edits the spec
 
 ### Delivery
 
@@ -129,7 +130,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 - [session-retro/](session-retro/) — End-of-session sweep of the live conversation for durable takeaways + the curation pass (team-learnings cap, entry staleness, stale proposals); routes per the contract table, admin targets by steward yes or proposal
 - [auto-sync/](auto-sync/) — One switch for hands-off git: autocommit + autopush of main for everything except gated files (write prompt + held from landing); on|off|status
-- [customize-os/](customize-os/) — Interactive, resumable instance customization: derives customized context files from the org's real artifacts (template targets: house PRD, jobs-breakdown, and job-spec formats from 2–4 example documents), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
+- [customize-os/](customize-os/) — Interactive, resumable instance customization: opens by confirming artifact naming (a chosen mapping executes repo-wide via the naming-conventions target; machine identifiers stay canonical), flags pre-existing out-of-band templates for capture-then-removal, derives customized context files from the org's real artifacts (template targets: house PRD, jobs-breakdown, and job-spec formats from 2–4 example documents), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
 
 ## Gaps
 

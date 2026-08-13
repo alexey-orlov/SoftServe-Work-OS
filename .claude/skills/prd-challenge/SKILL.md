@@ -1,6 +1,6 @@
 ---
 name: prd-challenge
-description: The one challenge command for a PRD — orchestrates every critique lens in parallel and blind to each other (assumption mapping via /assumption-map, steelmanned attack via /red-team, Cagan's four risks via the 7 reviewer personas, failure rehearsal via /pre-mortem when a solution and rollout exist), then synthesises one deduplicated report that leads with the ranked unverified assumptions and the next research step for each. Invokes the real skills — never reimplements them; each writes its own artifact as always. Use on /prd-challenge, "challenge this PRD", "review the PRD from all sides". NOT for a bare idea with no document (/assumption-map), a strategy or decision doc (/red-team directly), a job spec or breakdown (/job-spec-draft challenge), or the launch-readiness completeness verdict (/feature-launch-gate).
+description: The one challenge command for a PRD — orchestrates every critique lens in parallel and blind to each other (assumption mapping via /assumption-map, steelmanned attack via /red-team, Cagan's four risks via the 7 reviewer personas, failure rehearsal via /pre-mortem when a solution and rollout exist), then synthesises one deduplicated report that leads with the ranked unverified assumptions and the next research step for each. Invokes the real skills — never reimplements them; each writes its own artifact as always. Use on /prd-challenge, "challenge this PRD", "review the PRD from all sides". NOT for a bare idea with no document (/assumption-map), a strategy or decision doc (/red-team directly), a job spec (/job-spec-challenge) or breakdown (re-run /jobs-breakdown — it re-gates), or the launch-readiness completeness verdict (/feature-launch-gate).
 argument-hint: "[PRD slug or path] [--lenses ...]"
 group: definition
 ---
@@ -27,7 +27,7 @@ Grounding (why this shape): independent parallel judgments prevent the first rev
 |------|----------|-----------|-------------|
 | **Assumptions** | `/assumption-map` (its SKILL.md, end to end) | Always — feature mode by default, initiative mode for a new-product bet (adds Ethics / GTM / Team & Org) | The falsifiable, confidence-rated, 2×2-ranked assumption inventory |
 | **Attack** | `/red-team` (its SKILL.md, end to end) | Always — returns less on a thin doc, and says so | Steelmanned kill-assumption contracts: fails-if / evidence this week / kill criterion / cheapest test |
-| **Four risks** | The 7 personas in `.claude/agents/reviewers/` | Always | Value (customer-voice, uxr-analyst) · Usability (designer) · Feasibility (engineer) · Viability (executive, legal) · plus skeptic |
+| **Four risks** | The 7 PRD-panel personas in `.claude/agents/reviewers/` (seat table below) | Always | Value (customer-voice, uxr-analyst) · Usability (designer) · Feasibility (engineer) · Viability (executive, legal) · plus skeptic |
 | **Failure rehearsal** | `/pre-mortem` (its SKILL.md, end to end) | Only when the PRD's Solution and Rollout sections exist and are not `[GAP:]`-only — no ship-shaped content, nothing to rehearse. No dates involved. | Prospective hindsight: Tigers / Paper Tigers / Elephants |
 
 **Independence rule:** all lenses run **in parallel, blind to each other** — single message, multiple Task calls; no lens sees another's output before synthesis. Never run them sequentially.
@@ -40,7 +40,7 @@ Grounding (why this shape): independent parallel judgments prevent the first rev
 
 ### Step 1: Pick and read the PRD
 
-Named → find it in `product-development/product/PRDs/{area}/`. Unnamed → list PRDs modified in the last 30 days, ask — excluding `*-jobs-breakdown.md` and `*-job-spec.md` files, which are not PRDs (challenge a job spec via `/job-spec-draft challenge`). Read fully; note the stage, the sections present, and which sections are `[GAP:]`-only. Read the initiative page (`product-development/product/initiatives/{slug}.md`) for what evidence is already attached.
+Named → find it in `product-development/product/PRDs/{area}/`. Unnamed → list PRDs modified in the last 30 days, ask — excluding `*-jobs-breakdown.md` and `*-job-spec.md` files, which are not PRDs (challenge a job spec via `/job-spec-challenge`). Read fully; note the stage, the sections present, and which sections are `[GAP:]`-only. Read the initiative page (`product-development/product/initiatives/{slug}.md`) for what evidence is already attached.
 
 ### Step 2: Decide the lens set
 

@@ -103,6 +103,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 ## Downstream
 
 - `/job-spec-draft` — the per-job contract, riskiest job first; its variation scan can flag a different-backbone variation back here as a new job
+- `/job-spec-challenge` — challenges each drafted contract before its status moves to agreed; its §5 different-job flags also land back here
 - `/create-tickets` — after a job spec is agreed, never straight from the breakdown
 - `/prototype` — a job spec is its natural input; the breakdown only says what to prototype first
 

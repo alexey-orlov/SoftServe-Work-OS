@@ -15,4 +15,4 @@ One deliberate exception to "reference lives with its domain": templates are sin
 
 ### Files
 
-- [de-risk-a-bet.md](de-risk-a-bet.md) — The canonical skill chain for stress-testing a bet from idea to ship (/assumption-map → /prd-draft → /red-team → /prd-challenge → /jobs-breakdown → /job-spec-draft → /pre-mortem → /launch-checklist → /feature-launch-gate), with skip rules and feedback loops
+- [de-risk-a-bet.md](de-risk-a-bet.md) — The canonical skill chain for stress-testing a bet from idea to ship (/assumption-map → /prd-draft → /red-team → /prd-challenge → /jobs-breakdown → /job-spec-draft → /job-spec-challenge → /pre-mortem → /launch-checklist → /feature-launch-gate), with skip rules and feedback loops

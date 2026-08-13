@@ -1,6 +1,6 @@
 # Reviewer Personas
 
-Seven review perspectives used by `/prd-challenge` (as its four-risks lens) and `/strategy-sprint`.
+Nine review perspectives used by `/prd-challenge` (as its four-risks lens), `/strategy-sprint`, and `/job-spec-challenge` (as its judgment panel).
 
 **Read this when:** You are running a multi-perspective document review.
 
@@ -15,3 +15,5 @@ Seven review perspectives used by `/prd-challenge` (as its four-risks lens) and 
 - [legal-advisor.md](legal-advisor.md) — Flag legal, compliance, and regulatory concerns early
 - [skeptic.md](skeptic.md) — Challenge assumptions and play devil's advocate
 - [uxr-analyst.md](uxr-analyst.md) — Analyze from user research perspective and identify gaps
+- [po-ba-reviewer.md](po-ba-reviewer.md) — Adopt a PO/BA perspective: rules, ACs, and ticket-cuttability of a job spec
+- [qa-lead-reviewer.md](qa-lead-reviewer.md) — Adopt a QA lead perspective: testability of a job spec as written

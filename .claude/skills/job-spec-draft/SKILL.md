@@ -1,7 +1,7 @@
 ---
 name: job-spec-draft
-description: Write the buildable contract for ONE job — the level between the PRD (/prd-draft) and tickets (/create-tickets). Template-driven and proportionate (an Integration-type job is 2–3 pages; a risky net-new stateful one earns full depth), every load-bearing claim evidence-labeled. Runs a mandatory variation scan (company / user / situation dimensions — nuance vs branch vs different-job), then four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor capability evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus the engineering-confirmations list. challenge mode pressure-tests an existing draft into a relocation table + gaps report in PRDs/{area}/reviews/. Use on /job-spec-draft, "job spec J-2", "spec this job", "write the job contract", "challenge this job spec". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into jobs (/jobs-breakdown — runs first), dev tickets (/create-tickets — runs after the job spec is agreed), or making the solution visible (/prototype — a job spec is its natural input).
-argument-hint: "[job | breakdown row] [challenge <path>] [--market]"
+description: Write the buildable contract for ONE job — the level between the PRD (/prd-draft) and tickets (/create-tickets). Template-driven and proportionate (an Integration-type job is 2–3 pages; a risky net-new stateful one earns full depth), every load-bearing claim evidence-labeled. Runs a mandatory variation scan (company / user / situation dimensions — nuance vs branch vs different-job), then four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor capability evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus the engineering-confirmations list. Use on /job-spec-draft, "job spec J-2", "spec this job", "write the job contract". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into jobs (/jobs-breakdown — runs first), challenging a drafted spec (/job-spec-challenge — whose accepted verdicts fold back into the spec through this skill, its one writer), dev tickets (/create-tickets — runs after the job spec is agreed), or making the solution visible (/prototype — a job spec is its natural input).
+argument-hint: "[job | breakdown row] [--market]"
 group: definition
 ---
 
@@ -13,7 +13,6 @@ group: definition
 /job-spec-draft [initiative] J-2            → Draft or update the contract for that job
 /job-spec-draft [job description]       → Ad-hoc: classify, scan, sweep, draft — flags the missing breakdown
 /job-spec-draft [...] --market              → Adds the competitor-capability sweep (evidence, never UI)
-/job-spec-draft challenge [path]            → Pressure-test an existing draft (yours or prototype-derived)
 ```
 
 **What you get:** the living contract at `product-development/product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (template: `product-development/product/handbook/templates/job-spec-template.md`) — variations dispositioned, capabilities swept complete with state maps, rules with testable ACs, grounded scope priorities — and a closing readout: decisions only you can make, research routed by method, what Engineering must confirm before scope commits.
@@ -86,7 +85,7 @@ question (owner) · constraint (rule + why) · commit-candidate. If the lens fil
 missing, say so and continue with best judgment.
 ```
 
-Fold findings by disposition into §§6–11 and 16. A sweep with nothing to report says so — "nothing to assess" beats invented critique.
+Fold findings by disposition into §§6–11 and 16. A sweep with nothing to report says so — "nothing to assess" beats invented critique. The lens files above are shared: `/job-spec-challenge` reads them for its challenge-time sweeps — an edit to a lens changes both.
 
 ## Step 6: Feasibility & tech constraints
 
@@ -132,19 +131,10 @@ Research needed            → §13 rows: method + suggested skill per row
 Engineering must confirm   → §14 list — blocks scope commitment, not drafting
 Variations                 → [n dispositioned: X in, Y deferred, Z flagged to the breakdown]
 
-Next: [the next job to job spec, or /create-tickets when this one is agreed]
+Next: [/job-spec-challenge when the draft has stabilised · the next job to job spec · /create-tickets when this one is agreed]
 ```
 
-## Challenge mode
-
-`/job-spec-draft challenge [path]` — same machinery, pointed at an existing draft (hand-written or prototype-derived). Run the constraint line on every solution-shaped line, then the variation scan (its verdicts stand in for the draft's missing §5 as sweep context), then sweeps S1–S4 (S5 only with `--market`). Feasibility (Step 6) runs source-gated exactly as in author mode — its verdict or TODO lands in the report header; prioritization (Step 7) is skipped — the relocation table, not tiers, is the challenge deliverable. Then report:
-
-1. **Decisions only you can make** — pinned first; as many as genuinely exist.
-2. **The relocation table** — every flagged line: original → verdict (**Relocate** to the capability it serves · **Constraint (keep)** as rule + reason · **Commit** stamped · **Free up** with why leaving it open helps · **Gap flag**) → where it went. One table; no prose restatement. Nothing vanishes silently — even a freed-up line keeps its row recording the detail and why leaving it open helps.
-3. **Gaps** — missing inverse actions and lifecycle verbs, unreachable states, the slice test (false-thin-slice), silent cross-cutting rows, exceptions floor, unstated rules.
-4. **Offer the rewrite** — assemble the corrected job spec only on the PM's yes; the report never edits the job spec.
-
-Report → `product-development/product/PRDs/{area}/reviews/{initiative-slug}-{job-slug}-job-spec-review-{YYYY-MM-DD}.md` (dated, one per run). The job spec itself is touched only on PM confirm. Write-back for the report: uniform-block step 1 applies (first use of `reviews/` creates its 5-line CLAUDE.md stub); propose the report on the feature's `reviews:` list (gated, batched); the job spec's own registration is untouched by a challenge run.
+Suggest `/job-spec-challenge` explicitly when the contract stabilises — sweeps folded, gap count low, before the breakdown status moves to *agreed*. Never auto-run it: a judged checkpoint, not a data fetch. When the PM accepts a challenge report's verdicts, this skill folds them into the spec — the spec file has exactly one writer.
 
 ---
 
@@ -168,6 +158,7 @@ Specifics for this skill: the job spec lands in the feature's `job-specs:` list 
 
 ## Downstream
 
+- `/job-spec-challenge` — the independent challenge panel on this contract before it's agreed; its accepted verdicts fold back through this skill
 - `/create-tickets` — from an **agreed** job spec; §14's confirmations and the DoD seam map onto ticket structure
 - `/prototype` — the job spec is the need; the prototype is one hypothesis against it
 - `/code-first-draft` — same: the job spec is its source contract when one exists
@@ -176,4 +167,4 @@ Specifics for this skill: the job spec lands in the feature's `job-specs:` list 
 
 ## Chain Position
 
-Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`), with `/jobs-breakdown` — upstream: the cut · downstream: `/create-tickets`, `/prototype`. Skip rules live in the chain doc.
+Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`), with `/jobs-breakdown` — upstream: the cut · downstream: `/job-spec-challenge` (the judged checkpoint before the spec is agreed), then `/create-tickets`, `/prototype`. Skip rules live in the chain doc.
