@@ -14,6 +14,7 @@ Everything needed to install this OS on your machine and confirm it works.
 
 - [installation-guide.md](installation-guide.md) — Get the OS running in 15 minutes
 - [first-session-checklist.md](first-session-checklist.md) — Verify your setup works, 30-40 minutes
+- [skill-guide-definition-chain.md](skill-guide-definition-chain.md) — One page per skill for `/customize-os` and the PRD → jobs → job-spec chain: purpose, when used, inputs, step-by-step process, outputs, options
 
 ### Created on demand
 
