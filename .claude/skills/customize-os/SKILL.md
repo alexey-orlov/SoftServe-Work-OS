@@ -1,78 +1,136 @@
 ---
 name: customize-os
-description: Adapt a deployed instance of this OS to a customer or org — interactive setup that asks for the org's reference artifacts, derives customized context files from them, and installs each behind the gated write prompt. First implemented target - the house PRD/brief template. Derives the instance's prd-template.md from 2–4 example documents (common skeleton extracted, content blanked to placeholders, per-section guidance blocks routing /prd-draft's evidence slots, voice rules from the examples, subagent format-fidelity validation before install). Other targets (metric reporting conventions, fundamentals) are pointed to their manual paths until implemented. Runs in the customer instance — house formats never land in the master repo (decision 2026-08-13); in the master it stages output outside the repo instead of installing. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "make the template match our briefs", "derive our template from these examples". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
-argument-hint: "[target, e.g. prd-template] [example file paths...]"
+description: Adapt a deployed instance of this OS to a customer or org — interactive and resumable. Reads customization state first, asks only for missing inputs (targeted follow-ups mid-run), derives customized context files from the org's real artifacts, installs behind the gated write prompt, and ends every run with a readout — what changed and where it lives now, plus what's still needed split into Critical (blocks closing the step) and Other (improves quality, not blocking). Progress persists in os-installation/customization-status.md so customization continues across sessions (/customize-os continue). First implemented target - the house PRD/brief template, derived from 2–4 example documents (blanked skeleton, guidance layer routing /prd-draft's evidence slots, subagent fidelity validation); further targets plug into the same lifecycle. House formats land in customer instances only (decision 2026-08-13) — in the master repo it stages output outside the repo. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "continue customization", "where does customization stand?". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
+argument-hint: "[target|continue|status] [example file paths...]"
 group: os-admin
 ---
 
 ## Quick Start
 
-**What to provide:** the customization target and 2–4 reference examples of the org's real documents (paths — `.docx`, `.pdf`, or `.md`; filled examples beat blank templates because they show voice and conventions in use).
-
 ```
-/customize-os                                        → guided: pick target, point to examples
-/customize-os prd-template ~/path/Brief-A.docx ~/path/Brief-B.docx
+/customize-os                        → read state; resume the top in-progress target, or start guided
+/customize-os continue               → same, explicit
+/customize-os status                 → report progress across all targets; change nothing
+/customize-os prd-template ~/a.docx ~/b.docx   → run one target with inputs up front
 ```
 
-**What you get:** a derived, blank, guidance-annotated template staged for review, a validation score against the org's own examples, and — after your gated yes — the file installed where the consuming skill reads it.
+**Every run ends the same way:** the closing readout (Step 6) — what changed and where, what's still missing (Critical / Other), and the saved state that lets the next session pick up exactly here.
 
 ---
 
 # /customize-os — Fit the Instance to the Org
 
-The OS's skills are universal; everything org-specific lives in customized context files (see `.claude/team-learnings.md`). This skill is the guided way to produce those files from the org's real artifacts instead of hand-writing them.
+The OS's skills are universal; everything org-specific lives in customized context files (see `.claude/team-learnings.md`). This skill is the guided, resumable way to produce those files from the org's real artifacts instead of hand-writing them. Customization is a program, not a session: state persists, steps close one at a time, and any session can continue where the last one stopped.
+
+## The target lifecycle
+
+Every target — current and future — moves through the same five phases, tracked in the status file:
+
+```
+not started → gathering → derived → validated → installed → complete
+```
+
+`installed` = the artifact is live at its consuming path. `complete` = companions done too (conventions blocks, decision log entry). A target can sit at any phase between sessions.
+
+## State — the status file
+
+**Location:** where the outputs land. Customer instance → `os-installation/customization-status.md` (auto tier — updated without prompts, committed with the instance). Master-repo staging runs → `{staging folder}/customization-status.md` beside the staged artifacts, outside the repo — engagement state never lands in the master.
+
+**Read it FIRST on every invocation; update it LAST on every run.** Create it on first run:
+
+```markdown
+# Customization Status — {Org}
+_updated: YYYY-MM-DD · mode: instance | staging ({path})_
+
+## {target}
+- **Phase:** gathering | derived | validated | installed | complete
+- **Artifacts:** {what} → {path} (one line each, including staged drafts)
+- **Inputs received:** {example paths, house rules confirmed} (paths may be machine-specific — re-ask if unreachable, don't fail)
+- **Open — Critical:** {what blocks closing this phase — how to provide it}
+- **Open — Other:** {what would improve the result — not blocking}
+- **Log:** YYYY-MM-DD — {one line per session: what moved}
+```
+
+`status` mode prints a per-target summary from this file and exits.
+
+## Interaction contract
+
+- **State and repo before questions.** Read the status file, then look for answers in the repo and any documents the user pointed at (an org SOP often answers approval-ladder and naming questions — quote what you found, confirm, don't re-ask).
+- **Open with one compact question set** covering only the genuinely missing inputs — not an interview, not one-question-at-a-time for things that batch naturally.
+- **Follow-ups mid-run are expected**, whenever derivation hits something only the user can settle: examples disagree on structure, an evidence slot has no natural home, a house rule is unknowable from the artifacts, the install destination is ambiguous. Ask the specific question, with your recommended default first.
+- **Never invent an answer to avoid a question; never block silently.** If the user isn't available to answer, take the recommended default, mark the item **Open — Critical** or **Open — Other** in the status file, and say so in the readout.
 
 ## Instance vs. master — where am I?
 
-House formats belong to the customer instance **only** (decision `product-development/product/decisions/2026-08-13-prd-draft-template-driven-format.md`). Before installing anything, confirm with the user which repo this is:
+House formats belong to the customer instance **only** (decision `product-development/product/decisions/2026-08-13-prd-draft-template-driven-format.md`). Confirm once per status file which repo this is (record it as `mode:`):
 
-- **Customer instance** (a copy of the OS customized for one org) → install targets in place, gated prompt per file.
-- **SoftServe master** (this repo — placeholders like `[Your Product]` in root CLAUDE.md, SoftServe credits) → never overwrite the universal defaults. Derive and validate as normal, but **stage** the output outside the repo (the engagement's project folder; ask where) with an "Install as:" header naming the instance path.
+- **Customer instance** → install targets at their consuming paths, gated prompt per file.
+- **SoftServe master** (placeholders like `[Your Product]` in root CLAUDE.md, SoftServe credits) → never overwrite universal defaults. Derive and validate as normal, **stage** outputs in the engagement's project folder (ask where, once) with an "Install as:" header naming the instance path.
 
-When unsure, ask — one question, not a guess.
+## Step 1 — Resolve the target
 
-## Step 1 — Choose the target
+From args, the status file, or by asking. One target per run.
 
 | Target | Status | What happens |
 |--------|--------|--------------|
 | `prd-template` — house PRD/brief format | **Implemented** (Steps 2–5) | Derive `product-development/product/handbook/templates/prd-template.md` from example documents; `/prd-draft` follows it from the next run |
-| `metric-conventions` — KPI tier names, required fields, artifact name | Manual (guided) | Walk the user through filling `business-info.md` → "Metric Reporting Conventions" from their KPI docs; offer to draft the block from an example |
+| `metric-conventions` — KPI tier names, required fields, artifact name | Manual (guided) | Fill `business-info.md` → "Metric Reporting Conventions" from the org's KPI docs; offer to draft the block from an example |
 | `fundamentals` — business-info, segmentation, stakeholders | Manual (pointer) | Route to `os-installation/` install guide and the living masters in `strategy/business-context/` |
 
-One target per run. If the user names none, ask — and when the examples they attach are PRDs/briefs, propose `prd-template`.
+**Extending this skill** (planned): new targets are new rows here plus a target-specific derivation note in Step 3 — the lifecycle, state format, interaction contract, and readout are shared and don't change. Other handbook templates (any file in `handbook/templates/`) follow the `prd-template` recipe as-is with a different consuming path.
 
-## Step 2 — Gather inputs (ask only what's missing)
+## Step 2 — Gather (ask only what's missing)
 
-1. **Org name** — used in staging filenames and the derivation header.
-2. **2–4 reference examples** — real, filled documents in the house format. One example is accepted with a warning (structure inferred from n=1 is fragile); more than 4, ask which are canonical. Convert `.docx` via `textutil -convert txt` (macOS) or `pandoc`; read `.pdf` directly.
-3. **An existing house template, if one exists** — it wins on intended structure; the examples still supply voice and conventions in use.
-4. **Known house rules** the examples can't show — approval ladder, confidentiality footer, naming conventions. Check the org's SOP/process doc if one is on hand; quote what you found and confirm.
+1. **Org name** — for the status file, staging filenames, derivation headers.
+2. **2–4 reference examples** — real, filled documents in the house format (paths; `.docx` via `textutil -convert txt` or `pandoc`, `.pdf` read directly). Filled examples beat blank templates — they show voice in use. One example: accept with a warning (n=1 structure is fragile → record as Open — Other). More than 4: ask which are canonical.
+3. **An existing house template, if one exists** — wins on intended structure; examples still supply voice.
+4. **House rules the examples can't show** — approval ladder, confidentiality footer, naming conventions. Check the org's SOP first; confirm rather than re-ask.
+
+Record everything received under **Inputs received**; phase → `gathering` until the minimum (≥1 example or a house template) is in hand.
 
 ## Step 3 — Derive
 
-Work from structure outward; never carry content:
+Work from structure outward; never carry content. Phase → `derived` when the draft artifact exists.
 
-1. **Per-example extraction:** banner/header block, meta-table fields, section names and order, numbering/casing style, recurring sub-blocks (e.g. "Who feels this most", kill metrics, launch conditions), table shapes and columns, footer.
-2. **Common skeleton:** sections present in all examples → in; in a majority → in, flagged to the user; in one only → ask. Where examples disagree on a sub-block's shape, prefer the newest/most evolved example and say so.
-3. **Blank it:** every piece of real content becomes a `[bracketed placeholder]` describing what belongs there. Self-check later verifies zero real numbers, names, or feature specifics survive.
-4. **Write the guidance layer** — per-section `>` blockquote blocks (marked "never emitted"), carrying:
-   - **Evidence-slot routing:** map ALL of `/prd-draft` Step 3's format-neutral slots (problem-side / value-side / solution-side / proof-side) to a named home section. Every slot gets a home; a slot the format genuinely lacks gets guidance on where it lands anyway — slots may never be silently dropped.
-   - **Voice rules observed in the examples:** tone, reading level, person-naming conventions (role-neutral, they/them), tagline length, how the org writes honest unknowns — paired with the OS's `[GAP:]` marker convention.
-   - **Cross-links into the instance:** metric sections point at `business-info.md` → Metric Reporting Conventions and `/feature-metrics` (summary in the doc, full definitions in `analytics/metrics/`); decisions point at `/decision-log-entry`; launch conditions at `/launch-checklist`.
-5. **Top matter:** an "Install as:" header, the derivation date + source example names, and a drafting quality checklist at the bottom (derived from the org's own readiness/approval rules plus the OS hygiene rules).
+1. **Per-example extraction:** banner/header, meta-table fields, section names and order, numbering/casing, recurring sub-blocks, table shapes, footer.
+2. **Common skeleton:** in all examples → in; in a majority → in, flagged; in one only → follow-up question. Where examples disagree on a sub-block's shape, prefer the newest/most evolved and say so.
+3. **Blank it:** every piece of real content becomes a `[bracketed placeholder]` describing what belongs there — zero real numbers, names, or feature specifics survive.
+4. **Write the guidance layer** — per-section `>` blocks (marked "never emitted"), carrying: evidence-slot routing (ALL of `/prd-draft` Step 3's problem/value/solution/proof-side slots get a named home — slots may never be silently dropped); voice rules observed in the examples (tone, reading level, role-neutral naming, how the org writes honest unknowns — paired with the OS's `[GAP:]` convention); cross-links into the instance (metric sections → `business-info.md` conventions + `/feature-metrics`; decisions → `/decision-log-entry`; launch conditions → `/launch-checklist`).
+5. **Top matter:** "Install as:" header, derivation date + source names, drafting quality checklist at the bottom.
 
-## Step 4 — Validate (do this; skip only on explicit user request)
+## Step 4 — Validate (skip only on explicit user request)
 
-The proven pattern (13/13 on the first deployment): spawn a subagent given ONLY (a) the drafting contract from `/prd-draft` Step 3, (b) the derived template, (c) a synthetic scenario with deliberate evidence holes — reference examples withheld. Judge its output against a format-fidelity checklist you derive from the real examples: sections/order/naming, meta completeness, sub-block presence, voice rules, honest-TBD + `[GAP:]` pairing, zero invented numbers, zero guidance leakage.
-
-Fix failures **template-side** (tighten a guidance line), re-run once if fixes were made, and report the score with the failures named. The adjustment lever is the template, never the skill.
+Spawn a subagent given ONLY (a) `/prd-draft` Step 3's drafting contract, (b) the derived template, (c) a synthetic scenario with deliberate evidence holes — reference examples withheld. Judge against a fidelity checklist derived from the real examples (sections/order/naming, meta completeness, sub-blocks, voice, honest-TBD + `[GAP:]` pairing, zero invented numbers, zero guidance leakage). Fix failures **template-side**, re-run once if fixes were made, record the score. Phase → `validated`.
 
 ## Step 5 — Install
 
-1. Show the user the derived template and the validation result first.
-2. **Instance:** write to the consuming path (`prd-template` → `product-development/product/handbook/templates/prd-template.md`) — gated, native prompt. **Master:** write to the agreed staging location outside the repo instead.
-3. Offer the companion in the same run: a house template's KPI section usually implies the org's tier names — offer to fill `business-info.md` → "Metric Reporting Conventions" to match (gated).
-4. Offer `/decision-log-entry`: "Adopted {org} house format for {target}", naming the source examples and validation score.
+1. Show the derived artifact and validation result.
+2. **Instance:** write to the consuming path (gated, native prompt). **Staging:** write beside the status file with the "Install as:" header. Phase → `installed`.
+3. Offer companions in the same run: the KPI section implies tier names → offer to fill `business-info.md` → "Metric Reporting Conventions" (gated); offer `/decision-log-entry` ("Adopted {org} house format for {target}", sources + score). All companions done → `complete`.
+
+## Step 6 — Record and close (mandatory, every run — including interrupted ones)
+
+Update the status file (phase, artifacts, inputs, open items, log line), then end with this readout:
+
+```
+Customization run — {org} · {target} · phase: {phase}
+
+Changed this run
+  ✓ {artifact} → {path it lives at now}
+  ✓ status updated → {status file path}
+
+Was the provided info sufficient?
+  Critical — blocks closing this step
+    ✗ {missing input} — {exactly how to provide it}
+  Other — would improve the result, not blocking
+    ⚠ {nice-to-have and what it would add}
+  (or: ✓ sufficient — nothing outstanding for this phase)
+
+Next: {the single next action, and whose it is}
+Resume anytime with /customize-os continue — state is saved.
+```
+
+Rules: **Changed this run** lists real paths, never descriptions alone. The sufficiency split is honest — an item is Critical only if the phase genuinely cannot close without it; everything else is Other. Unanswered follow-ups land here, not in silence.
 
 ---
 
@@ -96,9 +154,10 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 Before presenting to the user, verify:
 
-- [ ] **Zero content carry-over:** no real numbers, customer names, feature specifics, or quotes from the examples survive in the derived template — structure and voice rules only
-- [ ] **Every evidence slot routed:** all four `/prd-draft` slot groups have a named home section in the guidance layer
-- [ ] **Guidance is fenced:** every instruction block is a `>` blockquote explicitly marked as never emitted into drafts
-- [ ] **Validation ran** (or the user explicitly skipped it) and the score + failures were reported
-- [ ] **Right repo:** installed in an instance, or staged outside the master — never overwrote the master's universal default
-- [ ] **Companions offered:** metric conventions block and `/decision-log-entry` offered when the target implied them
+- [ ] **State first, state last:** the status file was read before anything else and updated before the readout — even if the run was interrupted mid-phase
+- [ ] **Readout complete:** paths for everything changed, sufficiency split into Critical / Other (or an explicit "sufficient"), a single named next action
+- [ ] **Questions asked, not assumed:** every ambiguity was either asked as a follow-up or taken as a recommended default AND recorded as an open item — never silently guessed
+- [ ] **Zero content carry-over:** no real numbers, customer names, feature specifics, or quotes from the examples survive in a derived template — structure and voice rules only
+- [ ] **Every evidence slot routed:** all four `/prd-draft` slot groups have a named home in the guidance layer
+- [ ] **Validation ran** (or the user explicitly skipped it — recorded as Open — Other) with score + failures reported
+- [ ] **Right repo:** installed in an instance, or staged outside the master — never overwrote the master's universal defaults
