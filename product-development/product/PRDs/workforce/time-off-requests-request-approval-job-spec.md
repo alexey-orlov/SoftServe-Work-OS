@@ -42,7 +42,7 @@ Checked, not material: vertical, org size within Growth+Scale, data/integration 
 
 **Branch deltas (the delta only):**
 - *Manager is the requester:* submit/withdraw/cancel identical; the decision must come from another holder of decide rights — `decided-by ≠ requester` is an enforced invariant (R-8). Who that other decider is (second manager, org-admin fallback) is the open mechanism (§13 #3); the state machine is unchanged — the branch lives in the transition guard, not new states.
-- *Unplanned "out today":* the person is out effective immediately; the record enters the team view at once and the decision follows (retroactive approve/decline with honest dates — see E9). Whether a manager can record it on the analyst's behalf is open (§13 #2); if adopted, recorded-by is stored and visible — never shared credentials (§9).
+- *Unplanned "out today":* the person is out effective immediately; the record enters the team view at once and the decision follows (retroactive approve/decline with honest dates — see E6). Whether a manager can record it on the analyst's behalf is open (§13 #2); if adopted, recorded-by is stored and visible — never shared credentials (§9).
 
 ## 6) Capabilities & flow
 

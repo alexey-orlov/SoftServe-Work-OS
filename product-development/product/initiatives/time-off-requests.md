@@ -47,4 +47,4 @@ _owner: PM (roster placeholder)_
 
 - 2026-08-13 — Initiative created as the worked example of the PRD → breakdown → job spec chain.
 - 2026-08-13 — Jobs breakdown drafted (`/jobs-breakdown`): J-1 request-approval (walking skeleton) → J-2 coverage-handoff (the bet's risk test) → J-3 ∥ J-4; J-5 external-calendar-sync Won't-now; 7 cross-job questions opened in the breakdown's §4.
-- 2026-08-13 — J-1 request-approval job spec drafted (`/job-spec-draft`): four sweeps folded (S1–S4); 13 rules + 10-exception floor incl. the recursive decider-absent case; zero auto-closers ran (all source-gated out); 9 open questions — the ≥ 80% cover-naming premise routed to `/interview-guide` (suggested, not run).
+- 2026-08-13 — J-1 request-approval job spec drafted (`/job-spec-draft`): four sweeps folded (S1–S4); 13 rules + 8-exception floor incl. the recursive decider-absent case; zero auto-closers ran (all source-gated out); 9 open questions — the ≥ 80% cover-naming premise routed to `/interview-guide` (suggested, not run).
