@@ -1,13 +1,13 @@
 ---
 name: code-first-draft
-description: Build the first-pass implementation of a PRD in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. Writes real code plus a summary in PRDs/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
+description: Build the first-pass implementation of a PRD or feature brief in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. A feature brief (PRDs/{area}/*-brief.md) is the preferred source when one exists. Writes real code plus a summary in PRDs/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
 argument-hint: "[PRD or feature] [--explore-only]"
 group: delivery
 ---
 
 ## Quick Start
 
-1. Point the skill to a PRD or describe the feature to build
+1. Point the skill to a feature brief or PRD, or describe the feature to build
 2. The skill explores your codebase (framework, patterns, structure) or switch to Prototype Mode if no codebase exists
 3. The skill creates an implementation plan and ask for your approval before writing code
 4. The skill implements the feature following existing code patterns, with tests
@@ -34,7 +34,7 @@ Connect to codebase and build initial implementation of a feature. Single-pass d
 ## Context Routing
 
 **Check first:**
-1. `product-development/product/PRDs/{area}/` - PRD for requirements
+1. `product-development/product/PRDs/{area}/` - feature brief (`*-brief.md`, preferred when one exists — its rules/ACs and constraints are the implementation contract) or PRD for requirements
 2. `product-development/engineering/code-repos.yaml` - which repo owns the area, entry points, clone command
 3. `product-development/engineering/codebases/{repo-slug}.md` - cached codebase map, if one exists (routing hints only)
 4. Codebase (`.git` directory, source files)

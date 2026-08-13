@@ -46,6 +46,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Active PRDs | `product-development/product/PRDs/{area}/*.md` | feature name | Requirements, user flows, success metrics, edge cases |
+| Feature briefs | `product-development/product/PRDs/{area}/*-brief.md` | feature name | The per-feature buildable contract: capabilities, rules/ACs, variations, states, constraints — the need this prototype hypothesizes an answer to |
 | Previous Prototypes | `product-development/product/PRDs/prototypes/*.md` | feature name | Previous versions, iteration history, feedback received |
 | User Research | `product-development/product/customers/*.md` | user pain, problem | User quotes, pain points, workflows to design for |
 | Napkin Sketches | `product-development/product/PRDs/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
@@ -54,12 +55,13 @@ When this skill is invoked, immediately check:
 | Competitor Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | feature name | Competitor implementations for reference |
 
 **Context Priority:**
-1. PRD requirements and user flows FIRST (what to build)
+1. Feature brief (when one exists — the per-feature contract), then PRD requirements and user flows FIRST (what to build)
 2. User research and pain points SECOND (who we're building for)
 3. Previous prototypes and napkin sketches THIRD (what we've already explored)
 4. Brand and competitor context FOURTH (how it should look/feel)
 
 **Cross-Skill Links:**
+- If a feature brief exists (`/feature-brief`) --> it is the natural input: the brief carries the need, the prototype is one hypothesis against it — mine its capabilities, rules, and states; never treat your UI choices as new requirements to write back
 - If no PRD exists --> suggest `/prd-draft` first ("Prototype without requirements = guessing")
 - If no user research --> suggest `/interview-guide` ("Who are you designing for?")
 - After prototype is built --> suggest `/prototype-feedback` for structured review
@@ -559,6 +561,7 @@ If any are missing, ask before generating.
 
 **Before:**
 - `/prd-draft` - Define requirements (most important input)
+- `/feature-brief` - The per-feature contract; when one exists it is the sharper input
 - `/napkin-sketch` - Quick ASCII wireframe to establish layout
 
 **After:**
@@ -608,6 +611,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 **Before this:**
 - `/prd-draft` - Clear requirements
+- `/feature-brief` - The per-feature contract, when the initiative is past the cut
 - `/napkin-sketch` - Quick wireframe first
 
 **After this:**

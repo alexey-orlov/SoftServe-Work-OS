@@ -131,7 +131,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 | Role | Primary Folders | What to Check In |
 |------|----------------|------------------|
 | PM | `product/decisions/`, `product/customers/accounts/`, `product/PRDs/`, `product/strategy/` | Decision logs, call summaries, PRDs, strategy |
-| Engineer | `engineering/plans/` | Implementation plans |
+| Engineer | `engineering/plans/`, `engineering/tech-constraints.md` | Implementation plans; tech constraints + do-not-re-implement registry |
 | Designer | `product/PRDs/` (rationale sections) | Design rationale, UX findings (design artifacts live in Figma, linked from feature-index) |
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
 | Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/handbook/` | Competitive intel, vision docs, conventions |

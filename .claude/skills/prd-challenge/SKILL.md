@@ -1,6 +1,6 @@
 ---
 name: prd-challenge
-description: The one challenge command for a PRD — orchestrates every critique lens in parallel and blind to each other (assumption mapping via /assumption-map, steelmanned attack via /red-team, Cagan's four risks via the 7 reviewer personas, failure rehearsal via /pre-mortem when a solution and rollout exist), then synthesises one deduplicated report that leads with the ranked unverified assumptions and the next research step for each. Invokes the real skills — never reimplements them; each writes its own artifact as always. Use on /prd-challenge, "challenge this PRD", "review the PRD from all sides". NOT for a bare idea with no document (/assumption-map), a strategy or decision doc (/red-team directly), or the launch-readiness completeness verdict (/feature-launch-gate).
+description: The one challenge command for a PRD — orchestrates every critique lens in parallel and blind to each other (assumption mapping via /assumption-map, steelmanned attack via /red-team, Cagan's four risks via the 7 reviewer personas, failure rehearsal via /pre-mortem when a solution and rollout exist), then synthesises one deduplicated report that leads with the ranked unverified assumptions and the next research step for each. Invokes the real skills — never reimplements them; each writes its own artifact as always. Use on /prd-challenge, "challenge this PRD", "review the PRD from all sides". NOT for a bare idea with no document (/assumption-map), a strategy or decision doc (/red-team directly), a feature brief or breakdown (/feature-brief challenge), or the launch-readiness completeness verdict (/feature-launch-gate).
 argument-hint: "[PRD slug or path] [--lenses ...]"
 group: definition
 ---
@@ -40,7 +40,7 @@ Grounding (why this shape): independent parallel judgments prevent the first rev
 
 ### Step 1: Pick and read the PRD
 
-Named → find it in `product-development/product/PRDs/{area}/`. Unnamed → list PRDs modified in the last 30 days, ask. Read fully; note the stage, the sections present, and which sections are `[GAP:]`-only. Read the initiative page (`product-development/product/initiatives/{slug}.md`) for what evidence is already attached.
+Named → find it in `product-development/product/PRDs/{area}/`. Unnamed → list PRDs modified in the last 30 days, ask — excluding `*-breakdown.md` and `*-brief.md` files, which are not PRDs (challenge a feature brief via `/feature-brief challenge`). Read fully; note the stage, the sections present, and which sections are `[GAP:]`-only. Read the initiative page (`product-development/product/initiatives/{slug}.md`) for what evidence is already attached.
 
 ### Step 2: Decide the lens set
 
@@ -170,7 +170,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 **Before:** `/prd-draft` (the loop that suggests this at the right moments — it never auto-fires it), `/process-meeting` and `/user-research-synthesis` (the evidence being challenged), `/impact-sizing` (the numbers being attacked).
 
-**After:** `/prd-draft` (fold the ranked assumptions back into the draft — the loop's next iteration), `/decision-doc` (settle a surfaced contradiction), `/experiment-decision` (the cheapest test for a top assumption), `/pre-mortem` standalone closer to ship, `/launch-checklist` → `/feature-launch-gate`.
+**After:** `/prd-draft` (fold the ranked assumptions back into the draft — the loop's next iteration), `/decision-doc` (settle a surfaced contradiction), `/experiment-decision` (the cheapest test for a top assumption), `/feature-breakdown` → `/feature-brief` (once the PRD is agreed — cut it and write the buildable contracts), `/pre-mortem` standalone closer to ship, `/launch-checklist` → `/feature-launch-gate`.
 
 **When to run:** whenever the PM wants a full critique; natural moments are when the gap count drops materially and before a stage milestone. A thin PRD is a legitimate target — the report will simply be short and assumption-heavy.
 
@@ -185,4 +185,4 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 ## Chain Position
 
-Stage 4 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-draft` (the challenge folds stages 1 and 3 in when it runs; standalone `/assumption-map` and `/red-team` remain for pre-PRD ideas and non-PRD docs) · downstream: `/pre-mortem` standalone near ship, then `/launch-checklist`. Skip rules live in the chain doc.
+Stage 4 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/prd-draft` (the challenge folds stages 1 and 3 in when it runs; standalone `/assumption-map` and `/red-team` remain for pre-PRD ideas and non-PRD docs) · downstream: `/feature-breakdown` → `/feature-brief` (stage 5, the definition→delivery bridge), then `/pre-mortem` standalone near ship and `/launch-checklist`. Skip rules live in the chain doc.

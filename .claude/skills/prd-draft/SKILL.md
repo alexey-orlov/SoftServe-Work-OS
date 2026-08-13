@@ -1,6 +1,6 @@
 ---
 name: prd-draft
-description: Draft and iterate a PRD as the living spine of feature definition. Every run re-reads the initiative's attached evidence, updates the draft, marks unbacked sections with [GAP:] markers instead of stopping, auto-runs the research that closes agent-closable gaps (bounded — up to three closers per run, only where the source exists), and ends with a readiness readout — what closed this run, what's backed, what's still assumed, what only humans can do, what's waiting on someone else. First run creates the initiative page and proposes the feature-index entry. Use on /prd-draft, "write the PRD", "update the PRD", "where does this feature stand?". NOT for challenging a finished draft (/prd-challenge — deliberately never auto-run), or turning an agreed PRD into tickets (/create-tickets).
+description: Draft and iterate a PRD as the living spine of feature definition. Every run re-reads the initiative's attached evidence, updates the draft, marks unbacked sections with [GAP:] markers instead of stopping, auto-runs the research that closes agent-closable gaps (bounded — up to three closers per run, only where the source exists), and ends with a readiness readout — what closed this run, what's backed, what's still assumed, what only humans can do, what's waiting on someone else. First run creates the initiative page and proposes the feature-index entry. Use on /prd-draft, "write the PRD", "update the PRD", "where does this feature stand?". NOT for challenging a finished draft (/prd-challenge — deliberately never auto-run), cutting the agreed PRD into buildable features (/feature-breakdown → /feature-brief), or turning it into tickets (/create-tickets).
 argument-hint: "[idea or slug] [--draft-only] [--ai]"
 group: definition
 ---
@@ -218,8 +218,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 
 After the challenge passes and the PRD is agreed:
 
+- `/feature-breakdown` → `/feature-brief` — cut the agreed PRD into features and write each buildable contract (the definition→delivery bridge)
 - `/pre-mortem` — rehearse the launch failing, once a solution and rollout exist
-- `/create-tickets` — break the agreed PRD into the dev backlog
+- `/create-tickets` — turn agreed feature briefs (or the PRD directly, for small changes) into the dev backlog
 - `/prototype` / `/napkin-sketch` — make the solution visible before engineering commits
 - `/launch-checklist` → `/feature-launch-gate` — plan the launch, then gate the ship
 - `/slack-message` / `/status-update` — circulate

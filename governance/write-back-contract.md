@@ -102,7 +102,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | Surface | Only writer |
 |---|---|
 | `decisions/CLAUDE.md` "Recent Decisions" list | `/decision-log-entry` (and `/decision-doc` via the same rule) — append-only |
-| `feature-index.yaml` feature keys | `/prd-draft` and `/context-update` propose (gated); other skills only append artifact rows to existing keys (also gated) |
+| `feature-index.yaml` feature keys | `/prd-draft` and `/context-update` propose (gated); other skills only append artifact rows to existing keys (also gated) — `/feature-breakdown` and `/feature-brief` append `breakdown:` / `briefs:` rows; entry missing entirely (PRD never registered) → they may propose the minimal entry (prd + their row + initiatives) in the same gated change, marked as the registration `/prd-draft` would have made |
 | `governance/processed.txt` | ingest skills (rule 6) |
 | `governance/health/` | `/wiki-lint` |
 | `governance/proposals/` | headless runs (created), humans (cleared) |
@@ -121,8 +121,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel |
 | `competitive-research/intel/` monthly records | `/competitor-analysis` monitoring mode only — append-only, one `{YYYY-MM}.md` per run |
 | `product/PRDs/{area}/` PRD files (`{slug}-prd.md`) | `/prd-draft` — creates and iterates; other skills link, never edit the PRD body |
-| `product/PRDs/{area}/reviews/` | by filename suffix: `{slug}-assumption-map.md` → `/assumption-map` · `{slug}-red-team.md` → `/red-team` · `{slug}-challenge-{YYYY-MM-DD}.md` → `/prd-challenge` (dated, one per run) · `{slug}-premortem.md` → `/pre-mortem` — the skills also run as `/prd-challenge` lenses and keep these same filenames |
+| `product/PRDs/{area}/` breakdown + brief files | by filename suffix: `{initiative-slug}-breakdown.md` → `/feature-breakdown` · `{initiative-slug}-{feature-slug}-brief.md` → `/feature-brief` — living docs, edited in place by their writer; other skills link, never edit |
+| `product/PRDs/{area}/reviews/` | by filename suffix: `{slug}-assumption-map.md` → `/assumption-map` · `{slug}-red-team.md` → `/red-team` · `{slug}-challenge-{YYYY-MM-DD}.md` → `/prd-challenge` (dated, one per run) · `{slug}-premortem.md` → `/pre-mortem` · `{initiative-slug}-{feature-slug}-brief-review-{YYYY-MM-DD}.md` → `/feature-brief` challenge mode (dated, one per run) — the skills also run as `/prd-challenge` lenses and keep these same filenames |
 | `product/PRDs/prototypes/` | by filename suffix: `*-napkin-sketch.md` → `/napkin-sketch` · `*-{v0,lovable,bolt}-prompt.md`, `*-artifacts-v[N].md`, `*-figma-handoff.md` → `/prototype` · `*-feedback-round-[N].md` → `/prototype-feedback` · `*-first-draft.md`, `*-reference-impl/` → `/code-first-draft` |
 | `product/launches/` | `{slug}-launch-checklist.md` → `/launch-checklist` · `{slug}-gate-{date}.md` verdicts → `/feature-launch-gate` |
 | `analytics/metrics/{area}/` | by filename prefix: `feature-metrics-*` → `/feature-metrics` · `{feature}-experiment-metrics.md` → `/experiment-metrics` · `north-star-*` → `/define-north-star` · `metrics-framework-*` / `metric-hierarchy-*` → `/metrics-framework` |
 | `.claude/team-learnings.md` | gated — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`, applied only on the user's in-session yes |
+| `strategy/business-context/platform-model.md` | PM fills and maintains (gated); skills read only — `/feature-brief` and `/feature-breakdown` cite it, never edit it |
+| `engineering/tech-constraints.md` | Engineer fills and maintains (gated); skills read only — confirmed answers from briefs' Engineering-confirmations lists are folded in by the Engineer, not by skills |

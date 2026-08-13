@@ -121,4 +121,4 @@ Without this, there is no way to audit whether the gate was actually run before 
 
 ## Chain Position
 
-Stage 7 (final) of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/launch-checklist` · downstream: — (post-launch: `/feature-results`). Skip rules live in the chain doc.
+Stage 8 (final) of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`) — upstream: `/launch-checklist` · downstream: — (post-launch: `/feature-results`). Skip rules live in the chain doc.
