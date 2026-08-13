@@ -38,7 +38,7 @@ A brief here describes **what a user must be able to do and why** — clear enou
 |----------|--------|-----------------|
 | 1 | The breakdown (`PRDs/{area}/{initiative-slug}-breakdown.md`) | This feature's row: type, riskiest assumption, dependencies, deferred items pointed at it |
 | 2 | The PRD + initiative page | The goal this feature serves; open loops |
-| 3 | Sibling briefs in the area | Shared objects and states — consistency, not reinvention |
+| 3 | Sibling briefs in the area | Shared objects and states — consistency, not reinvention; a sibling that lands mid-run gets re-read: inherit its shared rules, import its handed-off questions |
 | 4 | `strategy/business-context/platform-model.md` | Permission carriers, fixed enums, localization obligations, presumed-constraint domains, self-access rules |
 | 5 | `product-development/engineering/tech-constraints.md` | Limits, conventions, do-not-re-implement registry |
 | 6 | `product-development/product/customers/` (research-synthesis, feature-requests, call summaries) | The job in users' own words; variation signals; per-claim evidence |
@@ -63,7 +63,7 @@ Self-interrogate along the three dimension families in [references/variation-sca
 
 ## Step 5: The sweep battery — parallel subagents
 
-**One message, multiple Task calls, blind to each other** — findings return to you; only you write. Four always, the fifth on `--market`. One call per sweep — where §4 found branches, each sweep covers all branches inside its one call (never multiply subagents per branch). The `[draft]` you pass is the Step-3 spine plus the §4 verdicts. Cross-sweep handoffs a lens proposes ("hand to S1") are yours to resolve at fold time — sweeps run blind.
+**One message, multiple Task calls, blind to each other** — findings return to you; only you write. Four always, the fifth on `--market`. Proportionality applies to the mechanism too: for an Integration-type feature the four lenses may run as one combined subagent pass (say so in the readout); the full parallel battery is for net-new / stateful depth. One call per sweep — where §4 found branches, each sweep covers all branches inside its one call (never multiply subagents per branch). The `[draft]` you pass is the Step-3 spine plus the §4 verdicts. Cross-sweep handoffs a lens proposes ("hand to S1") are yours to resolve at fold time — sweeps run blind.
 
 | Sweep | Lens file | Hunts |
 |-------|-----------|-------|

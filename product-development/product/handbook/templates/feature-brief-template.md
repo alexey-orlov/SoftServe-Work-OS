@@ -4,7 +4,7 @@
 >
 > **What this document is:** the buildable contract for ONE feature — the level between the PRD (why this bet) and tickets (who builds what). It describes what a user must be able to do and why: clear enough that the build can't get it wrong, open enough that design and engineering find the best way. No layout, no components, no copy, no implementation-how — `[code-names]` for anything that needs a label.
 >
-> **Proportionality rule:** all 16 core sections exist — a non-applicable one carries one line saying why. Depth follows risk × novelty × variation count, never habit: an Integration-type feature legitimately produces 2–3 pages; a risky net-new stateful feature earns full depth. Conditional sections (rules comment at the bottom) appear only when their trigger fires.
+> **Proportionality rule:** all 16 core sections exist — a non-applicable one carries one line saying why. Depth follows risk × novelty × variation count, never habit: an Integration-type feature legitimately produces 2–3 pages; a risky net-new stateful feature earns full depth. Page counts are approximations — the honest measure is content: Integration ≈ half a net-new brief's depth (§§1–4 a line or two each, no fields table, an arrow-chain flow instead of a state diagram). Conditional sections (rules comment at the bottom) appear only when their trigger fires.
 >
 > **Evidence labels:** every load-bearing claim carries one — `[Evidenced]` (source named) · `[Partial]` (signal, not proof) · `[Hypothesis — needs validation]`. Undecided capabilities are flagged, never invented.
 
@@ -173,13 +173,14 @@ stateDiagram-v2
 - [ ] Traces to a named PRD goal; nothing invented where evidence is absent — flagged instead
 
 <!--
-Template rules (keep this comment):
+Template rules (template file only — delete this comment when filling a copy):
 - Conditional sections — add ONLY when the trigger fires, placed after the section that feeds them:
   · Definitions (after the intro line) — the feature introduces novel terms
   · Committed solutions (after §9) — a mechanism the team has genuinely agreed is the only viable
     path, each stamped: serves capability · why the only path · agreed by · date. Rare — the
     default is a capability, not a Commit.
-  · Risks & break points (after §11) — high-risk feature: irreversibility, money, privacy
+  · Risks & break points (after §11) — high-risk feature: irreversibility, money, or privacy,
+    including authority over money movement; borderline → include a minimal version
     ("highest-risk job — extra QA; atomic-transaction question answered before dev starts")
   · Competitive notes (after §12) — a market sweep ran (`/feature-brief --market`)
   · Handoff note (at the very end) — handoff to BA/dev is imminent

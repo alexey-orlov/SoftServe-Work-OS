@@ -53,7 +53,7 @@
 - [ ] Statuses reflect reality (briefs that exist are linked from their rows)
 
 <!--
-Template rules (keep this comment):
+Template rules (template file only — delete this comment when filling a copy):
 - One breakdown per initiative, edited in place; the feature table is the live status board.
 - Feature IDs (F-1…) are stable once assigned — briefs and the feature-index reference them.
 - Link each drafted brief from its row: `[F-2 brief]({initiative-slug}-{feature-slug}-brief.md)`.
