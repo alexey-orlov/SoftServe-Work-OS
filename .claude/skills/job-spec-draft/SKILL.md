@@ -26,7 +26,7 @@ group: definition
 
 A job spec here describes **what a user must be able to do and why** — clear enough that the build can't get it wrong, open enough that design and engineering find the best way. It carries the need; the prototype carries one answer to it. UI nouns appear only for existing platform surfaces or as `[code-names]`.
 
-**The template owns the format.** Read `product-development/product/handbook/templates/job-spec-template.md` fresh each run — section order, table shapes, register rules, the proportionality rule, and the Quality gate (the single checklist) come from it. `>` blockquotes are guidance to you, never emitted.
+**The template owns the format.** Read `product-development/product/handbook/templates/job-spec-template.md` fresh each run — section order, table shapes, register rules, the proportionality rule, and the Quality gate (the single checklist) come from it. `>` blockquotes are guidance to you, never emitted. When a team installs its own house format there (`/customize-os job-spec-template`, derived from their real per-job requirement documents), this skill picks it up with no change.
 
 **Evidence labels, throughout:** `[Evidenced]` (source named) · `[Partial]` (signal, not proof) · `[Hypothesis — needs validation]`. Undecided capabilities are **flagged, never invented** — they land in "Capabilities this job does not answer" plus an open-question row.
 

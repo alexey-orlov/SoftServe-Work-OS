@@ -23,7 +23,7 @@ group: definition
 
 `/prd-draft` answers *why this bet*; `/create-tickets` needs a buildable contract. This skill produces the level in between, part one: the initiative cut into jobs — each one independently valuable, end-to-end, and small enough to build and test on its own. The cut decides what gets de-risked first; `/job-spec-draft` then writes the contract for one job at a time.
 
-**The template owns the format.** Read `product-development/product/handbook/templates/jobs-breakdown-template.md` fresh each run — section order, table shapes, and the status vocabulary (not-drafted → drafted → agreed → handed-off) come from it. `>` blockquotes in the template are guidance to you, never emitted.
+**The template owns the format.** Read `product-development/product/handbook/templates/jobs-breakdown-template.md` fresh each run — section order, table shapes, and the status vocabulary (not-drafted → drafted → agreed → handed-off) come from it. `>` blockquotes in the template are guidance to you, never emitted. When a team installs its own house format there (`/customize-os jobs-breakdown-template`, derived from their real breakdown documents), this skill picks it up with no change.
 
 ## Step 1: Read the state
 

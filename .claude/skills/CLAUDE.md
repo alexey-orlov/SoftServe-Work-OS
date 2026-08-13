@@ -129,7 +129,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 - [session-retro/](session-retro/) — End-of-session sweep of the live conversation for durable takeaways + the curation pass (team-learnings cap, entry staleness, stale proposals); routes per the contract table, admin targets by steward yes or proposal
 - [auto-sync/](auto-sync/) — One switch for hands-off git: autocommit + autopush of main for everything except gated files (write prompt + held from landing); on|off|status
-- [customize-os/](customize-os/) — Interactive, resumable instance customization: derives customized context files from the org's real artifacts (v1: house PRD template from 2–4 example briefs), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
+- [customize-os/](customize-os/) — Interactive, resumable instance customization: derives customized context files from the org's real artifacts (template targets: house PRD, jobs-breakdown, and job-spec formats from 2–4 example documents), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
 
 ## Gaps
 
