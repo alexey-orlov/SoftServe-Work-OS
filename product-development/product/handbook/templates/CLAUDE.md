@@ -17,3 +17,5 @@ Living master files are *not* here: stakeholder profiles live in `../../strategy
 - [initiative-page-template.md](initiative-page-template.md) — Living initiative page scaffold; copies go to `../../initiatives/{slug}.md`, one per initiative, edited in place
 - [competitor-teardown-template.md](competitor-teardown-template.md) — Living competitor profile scaffold; copies go to `../../competitive-research/competitors/{slug}/teardown.md`, one per competitor, edited in place
 - [competitive-area-matrix-template.md](competitive-area-matrix-template.md) — Per-area capability matrix scaffold; copies go to `../../competitive-research/competitive-matrix-{area}.md` when an area outgrows the main matrix
+- [feature-breakdown-template.md](feature-breakdown-template.md) — Initiative → sequenced feature plan scaffold; copies go to `../../PRDs/{area}/{initiative-slug}-breakdown.md`; `/feature-breakdown` builds on it
+- [feature-brief-template.md](feature-brief-template.md) — Per-feature buildable contract scaffold (the level between PRD and tickets); copies go to `../../PRDs/{area}/{initiative-slug}-{feature-slug}-brief.md`; `/feature-brief` builds on it
