@@ -137,6 +137,16 @@ If we [build X], then [Y metric] will [change by Z], because [assumption about u
 **Kill Criteria:**
 If [specific condition], we will [rollback/pause/iterate].
 
+**Metrics Summary by Level** (leadership / handoff view — full vetted definitions live in `analytics/metrics/{area}/` via `/feature-metrics`; link, don't restate. Level names are the OS default — use your org's own from `business-info.md` → Metric Reporting Conventions when defined):
+
+| Level | Metric | Baseline (source) | Target | Frequency |
+|-------|--------|-------------------|--------|-----------|
+| Outcome — business result | [e.g., logo retention, revenue impact] | [value (source)] | [goal] | [e.g., monthly] |
+| Product — adoption & engagement | [primary metric] ★ | [value (source)] | [goal] | [e.g., weekly] |
+| Quality — stability & performance | [e.g., error rate, load time] | [value (source)] | [acceptable range] | [e.g., daily] |
+
+Every level carries at least one metric — an empty level gets a `[GAP:]`, not a blank row. ★ = the primary metric defined above.
+
 ### Evaluation Plan (for AI features or experiments)
 
 | Type | Detail |
@@ -248,6 +258,7 @@ If [specific condition], we will [rollback/pause/iterate].
 - [ ] Solution mock or description added
 - [ ] Why-we-beat-the-alternative stated (when we win, when we don't)
 - [ ] North-star, secondary, and guardrail metrics defined
+- [ ] Metrics summary covers every level (default: outcome / product / quality), each metric with a baseline source and measurement frequency — thin levels marked `[GAP:]`
 - [ ] Impact sizing modeled (reach × baseline × change, per named lever)
 
 ### Solution Review Stage

@@ -19,7 +19,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Current PRD | `product-development/product/PRDs/{area}/*.md` | feature name from chat | Hypothesis, problem statement, user impact |
-| Business Info | `product-development/product/strategy/business-context/business-info.md` | business model, growth stage, metrics | Product strategy, current North Star |
+| Business Info | `product-development/product/strategy/business-context/business-info.md` | business model, growth stage, metrics, reporting conventions | Product strategy, current North Star, metric reporting conventions (level names, required fields, artifact name) |
 | Metrics Context | `product-development/analytics/metrics/{area}/*.md` | baseline numbers, historical data | Current metric baselines, ranges |
 | Strategy | `product-development/product/strategy/*.md` | feature related to strategic pillar | Strategic fit and expected outcomes |
 | Meetings | `product-development/product/meetings/*/summaries/*.md` | feature name, "success metrics" | Stakeholder expectations, past decisions |
@@ -167,6 +167,25 @@ When to stop the experiment early.
 
 ---
 
+## The Leveled Reporting View
+
+Primary / guardrails / kill criteria is the working discipline. Leadership reviews and
+handoff docs read the same metrics a second way — as a leveled summary:
+
+| Level (OS default) | What it holds | Fed by |
+|--------------------|---------------|--------|
+| **Outcome** — business result | Post-launch tracking of the PRD's Business Value hypothesis (retention, revenue impact, NPS) | PRD Business Value section, `/impact-sizing` baselines, North Star ladder |
+| **Product** — adoption & engagement | The primary metric (★) plus supporting usage metrics | This skill's six-check selection |
+| **Quality** — stability & performance | The guardrails (error rate, latency, support volume) | Guardrail table |
+
+Rules:
+- **Org naming wins.** The level names above are the OS default. If `business-info.md` → "Metric Reporting Conventions" defines the org's own tier names, extra required per-metric fields, or a house name for the summary artifact, use those — the structure stays, the labels follow the org.
+- **Every level carries at least one metric.** An empty level is a `[GAP: no outcome metric — pull from PRD Business Value / run /impact-sizing]`, never a silent blank.
+- **One primary, still.** The leveled view does not dilute the single-primary discipline — ★ marks the primary inside its level (usually Product).
+- **Quality targets are ranges.** Guardrail rows carry their acceptable range, not an improvement goal.
+
+---
+
 ## Output Template
 
 ```markdown
@@ -204,6 +223,18 @@ If any of these occur, immediately rollback:
 - **Tracking:** [how it's implemented]
 - **Dashboard:** [where to monitor]
 - **Review cadence:** [how often to check]
+
+## KPI Summary — Leveled View
+_Same metrics, arranged for leadership review and handoff. Levels are the OS default —
+org tier names / extra fields come from `business-info.md` → Metric Reporting Conventions when defined._
+
+| Level | Metric | Definition | Baseline | Baseline source | Target | Frequency |
+|-------|--------|------------|----------|-----------------|--------|-----------|
+| Outcome | [business-result metric] | [how calculated] | [X] | [system/table] | [Y] | [cadence] |
+| Product | [primary metric] ★ | [how calculated] | [X] | [system/table] | [Y] | [cadence] |
+| Quality | [guardrail metric] | [how calculated] | [X] | [system/table] | [acceptable range] | [cadence] |
+
+★ = primary metric. Every level has ≥1 metric or an explicit `[GAP:]` row.
 ```
 
 ---
@@ -291,3 +322,4 @@ Before presenting output to the PM, verify:
 - [ ] **Metrics ladder to North Star:** The output explicitly shows how the primary metric connects upward to the company's North Star metric from `product-development/product/strategy/business-context/business-info.md`
 - [ ] **Data source identified for each metric:** Every metric names where the data comes from (e.g., "Amplitude event: task_created" or "database query on users table")
 - [ ] **Metric sensitivity estimated:** The output addresses whether the expected feature impact is large enough for the metric to detect, given current variance and traffic
+- [ ] **Leveled view complete:** the KPI Summary covers every reporting level (OS default Outcome / Product / Quality — org names from `business-info.md` when defined) with ≥1 metric each or an explicit `[GAP:]`, the primary flagged ★, and every row carrying a baseline source and measurement frequency

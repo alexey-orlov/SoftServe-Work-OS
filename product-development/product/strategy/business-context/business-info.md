@@ -246,6 +246,11 @@ Headline numbers only. Metric **definitions**, the SQL behind them, and dashboar
 
 **Efficiency:** CAC [amount] · LTV [amount] · LTV:CAC [ratio] · Payback [months] · Burn multiple [ratio]
 
+**Metric Reporting Conventions** — how metric docs speak to leadership. `/feature-metrics` and the PRD template read this block; leave the defaults if your org has no house taxonomy:
+- **Level names:** [default: Outcome / Product / Quality — replace with your org's tier names if it has its own, e.g. "Tier 1 — Outcome Metrics"]
+- **Required per-metric fields beyond the defaults** (definition, baseline, baseline source, target, measurement frequency): [none / list them]
+- **Summary artifact name:** [default: "Metrics Summary" — replace with the org's term, e.g. "KPI Framework"]
+
 ---
 
 ## Go-to-Market

@@ -30,3 +30,4 @@ rules as they come up._
 - 2026-08-03 — When asked about churn, always specify by-segment or by-tier; overall churn alone misleads.
 - 2026-08-03 — Customer summaries never include customer-side PII: role titles, not personal names.
 - 2026-08-03 — SQL queries always carry the `Last verified:` header with a real date — placeholder dates fail the launch gate.
+- 2026-08-13 — Skills stay universal: org- or customer-specific behavior (naming, formats, required fields) is read from customized context files (e.g. business-info.md convention blocks), never hardcoded in a skill; prefer extending an existing context file over creating a new one.
