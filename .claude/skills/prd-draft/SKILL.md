@@ -94,6 +94,7 @@ Check, in this priority order:
 8. Non-goals — what are we explicitly NOT doing?
 9. Success metrics — primary + guardrails?
 10. Key stakeholders?
+11. Any header fields the installed template's meta table requires that the repo can't answer (e.g. availability model, eligible users, pricing).
 
 **AI features** (`--ai` or auto-detected): the three behavior questions in `reference/ai-prd.md` (example inputs, edge-case handling, never-do).
 
@@ -101,14 +102,16 @@ Check, in this priority order:
 
 ## Step 3: Draft or Update
 
-Build on `product-development/product/handbook/templates/prd-template.md` — its section order is the argument: **Customer Value → Business Value → Scope → Solution → Success Metrics → Rollout → Risks → Owners → Appendix**. Include only sections relevant to the current stage.
+**The template owns the format.** Read `product-development/product/handbook/templates/prd-template.md` fresh each run — it is this deployment's document contract: section order and names, the meta table's fields, per-section `>` guidance blocks, table shapes, stage/length rules, and voice notes. Follow it exactly; `>` blockquotes are guidance to the drafting agent, never emitted into the draft. When a team installs its own house format there (e.g. a customer's Product Brief template), drafting picks it up with no change to this skill. Include only sections relevant to the current stage (or the template's own status ladder).
 
-- **Customer Value** carries segments (with account count + ARR from `segmentation-matrix.md`), problem, frequency, criticality, today's alternative, evidence — real quotes and numbers, sourced.
-- **Business Value** carries strategy fit, hypothesis, and the impact-by-lever table — **at most two primary levers**, others marked "not what this bet is for". Numbers come from `/impact-sizing` (reach × baseline × expected change); a lever named without a baseline gets a `[GAP:]`.
-- **Solution** carries key elements and **why/when it beats today's alternative** — the alternative named in Customer Value, not the options-we-rejected list (that stays in the Appendix as "Alternatives Considered").
-- **Success Metrics** — baselines and targets, guardrails, kill criteria. Deep-dive: `/feature-metrics`; experiment metrics: `/experiment-metrics`.
+Whatever the section names, route the core evidence slots to wherever the template's guidance places them — every slot lands somewhere or gets a `[GAP:]`:
 
-**Stage-length guide** (exceed it → move detail to the Appendix):
+- **Problem-side** — segment (with account count + ARR from `segmentation-matrix.md`), problem, frequency, criticality, today's alternative/workaround, evidence: real quotes and numbers, sourced.
+- **Value-side** — strategy fit, hypothesis, impact by lever: **at most two primary levers**, others marked "not what this bet is for". Numbers come from `/impact-sizing` (reach × baseline × expected change); a lever named without a baseline gets a `[GAP:]`.
+- **Solution-side** — key elements / feature set, **why/when it beats today's alternative** (the alternative named problem-side — options *we* rejected stay separate as "Alternatives Considered"), scope boundary and non-goals.
+- **Proof-side** — success metrics with baselines and targets, guardrails, kill criteria (deep-dive: `/feature-metrics`; experiment metrics: `/experiment-metrics`), rollout, risks with mitigations, dependencies with owners.
+
+**Stage-length guide** — the default when the template doesn't define its own (exceed it → move detail to the Appendix):
 
 | Stage | Words | Focus |
 |-------|-------|-------|
@@ -119,7 +122,7 @@ Build on `product-development/product/handbook/templates/prd-template.md` — it
 | Launch Readiness | 1500–2000 | Rollback, kill criteria, go/no-go |
 | Impact Review | 500–800 | Results vs targets, learnings |
 
-**Writing:** the PM's voice per `product-development/product/handbook/writing-guides/`, real quotes, actual numbers, named stakeholders, no corporate filler. Quality bar: the PRD Quality Checklist at the bottom of the template — the single checklist; check the items for the current stage before presenting.
+**Writing:** the template's own voice notes first, then the PM's voice per `product-development/product/handbook/writing-guides/` — real quotes, actual numbers, named stakeholders, no corporate filler. Quality bar: the Quality Checklist at the bottom of the template — the single checklist; check the items for the current stage before presenting.
 
 ## Step 4: Register the Work (first run — prd-draft is the index producer)
 
