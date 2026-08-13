@@ -1,11 +1,11 @@
 # EXAMPLE — Team Time-Off & Coverage
 
-_status: active — PRD in Planning Review; feature cut + first brief drafted (worked example)_
+_status: active — PRD in Planning Review; job cut + first job spec drafted (worked example)_
 _updated: 2026-08-13_
-_target-feature(s): `feature-index.yaml#workforce.time-off-requests`_
+_target-job(s): `feature-index.yaml#workforce.time-off-requests`_
 _owner: PM (roster placeholder)_
 
-> Synthetic worked example for the fictional product **Beacon** — this initiative demonstrates the definition→delivery bridge: PRD → `/feature-breakdown` → `/feature-brief`. Every number is invented.
+> Synthetic worked example for the fictional product **Beacon** — this initiative demonstrates the definition→delivery bridge: PRD → `/jobs-breakdown` → `/job-spec-draft`. Every number is invented.
 
 ## Snapshot
 
@@ -24,8 +24,8 @@ _owner: PM (roster placeholder)_
 - PRD: [Team Time-Off & Coverage PRD](../PRDs/workforce/time-off-requests-prd.md)
 - Assumption map: -
 - Challenge report: -
-- Feature breakdown: [time-off-requests-breakdown.md](../PRDs/workforce/time-off-requests-breakdown.md)
-- Feature briefs: [F-1 — request & decide](../PRDs/workforce/time-off-requests-request-approval-brief.md)
+- Jobs breakdown: [time-off-requests-jobs-breakdown.md](../PRDs/workforce/time-off-requests-jobs-breakdown.md)
+- Job specs: [J-1 — request & decide](../PRDs/workforce/time-off-requests-request-approval-job-spec.md)
 - Impact sizing: -
 - User research: -
 - Competitive analysis: -
@@ -41,10 +41,10 @@ _owner: PM (roster placeholder)_
 
 ## Open loops
 
-- Mine: agree the F-1 brief with Engineering (its §14 confirmations) — then `/create-tickets`.
+- Mine: agree the J-1 job spec with Engineering (its §14 confirmations) — then `/create-tickets`.
 
 ## Activity
 
-- 2026-08-13 — Initiative created as the worked example of the PRD → breakdown → brief chain.
-- 2026-08-13 — Feature breakdown drafted (`/feature-breakdown`): F-1 request-approval (walking skeleton) → F-2 coverage-handoff (the bet's risk test) → F-3 ∥ F-4; F-5 external-calendar-sync Won't-now; 7 cross-feature questions opened in the breakdown's §4.
-- 2026-08-13 — F-1 request-approval brief drafted (`/feature-brief`): four sweeps folded (S1–S4); 13 rules + 10-exception floor incl. the recursive decider-absent case; zero auto-closers ran (all source-gated out); 9 open questions — the ≥ 80% cover-naming premise routed to `/interview-guide` (suggested, not run).
+- 2026-08-13 — Initiative created as the worked example of the PRD → breakdown → job spec chain.
+- 2026-08-13 — Jobs breakdown drafted (`/jobs-breakdown`): J-1 request-approval (walking skeleton) → J-2 coverage-handoff (the bet's risk test) → J-3 ∥ J-4; J-5 external-calendar-sync Won't-now; 7 cross-job questions opened in the breakdown's §4.
+- 2026-08-13 — J-1 request-approval job spec drafted (`/job-spec-draft`): four sweeps folded (S1–S4); 13 rules + 10-exception floor incl. the recursive decider-absent case; zero auto-closers ran (all source-gated out); 9 open questions — the ≥ 80% cover-naming premise routed to `/interview-guide` (suggested, not run).

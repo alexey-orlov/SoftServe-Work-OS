@@ -24,7 +24,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 ```
 
 - **No restated defaults.** `disable-model-invocation` and `user-invocable` are omitted: every skill here is deliberately both user- and model-invocable — descriptions are the natural-language router, cron runs (`/weekly-review --digest`, `/wiki-lint`) and skill-to-skill orchestration (`/prd-challenge`, `/context-update` → `/process-meeting`) require model invocation, and `disable-model-invocation: true` would also drop the description from context and block scheduled/subagent use. Set a non-default flag only when a new skill genuinely needs it (external side effects on explicit user timing → `disable-model-invocation: true`; background knowledge with no meaningful command → `user-invocable: false`) and record the reason here.
-- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: feature-brief at ~1,440).
+- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: job-spec-draft at ~1,440).
 - **`argument-hint` is always double-quoted** — unquoted `[...]` parses as a YAML list.
 - **No other keys.** `group` is the only custom key; if tooling ever needs machine-readable extras, use the Agent Skills spec's `metadata:` map instead of new top-level keys.
 
@@ -75,15 +75,15 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [red-team/](red-team/) — Attack the load-bearing claims of a PRD, strategy, or decision doc before reality does
 - [strategy-sprint/](strategy-sprint/) — Create product strategy in 1 day, 1 week, or 1 month timeframes. Progressive strategy development framework
 - [write-prod-strategy/](write-prod-strategy/) — Product strategy docs using 7-component framework
-- [feature-breakdown/](feature-breakdown/) — Cut an agreed initiative into shippable features: backbone, gated + sequenced feature table with dependency rationale; the definition→delivery bridge, part one
-- [feature-brief/](feature-brief/) — The per-feature buildable contract between PRD and tickets: variation scan, four sweep subagents, grounded priorities, research routing, eng-confirmation list; challenge mode pressure-tests existing drafts
+- [jobs-breakdown/](jobs-breakdown/) — Cut an agreed initiative into shippable jobs: backbone, gated + sequenced job table with dependency rationale; the definition→delivery bridge, part one
+- [job-spec-draft/](job-spec-draft/) — The per-job buildable contract between PRD and tickets: variation scan, four sweep subagents, grounded priorities, research routing, eng-confirmation list; challenge mode pressure-tests existing drafts
 
 ### Delivery
 
 `group: delivery` — Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in.
 
 - [code-first-draft/](code-first-draft/) — First-pass implementation of a PRD in the product codebase (or a standalone reference impl when none is connected)
-- [create-tickets/](create-tickets/) — Turn an agreed PRD or feature brief into dev-backlog tickets (briefs preferred when they exist), or push feature-request records as intake tickets — tracker MCP or text fallback
+- [create-tickets/](create-tickets/) — Turn an agreed PRD or job spec into dev-backlog tickets (job specs preferred when they exist), or push feature-request records as intake tickets — tracker MCP or text fallback
 - [feature-results/](feature-results/) — Post-launch analysis and results documentation. Document what shipped and what we learned
 - [launch-checklist/](launch-checklist/) — Prioritized, dependency-mapped launch plan (small / major / regulatory), importing the pre-mortem's launch-blocking risks
 - [prioritize-requests/](prioritize-requests/) — Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park

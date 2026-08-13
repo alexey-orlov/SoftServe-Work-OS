@@ -1,6 +1,6 @@
-# Tech Constraints — the build realities every feature brief must respect
+# Tech Constraints — the build realities every job spec must respect
 
-The engineering facts a requirements doc can't guess: stack and conventions, hard platform limits, and the registry of things that already exist and must not be re-implemented. `/feature-brief` matches every draft against this file (its Constraints and Engineering-confirmations sections cite it); `/feature-breakdown` reads it when sequencing. Unfilled sections make those skills mark output `[GAP: tech constraints unfilled — feasibility unverified]`.
+The engineering facts a requirements doc can't guess: stack and conventions, hard platform limits, and the registry of things that already exist and must not be re-implemented. `/job-spec-draft` matches every draft against this file (its Constraints and Engineering-confirmations sections cite it); `/jobs-breakdown` reads it when sequencing. Unfilled sections make those skills mark output `[GAP: tech constraints unfilled — feasibility unverified]`.
 
 _updated: [TBD — fill during setup]_ · _owner: Engineer (see Team table in root CLAUDE.md)_
 
@@ -30,7 +30,7 @@ _updated: [TBD — fill during setup]_ · _owner: Engineer (see Team table in ro
 
 ## 7) Do-not-re-implement registry
 
-Existing shared components, endpoints, and services that new work must consume, not rebuild. This feeds the brief idiom: "already live in [system] — Engineering to confirm the same [endpoint/component] is consumed here; do not re-implement."
+Existing shared components, endpoints, and services that new work must consume, not rebuild. This feeds the job-spec idiom: "already live in [system] — Engineering to confirm the same [endpoint/component] is consumed here; do not re-implement."
 
 | What exists | Where it lives | Covers | Confirm with |
 |---|---|---|---|
@@ -40,7 +40,7 @@ Existing shared components, endpoints, and services that new work must consume, 
 Living-master rules (keep this comment):
 - One copy, edited in place — never copied per feature. Budget ≤120 lines.
 - Owner: Engineer — PMs and skills read it; only Engineering fills or corrects it.
-  /feature-brief's "Engineering confirmations needed" section is the standing request
+  /job-spec-draft's "Engineering confirmations needed" section is the standing request
   queue that seeds this file: confirmed answers get folded in here.
 - [TBD] markers mean "not filled yet"; the run-time nag is the skills' [GAP:] marker.
 - This file is gated in governance/write-policy.yaml — edits need an in-session yes.

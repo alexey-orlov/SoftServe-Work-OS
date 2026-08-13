@@ -41,8 +41,8 @@ tiers:
     - product-development/product/strategy/business-context/segmentation-matrix.md
     - product-development/product/strategy/business-context/stakeholders.md
     - product-development/product/strategy/current-quarter.md
-    - product-development/product/strategy/business-context/platform-model.md  # platform facts feature briefs must respect
-    - product-development/engineering/tech-constraints.md                      # build realities feature briefs must respect — Engineer-owned
+    - product-development/product/strategy/business-context/platform-model.md  # platform facts job specs must respect
+    - product-development/engineering/tech-constraints.md                      # build realities job specs must respect — Engineer-owned
     # System rules — the OS itself.
     - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
     - product-development/product/handbook/templates/**                      # templates shape every future document

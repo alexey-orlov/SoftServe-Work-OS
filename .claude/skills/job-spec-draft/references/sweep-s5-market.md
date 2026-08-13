@@ -17,10 +17,10 @@ What close competitors' products can and can't do for **this job** — capabilit
 
 ## Hard rules
 
-- **Evidence, never UI.** "Competitor X supports bulk approval" is admissible; "Competitor X uses a right-side drawer" is not — never carry layout, copy, or interaction patterns into the brief.
+- **Evidence, never UI.** "Competitor X supports bulk approval" is admissible; "Competitor X uses a right-side drawer" is not — never carry layout, copy, or interaction patterns into the job spec.
 - **Label everything:** `[Evidenced]` (seen in their docs/product, cited) · `[Partial]` (marketing claim, unverified) · `[Hypothesis — needs validation]`.
 - **This job only.** No general competitive posture, pricing philosophy, or roadmap speculation — `/competitor-analysis` owns those.
 
 ## Return format
 
-Per-competitor capability notes with citations and labels, then a one-paragraph synthesis: table-stakes for this job · where the draft exceeds or trails · which §12 rows this evidence moves and in which direction. Findings that imply new capabilities go through the standard disposition (in-feature / deferred / open question), marked as market-sourced.
+Per-competitor capability notes with citations and labels, then a one-paragraph synthesis: table-stakes for this job · where the draft exceeds or trails · which §12 rows this evidence moves and in which direction. Findings that imply new capabilities go through the standard disposition (in-job / deferred / open question), marked as market-sourced.

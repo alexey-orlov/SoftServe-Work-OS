@@ -3,8 +3,8 @@
 The shared rules behind every claim about what the product's code does. The engines —
 `/code-qa` (answer pipeline) and `/connect-code` (setup) — implement these rules step by
 step; skills that make code claims in passing (reviewers, gates, critique skills) follow
-them via the short block below. Rationale and alternatives:
-`product-development/product/decisions/2026-08-05-code-grounding-architecture.md`.
+them via the short block below. The chosen shape: tiered local-first grounding — local
+clone + registry + labeled degradation over MCP-only or map-only; maps route, never prove.
 
 ## The access-tier chain
 

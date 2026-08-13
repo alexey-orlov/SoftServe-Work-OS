@@ -17,4 +17,4 @@ Implementation plans, plus the code-repo registry, the code-grounding contract, 
 
 - [code-repos.yaml](code-repos.yaml) — Registry of product code repos: remote, coverage, entry points, deployed ref, access tier — Tier 0 of code grounding (`/code-qa`)
 - [code-grounding.md](code-grounding.md) — The rules every claim about product code follows: the access-tier chain, `repo@sha` citation format, honesty rules, secrets masking, and the short block code-claiming skills paste. Implemented by `/code-qa` and `/connect-code`
-- [tech-constraints.md](tech-constraints.md) — Build realities feature briefs must respect: stack and conventions, platform limits, NFR floors, do-not-re-implement registry. Engineer-owned; read by `/feature-brief` and `/feature-breakdown`
+- [tech-constraints.md](tech-constraints.md) — Build realities job specs must respect: stack and conventions, platform limits, NFR floors, do-not-re-implement registry. Engineer-owned; read by `/job-spec-draft` and `/jobs-breakdown`

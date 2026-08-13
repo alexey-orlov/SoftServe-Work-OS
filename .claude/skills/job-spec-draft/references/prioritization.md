@@ -1,6 +1,6 @@
 # Prioritization — grounded scope decisions for §12
 
-Scores what's **in this feature vs deferred** (the boundary), never the build order — that lives in the breakdown. Score each variation (§5), each major candidate capability, and each contested exception. Skip scoring what's obviously core: the walking skeleton's own path is in by definition.
+Scores what's **in this job vs deferred** (the boundary), never the build order — that lives in the breakdown. Score each variation (§5), each major candidate capability, and each contested exception. Skip scoring what's obviously core: the walking skeleton's own path is in by definition.
 
 ## The four factors
 
@@ -13,7 +13,7 @@ Scores what's **in this feature vs deferred** (the boundary), never the build or
 
 ## Tiers
 
-**Must** (the feature is wrong without it) · **Should** (in unless effort-evidence from §14 pushes back) · **Could** (in if cheap; first to cut) · **Won't-now** (deferred — §16 names where it goes and why later beats now).
+**Must** (the job is wrong without it) · **Should** (in unless effort-evidence from §14 pushes back) · **Could** (in if cheap; first to cut) · **Won't-now** (deferred — §16 names where it goes and why later beats now).
 
 ## Hard rules
 
@@ -21,8 +21,8 @@ Scores what's **in this feature vs deferred** (the boundary), never the build or
 2. **Effort is never scored here.** Effort is Engineering's number — §14 asks for ranges per Must item; a Should/Could boundary can move when those come back. Scoring effort yourself both gets it wrong and pre-empts the people who own it.
 3. **Provisional tiers:** Reach or Frequency without a source → the tier is marked *provisional* in §12 and auto-generates a §13 research row (method per the routing table). A provisional Must still blocks scope commitment — that's the point.
 4. **Variations are scoped like scope:** a nuance with 2-account reach can defer; a branch covering a whole compliance regime escalates. The §5 table's Priority column uses this same rubric.
-5. **Sanity check against the riskiest assumption:** if the Must set no longer tests §4's riskiest assumption — the boundary drifted from de-risking to feature-completeness — re-cut or flag to the breakdown.
-6. **Deferrals are named, not dropped:** every Won't-now points to a future feature or says "deliberately never, because …" (§16). The coverage rule from the breakdown applies at brief grain too.
+5. **Sanity check against the riskiest assumption:** if the Must set no longer tests §4's riskiest assumption — the boundary drifted from de-risking to job-completeness — re-cut or flag to the breakdown.
+6. **Deferrals are named, not dropped:** every Won't-now points to a future job or says "deliberately never, because …" (§16). The coverage rule from the breakdown applies at job spec grain too.
 
 ## Worked micro-example (shape, not content)
 

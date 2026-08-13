@@ -1,6 +1,6 @@
 # EXAMPLE — Team Time-Off & Coverage PRD
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Beacon's mid-market and enterprise orgs run standing data-operations teams around enrichment jobs; when the person who approves jobs or watches the credit budget is away with no handoff, runs stall and balances drain unseen — so Beacon is adding team time-off management where that duty lives: the workspace. Every number below is invented. Use this next to [the blank template](../../handbook/templates/prd-template.md); the feature cut derived from it lives in [time-off-requests-breakdown.md](time-off-requests-breakdown.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Beacon's mid-market and enterprise orgs run standing data-operations teams around enrichment jobs; when the person who approves jobs or watches the credit budget is away with no handoff, runs stall and balances drain unseen — so Beacon is adding team time-off management where that duty lives: the workspace. Every number below is invented. Use this next to [the blank template](../../handbook/templates/prd-template.md); the job cut derived from it lives in [time-off-requests-jobs-breakdown.md](time-off-requests-jobs-breakdown.md).
 
 **DRI:** PM (see team roster in root CLAUDE.md) · **Stage:** Planning Review · **Status:** Draft · **Last updated:** 2026-08-13
 
@@ -20,7 +20,7 @@ Coverage continuity is the retention half of the Q3 "own the ops workflow" bet: 
 
 One workspace surface where analysts request time off, workspace managers decide, and the two coverage duties — enrichment-job approval and burn-alert watching — follow the absence automatically.
 
-| # | Feature | One line |
+| # | Job | One line |
 |---|---------|----------|
 | 1 | Request & decide time off | Analyst requests dates → workspace manager approves or declines → the team sees who's out |
 | 2 | Coverage handoff | During an approved absence, job-approval duty and burn alerts route to a chosen covering teammate — the routing rails already exist in the notification service |

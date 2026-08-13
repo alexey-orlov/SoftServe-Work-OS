@@ -14,7 +14,7 @@ The Cockburn walk: take every flow in §6 (per branch, where §5 found branches)
 - Retroactive: the action targets a past date, a closed period, an already-processed record
 - Expiry: the pending thing outlives its validity (invitation, approval window, token) — what state results?
 - Concurrency: two actors act on the same object at once (approve + withdraw racing); the same actor double-submits
-- In-flight change: the feature (or a permission, or the plan) turns on/off while objects are mid-flow
+- In-flight change: the job (or a permission, or the plan) turns on/off while objects are mid-flow
 
 **Data:**
 - Missing / invalid / duplicate at the moment of action (not just at entry)
@@ -32,7 +32,7 @@ The Cockburn walk: take every flow in §6 (per branch, where §5 found branches)
 
 - Every exception row states an **outcome that must hold**, or is explicitly marked open (`?`) with an owner — never left implied.
 - Tag rows with the §5 variation they belong to when not universal.
-- The list is **a floor, not a ceiling** — expected incomplete; design and QA will find more, and the brief says so.
+- The list is **a floor, not a ceiling** — expected incomplete; design and QA will find more, and the job spec says so.
 - An exception that reveals a missing capability (e.g. "expired invite" implies "re-invite") → hand it to S1's disposition, don't duplicate it.
 
 ## Return format

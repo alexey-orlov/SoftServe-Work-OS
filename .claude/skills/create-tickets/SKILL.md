@@ -1,6 +1,6 @@
 ---
 name: create-tickets
-description: Turn an agreed PRD or feature brief into dev-backlog tickets (estimates, dependencies, sprint suggestion), or push customer feature-request records as 1:1 intake tickets — via the connected tracker MCP (Linear / Jira / Asana) or formatted text fallback. Feature briefs are the preferred source when they exist (PRDs/{area}/*-brief.md — a brief's rules/ACs, engineering confirmations, and DoD seam map straight onto tickets); run after the brief or PRD is agreed, not before. NOT for deciding which requests deserve building (/prioritize-requests), writing the spec itself (/prd-draft), or cutting the initiative into features (/feature-breakdown → /feature-brief).
+description: Turn an agreed PRD or job spec into dev-backlog tickets (estimates, dependencies, sprint suggestion), or push customer feature-request records as 1:1 intake tickets — via the connected tracker MCP (Linear / Jira / Asana) or formatted text fallback. Job specs are the preferred source when they exist (PRDs/{area}/*-job-spec.md — a job spec's rules/ACs, engineering confirmations, and DoD seam map straight onto tickets); run after the job spec or PRD is agreed, not before. NOT for deciding which requests deserve building (/prioritize-requests), writing the spec itself (/prd-draft), or cutting the initiative into jobs (/jobs-breakdown → /job-spec-draft).
 argument-hint: "[PRD path | push]"
 group: delivery
 ---
@@ -11,7 +11,7 @@ Generate engineering tickets from PRDs, feature specs, or task lists. Supports d
 
 ## Quick Start
 
-1. Point the skill to the source: feature brief, PRD, meeting action items, or describe the work
+1. Point the skill to the source: job spec, PRD, meeting action items, or describe the work
 2. The skill breaks it down into well-structured tickets with acceptance criteria
 3. Each ticket gets an effort estimate, dependencies, and component label
 4. If Linear/Jira MCP is connected, the skill creates tickets directly; otherwise, the skill generates copy-paste text
@@ -74,7 +74,7 @@ summary).
 ### Step 1: Gather Context
 
 Ask the PM:
-1. **Source document:** feature brief, PRD, or task list?
+1. **Source document:** job spec, PRD, or task list?
 2. **Target system:** Linear, Jira, or text output?
 3. **Project/Team:** Which project/team should receive tickets?
 4. **Ticket type:** Story, Task, Bug, Epic?
@@ -84,14 +84,14 @@ When `engineering/code-repos.yaml` lists a reachable repo covering the area, pul
 module paths and entry points via `/code-qa` so Technical Notes reference actual files,
 not guessed ones.
 
-When agreed feature briefs exist for the work (`product-development/product/PRDs/{area}/
-{initiative-slug}-{feature-slug}-brief.md` — check the feature's `briefs:` list in
+When agreed job specs exist for the work (`product-development/product/PRDs/{area}/
+{initiative-slug}-{job-slug}-job-spec.md` — check the feature's `job-specs:` list in
 `feature-index.yaml`, or the breakdown's table), prefer them over the PRD as the
-decomposition source: one brief ≈ one epic or story cluster; its Rules & acceptance
+decomposition source: one job spec ≈ one epic or story cluster; its Rules & acceptance
 criteria become ticket ACs near-verbatim; its Engineering-confirmations list becomes
 blocking spike/confirmation tickets ("do not re-implement" checks first); its deferred
 cross-cutting rows and Out-of-scope section define what NOT to ticket; its DoD footer
-maps onto each ticket's definition of done. A brief still in Draft status → flag it,
+maps onto each ticket's definition of done. A job spec still in Draft status → flag it,
 don't ticket it.
 
 ### Step 2: Analyze Source Material
@@ -469,7 +469,7 @@ Remember: Great tickets save engineering hours. Invest time upfront to create cl
 When the PM uses `/create-tickets`, the skill automatically:
 
 ### 1. Extract Source Material Understanding
-**Source:** feature briefs (`*-brief.md`, preferred when both exist) and PRDs in `product-development/product/PRDs/{area}/`, or uploaded documents
+**Source:** job specs (`*-job-spec.md`, preferred when both exist) and PRDs in `product-development/product/PRDs/{area}/`, or uploaded documents
 - **What What to look for:** Acceptance criteria, technical requirements, design context
 - **How the skill uses it:** Generate detailed tickets with full context
 - **Example:** "PRD says 'mobile-first', I'll note that in every ticket's technical notes"

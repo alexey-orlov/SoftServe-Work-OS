@@ -1,34 +1,34 @@
 ---
-name: feature-brief
-description: Write the buildable contract for ONE feature — the level between the PRD (/prd-draft) and tickets (/create-tickets). Template-driven and proportionate (an Integration-type job is 2–3 pages; a risky net-new stateful one earns full depth), every load-bearing claim evidence-labeled. Runs a mandatory variation scan (company / user / situation dimensions — nuance vs branch vs different-feature), then four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor capability evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus the engineering-confirmations list. challenge mode pressure-tests an existing draft into a relocation table + gaps report in PRDs/{area}/reviews/. Use on /feature-brief, "brief F-2", "spec this feature", "write the feature contract", "challenge this brief". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into features (/feature-breakdown — runs first), dev tickets (/create-tickets — runs after the brief is agreed), or making the solution visible (/prototype — a brief is its natural input).
-argument-hint: "[feature | breakdown row] [challenge <path>] [--market]"
+name: job-spec-draft
+description: Write the buildable contract for ONE job — the level between the PRD (/prd-draft) and tickets (/create-tickets). Template-driven and proportionate (an Integration-type job is 2–3 pages; a risky net-new stateful one earns full depth), every load-bearing claim evidence-labeled. Runs a mandatory variation scan (company / user / situation dimensions — nuance vs branch vs different-job), then four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor capability evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus the engineering-confirmations list. challenge mode pressure-tests an existing draft into a relocation table + gaps report in PRDs/{area}/reviews/. Use on /job-spec-draft, "job spec J-2", "spec this job", "write the job contract", "challenge this job spec". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into jobs (/jobs-breakdown — runs first), dev tickets (/create-tickets — runs after the job spec is agreed), or making the solution visible (/prototype — a job spec is its natural input).
+argument-hint: "[job | breakdown row] [challenge <path>] [--market]"
 group: definition
 ---
 
 ## Quick Start
 
-**What to provide:** A feature from a breakdown (`F-2`, or the initiative slug + feature name), or an ad-hoc feature description when no breakdown exists yet (offered: run `/feature-breakdown` first — a brief without a cut risks briefing a component).
+**What to provide:** A job from a breakdown (`J-2`, or the initiative slug + job name), or an ad-hoc job description when no breakdown exists yet (offered: run `/jobs-breakdown` first — a job spec without a cut risks speccing a component).
 
 ```
-/feature-brief [initiative] F-2            → Draft or update the contract for that feature
-/feature-brief [feature description]       → Ad-hoc: classify, scan, sweep, draft — flags the missing breakdown
-/feature-brief [...] --market              → Adds the competitor-capability sweep (evidence, never UI)
-/feature-brief challenge [path]            → Pressure-test an existing draft (yours or prototype-derived)
+/job-spec-draft [initiative] J-2            → Draft or update the contract for that job
+/job-spec-draft [job description]       → Ad-hoc: classify, scan, sweep, draft — flags the missing breakdown
+/job-spec-draft [...] --market              → Adds the competitor-capability sweep (evidence, never UI)
+/job-spec-draft challenge [path]            → Pressure-test an existing draft (yours or prototype-derived)
 ```
 
-**What you get:** the living contract at `product-development/product/PRDs/{area}/{initiative-slug}-{feature-slug}-brief.md` (template: `product-development/product/handbook/templates/feature-brief-template.md`) — variations dispositioned, capabilities swept complete with state maps, rules with testable ACs, grounded scope priorities — and a closing readout: decisions only you can make, research routed by method, what Engineering must confirm before scope commits.
+**What you get:** the living contract at `product-development/product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (template: `product-development/product/handbook/templates/job-spec-template.md`) — variations dispositioned, capabilities swept complete with state maps, rules with testable ACs, grounded scope priorities — and a closing readout: decisions only you can make, research routed by method, what Engineering must confirm before scope commits.
 
 **Time:** minutes for an Integration-type job; a full net-new stateful contract is a working session.
 
 ---
 
-# /feature-brief — the buildable contract
+# /job-spec-draft — the buildable contract
 
-A brief here describes **what a user must be able to do and why** — clear enough that the build can't get it wrong, open enough that design and engineering find the best way. It carries the need; the prototype carries one answer to it. UI nouns appear only for existing platform surfaces or as `[code-names]`.
+A job spec here describes **what a user must be able to do and why** — clear enough that the build can't get it wrong, open enough that design and engineering find the best way. It carries the need; the prototype carries one answer to it. UI nouns appear only for existing platform surfaces or as `[code-names]`.
 
-**The template owns the format.** Read `product-development/product/handbook/templates/feature-brief-template.md` fresh each run — section order, table shapes, register rules, the proportionality rule, and the Quality gate (the single checklist) come from it. `>` blockquotes are guidance to you, never emitted.
+**The template owns the format.** Read `product-development/product/handbook/templates/job-spec-template.md` fresh each run — section order, table shapes, register rules, the proportionality rule, and the Quality gate (the single checklist) come from it. `>` blockquotes are guidance to you, never emitted.
 
-**Evidence labels, throughout:** `[Evidenced]` (source named) · `[Partial]` (signal, not proof) · `[Hypothesis — needs validation]`. Undecided capabilities are **flagged, never invented** — they land in "Capabilities this feature does not answer" plus an open-question row.
+**Evidence labels, throughout:** `[Evidenced]` (source named) · `[Partial]` (signal, not proof) · `[Hypothesis — needs validation]`. Undecided capabilities are **flagged, never invented** — they land in "Capabilities this job does not answer" plus an open-question row.
 
 **The constraint line (run on every specific-looking detail):** *if the build changed this detail, where would the problem show up?* Caught in design review as look-and-feel → it's a solution: relocate to the capability it serves, or free it up. Surfaces after launch as a legal / money / data failure the build couldn't have known → it's a **constraint**: keep as rule + reason. Third outcome, rare: a **Commit** — the team has genuinely agreed there's only one viable path; keep by name, stamped (serves capability · why the only path · agreed by · date). Domains in `platform-model.md` §7 are presumed constraints until their owner says otherwise.
 
@@ -36,18 +36,18 @@ A brief here describes **what a user must be able to do and why** — clear enou
 
 | Priority | Source | What to extract |
 |----------|--------|-----------------|
-| 1 | The breakdown (`PRDs/{area}/{initiative-slug}-breakdown.md`) | This feature's row: type, riskiest assumption, dependencies, deferred items pointed at it |
-| 2 | The PRD + initiative page | The goal this feature serves; open loops |
-| 3 | Sibling briefs in the area | Shared objects and states — consistency, not reinvention; a sibling that lands mid-run gets re-read: inherit its shared rules, import its handed-off questions |
+| 1 | The breakdown (`PRDs/{area}/{initiative-slug}-jobs-breakdown.md`) | This job's row: type, riskiest assumption, dependencies, deferred items pointed at it |
+| 2 | The PRD + initiative page | The goal this job serves; open loops |
+| 3 | Sibling job specs in the area | Shared objects and states — consistency, not reinvention; a sibling that lands mid-run gets re-read: inherit its shared rules, import its handed-off questions |
 | 4 | `strategy/business-context/platform-model.md` | Permission carriers, fixed enums, localization obligations, presumed-constraint domains, self-access rules |
 | 5 | `product-development/engineering/tech-constraints.md` | Limits, conventions, do-not-re-implement registry |
 | 6 | `product-development/product/customers/` (research-synthesis, feature-requests, call summaries) | The job in users' own words; variation signals; per-claim evidence |
 | 7 | `strategy/business-context/segmentation-matrix.md`, `customers/accounts/portfolio.yaml` | Reach denominators for §5 and §12 |
 | 8 | `product-development/analytics/` (metrics, investigations) | Baselines for §15 |
-| 9 | A prototype, if one exists (`PRDs/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the brief |
+| 9 | A prototype, if one exists (`PRDs/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the job spec |
 | 10 | `PRDs/{area}/reviews/` | Assumptions already ranked; challenges already answered |
 
-Ask only questions that block the feature's definition (its object, its actors, its loop). Everything else drafts with `[GAP: what's missing — how to close it]`. `platform-model.md` / `tech-constraints.md` still `[TBD]` → carry `[GAP: platform model unfilled — constraints unverified]` / `[GAP: tech constraints unfilled — feasibility unverified]` in §9.
+Ask only questions that block the job's definition (its object, its actors, its loop). Everything else drafts with `[GAP: what's missing — how to close it]`. `platform-model.md` / `tech-constraints.md` still `[TBD]` → carry `[GAP: platform model unfilled — constraints unverified]` / `[GAP: tech constraints unfilled — feasibility unverified]` in §9.
 
 ## Step 2: Classify the job
 
@@ -59,11 +59,11 @@ Draft top-down per the template: root cause (why this exists, with current-state
 
 ## Step 4: Variation scan (mandatory — before any output)
 
-Self-interrogate along the three dimension families in [references/variation-scan.md](references/variation-scan.md) — company, user, situation. For each dimension: does execution of THIS job differ? Classify every hit: **not material** (say so in the §5 verdict line) · **nuance** (variation-tagged rules + exception rows) · **branch** (delta sub-flow, the delta only) · **different job** (backbone differs end-to-end → flag to `/feature-breakdown` as its own feature; never absorb it). Reach per variation is sourced (Step 1 row 7) or `[Hypothesis — needs validation]`. The scan's verdict fills §5 — silence is not an option.
+Self-interrogate along the three dimension families in [references/variation-scan.md](references/variation-scan.md) — company, user, situation. For each dimension: does execution of THIS job differ? Classify every hit: **not material** (say so in the §5 verdict line) · **nuance** (variation-tagged rules + exception rows) · **branch** (delta sub-flow, the delta only) · **different job** (backbone differs end-to-end → flag to `/jobs-breakdown` as its own job; never absorb it). Reach per variation is sourced (Step 1 row 7) or `[Hypothesis — needs validation]`. The scan's verdict fills §5 — silence is not an option.
 
 ## Step 5: The sweep battery — parallel subagents
 
-**One message, multiple Task calls, blind to each other** — findings return to you; only you write. Four always, the fifth on `--market`. Proportionality applies to the mechanism too: for an Integration-type feature the four lenses may run as one combined subagent pass (say so in the readout); the full parallel battery is for net-new / stateful depth. One call per sweep — where §4 found branches, each sweep covers all branches inside its one call (never multiply subagents per branch). The `[draft]` you pass is the Step-3 spine plus the §4 verdicts. Cross-sweep handoffs a lens proposes ("hand to S1") are yours to resolve at fold time — sweeps run blind.
+**One message, multiple Task calls, blind to each other** — findings return to you; only you write. Four always, the fifth on `--market`. Proportionality applies to the mechanism too: for an Integration-type job the four lenses may run as one combined subagent pass (say so in the readout); the full parallel battery is for net-new / stateful depth. One call per sweep — where §4 found branches, each sweep covers all branches inside its one call (never multiply subagents per branch). The `[draft]` you pass is the Step-3 spine plus the §4 verdicts. Cross-sweep handoffs a lens proposes ("hand to S1") are yours to resolve at fold time — sweeps run blind.
 
 | Sweep | Lens file | Hunts |
 |-------|-----------|-------|
@@ -76,11 +76,11 @@ Self-interrogate along the three dimension families in [references/variation-sca
 Sub-agent prompt template (per sweep):
 
 ```
-You are one sweep of a parallel feature-brief pass. Read the lens at
-.claude/skills/feature-brief/references/[file] and apply it end to end to this draft:
+You are one sweep of a parallel job-spec-draft pass. Read the lens at
+.claude/skills/job-spec-draft/references/[file] and apply it end to end to this draft:
 [draft]. Context: [PRD path · platform-model.md · tech-constraints.md · §5 verdicts].
 Work alone — do not look for other sweeps' output. Return findings only: for each,
-what's missing or wrong, the evidence, and a proposed disposition — in-feature (as
+what's missing or wrong, the evidence, and a proposed disposition — in-job (as
 capability / rule / AC / exception row) · deferred (risk + where it goes) · open
 question (owner) · constraint (rule + why) · commit-candidate. If the lens file is
 missing, say so and continue with best judgment.
@@ -94,7 +94,7 @@ When `engineering/code-repos.yaml` lists a reachable repo covering the area (rea
 
 ## Step 7: Prioritize & scope
 
-Score each variation and each major candidate requirement/exception per [references/prioritization.md](references/prioritization.md): sourced Reach · Frequency · Severity (compliance / money / privacy / irreversibility auto-Must) · Evidence label → Must / Should / Could / Won't-now. Effort is deliberately not scored — it's Engineering's number (§14). Unevidenced Reach or Frequency → tier marked *provisional* + a §13 research row. This sets the feature boundary; build order stays in the breakdown.
+Score each variation and each major candidate requirement/exception per [references/prioritization.md](references/prioritization.md): sourced Reach · Frequency · Severity (compliance / money / privacy / irreversibility auto-Must) · Evidence label → Must / Should / Could / Won't-now. Effort is deliberately not scored — it's Engineering's number (§14). Unevidenced Reach or Frequency → tier marked *provisional* + a §13 research row. This sets the job boundary; build order stays in the breakdown.
 
 ## Step 8: Route the research — and close what you can
 
@@ -117,7 +117,7 @@ Write per the template — proportionate (Integration ≈ 2–3 pages; condition
 ## Step 10: The readout (every run ends here)
 
 ```
-Where this contract stands — {initiative} F-{N}
+Where this contract stands — {initiative} J-{N}
 
 Decisions only you can make
   → [the judgment calls the sweeps surfaced — as many as genuinely exist]
@@ -132,19 +132,19 @@ Research needed            → §13 rows: method + suggested skill per row
 Engineering must confirm   → §14 list — blocks scope commitment, not drafting
 Variations                 → [n dispositioned: X in, Y deferred, Z flagged to the breakdown]
 
-Next: [the next feature to brief, or /create-tickets when this one is agreed]
+Next: [the next job to job spec, or /create-tickets when this one is agreed]
 ```
 
 ## Challenge mode
 
-`/feature-brief challenge [path]` — same machinery, pointed at an existing draft (hand-written or prototype-derived). Run the constraint line on every solution-shaped line, then the variation scan (its verdicts stand in for the draft's missing §5 as sweep context), then sweeps S1–S4 (S5 only with `--market`). Feasibility (Step 6) runs source-gated exactly as in author mode — its verdict or TODO lands in the report header; prioritization (Step 7) is skipped — the relocation table, not tiers, is the challenge deliverable. Then report:
+`/job-spec-draft challenge [path]` — same machinery, pointed at an existing draft (hand-written or prototype-derived). Run the constraint line on every solution-shaped line, then the variation scan (its verdicts stand in for the draft's missing §5 as sweep context), then sweeps S1–S4 (S5 only with `--market`). Feasibility (Step 6) runs source-gated exactly as in author mode — its verdict or TODO lands in the report header; prioritization (Step 7) is skipped — the relocation table, not tiers, is the challenge deliverable. Then report:
 
 1. **Decisions only you can make** — pinned first; as many as genuinely exist.
 2. **The relocation table** — every flagged line: original → verdict (**Relocate** to the capability it serves · **Constraint (keep)** as rule + reason · **Commit** stamped · **Free up** with why leaving it open helps · **Gap flag**) → where it went. One table; no prose restatement. Nothing vanishes silently — even a freed-up line keeps its row recording the detail and why leaving it open helps.
 3. **Gaps** — missing inverse actions and lifecycle verbs, unreachable states, the slice test (false-thin-slice), silent cross-cutting rows, exceptions floor, unstated rules.
-4. **Offer the rewrite** — assemble the corrected brief only on the PM's yes; the report never edits the brief.
+4. **Offer the rewrite** — assemble the corrected job spec only on the PM's yes; the report never edits the job spec.
 
-Report → `product-development/product/PRDs/{area}/reviews/{initiative-slug}-{feature-slug}-brief-review-{YYYY-MM-DD}.md` (dated, one per run). The brief itself is touched only on PM confirm. Write-back for the report: uniform-block step 1 applies (first use of `reviews/` creates its 5-line CLAUDE.md stub); propose the report on the feature's `reviews:` list (gated, batched); the brief's own registration is untouched by a challenge run.
+Report → `product-development/product/PRDs/{area}/reviews/{initiative-slug}-{job-slug}-job-spec-review-{YYYY-MM-DD}.md` (dated, one per run). The job spec itself is touched only on PM confirm. Write-back for the report: uniform-block step 1 applies (first use of `reviews/` creates its 5-line CLAUDE.md stub); propose the report on the feature's `reviews:` list (gated, batched); the job spec's own registration is untouched by a challenge run.
 
 ---
 
@@ -162,18 +162,18 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
-Specifics for this skill: the brief lands in the feature's `briefs:` list (gated, batched once per run); the breakdown's F-row gets its status bumped and the brief linked; the initiative page's "Feature briefs:" row and a dated Activity line are updated. New feature keys belong to `/prd-draft` and `/context-update`; entry missing entirely → propose the minimal entry (prd + briefs + initiatives) in the same gated change, marked as the registration `/prd-draft` would have made.
+Specifics for this skill: the job spec lands in the feature's `job-specs:` list (gated, batched once per run); the breakdown's J-row gets its status bumped and the job spec linked; the initiative page's "Job specs:" row and a dated Activity line are updated. New feature keys belong to `/prd-draft` and `/context-update`; entry missing entirely → propose the minimal entry (prd + job-specs + initiatives) in the same gated change, marked as the registration `/prd-draft` would have made.
 
 ---
 
 ## Downstream
 
-- `/create-tickets` — from an **agreed** brief; §14's confirmations and the DoD seam map onto ticket structure
-- `/prototype` — the brief is the need; the prototype is one hypothesis against it
-- `/code-first-draft` — same: the brief is its source contract when one exists
+- `/create-tickets` — from an **agreed** job spec; §14's confirmations and the DoD seam map onto ticket structure
+- `/prototype` — the job spec is the need; the prototype is one hypothesis against it
+- `/code-first-draft` — same: the job spec is its source contract when one exists
 - `/feature-metrics` — deepens §15 into full metric definitions
-- `/feature-breakdown` — receives different-job variation flags as new feature candidates
+- `/jobs-breakdown` — receives different-job variation flags as new job candidates
 
 ## Chain Position
 
-Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`), with `/feature-breakdown` — upstream: the cut · downstream: `/create-tickets`, `/prototype`. Skip rules live in the chain doc.
+Stage 5 of the de-risk-a-bet chain (`product-development/product/handbook/de-risk-a-bet.md`), with `/jobs-breakdown` — upstream: the cut · downstream: `/create-tickets`, `/prototype`. Skip rules live in the chain doc.

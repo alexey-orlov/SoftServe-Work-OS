@@ -1,6 +1,6 @@
 # Platform Model — how the product actually works underneath
 
-The platform facts every feature brief has to line up with: how access is really decided, what names and states are fixed, which domains are compliance-bound, and where things live. `/feature-brief` and `/feature-breakdown` read this file to ground capabilities, permission matrices, and constraints in reality instead of folklore. Unfilled sections make those skills mark their output `[GAP: platform model unfilled — constraints unverified]`.
+The platform facts every job spec has to line up with: how access is really decided, what names and states are fixed, which domains are compliance-bound, and where things live. `/job-spec-draft` and `/jobs-breakdown` read this file to ground capabilities, permission matrices, and constraints in reality instead of folklore. Unfilled sections make those skills mark their output `[GAP: platform model unfilled — constraints unverified]`.
 
 _updated: [TBD — fill during setup]_ · _owner: PM (see Team table in root CLAUDE.md)_
 
@@ -49,6 +49,6 @@ Living-master rules (keep this comment):
 - One copy, edited in place — never copied per feature. Budget ≤120 lines.
 - Owner: PM. Refresh when the access model, enums, or obligations change; bump _updated: on every edit.
 - [TBD] markers mean "not filled yet" — deliberately silent in lint; the run-time nag is
-  /feature-brief and /feature-breakdown carrying [GAP: platform model unfilled].
+  /job-spec-draft and /jobs-breakdown carrying [GAP: platform model unfilled].
 - This file is gated in governance/write-policy.yaml — edits need an in-session yes.
 -->

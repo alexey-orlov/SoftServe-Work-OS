@@ -1,12 +1,12 @@
-# EXAMPLE — Team Time-Off & Coverage — F-1: request-approval
+# EXAMPLE — Team Time-Off & Coverage — J-1: request-approval
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits. This is the buildable contract for one feature of the [Team Time-Off & Coverage](../../initiatives/time-off-requests.md) initiative — the level between the [PRD](time-off-requests-prd.md) (why this bet) and tickets (who builds what), drafted by `/feature-brief` from the [breakdown](time-off-requests-breakdown.md)'s F-1 row. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/feature-brief-template.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits. This is the buildable contract for one job of the [Team Time-Off & Coverage](../../initiatives/time-off-requests.md) initiative — the level between the [PRD](time-off-requests-prd.md) (why this bet) and tickets (who builds what), drafted by `/job-spec-draft` from the [breakdown](time-off-requests-jobs-breakdown.md)'s J-1 row. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/job-spec-template.md).
 
-Workspace time-off: an analyst requests dates and proposes a cover, the workspace manager decides, and the whole team sees who's out and who covers. The absence object this creates — including the named cover — is the contract F-2 later routes duties on.
+Workspace time-off: an analyst requests dates and proposes a cover, the workspace manager decides, and the whole team sees who's out and who covers. The absence object this creates — including the named cover — is the contract J-2 later routes duties on.
 
 | ID | Type | Parent | Effort | Priority — why | Depends on | Status | Updated |
 |----|------|--------|--------|----------------|-----------|--------|---------|
-| F-1 | Net new | [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-breakdown.md) | [Eng to confirm] | Must — walking skeleton; F-2/F-3/F-4 all consume its absence object and decision flow (breakdown §3) | — | Draft | 2026-08-13 |
+| J-1 | Net new | [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-jobs-breakdown.md) | [Eng to confirm] | Must — walking skeleton; J-2/J-3/J-4 all consume its absence object and decision flow (breakdown §3) | — | Draft | 2026-08-13 |
 
 ## 1) Why this exists
 
@@ -22,16 +22,16 @@ When I plan time away (or wake up sick), I want my time off agreed and my cover 
 
 ## 4) The slice
 
-**Riskiest assumption this feature tests:** teams move requests + decisions into the workspace and name covers unprompted — the first read on the ≥ 80% cover-assignment target (breakdown F-1 row; PRD — invented universe).
-**The backbone (full flow, for context):** request → decide (cover settled) → team sees → absence starts: duties route to cover (F-2) → absence ends: duties revert → no stalled jobs, no unwatched balances.
-**What this slice covers:** submit through decide through team visibility through system activation/completion of the absence. The loop closes at "complete, visible absence data" — duty *routing* deliberately does not happen here (F-2's seam), but every field routing needs exists and is current.
-**Preconditions & inherited dependencies:** none — first feature. Uses only existing platform facts: workspace membership, plan tier, the notification service.
+**Riskiest assumption this job tests:** teams move requests + decisions into the workspace and name covers unprompted — the first read on the ≥ 80% cover-assignment target (breakdown J-1 row; PRD — invented universe).
+**The backbone (full flow, for context):** request → decide (cover settled) → team sees → absence starts: duties route to cover (J-2) → absence ends: duties revert → no stalled jobs, no unwatched balances.
+**What this slice covers:** submit through decide through team visibility through system activation/completion of the absence. The loop closes at "complete, visible absence data" — duty *routing* deliberately does not happen here (J-2's seam), but every field routing needs exists and is current.
+**Preconditions & inherited dependencies:** none — first job. Uses only existing platform facts: workspace membership, plan tier, the notification service.
 
 ## 5) Variations — who does this differently
 
 Checked, not material: vertical, org size within Growth+Scale, data/integration maturity, tenure, migration state (net-new object — no historical data). Language: unknowable — platform-model §6 unfilled, carried in §10/§13. Accessibility: §10 row 1.
 
-| Variation | Who (reach, sourced) | Differs how | Priority — grounded | In this feature? |
+| Variation | Who (reach, sourced) | Differs how | Priority — grounded | In this job? |
 |-----------|----------------------|-------------|---------------------|------------------|
 | EU orgs | 14 of 52 (PRD — invented universe) | Nuance — note + decline reason are personal data: visibility + minimization rules; records are coverage-planning, **not** statutory-leave records (PRD non-goal) | Must (auto — privacy) | Yes — R-9/R-10, §9 |
 | Plan gating | 52 Growth+Scale in (PRD — invented universe); Starter counts unknown | Nuance — eligibility rule; Starter presentation (absent vs locked) undecided | Must — the buying segment | Yes — R-12; Starter question → §13 |
@@ -81,9 +81,9 @@ stateDiagram-v2
     Completed --> [*]
 ```
 
-Withdrawn, Declined (unless resubmitted), Cancelled, EndedEarly, Completed are deliberately terminal — no un-cancel or reopen; the path back is always a new request (audit clarity). A request still Submitted when its start date arrives sits in E2 (open). This status enum is the cross-feature contract F-2/F-3/F-4 consume — settle it before build (breakdown §4 #4; **commit-candidate** once agreed).
+Withdrawn, Declined (unless resubmitted), Cancelled, EndedEarly, Completed are deliberately terminal — no un-cancel or reopen; the path back is always a new request (audit clarity). A request still Submitted when its start date arrives sits in E2 (open). This status enum is the cross-job contract J-2/J-3/J-4 consume — settle it before build (breakdown §4 #4; **commit-candidate** once agreed).
 
-**Capabilities this feature does not answer — flagged, not invented:** org-level Head-of-Ops coverage read (§13 #8, §16) · on-behalf submission (§13 #2) · cover accept/decline consent (§13 #7) · retention periods for terminal records (§13 #6) · Starter-tier presentation (§13 #4).
+**Capabilities this job does not answer — flagged, not invented:** org-level Head-of-Ops coverage read (§13 #8, §16) · on-behalf submission (§13 #2) · cover accept/decline consent (§13 #7) · retention periods for terminal records (§13 #6) · Starter-tier presentation (§13 #4).
 
 ## 7) Roles & permissions
 
@@ -107,8 +107,8 @@ The enterprise security reviewer (second out-of-scope persona) evaluates and nev
 
 - **R-1** — Declining requires a non-empty reason, checked at the write. — *Why:* the requester must be able to act on the decision; resubmission needs direction.
 - **R-2** — Approval records a cover outcome: a named cover or an explicit no-cover choice (optional reason). — *Why:* the ≥ 80% metric needs "chose not to" distinguished from "forgot" (PRD — invented universe).
-- **R-3** — Cover validity at the decision write: cover ≠ requester, a current member of the same workspace. — *Why:* a dangling or self cover corrupts the object F-2 routes on.
-- **R-4** — The manager can change the cover (or flip to explicit no-cover) on an Approved or Active absence; old and new cover are notified; the change lands in history. — *Why:* covers resign, get sick, and leave; without this the F-2 contract rots (sweep S1/S2's top finding).
+- **R-3** — Cover validity at the decision write: cover ≠ requester, a current member of the same workspace. — *Why:* a dangling or self cover corrupts the object J-2 routes on.
+- **R-4** — The manager can change the cover (or flip to explicit no-cover) on an Approved or Active absence; old and new cover are notified; the change lands in history. — *Why:* covers resign, get sick, and leave; without this the J-2 contract rots (sweep S1/S2's top finding).
 - **R-5** — A new request is blocked only by the same person's Submitted/Approved/Active records in the same workspace sharing ≥ 1 day; terminal states never block; adjacency (end = next start − 1) is allowed. — *Why:* an unscoped overlap rule lets one declined request poison its dates forever.
 - **R-6** — Transitions are guarded against the current state at the write; the loser of a race (approve vs withdraw, two deciders) fails and sees the request's current state. — *Why:* exactly one outcome must win; the overlap check is enforced at the write too (§14 #5).
 - **R-7** — Every decision, manual transition, and cover change appends actor + timestamp (+ reason where required) to the record's history; system transitions are attributed as system; history is append-only — a resubmitted request keeps its declined decision. — *Why:* declines, cancels, and cover changes are disputable; a defensible record is a presumed constraint (§9).
@@ -116,7 +116,7 @@ The enterprise security reviewer (second out-of-scope persona) evaluates and nev
 - **R-9** — The note and the decline reason are visible to the requester and deciders only — never in [whos-out], never to the cover, never in notification payloads. [whos-out] renders Approved/Active records, dates + cover only. — *Why:* pending requests and reasons can carry personal context; storage minimization alone doesn't protect display. *(EU nuance, applies globally)*
 - **R-10** — Requests are immutable while Submitted (correct via withdraw + resubmit); the manager never edits dates (correct via decline with reason). — *Why:* two deliberate cannots, stated so the build doesn't invent ad-hoc edit permissions.
 - **R-11** — Notifications follow a per-transition recipient map: submit → deciders · decision → requester (+ named cover on approve) · cancel / end-early / cover-change → requester, decider, old + new cover · activation → cover on duty-visibility, completion → cover released. Delivery failure never rolls back a state change and is surfaced, not silent. — *Why:* the handoff must close in reality, not on one screen; a dropped decline notice is the bug (failure-visibility principle).
-- **R-12** — Date semantics, one anchor for everything: end date inclusive ("out 12th–14th" = back the 15th); activation at start-of-day and completion at end-of-day in the workspace's timezone *(proposed default — §14 #3)*; the same boundary defines the before-start cancel cutoff and the [whos-out] "today". — *Why:* an off-by-one here becomes duties routed a day late in F-2 — the exact incident this initiative fights.
+- **R-12** — Date semantics, one anchor for everything: end date inclusive ("out 12th–14th" = back the 15th); activation at start-of-day and completion at end-of-day in the workspace's timezone *(proposed default — §14 #3)*; the same boundary defines the before-start cancel cutoff and the [whos-out] "today". — *Why:* an off-by-one here becomes duties routed a day late in J-2 — the exact incident this initiative fights.
 - **R-13** — Growth+Scale plans only. On downgrade, existing records stay readable and run their lifecycle out; no new submissions. Start dates of today or earlier are allowed with immediate activation (launch-week reality + the out-today branch use one mechanism). — *Why:* plan boundaries must not orphan mid-flow absences; day one must work against absences already agreed offline.
 
 **Acceptance criteria:**
@@ -134,21 +134,21 @@ The enterprise security reviewer (second out-of-scope persona) evaluates and nev
 
 - `[GAP: platform model unfilled — constraints unverified]` — permission carriers, fixed enums, localization obligations, and self-access rules are all `[TBD]` in `business-context/platform-model.md`; every permission and enum claim above is provisional until it is filled.
 - `[GAP: tech constraints unfilled — feasibility unverified]` — `engineering/tech-constraints.md` holds no limits, conventions, or do-not-re-implement registry; platform ceilings and idempotency conventions are unknown.
-- `[TODO: feasibility unverified — needs /connect-code or eng consult]` — beacon-app is registered (`access_tier: local`) but no clone grant exists on this machine and the remote is a placeholder; the SHA-stamped map covers billing flows only and routes, never proves. No claim in this brief is code-verified.
-- **security** — no shared logins, ever (Beacon prohibits them; the workaround this feature replaces). Any on-behalf action, if adopted, is attributed to its real actor. — `[Evidenced — PRD]`
+- `[TODO: feasibility unverified — needs /connect-code or eng consult]` — beacon-app is registered (`access_tier: local`) but no clone grant exists on this machine and the remote is a placeholder; the SHA-stamped map covers billing flows only and routes, never proves. No claim in this job spec is code-verified.
+- **security** — no shared logins, ever (Beacon prohibits them; the workaround this job replaces). Any on-behalf action, if adopted, is attributed to its real actor. — `[Evidenced — PRD]`
 - **privacy (presumed constraint)** — note + decline reason: minimal collection, R-9 visibility, retention open (§13 #6). These are coverage-planning records, **not** statutory-leave records — v1 makes no compliance claim (PRD non-goal). — `[Partial]`
 - **audit (presumed constraint)** — disputable actions carry the R-7 record. — `[Partial]`
 
 ## 10) Cross-cutting concerns
 
-| Dimension | In this feature? | If deferred — risk + where it goes |
+| Dimension | In this job? | If deferred — risk + where it goes |
 |-----------|------------------|-------------------------------------|
 | Accessibility (keyboard, screen reader, color) | In — all four places operable keyboard-only and screen-reader announced; status never carried by color alone; floor unknown (`[GAP: tech constraints unfilled]`) → §14 #6 | — |
 | Localization — UI + system text | In (conditional) — string surface (labels, state names, errors, notification templates) kept externalizable; obligation unknown → §13 #5; notification locale is a recipient property | — |
 | Notifications at every handoff | In — R-11 map; channels + service capabilities unverified → §14 #1 | — |
 | Audit & history (who / what / when) | In — R-7; read scope: requester + deciders see a record's history | Org-level audit surface — deferred, no owner → §16 |
 | Day-one & existing data | In — no backfill or setup needed (net-new object; deciders come from the existing workspace model); designed empty states (AC-4); backdated starts per R-13 | — |
-| Permission-denied & out-of-scope personas | In — §7 row per persona: nothing decide-shaped renders for non-deciders; out-of-scope personas get nothing + this brief as the explanation | Head-of-Ops org read — deferred with no named owner, verdict forced → §13 #8 / §16 |
+| Permission-denied & out-of-scope personas | In — §7 row per persona: nothing decide-shaped renders for non-deciders; out-of-scope personas get nothing + this job spec as the explanation | Head-of-Ops org read — deferred with no named owner, verdict forced → §13 #8 / §16 |
 | Plan / packaging eligibility | In — R-13 gate + downgrade wind-down; Starter presentation (absent vs locked) → §13 #4 | — |
 | Limits, quota & idempotency | In — R-6 guards; write-enforced overlap; volumes naturally small (tens of requests / person / year) | Platform ceilings unknown (`[GAP: tech constraints unfilled]`) → §14 #6 |
 | Timezone & calendar | In — R-12, one anchor; per-user vs per-workspace timezone data → §14 #3 | — |
@@ -159,10 +159,10 @@ Design and QA will find more; this list is expected to grow.
 
 | # | When this happens… | …what must be true | Variation | Open? |
 |---|--------------------|--------------------|-----------|-------|
-| E1 | **The decider is themselves away** (on an Active absence, deactivated, or never assigned) — the recursive case | Pending requests stay decidable by another holder of decide rights, or submission fails with the reason visible; no request ever enters a queue nobody can decide. F-1 has no routing (that's F-2) — permission redundancy is its only mitigation; if the carrier turns out single-human, F-1 ships a designed deadlock and must pull a fallback-decider rule in | universal | ? — §13 #3 |
+| E1 | **The decider is themselves away** (on an Active absence, deactivated, or never assigned) — the recursive case | Pending requests stay decidable by another holder of decide rights, or submission fails with the reason visible; no request ever enters a queue nobody can decide. J-1 has no routing (that's J-2) — permission redundancy is its only mitigation; if the carrier turns out single-human, J-1 ships a designed deadlock and must pull a fallback-decider rule in | universal | ? — §13 #3 |
 | E2 | Request still Submitted when its start date arrives — or decided only after the window passed | The stall is detectable and surfaced to requester + deciders (no transition fires, so R-11 alone is blind here); a late decision has a defined outcome — approve → record with honest dates, or blocked with the reason visible | universal | ? — expiry vs retro policy, PM |
 | E3 | Proposed cover invalid at decision time (left workspace, deactivated, is the requester) | Approval cannot record a dangling or self cover — fresh choice or explicit no-cover forced (R-3) | universal | — |
-| E4 | Proposed cover is themselves out during the requested dates | The decider learns this before deciding — from absence data F-1 already owns; full conflict intelligence stays F-4 | universal | ? — floor vs defer, §13 #9 |
+| E4 | Proposed cover is themselves out during the requested dates | The decider learns this before deciding — from absence data J-1 already owns; full conflict intelligence stays J-4 | universal | ? — floor vs defer, §13 #9 |
 | E5 | Requester deactivated with records mid-flight | In-flight requests and absences are flagged to the decider (cancel-or-keep, re-select cover); [whos-out] stays truthful — a departed person is not "out" | universal | — |
 | E6 | Out-today recorded, manager later declines | Days already displayed as out are never retroactively falsified — the record shows effective-then-declined honestly, in history | out-today branch | — |
 | E7 | Notification delivery fails at any transition | The state change stands; the failure is retried or surfaced — never silently dropped | universal | — |
@@ -178,10 +178,10 @@ The walking skeleton (submit → decide → see → activate/complete) is in by 
 | Withdraw / cancel / end-early inverse verbs | all 52 (PRD — invented universe) | per changed plan, unsourced | High — a forward-only flow blocks the core loop | `[Partial]` | Must | In |
 | EU note/reason visibility + minimization (R-9) | 14 EU orgs (PRD — invented universe) | every request with a note | Privacy — auto-escalates | `[Evidenced — PRD count]` | **Must (auto)** | In |
 | Plan gate + downgrade wind-down (R-13) | 52 in (PRD — invented universe); Starter counts unknown | at plan boundaries | Medium — mid-flow orphans | `[Partial]` | Must | In |
-| Decider redundancy / fallback (E1, recursive absence) | unknown | unknown | High — blocked loop inside the feature that exists to fix blocked loops | `[Hypothesis — needs validation]` | Must *(provisional)* | Research → §13 #3 |
+| Decider redundancy / fallback (E1, recursive absence) | unknown | unknown | High — blocked loop inside the job that exists to fix blocked loops | `[Hypothesis — needs validation]` | Must *(provisional)* | Research → §13 #3 |
 | Unplanned out-today branch | PRD problem says "planned or not"; no count | unknown | High — unplanned absences are the harder half of the problem statement | `[Partial]` | Should *(provisional)* | In as branch, pending §13 #2 |
-| Cover accept/decline consent | unknown | unknown | Medium — silent conscription; duty becomes real only in F-2 | `[Hypothesis — needs validation]` | Could *(provisional)* | Research → §13 #7 |
-| Head-of-Ops org-level coverage read | buyer persona; 3 enterprise deals named absence handling (PRD — invented universe) | — | Medium — the buyer has no dedicated view at launch | `[Partial]` | Won't-now | Deferred → §16 (F-4 widens or explicitly out) |
+| Cover accept/decline consent | unknown | unknown | Medium — silent conscription; duty becomes real only in J-2 | `[Hypothesis — needs validation]` | Could *(provisional)* | Research → §13 #7 |
+| Head-of-Ops org-level coverage read | buyer persona; 3 enterprise deals named absence handling (PRD — invented universe) | — | Medium — the buyer has no dedicated view at launch | `[Partial]` | Won't-now | Deferred → §16 (J-4 widens or explicitly out) |
 
 ## 13) Open questions & research needed
 
@@ -193,16 +193,16 @@ The walking skeleton (submit → decide → see → activate/complete) is in by 
 | 4 | Starter presentation: absent vs visible-locked; upgrade-path value? | R-13 | PM/GTM | Platform-model entitlement fill + packaging call | Open |
 | 5 | Localization obligation for UI + notifications? | §10 row 2 | PM | Fill platform-model §6, or record "single-language product — checked date" | Open |
 | 6 | Retention for notes, reasons, and terminal records (EU)? | R-9, §9 | PM | Privacy consult; fill platform-model §7 | Open |
-| 7 | Cover consent: notify-only or accept/decline before F-2 makes the duty real? | §12 row 7 | PM | `/interview-guide` (same sessions as #1) | Open |
-| 8 | Head-of-Ops read: map to an existing org-admin surface, widen F-4, or explicitly out? | §16 | PM | Stakeholder decision; platform-model §3 fill | Open |
-| 9 | Cover-is-absent warn at approval: F-1 floor or defer to F-4? | E4 | PM | Decide after §14 effort signal | Open |
+| 7 | Cover consent: notify-only or accept/decline before J-2 makes the duty real? | §12 row 7 | PM | `/interview-guide` (same sessions as #1) | Open |
+| 8 | Head-of-Ops read: map to an existing org-admin surface, widen J-4, or explicitly out? | §16 | PM | Stakeholder decision; platform-model §3 fill | Open |
+| 9 | Cover-is-absent warn at approval: J-1 floor or defer to J-4? | E4 | PM | Decide after §14 effort signal | Open |
 
 Auto-closers this run: **none ran** — all three candidate routes failed their source gates (`/code-qa`: no reachable repo access; segmentation-matrix: unfilled scaffold; corpus synthesis: research-synthesis holds no time-off material — checked 2026-08-13).
 
 ## 14) Engineering confirmations needed
 
 - [ ] Burn-alert routing rails already live in the notification service (PRD — invented universe) — confirm the same rails are consumed for approval-duty handoff and for R-11's transition notices; **do not re-implement**. Registry empty (`[GAP: tech constraints unfilled]`), no code access (`[TODO: feasibility unverified — needs /connect-code or eng consult]`).
-- [ ] Atomic decision write: status change + cover outcome + history entry + notification enqueue land together or not at all — F-2 must never read a half-created absence at the absence→handoff state change.
+- [ ] Atomic decision write: status change + cover outcome + history entry + notification enqueue land together or not at all — J-2 must never read a half-created absence at the absence→handoff state change.
 - [ ] Active/Completed transitions: scheduled job or derived at read? Missed-run self-healing (AC-8); timezone held per user or per workspace (R-12's anchor).
 - [ ] Decide-rights carrier (§13 #3): existing permission vs new; single human vs role — this answer decides whether E1 is a nuisance or a deadlock.
 - [ ] Overlap uniqueness (R-5) and state guards (R-6) enforced transactionally at the write, not only as pre-checks.
@@ -213,28 +213,28 @@ Auto-closers this run: **none ran** — all three candidate routes failed their 
 
 - **Behavior we expect to change:** requests and decisions move from wall calendars and check-ins into the workspace; covers get settled at decision time.
 - **Leading signal:** share of approved absences with a named cover — target ≥ 80% (PRD secondary, invented); orgs with ≥ 1 decided request in month one.
-- **Lagging signal:** `coverage_gap_incidents` — 5.8 → ≤ 1.0 per 100 Growth+Scale orgs/month (PRD primary). F-1 alone is not expected to reach target — routing is F-2; F-1 supplies the denominator and the early read.
+- **Lagging signal:** `coverage_gap_incidents` — 5.8 → ≤ 1.0 per 100 Growth+Scale orgs/month (PRD primary). J-1 alone is not expected to reach target — routing is J-2; J-1 supplies the denominator and the early read.
 - **Guardrail:** enrichment-job approval median latency flat or better; no rise in permission-escalation security events (PRD).
-- **Riskiest-assumption tie-in:** cover-naming below 80% on F-1 alone means the handoff premise is in trouble *before* any routing ships — the deliberate early kill signal (breakdown §3).
+- **Riskiest-assumption tie-in:** cover-naming below 80% on J-1 alone means the handoff premise is in trouble *before* any routing ships — the deliberate early kill signal (breakdown §3).
 
 ## 16) Out of scope & sequencing
 
-- Duty routing during the absence — **F-2** — it is the bet's test; F-1 only guarantees the object it routes on.
-- Policy, accrual, balances — **F-3** — managers decide without balance math until then (known gap, breakdown §3).
-- Overlap/conflict intelligence beyond E4's floor — **F-4** — needs job-schedule + billing-cycle data F-1 doesn't touch.
-- External calendar sync — **F-5, Won't-now** — it is the calendar the hypothesis argues against (breakdown).
-- Head-of-Ops org-level coverage read — **F-4 widens, or explicitly out** — verdict forced in §13 #8; currently no owner.
+- Duty routing during the absence — **J-2** — it is the bet's test; J-1 only guarantees the object it routes on.
+- Policy, accrual, balances — **J-3** — managers decide without balance math until then (known gap, breakdown §3).
+- Overlap/conflict intelligence beyond E4's floor — **J-4** — needs job-schedule + billing-cycle data J-1 doesn't touch.
+- External calendar sync — **J-5, Won't-now** — it is the calendar the hypothesis argues against (breakdown).
+- Head-of-Ops org-level coverage read — **J-4 widens, or explicitly out** — verdict forced in §13 #8; currently no owner.
 - Cross-workspace absence mirroring — **breakdown §4 #6** — v1 is per-workspace by rule (E-scope in R-5).
-- Cover consent step — revisit **with F-2**, where the duty becomes real.
+- Cover consent step — revisit **with J-2**, where the duty becomes real.
 - HRIS/payroll export, statutory-leave workflows — **deliberately never in v1** (PRD non-goals; compliance surface).
 
 ---
 
 **Definition of done (delivery seam):** all ACs met · code review · QA on supported browsers · accessibility check · staging verified · PM sign-off.
 
-**Evidence & traceability:** PRD goal this serves: [`coverage_gap_incidents` 5.8 → ≤ 1.0](time-off-requests-prd.md) · Sources this brief leans on: [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-breakdown.md) (F-1 row, §3, §4) · [initiative page](../../initiatives/time-off-requests.md) · [platform-model.md](../../strategy/business-context/platform-model.md) (unfilled — checked 2026-08-13) · [tech-constraints.md](../../../engineering/tech-constraints.md) (unfilled — checked 2026-08-13) · [code-repos.yaml](../../../engineering/code-repos.yaml) (no reachable access) · sweep battery S1–S4 run 2026-08-13.
+**Evidence & traceability:** PRD goal this serves: [`coverage_gap_incidents` 5.8 → ≤ 1.0](time-off-requests-prd.md) · Sources this job spec leans on: [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-jobs-breakdown.md) (J-1 row, §3, §4) · [initiative page](../../initiatives/time-off-requests.md) · [platform-model.md](../../strategy/business-context/platform-model.md) (unfilled — checked 2026-08-13) · [tech-constraints.md](../../../engineering/tech-constraints.md) (unfilled — checked 2026-08-13) · [code-repos.yaml](../../../engineering/code-repos.yaml) (no reachable access) · sweep battery S1–S4 run 2026-08-13.
 
-**Quality gate** (the single checklist — checked by `/feature-brief` before presenting; recheck on manual edits):
+**Quality gate** (the single checklist — checked by `/job-spec-draft` before presenting; recheck on manual edits):
 
 - [x] Passes the four pressure tests: outcome-changing · standalone-shippable · vertical · scope-sane
 - [x] Altitude: no visual design, copy, component choice, implementation-how, or effort numbers; UI nouns only for existing platform surfaces or `[code-names]`

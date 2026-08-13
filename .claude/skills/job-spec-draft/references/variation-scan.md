@@ -1,6 +1,6 @@
 # The variation scan — who executes this job differently
 
-Loaded by `/feature-brief` Step 4 (mandatory, before any output) and by `/feature-breakdown` Step 3 (variation-aware cutting). The question, per dimension: **does execution of THIS job differ — not the user's context in general, this job.**
+Loaded by `/job-spec-draft` Step 4 (mandatory, before any output) and by `/jobs-breakdown` Step 3 (variation-aware cutting). The question, per dimension: **does execution of THIS job differ — not the user's context in general, this job.**
 
 ## The three dimension families
 
@@ -23,7 +23,7 @@ Loaded by `/feature-brief` Step 4 (mandatory, before any output) and by `/featur
 - First-run vs steady-state (empty states, defaults, onboarding vs routine)
 - Volume (1 item vs 500 — batch, pagination, timeout realities)
 - Timing & seasonality (deadline periods, cycle boundaries, retroactive actions)
-- Migration state (org mid-migration, historical data present, feature turned on mid-cycle)
+- Migration state (org mid-migration, historical data present, job turned on mid-cycle)
 
 ## Classify every hit — four dispositions, nothing unclassified
 
@@ -32,7 +32,7 @@ Loaded by `/feature-brief` Step 4 (mandatory, before any output) and by `/featur
 | **Not material** | Execution identical | Named in §5's verdict line ("checked: …") — proof of the scan, not silence |
 | **Nuance** | Same flow, different rule or edge | Variation-tagged rule in §8 and/or exception row in §11 |
 | **Branch** | A step materially differs | Delta sub-flow under §5 — the delta only, never a full parallel spec |
-| **Different job** | The backbone differs end-to-end | Flagged back to the breakdown as its own feature candidate — never absorbed into this brief |
+| **Different job** | The backbone differs end-to-end | Flagged back to the breakdown as its own job candidate — never absorbed into this job spec |
 
 ## Rules
 

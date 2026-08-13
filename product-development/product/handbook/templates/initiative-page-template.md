@@ -20,8 +20,8 @@ _owner: [Name from team roster]_
 - PRD: [PENDING: product/PRDs/[area]/[slug]-prd.md]
 - Assumption map: -
 - Challenge report: -
-- Feature breakdown: -
-- Feature briefs: -
+- Jobs breakdown: -
+- Job specs: -
 - Impact sizing: -
 - User research: -
 - Competitive analysis: -

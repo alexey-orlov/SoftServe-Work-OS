@@ -1,22 +1,22 @@
-# [Initiative] — F[N]: [feature code-name]
+# [Initiative] — J[N]: [job code-name]
 
-> **How to use:** Copy for your feature as `PRDs/{area}/{initiative-slug}-{feature-slug}-brief.md`. For guided creation run `/feature-brief` — it reads this file fresh each run as the document contract: section order, table shapes, and register rules come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
+> **How to use:** Copy for your job as `PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md`. For guided creation run `/job-spec-draft` — it reads this file fresh each run as the document contract: section order, table shapes, and register rules come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
 >
-> **What this document is:** the buildable contract for ONE feature — the level between the PRD (why this bet) and tickets (who builds what). It describes what a user must be able to do and why: clear enough that the build can't get it wrong, open enough that design and engineering find the best way. No layout, no components, no copy, no implementation-how — `[code-names]` for anything that needs a label.
+> **What this document is:** the buildable contract for ONE job — the level between the PRD (why this bet) and tickets (who builds what). It describes what a user must be able to do and why: clear enough that the build can't get it wrong, open enough that design and engineering find the best way. No layout, no components, no copy, no implementation-how — `[code-names]` for anything that needs a label.
 >
-> **Proportionality rule:** all 16 core sections exist — a non-applicable one carries one line saying why. Depth follows risk × novelty × variation count, never habit: an Integration-type feature legitimately produces 2–3 pages; a risky net-new stateful feature earns full depth. Page counts are approximations — the honest measure is content: Integration ≈ half a net-new brief's depth (§§1–4 a line or two each, no fields table, an arrow-chain flow instead of a state diagram). Conditional sections (rules comment at the bottom) appear only when their trigger fires.
+> **Proportionality rule:** all 16 core sections exist — a non-applicable one carries one line saying why. Depth follows risk × novelty × variation count, never habit: an Integration-type job legitimately produces 2–3 pages; a risky net-new stateful job earns full depth. Page counts are approximations — the honest measure is content: Integration ≈ half a net-new job spec's depth (§§1–4 a line or two each, no fields table, an arrow-chain flow instead of a state diagram). Conditional sections (rules comment at the bottom) appear only when their trigger fires.
 >
 > **Evidence labels:** every load-bearing claim carries one — `[Evidenced]` (source named) · `[Partial]` (signal, not proof) · `[Hypothesis — needs validation]`. Undecided capabilities are flagged, never invented.
 
-[One line: what this feature is, in plain words.]
+[One line: what this job is, in plain words.]
 
 | ID | Type | Parent | Effort | Priority — why | Depends on | Status | Updated |
 |----|------|--------|--------|----------------|-----------|--------|---------|
-| F-[N] | Integration / Net new / Enhancement | [PRD](link) · [breakdown](link) | [Eng to confirm] | Must — [reason] | F-[M] | Draft / Agreed / Handed off | [YYYY-MM-DD] |
+| J-[N] | Integration / Net new / Enhancement | [PRD](link) · [breakdown](link) | [Eng to confirm] | Must — [reason] | F-[M] | Draft / Agreed / Handed off | [YYYY-MM-DD] |
 
 ## 1) Why this exists
 
-> The root cause, not the feature pitch: what is broken or missing today, with current-state facts (code-verified where possible — "the flag already exists in [module]; it just isn't visible here"). 1–2 paragraphs.
+> The root cause, not the job pitch: what is broken or missing today, with current-state facts (code-verified where possible — "the flag already exists in [module]; it just isn't visible here"). 1–2 paragraphs.
 
 ## 2) Outcome
 
@@ -28,20 +28,20 @@
 
 ## 4) The slice
 
-> A feature here is one thin end-to-end slice of the initiative. Four facts, no more.
+> A job here is one thin end-to-end slice of the initiative. Four facts, no more.
 
-**Riskiest assumption this feature tests:** [the thing we most need to find out]
+**Riskiest assumption this job tests:** [the thing we most need to find out]
 **The backbone (full flow, for context):** [stage] → [stage] → [stage] → [outcome lands]
 **What this slice covers:** [where it starts, where it ends, that the loop closes — or why it deliberately doesn't]
 **Preconditions & inherited dependencies:** [what must be live before this starts]
 
 ## 5) Variations — who does this differently
 
-> Mandatory verdict, never silence. Either the one-line verdict — "No material variations (checked: company size, vertical, org complexity, plan/package, region & compliance, data/integration maturity, persona, permission scope, tenure, language, accessibility needs, first-run vs steady-state, volume, timing/seasonality, migration state)" — or the table. Dispositions: **nuance** (same flow — rendered as variation-tagged rules and exception rows) · **branch** (a step materially differs — delta sub-flow below the table, the delta only) · **different job** (backbone differs end-to-end — flagged back to the breakdown as its own feature, never absorbed here). Reach is sourced, not guessed.
+> Mandatory verdict, never silence. Either the one-line verdict — "No material variations (checked: company size, vertical, org complexity, plan/package, region & compliance, data/integration maturity, persona, permission scope, tenure, language, accessibility needs, first-run vs steady-state, volume, timing/seasonality, migration state)" — or the table. Dispositions: **nuance** (same flow — rendered as variation-tagged rules and exception rows) · **branch** (a step materially differs — delta sub-flow below the table, the delta only) · **different job** (backbone differs end-to-end — flagged back to the breakdown as its own job, never absorbed here). Reach is sourced, not guessed.
 
-| Variation | Who (reach, sourced) | Differs how | Priority — grounded | In this feature? |
+| Variation | Who (reach, sourced) | Differs how | Priority — grounded | In this job? |
 |-----------|----------------------|-------------|---------------------|------------------|
-| [name] | [segment · N accounts / $ARR · source] | [nuance / branch / different job — one line] | [tier — reason] | [yes / deferred → F-N] |
+| [name] | [segment · N accounts / $ARR · source] | [nuance / branch / different job — one line] | [tier — reason] | [yes / deferred → J-N] |
 
 ## 6) Capabilities & flow
 
@@ -51,7 +51,7 @@
 **Actions:** [what they can act on, described by intent]
 **Where each action leads:** [what each action causes]
 
-**[Object] fields** (only when this feature introduces a new object):
+**[Object] fields** (only when this job introduces a new object):
 
 | Field | What it is | Required / derived / system-set |
 |-------|------------|--------------------------------|
@@ -62,7 +62,7 @@ stateDiagram-v2
     Draft --> Submitted: submits (owner)
 ```
 
-**Capabilities this feature does not answer — flagged, not invented:** [the undecided ones, named as open questions in §13]
+**Capabilities this job does not answer — flagged, not invented:** [the undecided ones, named as open questions in §13]
 
 ## 7) Roles & permissions
 
@@ -92,9 +92,9 @@ stateDiagram-v2
 
 ## 10) Cross-cutting concerns
 
-> Every row answered — **in this feature** (budgeted scope) or **deferred** (named risk + which later feature picks it up). Silence is the only wrong answer.
+> Every row answered — **in this job** (budgeted scope) or **deferred** (named risk + which later job picks it up). Silence is the only wrong answer.
 
-| Dimension | In this feature? | If deferred — risk + where it goes |
+| Dimension | In this job? | If deferred — risk + where it goes |
 |-----------|------------------|-------------------------------------|
 | Accessibility (keyboard, screen reader, color) | | |
 | Localization — UI + system text | | |
@@ -116,7 +116,7 @@ stateDiagram-v2
 
 ## 12) Scope priorities & grounding
 
-> What's in vs deferred, and why — grounded, never opinion. **Reach** = accounts / ARR / users affected, named number + source (`segmentation-matrix.md`, `portfolio.yaml`, analytics). **Frequency** = how often it bites for those affected. **Severity**: compliance / money / privacy / irreversibility auto-escalate to Must regardless of reach. **Effort is deliberately not scored** — it's Engineering's number (§14). Unevidenced Reach or Frequency → tier marked *provisional* + a research row in §13. This table sets the feature boundary; build order lives in the breakdown.
+> What's in vs deferred, and why — grounded, never opinion. **Reach** = accounts / ARR / users affected, named number + source (`segmentation-matrix.md`, `portfolio.yaml`, analytics). **Frequency** = how often it bites for those affected. **Severity**: compliance / money / privacy / irreversibility auto-escalate to Must regardless of reach. **Effort is deliberately not scored** — it's Engineering's number (§14). Unevidenced Reach or Frequency → tier marked *provisional* + a research row in §13. This table sets the job boundary; build order lives in the breakdown.
 
 | Item | Reach (sourced) | Frequency | Severity | Evidence | Tier | In / deferred → where |
 |------|-----------------|-----------|----------|----------|------|------------------------|
@@ -148,17 +148,17 @@ stateDiagram-v2
 
 ## 16) Out of scope & sequencing
 
-> Each exclusion names its future feature (or "deliberately never, because…") and why later beats now. §5's different-job flags and §10's deferrals land here.
+> Each exclusion names its future job (or "deliberately never, because…") and why later beats now. §5's different-job flags and §10's deferrals land here.
 
-- [exclusion] — [future feature F-N / never] — [why later]
+- [exclusion] — [future job J-N / never] — [why later]
 
 ---
 
 **Definition of done (delivery seam):** all ACs met · code review · QA on supported browsers · accessibility check · staging verified · PM sign-off.
 
-**Evidence & traceability:** PRD goal this serves: [link] · Sources this brief leans on: [links]
+**Evidence & traceability:** PRD goal this serves: [link] · Sources this job spec leans on: [links]
 
-**Quality gate** (the single checklist — checked by `/feature-brief` before presenting; recheck on manual edits):
+**Quality gate** (the single checklist — checked by `/job-spec-draft` before presenting; recheck on manual edits):
 
 - [ ] Passes the four pressure tests: outcome-changing · standalone-shippable · vertical · scope-sane
 - [ ] Altitude: no visual design, copy, component choice, implementation-how, or effort numbers; UI nouns only for existing platform surfaces or `[code-names]`
@@ -175,18 +175,18 @@ stateDiagram-v2
 <!--
 Template rules (template file only — delete this comment when filling a copy):
 - Conditional sections — add ONLY when the trigger fires, placed after the section that feeds them:
-  · Definitions (after the intro line) — the feature introduces novel terms
+  · Definitions (after the intro line) — the job introduces novel terms
   · Committed solutions (after §9) — a mechanism the team has genuinely agreed is the only viable
     path, each stamped: serves capability · why the only path · agreed by · date. Rare — the
     default is a capability, not a Commit.
-  · Risks & break points (after §11) — high-risk feature: irreversibility, money, or privacy,
+  · Risks & break points (after §11) — high-risk job: irreversibility, money, or privacy,
     including authority over money movement; borderline → include a minimal version
     ("highest-risk job — extra QA; atomic-transaction question answered before dev starts")
-  · Competitive notes (after §12) — a market sweep ran (`/feature-brief --market`)
+  · Competitive notes (after §12) — a market sweep ran (`/job-spec-draft --market`)
   · Handoff note (at the very end) — handoff to BA/dev is imminent
 - Living doc: edit in place, bump the Updated cell. Challenge reports live in
   `PRDs/{area}/reviews/`, never inside this file.
 - The section order IS the method's spine (why → outcome → job → slice → variations →
   capabilities → rules → constraints → cross-cutting → priorities → research → eng → measures).
-  Skills follow it; don't re-order per feature.
+  Skills follow it; don't re-order per job.
 -->

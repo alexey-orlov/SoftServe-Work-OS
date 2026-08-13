@@ -17,12 +17,12 @@
 #   queries, metrics, dashboards, experiments, investigations,
 #   decisions, initiatives — plus:
 #     reviews:          review artifacts in product/PRDs/{area}/reviews/ (assumption map,
-#                       red-team, challenge reports, pre-mortem, brief reviews), listed as they land
+#                       red-team, challenge reports, pre-mortem, job-spec reviews), listed as they land
 #     impact-sizing:    analytics/investigations/{area}/impact-sizing-*.md
 #     launch-checklist: product/launches/{slug}-launch-checklist.md
 #     launch-gate:      product/launches/{slug}-gate-{date}.md verdict
-#     breakdown:        product/PRDs/{area}/{initiative-slug}-breakdown.md (/feature-breakdown)
-#     briefs:           list of product/PRDs/{area}/{initiative-slug}-{feature-slug}-brief.md (/feature-brief)
+#     jobs-breakdown:   product/PRDs/{area}/{initiative-slug}-jobs-breakdown.md (/jobs-breakdown)
+#     job-specs:        list of product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md (/job-spec-draft)
 # - Omit keys that don't apply yet. Add them when artifacts exist.
 
 # Replace these examples with your own product areas. Keep one or two as a
@@ -75,11 +75,11 @@ billing:
 workforce:
   time-off-requests:
     # EXAMPLE (synthetic, fictional product Beacon) — the worked example of the
-    # definition→delivery bridge: PRD → /feature-breakdown → /feature-brief.
+    # definition→delivery bridge: PRD → /jobs-breakdown → /job-spec-draft.
     prd: product/PRDs/workforce/time-off-requests-prd.md
-    breakdown: product/PRDs/workforce/time-off-requests-breakdown.md
-    briefs:
-      - product/PRDs/workforce/time-off-requests-request-approval-brief.md   # F-1 request-approval
+    jobs-breakdown: product/PRDs/workforce/time-off-requests-jobs-breakdown.md
+    job-specs:
+      - product/PRDs/workforce/time-off-requests-request-approval-job-spec.md   # J-1 request-approval
     initiatives: [time-off-requests]
 
 # Add more product areas here. Common starting set:
