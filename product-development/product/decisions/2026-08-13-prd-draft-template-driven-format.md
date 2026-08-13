@@ -13,13 +13,13 @@ Customer deployments adopt a house PRD format by swapping that one template file
 
 ## Context
 
-First case: Payworks (AIPM Jumpstart). Their Product Brief format — 8 fixed sections (Overview / Problem Statement / Objectives & Success Metrics / Proposed Solution / UX Principles / Key Decisions & Tradeoffs / Risks & Dependencies / Rollout & Iteration Plan) — differs substantially from the default template's order. Matching it under the old skill meant forking the skill body.
+First case: a customer deployment with an established house Product Brief format — 8 fixed sections whose names and order differ substantially from the default template's. Matching it under the old skill meant forking the skill body. (Customer specifics live in the engagement's own project folder, outside this repo.)
 
 ## Options considered
 
 - **Fork the skill per customer** — rejected: N customers → N drifting skill bodies; the loop, gap markers, auto-research, and readout are format-independent and should not multiply.
 - **Ship multiple templates + a selector flag** — rejected for now: one canonical template per deployment is simpler; variants can come later if a team genuinely runs two formats.
-- **Template owns format, skill owns method** (chosen) — validated 2026-08-13 by an Opus subagent test: universal contract + Payworks-shaped template (reference briefs withheld) produced a brief scoring 13/13 on a format-fidelity checklist derived from Payworks' three reference briefs, with honest TBD+`[GAP:]` pairing and no invented numbers. Both surfaced nits were fixed template-side, confirming the adjustment lever sits in the template.
+- **Template owns format, skill owns method** (chosen) — validated 2026-08-13 by an Opus subagent test: universal contract + a house-format-shaped template (reference briefs withheld) produced a brief scoring 13/13 on a format-fidelity checklist derived from the customer's three reference briefs, with honest TBD+`[GAP:]` pairing and no invented numbers. Both surfaced nits were fixed template-side, confirming the adjustment lever sits in the template.
 
 ## Tradeoff accepted
 
@@ -27,4 +27,4 @@ The default template file gains responsibility: a badly written house template n
 
 ## Deferred (revivable)
 
-The companion enrichment of the *default* `prd-template.md` (adopting Payworks-inspired optional blocks: tagline, Overview section, trigger moment, user outcomes, Day-7/30/60/90 checkpoint schedule, dependencies register with owners, UX-principles block, decisions-inline digest) was proposed alongside but not applied — separate decision, not taken up on 2026-08-13. The full comparison lives in the session's mapping analysis (Payworks brief-format gap analysis, 2026-08-13).
+The companion enrichment of the *default* `prd-template.md` (adopting customer-format-inspired optional blocks: tagline, Overview section, trigger moment, user outcomes, Day-7/30/60/90 checkpoint schedule, dependencies register with owners, UX-principles block, decisions-inline digest) was proposed alongside but not applied — separate decision, not taken up on 2026-08-13. The full comparison lives in the engagement's brief-format gap analysis (2026-08-13, engagement-side, outside this repo).
