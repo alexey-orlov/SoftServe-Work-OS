@@ -1,6 +1,6 @@
 # Skills
 
-51 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+52 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -24,7 +24,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 ```
 
 - **No restated defaults.** `disable-model-invocation` and `user-invocable` are omitted: every skill here is deliberately both user- and model-invocable — descriptions are the natural-language router, cron runs (`/weekly-review --digest`, `/wiki-lint`) and skill-to-skill orchestration (`/prd-challenge`, `/context-update` → `/process-meeting`) require model invocation, and `disable-model-invocation: true` would also drop the description from context and block scheduled/subagent use. Set a non-default flag only when a new skill genuinely needs it (external side effects on explicit user timing → `disable-model-invocation: true`; background knowledge with no meaningful command → `user-invocable: false`) and record the reason here.
-- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: job-spec-draft at ~1,440).
+- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: pm-handoff at ~1,470).
 - **`argument-hint` is always double-quoted** — unquoted `[...]` parses as a YAML list.
 - **No other keys.** `group` is the only custom key; if tooling ever needs machine-readable extras, use the Agent Skills spec's `metadata:` map instead of new top-level keys.
 
@@ -34,7 +34,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 |-------|--------|--------|
 | [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 11 |
 | [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 17 |
-| [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in. | 6 |
+| [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in. | 7 |
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
@@ -89,6 +89,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [launch-checklist/](launch-checklist/) — Prioritized, dependency-mapped launch plan (small / major / regulatory), importing the pre-mortem's launch-blocking risks
 - [prioritize-requests/](prioritize-requests/) — Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park
 - [code-qa/](code-qa/) — Answer product questions from the code itself, PM-language and concise; evidence with repo@sha citations kept internal, shown on request
+- [pm-handoff/](pm-handoff/) — Readiness gate for the PM → BA/TPM/PO requirements handoff: four checks (open/unvalidated items, prototype links, approval status, template completeness) over a whole feature or one job; ✅/❌ checklist + READY/NOT READY verdict, reports only, saves a dated record on request
 
 ### Discovery: market analysis
 

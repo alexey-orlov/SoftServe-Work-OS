@@ -4,7 +4,7 @@ How six skills work, one page each: the setup skill that teaches the OS your org
 
 **Read this when:** You want to know what a `/`-command actually does before running it, or you are explaining the definition chain to someone new.
 
-_updated: 2026-08-13 · source: each skill's `SKILL.md` in `.claude/skills/`_
+_updated: 2026-08-14 · source: each skill's `SKILL.md` in `.claude/skills/`_
 
 ## How the six fit together
 
@@ -18,6 +18,8 @@ _updated: 2026-08-13 · source: each skill's `SKILL.md` in `.claude/skills/`_
 ```
 
 Two rules run through all of them: **the template owns the format** (skills stay universal, the installed template carries house structure), and **one writer per file** (a challenge skill reports, the draft skill writes).
+
+**The seam gate.** When spec- and story-writing belongs to another role — a BA, Technical PM, or Product Owner — `/pm-handoff` runs at the end of the chain, before the work leaves the PM: four checks (no open or unvalidated items; prototype links present; approval confirmed in the documents' own status fields; no essential template section missing without a stated reason) over the whole feature or a single job, ending in a READY / NOT READY verdict with a fix route per failure. It follows both rules above: it reports and never edits, and it reads the installed templates and the Document Naming Conventions block fresh each run — so house formats and house terms from `/customize-os` flow through it with no skill change.
 
 | # | Page | Skill | One line |
 |---|------|-------|----------|
