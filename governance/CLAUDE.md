@@ -22,7 +22,9 @@ file a proposal in [proposals/](proposals/)). `/auto-sync on|off` flips the auto
 
 1. **Write time** — `.claude/hooks/write-guard.sh` (PreToolUse hook) re-reads
    write-policy.yaml on every agent file-write and raises a native approval prompt on
-   gated paths.
+   gated paths — tagged `🔒 GATED FILE — Team OS write policy` with the path, the
+   matched rule and what approve/reject mean, so it is never confused with an ordinary
+   permission ask.
 2. **Land time** — `.claude/hooks/auto-commit.sh` (Stop hook, the auto-sync engine —
    flipped by `/auto-sync`) auto-commits and pushes auto-tier work each turn, and always
    holds gated paths back for the user to land deliberately.

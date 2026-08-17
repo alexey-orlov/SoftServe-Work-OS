@@ -30,9 +30,30 @@ Fires on every `Edit|Write|MultiEdit|NotebookEdit` call. Looks the target path u
 `governance/write-policy.yaml`:
 
 - **auto** (not listed) → no output; the write proceeds normally.
-- **gated** → returns `permissionDecision: "ask"` — Claude Code shows a native
-  confirmation naming the file and the policy; the user approves after seeing the
+- **gated** → returns `permissionDecision: "ask"` — Claude Code shows its native
+  confirmation with the hook's reason on it; the user approves after seeing the
   change. (The same paths are also held back from auto-sync — hook 3.)
+
+The reason is written so a gated ask cannot be mistaken for an ordinary permission
+prompt (Bash, an auto-tier edit, an MCP call). It always reads:
+
+```
+🔒 GATED FILE — Team OS write policy · product-development/feature-index.yaml
+Why: steering files · the product map (rule: product-development/feature-index.yaml). Protected context — every change needs your explicit yes.
+Approve → written now, but NOT auto-committed or pushed (land it afterwards: "commit and push the gated changes", or git). Reject → nothing is written. Unsure → reject and ask for the exact before/after.
+```
+
+Line 1 is a fixed badge + the repo-relative path. Line 2 is the policy's own words:
+the comment heading above the matched entry ("Steering files" / "System rules"), the
+entry's trailing `# comment`, and the exact pattern — so **write those comments for a
+person**, they are what the approver reads. In the terminal the text appears inside the
+dialog after `Hook PreToolUse:<Tool> requires confirmation for this edit:` with the line
+breaks kept; in the desktop app it is the reason block on the approval card (one
+paragraph, ~6 lines visible). Test the text without triggering a real write:
+
+```bash
+printf '{"tool_input":{"file_path":"%s/CLAUDE.md"}}' "$PWD" | CLAUDE_PROJECT_DIR="$PWD" .claude/hooks/write-guard.sh
+```
 
 This is what makes the write policy enforcement rather than prose: it binds every agent
 session in the repo, regardless of which skill is running. It does NOT bind humans in a

@@ -16,7 +16,11 @@
 #           CLAUDE.md files, the ledger, health reports.
 #   gated — the steering files and the system's own rules, one list, two gates:
 #           (1) write time — the agent shows the change and you approve Claude Code's
-#               native prompt BEFORE anything is written;
+#               native prompt BEFORE anything is written. That prompt is tagged
+#               "🔒 GATED FILE — Team OS write policy" and quotes this file back to
+#               you: the comment heading above the matched entry, the entry's
+#               trailing # comment, and the pattern — write those comments for a
+#               person, they are the "why" the approver reads;
 #           (2) land time — auto-sync never commits or pushes these paths; you land
 #               them deliberately (say "commit and push the gated changes", or use
 #               git yourself).
@@ -46,7 +50,7 @@ tiers:
     # System rules — the OS itself.
     - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
     - product-development/product/handbook/templates/**                      # templates shape every future document
-    - governance/write-policy.yaml                                           # this file
+    - governance/write-policy.yaml                                           # the write policy itself — what is auto vs gated
     - governance/write-back-contract.md
     - product-development/engineering/code-grounding.md                      # evidence contract — lives beside its registry
     - .claude/settings.json
