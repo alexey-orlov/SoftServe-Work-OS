@@ -6,18 +6,22 @@ context tax: **hard cap ~30 lines of entries. When adding, prune the weakest.**
 
 ## The capture loop (how entries get here)
 
-When the user corrects/rejects/redirects output or states a standing preference, or a
-durable gap surfaces mid-work — run the loop in the moment, not only when asked:
-generalize to the root cause (fix the class of mistake, not the single instance) → apply
-to the work in hand → persist only if it's likely to recur and isn't covered (sharpen an
-existing rule before adding) → route by narrowest scope (canonical routing table:
-`governance/write-back-contract.md` — skill/agent-specific rules go to that skill's
-self-check, NOT here; this file is the last resort, for cross-cutting rules only) →
-close the loop out loud (one line in the reply: what was generalized, where it went).
-Gated targets (this file, skills, agents, templates, structural changes) are applied
-only via your in-session yes at the write prompt — otherwise file the exact change in
-`governance/proposals/`. At a session's natural wrap-up, offer a one-line sweep:
-"N takeaways from this session look durable — file them?"
+Run the loop in the moment, not only when asked. Triggers: the user corrects, rejects, or
+redirects output or states a standing preference — OR you hit a collision yourself: an
+assumption proven wrong, a rule you couldn't follow as written, contradictory
+instructions, a skill misfire, repeated friction, a tool/environment failure that will
+recur. Then: generalize to the root cause (the class of mistake, not the instance) → apply
+to the work in hand → persist only if it will recur and isn't covered (sharpen an existing
+rule before adding) → route by narrowest scope (canonical table:
+`governance/write-back-contract.md` — skill/agent rules go to that skill's self-check, NOT
+here; this file is the last resort, for cross-cutting rules only) → close the loop out
+loud (one line in the reply: what was generalized, where it went). Auto-tier targets:
+write now. Gated targets (this file, skills, agents, templates, structure): the
+write-guard prompt IS the suggestion (exact diff; your in-session yes is one keystroke) —
+don't stall the task on it: finish the turn's work, then make gated learning edits at the
+end of the turn so the prompts arrive with the result. Headless runs file the exact change
+in `governance/proposals/` instead. At a session's natural wrap-up, offer a one-line
+sweep: "N takeaways from this session look durable — file them?"
 
 Entry format, one line each: `- YYYY-MM-DD — rule (why, if not obvious)`. Adding at the
 cap means naming the weakest entry to prune in the same proposal.
