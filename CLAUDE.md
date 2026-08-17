@@ -101,8 +101,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 ## Four Rules
 
 1. **Summaries first, raw data in subfolders.** A one-hour call becomes a 500-token summary in `summaries/`. Raw transcripts sit in `transcripts/` for when the summary isn't enough. Every level of nesting is a context-saving decision.
-2. **Every folder has a CLAUDE.md navigation file.** Update it when you add files — append new entries to the END of the list, never re-sort (re-sorting causes merge conflicts; only `/wiki-lint --fix` re-orders).
-3. **The repo gets updated before a feature ships.** Run `/feature-launch-gate`. No exceptions. *"The feature is not rolled out until the repository is updated."* Between launches, `/wiki-lint` (weekly + on every PR) catches what slipped.
+2. **Every folder has a CLAUDE.md navigation file.** Update it when you add files — append new entries to the END of the list, never re-sort (re-sorting causes merge conflicts; only `/wiki-lint` re-orders, and only where duplicate entries collided).
+3. **The repo gets updated before a feature ships.** Run `/feature-launch-gate`. No exceptions. *"The feature is not rolled out until the repository is updated."* Between launches, `/wiki-lint` (weekly + on every PR) catches what slipped — it fixes the mechanical drift itself and lists everything else as plain-language suggestions for a person to approve.
 4. **Corrections become rules.** When the user corrects agent behavior or a durable takeaway surfaces, run the capture loop in `.claude/team-learnings.md` — generalize to the root cause, route by narrowest scope, propose through the write policy.
 
 ## Governance

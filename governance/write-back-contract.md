@@ -65,8 +65,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 ## Rules behind the block
 
 1. **Append to the END, never re-sort.** Two teammates adding files the same day must not
-   conflict. The only thing allowed to re-order a navigation list is `/wiki-lint --fix`
-   (single writer for mechanical order). Modeled on `decision-log-entry` Rule 3.
+   conflict. The only thing allowed to re-order a navigation list is `/wiki-lint` (single
+   writer for mechanical order — its default run, and only where duplicate entries
+   collided). Modeled on `decision-log-entry` Rule 3.
 2. **Check before creating.** Before adding a feature key to `feature-index.yaml` or
    creating an initiative page, read the existing keys/pages — near-duplicates are merged,
    not multiplied. One home per item; other pages link, never restate.
@@ -116,7 +117,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `meetings/{type}/docs/feedback-*.md` | `/meeting-feedback` |
 | `product-development/inbox/` | integrations (and humans) drop files; `/context-update` sweeps gate them; `/process-meeting` moves them out to their transcript home; humans clear junk (file + ledger line together) |
 | `customers/feature-requests/` records | created by `/process-meeting`; `tracker_ref` set only by `/create-tickets` push mode |
-| navigation list re-ordering | `/wiki-lint --fix` only |
+| navigation list re-ordering | `/wiki-lint` only (its mechanical repairs, run by default) |
 | `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
 | `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel |
 | `competitive-research/intel/` monthly records | `/competitor-analysis` monitoring mode only — append-only, one `{YYYY-MM}.md` per run |

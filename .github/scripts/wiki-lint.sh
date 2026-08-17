@@ -3,6 +3,11 @@
 # (checks 2–4 and 8–10: nav coverage, index↔disk, broken links, ledger integrity,
 # placeholder/truncation scan, YAML parse). The judgment checks (staleness tiers,
 # contradiction sweep, initiative health) live in the /wiki-lint skill.
+# This script REPORTS ONLY — the repairs (and the plain-language readout with suggested
+# changes) are the skill's job; run /wiki-lint in a session to fix what is listed here.
+# Messages follow the skill's plain-language contract: the weekly issue is read by PMs,
+# not just admins — say "folder contents list", not "nav"; "processed-files list", not
+# "ledger"; "can't be read (formatting error)", not "YAML parse".
 # KEEP IN SYNC with the skill: change a check there → change it here in the same PR.
 #
 # Usage: .github/scripts/wiki-lint.sh   (run from the repo root; exit 0 = clean)
@@ -17,11 +22,11 @@ note()  { printf '%s\n' "$*"; }
 fail()  { printf '❌ %s\n' "$*"; FAIL=$((FAIL+1)); }
 warn()  { printf '⚠️  %s\n' "$*"; WARN=$((WARN+1)); }
 
-note "== wiki-lint (mechanical) =="
+note "== wiki-lint (mechanical checks — this run only reports; run /wiki-lint in a session to fix) =="
 
 # ---- Check 2a: every directory under product-development/ has a CLAUDE.md ----------
 while IFS= read -r d; do
-  [ -f "$d/CLAUDE.md" ] || fail "missing CLAUDE.md: $d/"
+  [ -f "$d/CLAUDE.md" ] || fail "folder has no contents list (CLAUDE.md) — /wiki-lint adds one: $d/"
 done < <(find "$PD" governance -type d ! -path '*/.git*')
 
 # ---- Check 2b: every nav link target exists ----------------------------------------
@@ -43,7 +48,7 @@ while IFS= read -r nav; do
   done
 done < <(find "$PD" governance .claude -name 'CLAUDE.md' 2>/dev/null) | sort -u > "$NAVTMP"
 while IFS= read -r line; do
-  [ -n "$line" ] && fail "nav link broken: $line"
+  [ -n "$line" ] && fail "contents-list link leads nowhere (file moved or deleted?): $line"
 done < "$NAVTMP"
 rm -f "$NAVTMP"
 
@@ -55,7 +60,7 @@ while IFS= read -r f; do
   # queue folders hold transient files by design — no per-file nav requirement
   case "$f" in "$PD"/inbox/*|governance/proposals/*) continue ;; esac
   if [ -f "$dir/CLAUDE.md" ] && ! grep -qF "$base" "$dir/CLAUDE.md"; then
-    fail "file not in its folder's CLAUDE.md: $f"
+    fail "file missing from its folder's contents list (CLAUDE.md) — /wiki-lint adds the line: $f"
   fi
 done < <(find "$PD" governance -type f ! -path '*/.git*')
 
@@ -85,12 +90,12 @@ def walk(node, feature):
         if "/" in node and not node.startswith("http") and " " not in node:
             p = os.path.join(pd, node)
             if not os.path.exists(p):
-                print(f"❌ feature-index path missing on disk: {node}")
+                print(f"❌ feature index points at a file that doesn't exist (moved or deleted?): {node}")
                 bad += 1
 try:
     idx = yaml.safe_load(open(os.path.join(pd, "feature-index.yaml")))
 except Exception as e:
-    print(f"❌ feature-index.yaml does not parse: {e}"); sys.exit(1)
+    print(f"❌ feature-index.yaml can't be read (formatting error) — every feature lookup is broken until fixed: {e}"); sys.exit(1)
 if isinstance(idx, dict):
     for area, feats in idx.items():
         if isinstance(feats, dict):
@@ -100,7 +105,7 @@ if isinstance(idx, dict):
                     for slug in (entry.get("initiatives") or []):
                         page = os.path.join(pd, "product", "initiatives", f"{slug}.md")
                         if not os.path.exists(page):
-                            print(f"❌ initiative slug without a page: {slug} (feature {area}.{feat})")
+                            print(f"❌ initiative named in the feature index has no page in product/initiatives/: {slug} (feature {area}.{feat})")
                             bad += 1
                     walk({k: v for k, v in entry.items() if k != "initiatives"}, feat)
 sys.exit(1 if bad else 0)
@@ -114,13 +119,13 @@ LEDGER="governance/processed.txt"
 if [ -f "$LEDGER" ]; then
   while IFS= read -r p; do
     [ -z "$p" ] && continue
-    [ -e "$p" ] || fail "ledger path missing on disk: $p"
+    [ -e "$p" ] || fail "processed-files list ($LEDGER) names a file that no longer exists: $p"
   done < "$LEDGER"
-  if ! sort -c "$LEDGER" 2>/dev/null; then warn "ledger not sorted — run: sort -o $LEDGER $LEDGER"; fi
+  if ! sort -c "$LEDGER" 2>/dev/null; then warn "processed-files list ($LEDGER) is out of order — /wiki-lint sorts it (or run: sort -o $LEDGER $LEDGER)"; fi
   DUPES=$(sort "$LEDGER" | uniq -d)
-  [ -n "$DUPES" ] && warn "ledger has duplicate lines: $DUPES"
+  [ -n "$DUPES" ] && warn "processed-files list ($LEDGER) has duplicate lines — /wiki-lint removes them: $DUPES"
 else
-  warn "no ledger at $LEDGER"
+  warn "no processed-files list at $LEDGER"
 fi
 
 # ---- Check 8b: learning loop (team-learnings cap + entry age) ------------------------
@@ -145,7 +150,7 @@ while IFS= read -r nav; do
     # heuristic: a description ending without sentence-ish punctuation AND shorter than 200 chars is fine;
     # flag only classic truncations: line ends mid-word with a single trailing letter after a space
     case "$line" in
-      *" s"|*" a"|*" pri"|*:) warn "possible truncated nav line in $nav: ${line%%:*}" ;;
+      *" s"|*" a"|*" pri"|*:) warn "a contents-list line looks cut off mid-word in $nav (line ${line%%:*}) — /wiki-lint suggests the full text" ;;
     esac
   done
 done < <(find "$PD" governance .claude -name 'CLAUDE.md' 2>/dev/null)
@@ -155,12 +160,12 @@ if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; t
   for y in "$PD/feature-index.yaml" "$PD/analytics/data-catalog.yaml" \
            "governance/write-policy.yaml" "$PD/product/customers/accounts/portfolio.yaml" \
            "$PD/engineering/code-repos.yaml"; do
-    [ -f "$y" ] || { warn "yaml missing: $y"; continue; }
+    [ -f "$y" ] || { warn "expected index/registry file is missing: $y"; continue; }
     python3 -c "import yaml,sys; yaml.safe_load(open('$y'))" 2>/dev/null \
-      || fail "yaml does not parse: $y"
+      || fail "index/registry file can't be read (formatting error) — everything that reads it is broken until fixed: $y"
   done
 fi
 
 note ""
-note "== result: $FAIL failure(s), $WARN warning(s) =="
+note "== result: $FAIL problem(s) to fix, $WARN worth a look — run /wiki-lint in a session: it fixes the mechanical ones and suggests the rest =="
 [ "$FAIL" -eq 0 ]
