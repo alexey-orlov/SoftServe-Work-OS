@@ -88,12 +88,13 @@ settings:
   auto-commit:
     enabled: false
 
-    # Which changed files may be committed:
-    #   auto-tier           — only paths NOT in the list above. Protected files are
-    #                         held back for you to land. This is the setting that
-    #                         matches the write-guard.
-    #   product-development — everything under product-development/, any tier
-    #   all                 — every tracked change in the repo
+    # Which changed files may be committed. Gated paths (the list above) are ALWAYS
+    # held back for you to land, whatever this says — scope only narrows the rest:
+    #   auto-tier           — every changed path NOT in the list above (default; the
+    #                         setting that matches the write-guard)
+    #   product-development — only such paths under product-development/ (leaves
+    #                         governance/, os-installation/, … for you to commit)
+    #   all                 — legacy alias of auto-tier, kept for older configs
     scope: auto-tier
 
     # Commit subject prefix — see "Commit prefixes" in the root CLAUDE.md.
@@ -113,8 +114,9 @@ settings:
     #                  out and back; the hook restores your branch on any failure.
     strategy: ff-only
 
-    # Refuse to merge a side branch whose commits touched protected paths, even
-    # if `scope` above allowed committing them. Those land deliberately, by you.
+    # Refuse to merge a side branch whose history touched protected paths (the hook
+    # never commits those itself; a human may have committed some on the branch).
+    # Those land deliberately, by you.
     block-protected-tiers: true
 
     # Push the target branch to origin after each commit (and merge, if any).

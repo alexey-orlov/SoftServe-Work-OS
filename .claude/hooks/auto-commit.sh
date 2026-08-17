@@ -97,18 +97,22 @@ is_protected() {
 CANDIDATES=$(git status --porcelain --untracked-files=all 2>/dev/null | sed 's/^...//' | sed 's/.* -> //')
 [ -n "$CANDIDATES" ] || exit 0                          # nothing changed → silent no-op
 
-ALLOWED=""; HELD=""
+# Gated paths are held back FIRST, whatever `scope` says — the one invariant of
+# auto-sync ("never commits or pushes gated files"). Scope only narrows the rest:
+#   auto-tier (default)  — every non-gated change
+#   product-development  — non-gated changes under product-development/ only
+#   all                  — legacy alias of auto-tier (older configs)
+ALLOWED=""; HELD=""; OUTSIDE=""
 while IFS= read -r f; do
   [ -z "$f" ] && continue
+  if is_protected "$f"; then HELD="$HELD$f
+"; continue; fi
   case "$AC_SCOPE" in
-    all)                 ALLOWED="$ALLOWED$f
-" ;;
     product-development) case "$f" in product-development/*) ALLOWED="$ALLOWED$f
-" ;; *) HELD="$HELD$f
+" ;; *) OUTSIDE="$OUTSIDE$f
 " ;; esac ;;
-    auto-tier|*)         if is_protected "$f"; then HELD="$HELD$f
-"; else ALLOWED="$ALLOWED$f
-"; fi ;;
+    *)                   ALLOWED="$ALLOWED$f
+" ;;
   esac
 done <<EOF
 $CANDIDATES
@@ -116,10 +120,22 @@ EOF
 
 ALLOWED=$(printf '%s' "$ALLOWED" | sed '/^$/d')
 HELD=$(printf '%s' "$HELD" | sed '/^$/d')
+OUTSIDE=$(printf '%s' "$OUTSIDE" | sed '/^$/d')
+
+# What was left uncommitted, and why — appended to every report that has something to say.
+LEFT=""
+[ -n "$HELD" ] && LEFT="Held back (gated paths — land them yourself, or say: commit and push the gated changes):
+$HELD"
+if [ -n "$OUTSIDE" ]; then
+  [ -n "$LEFT" ] && LEFT="$LEFT
+"
+  LEFT="${LEFT}Outside scope '$AC_SCOPE' (not auto-committed):
+$OUTSIDE"
+fi
 
 if [ -z "$ALLOWED" ]; then
-  [ -n "$HELD" ] && note "nothing auto-committed — every change is on a gated path under scope '$AC_SCOPE'. Land these yourself (or say: commit and push the gated changes):
-$HELD"
+  [ -n "$LEFT" ] && note "nothing auto-committed.
+$LEFT"
   exit 0
 fi
 
@@ -146,18 +162,17 @@ fi
 COMMITTED=$(git rev-parse --short HEAD)
 
 REPORT="committed $COMMITTED ($COUNT file(s)) on $BRANCH"
-[ -n "$HELD" ] && REPORT="$REPORT
-Held back (gated paths — land them yourself, or say: commit and push the gated changes):
-$HELD"
+[ -n "$LEFT" ] && REPORT="$REPORT
+$LEFT"
 
 # --- land it: merge only when on a side branch, then push ---------------------------
 if [ "${AM_ENABLED:-false}" != "true" ]; then
-  [ -n "$HELD" ] && note "$REPORT"
+  [ -n "$LEFT" ] && note "$REPORT"
   exit 0
 fi
 
 SAY=""
-[ -n "$HELD" ] && SAY=y
+[ -n "$LEFT" ] && SAY=y
 
 if [ "$BRANCH" != "$AM_TARGET" ]; then
   if ! git show-ref --verify --quiet "refs/heads/$AM_TARGET"; then

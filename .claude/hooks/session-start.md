@@ -45,10 +45,12 @@ Fires when Claude finishes responding. Reads the `settings:` block of
 `governance/write-policy.yaml`; with both switches `false` (the shipped
 state) it exits immediately and does nothing.
 
-- **`auto-commit`** — stages and commits the turn's changes. `scope: auto-tier` (the
-  default) commits only paths the write-guard would have let through unprompted; anything
-  matching a gated pattern is left in your working tree and named in the
-  report. `product-development` and `all` widen that if you want them.
+- **`auto-commit`** — stages and commits the turn's changes. Anything matching a gated
+  pattern is left in your working tree and named in the report — always, whatever
+  `scope` says. `scope: auto-tier` (the default) commits every other changed path, i.e.
+  exactly what the write-guard would have let through unprompted; `product-development`
+  narrows that to paths under `product-development/` (the rest is named in the report as
+  outside scope); `all` is a legacy alias of `auto-tier`.
 - **`auto-merge`** — lands the commit on `target-branch`, then pushes. Already on the
   target (the normal case — sessions run on main): skips straight to the push. On a side
   branch: `strategy: ff-only` (the default) moves the target ref straight from HEAD, so
