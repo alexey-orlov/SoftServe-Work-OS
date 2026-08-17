@@ -85,6 +85,7 @@ is_protected() {
         pat=$(printf '%s' "$pat" | sed 's/^ *//;s/ *$//')
         [ -z "$pat" ] && continue
         glob=${pat//\*\*/\*}
+        case "$pat" in */) glob="${glob}*" ;; esac      # bare `dir/` → whole directory
         # shellcheck disable=SC2254
         case "$rel" in $glob) return 0 ;; esac
         ;;

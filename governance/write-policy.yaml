@@ -12,8 +12,8 @@
 # write-back contract, proposals/CLAUDE.md) point here and never restate it:
 #   auto  — DEFAULT for any path not listed below. Agents write and commit directly,
 #           and push directly while auto-sync is on. Covers raw material, records
-#           (summaries, decisions, results), deliverables (PRDs, analyses), navigation
-#           CLAUDE.md files, the ledger, health reports.
+#           (summaries, decisions, results), deliverables (PRDs, analyses), the quarter
+#           page, and navigation CLAUDE.md files outside the gated trees.
 #   gated — the steering files and the system's own rules, one list, two gates:
 #           (1) write time — the agent shows the change and you approve Claude Code's
 #               native prompt BEFORE anything is written. That prompt is tagged
@@ -25,12 +25,19 @@
 #               them deliberately (say "commit and push the gated changes", or use
 #               git yourself).
 #           Headless/scheduled runs cannot ask: they file a proposal in
-#           governance/proposals/ instead of writing.
+#           governance/proposals/ instead of writing. (With governance/** gated as a
+#           whole, that inbox is gated too — before running anything headless, list
+#           the governance rule files below instead of the folder.)
 #           Historical names — "confirm tier" / "Tier 2" and "admin tier" — were
 #           collapsed into this single gated tier on 2026-08-11; older skill prose
 #           still using those names means this tier.
 #
-# Paths are repo-root-relative. Globs use shell fnmatch (`*` does not cross `/`, `**` does).
+# Paths are repo-root-relative. A whole directory is written `dir/**` (the hooks also read
+# a bare `dir/` the same way, but keep `dir/**` so the optional GitHub ruleset can copy the
+# list as-is). Globs use shell fnmatch (`*` does not cross `/`, `**` does).
+#
+# Keep this list SHORT and coarse — whole directories plus the few single files that
+# steer everything; a path is gated if it sits under any entry.
 
 version: 2
 
@@ -40,25 +47,16 @@ steward: "[Your Name]"   # ← fill during setup (see Team table in root CLAUDE.
 tiers:
   gated:
     # Steering files — the distilled context every session leans on.
-    - product-development/feature-index.yaml                                 # the product map
-    - product-development/product/strategy/business-context/business-info.md
-    - product-development/product/strategy/business-context/segmentation-matrix.md
-    - product-development/product/strategy/business-context/stakeholders.md
-    - product-development/product/strategy/current-quarter.md
-    - product-development/product/strategy/business-context/platform-model.md  # platform facts job specs must respect
-    - product-development/engineering/tech-constraints.md                      # build realities job specs must respect — Engineer-owned
+    - product-development/feature-index.yaml                       # the product map
+    - product-development/product/strategy/business-context/**     # who we are — company, ICP, personas, pricing, stakeholders, segments, platform model
+    - product-development/product/handbook/templates/**            # templates shape every future document
+    - product-development/engineering/**                           # build realities — tech constraints, code registry + grounding contract, plans, codebase maps
     # System rules — the OS itself.
-    - CLAUDE.md                                                              # root — steers every session (carries the business-fundamentals mirror block)
-    - product-development/product/handbook/templates/**                      # templates shape every future document
-    - governance/write-policy.yaml                                           # the write policy itself — what is auto vs gated
-    - governance/write-back-contract.md
-    - product-development/engineering/code-grounding.md                      # evidence contract — lives beside its registry
-    - .claude/settings.json
-    - .claude/hooks/**
-    - .claude/skills/**
-    - .claude/agents/**
-    - .claude/team-learnings.md
-    - .github/**
+    - CLAUDE.md                                                    # root — steers every session (carries the business-fundamentals mirror block)
+    - governance/**                                                # the write policy + write-back contract, plus the ledger, health reports and proposals inbox
+    - os-installation/**                                           # install + setup guides, customization state, MCP integration logs
+    - .claude/**                                                   # skills, agents, hooks, settings, team learnings
+    - .github/**                                                   # CI — the weekly lint + gated-path audit
 
 # Living pages — edit-in-place current-truth files (auto tier unless listed above).
 # Informational: /wiki-lint verifies each exists, carries a `_updated:` header, and

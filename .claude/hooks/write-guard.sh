@@ -46,7 +46,8 @@ REL="${FILE#"$ROOT"/}"
 # --- match against the gated patterns from the policy ----------------------------
 # Walks the YAML by line: `gated:` opens the list, any other `key:` closes it, comment-only
 # lines inside the list name the group that follows (e.g. "Steering files — …"), and each
-# `- pattern   # note` entry is matched with shell globbing (`**` treated as `*`).
+# `- pattern   # note` entry is matched with shell globbing (`**` treated as `*`; a bare
+# `dir/` is read as `dir/**`, so a hand-written directory entry never silently matches nothing).
 TIER=""; SECTION=""; GROUP=""; NOTE=""; PAT=""
 trim() { printf '%s' "$1" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'; }
 while IFS= read -r line; do
@@ -61,6 +62,7 @@ while IFS= read -r line; do
       case "$ENTRY" in *"#"*) NOTE=$(trim "${ENTRY#*#}") ;; esac   # its human note
       [ -z "$PAT" ] && continue
       GLOB=${PAT//\*\*/\*}                              # case-glob: * already crosses /
+      case "$PAT" in */) GLOB="${GLOB}*" ;; esac        # bare `dir/` → whole directory
       # shellcheck disable=SC2254
       case "$REL" in
         $GLOB) TIER="$SECTION"; break ;;

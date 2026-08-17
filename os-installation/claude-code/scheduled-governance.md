@@ -111,8 +111,9 @@ the week's digest file in place; include the feature-request lines from
 `product-development/product/customers/feature-requests/`; post Part A via the team
 messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
 record only"; never edit gated files headlessly (file a proposal in
-`governance/proposals/` instead); end with the run summary listing every
-path written.
+`governance/proposals/` instead — the inbox itself sits under gated `governance/`, so
+read the headless note in `write-policy.yaml`'s header before enabling any runner); end
+with the run summary listing every path written.
 
 **Team-neutral alternative — GitHub Action** (runs server-side under the repo, tied to no
 personal account). Add an `ANTHROPIC_API_KEY` repo secret, then:
