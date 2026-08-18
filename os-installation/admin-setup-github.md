@@ -11,10 +11,11 @@ approval is path-scoped through CODEOWNERS. Background: `claude-code/scheduled-g
 ## 1. Two roles
 
 1. **Team `os-admins`** — org → Teams → New team. Add the stewards (the people who may
-   approve changes to gated paths). It must have write access to the repo (CODEOWNERS
-   requirement).
-2. **Repository access** — Settings → Collaborators and teams: `os-admins` → *Admin* (or
-   *Maintain*); everyone else → *Write*.
+   approve changes to gated paths).
+2. **Repository access** — Settings → Collaborators and teams: `os-admins` → *Write*;
+   everyone else → *Write* too. *Write* is all an OS-admin needs: CODEOWNERS only requires
+   write access, and the bypass in step 3 is granted to the **team**, not to a repository
+   role. Repository administration stays with the repo admin running this guide.
 
 ## 2. Tell the OS who the admins are
 

@@ -19,10 +19,14 @@ Background: `claude-code/scheduled-governance.md`.
    | Permission | Contributors | OS-Admins |
    |---|---|---|
    | Contribute · Create branch · Contribute to pull requests | Allow | Allow |
-   | Bypass policies when completing pull requests | **Deny** | Allow |
-   | Bypass policies when pushing | **Deny** | Allow |
-   | Force push (rewrite history, delete branches and tags) | **Deny** | Allow |
-   | Edit policies · Manage permissions | **Deny** | Allow |
+   | Bypass policies when completing pull requests | Not set (leave as is) | **Allow** |
+   | Bypass policies when pushing | Not set (leave as is) | **Allow** |
+   | Force push (rewrite history, delete branches and tags) | Not set (leave as is) | **Allow** |
+   | Edit policies · Manage permissions | Not set (leave as is) | **Allow** |
+
+   Do **not** set the Contributors column to *Deny*: in Azure DevOps a Deny beats an Allow,
+   and your OS-Admins are Contributors too — a Deny would block them as well. *Not set*
+   already means "no" for everyone who has no Allow from elsewhere.
 
    Check the `main` branch inherits this (Repos → Branches → main → ⋯ → Branch security).
 
@@ -46,8 +50,9 @@ Repos → Branches → `main` → ⋯ → **Branch policies**:
   .github/scripts/gated-paths.sh --format ado
   ```
 
-  · *Allow requestors to approve their own changes* — on only if `OS-Admins` has fewer than
-  two people · Activity feed message: "Gated OS path — needs OS-Admins approval". Save.
+  · *Allow requestors to approve their own changes* — **on** (an OS-admin may approve a
+  change they proposed themselves) · Activity feed message: "Gated OS path — needs
+  OS-Admins approval". Save.
 - Optional: *Build validation* running `.github/scripts/wiki-lint.sh`; *Limit merge types*
   → allow *Squash* and *Rebase and fast-forward*.
 
