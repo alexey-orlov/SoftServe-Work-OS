@@ -18,7 +18,7 @@ Everything needed to install this OS on your machine and confirm it works.
 - [admin-setup-github.md](admin-setup-github.md) — Admin, once, before the team starts: two roles (`os-admins` team; write for everyone, admins included — the bypass is by team, not by repo role), the `main` ruleset (pull request required, code-owner review, admins bypass), repo settings for auto-merge, teammate `gh auth login`, two-minute test — the server side of the pr landing strategy
 - [admin-setup-azure-devops.md](admin-setup-azure-devops.md) — Same for Azure Repos: `OS-Admins` group + Contributors permissions table, the one required-reviewer branch policy with the generated path filter, teammate `az login`, test, and how the path filter is refreshed when the gated list changes (manual by default)
 - [gated-policy-sync.azure-pipelines.yml](gated-policy-sync.azure-pipelines.yml) — OPTIONAL Azure pipeline that refreshes the required-reviewer path filter from `governance/write-policy.yaml` automatically; not installed by default — the manual step in the Azure guide is the baseline
-- *Customer-facing documentation* — the plain-language site and Word editions a team is sent (Overview · Setup · FAQ) live in [`Documentation/`](../Documentation/) at the repo root, gated, with their single source. The two admin guides above stay the terse admin reference; the site is what a first-time reader gets
+- *Customer-facing documentation* — the plain-language site a team is sent (Overview · Setup) lives in [`Documentation/`](../Documentation/) at the repo root, gated, with its single source. The two admin guides above stay the terse admin reference; the site is what a first-time reader gets
 
 ### Created on demand
 

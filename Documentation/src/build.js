@@ -41,16 +41,20 @@ function resolveInternal(href) {
 const WARN = new Set();
 const LEAK = /\b(GitHub\s*(\/|or|and)\s*Azure|Azure(\s+Repos| DevOps)?\s*(\/|or|and)\s*GitHub)\b/;
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const hinl = (text) => tokens(text).map((t) => {
+// nolink renders link tokens as their inner formatted text instead of an <a> — for contexts that
+// are themselves a link (the "On this page" rail). A nested <a> is invalid: browsers split it, so a
+// heading containing a Markdown link would grow a second rail entry that navigates off the page.
+const hinl = (text, nolink) => tokens(text).map((t) => {
   switch (t.k) {
     case "t": if (LEAK.test(t.v)) WARN.add(`both platforms in one sentence: "${t.v.trim().slice(0, 90)}"`); return esc(t.v);
-    case "b": return `<strong>${hinl(t.v)}</strong>`;
-    case "i": return `<em>${hinl(t.v)}</em>`;
+    case "b": return `<strong>${hinl(t.v, nolink)}</strong>`;
+    case "i": return `<em>${hinl(t.v, nolink)}</em>`;
     case "c": return `<code>${esc(t.v).replace(/([^\s])\/(?=.)/g, "$1/<wbr>")}</code>`;
-    case "a": if (t.href.startsWith("#/") && !resolveInternal(t.href)) WARN.add(`unresolved link ${t.href} ("${plain(t.v)}")`); return t.href.startsWith("#/") ? `<a href="${esc(t.href)}">${hinl(t.v)}</a>` : `<a href="${esc(t.href)}" target="_blank" rel="noopener">${hinl(t.v)}</a>`;
-    case "pf": return `<span data-platform="github">${hinl(t.gh)}</span><span data-platform="azure">${hinl(t.az)}</span>`;
+    case "a": if (t.href.startsWith("#/") && !resolveInternal(t.href)) WARN.add(`unresolved link ${t.href} ("${plain(t.v)}")`); return nolink ? hinl(t.v, nolink) : t.href.startsWith("#/") ? `<a href="${esc(t.href)}">${hinl(t.v)}</a>` : `<a href="${esc(t.href)}" target="_blank" rel="noopener">${hinl(t.v)}</a>`;
+    case "pf": return `<span data-platform="github">${hinl(t.gh, nolink)}</span><span data-platform="azure">${hinl(t.az, nolink)}</span>`;
   }
 }).join("");
+const hnav = (text) => hinl(text, true);
 // A callout / say / code that follows a step list (or sits inside a step) is part of that
 // procedure, so it aligns with the step BODY column rather than the base content column —
 // otherwise it hangs out to the left of the step text above it. This walks a block list and
@@ -108,7 +112,7 @@ function navTree(blocks, pf = null, acc = []) {
 const flat = ARTICLES.map(({ s, a }) => ({ s, a, route: `${s.id}/${a.id}` }));
 // The platform switch sits under every article title (not in the header, where readers miss it). One instance per
 // article; all instances mirror <html data-platform>, so the choice — kept in localStorage — is the same on every page.
-const PFBAR = `<div class="pfbar"><div class="pfbar-text"><span class="pfbar-label">Your platform</span><span class="pfbar-hint">${hinl("Every page shows the {gh:GitHub|az:Azure Repos} steps only. Switch here — your choice is remembered.")}</span></div><div class="seg" role="group" aria-label="Choose your git platform"><button type="button" data-set="github" aria-pressed="true">GitHub</button><button type="button" data-set="azure" aria-pressed="false">Azure Repos</button></div></div>`;
+const PFBAR = `<div class="pfbar"><span class="pfbar-label">Your platform</span><div class="seg" role="group" aria-label="Your platform"><button type="button" data-set="github" aria-pressed="true">GitHub</button><button type="button" data-set="azure" aria-pressed="false">Azure Repos</button></div></div>`;
 const articlesHtml = flat.map(({ s, a, route }, idx) => {
   const rail = navTree(a.blocks);
   const prev = flat[idx - 1], next = flat[idx + 1];
@@ -121,7 +125,7 @@ const articlesHtml = flat.map(({ s, a, route }, idx) => {
     ${html(a.blocks, { route })}
     <nav class="pager">${prev ? `<a class="pager-prev" href="#/${prev.route}"><span>Previous</span><b>${esc(prev.a.title)}</b></a>` : "<span></span>"}${next ? `<a class="pager-next" href="#/${next.route}"><span>Next</span><b>${esc(next.a.title)}</b></a>` : ""}</nav>
   </div>
-  <nav class="rail" aria-label="On this page"><p class="rail-title">On this page</p><ol>${rail.map((h) => `<li class="l${h.level}"${h.pf ? ` data-platform="${h.pf}"` : ""}><a href="#/${route}/${h.id}" data-target="${h.id}">${hinl(h.text)}</a></li>`).join("")}</ol></nav>
+  <nav class="rail" aria-label="On this page"><p class="rail-title">On this page</p><ol>${rail.map((h) => `<li class="l${h.level}"${h.pf ? ` data-platform="${h.pf}"` : ""}><a href="#/${route}/${h.id}" data-target="${h.id}">${hnav(h.text)}</a></li>`).join("")}</ol></nav>
 </article>`;
 }).join("\n");
 const placeholders = doc.sections.filter((s) => !s.articles.length).map((s) => `<article data-route="${s.id}/index" hidden><div class="art-main"><p class="crumb">${esc(s.title)}</p><h1>${esc(s.title)}</h1><div class="empty"><p>${hinl(s.placeholder || "Nothing here yet.")}</p></div></div><nav class="rail" aria-label="On this page"></nav></article>`).join("");
@@ -189,10 +193,8 @@ html[data-platform="azure"] [data-platform="github"]{display:none!important}
 @media (max-width:760px){.logo .doc,.logo .sep{display:none} .top-in{gap:12px; padding:0 14px} .tabs{margin-left:0; gap:2px} .tab{padding:0 7px; font-size:13px}}
 
 /* ---------- platform toggle — under every article title; the choice lives on <html data-platform> (set before first paint) and in localStorage */
-.pfbar{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px 24px; margin:0 0 30px; padding:12px 14px 12px 16px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
-.pfbar-text{display:flex; flex-direction:column; gap:3px; flex:1 1 280px; min-width:0}
+.pfbar{display:flex; align-items:center; flex-wrap:wrap; gap:10px 18px; margin:0 0 30px; padding:10px 14px 10px 16px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
 .pfbar-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--ink)}
-.pfbar-hint{font-size:13px; line-height:1.4; color:var(--muted)}
 .seg{position:relative; display:inline-grid; grid-template-columns:1fr 1fr; flex:0 0 auto; padding:3px; border:1px solid var(--line); border-radius:999px; background:var(--surface); box-shadow:inset 0 1px 2px rgba(10,37,64,.06)}
 .seg::before{content:""; position:absolute; top:3px; bottom:3px; left:3px; width:calc(50% - 3px); border-radius:999px; background:var(--seg-on); box-shadow:0 1px 2px rgba(10,37,64,.25); transition:transform .18s ease}
 html[data-platform="azure"] .seg::before{transform:translateX(100%)}
@@ -200,7 +202,7 @@ html[data-platform="azure"] .seg::before{transform:translateX(100%)}
 .seg button:hover{color:var(--ink)}
 html[data-platform="github"] .seg button[data-set="github"], html[data-platform="azure"] .seg button[data-set="azure"]{color:var(--seg-on-fg); cursor:default}
 .seg button:focus-visible{outline:none; border-radius:999px; box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
-@media (max-width:560px){.pfbar{padding:12px 12px} .pfbar-text{flex-basis:100%} .seg{width:100%}}
+@media (max-width:560px){.pfbar{padding:10px 12px} .pfbar-label{flex-basis:100%} .seg{width:100%}}
 
 /* ---------- layout */
 .wrap{max-width:1400px; margin:0 auto; padding:0 28px; display:grid; grid-template-columns:240px minmax(0,1fr); gap:48px}

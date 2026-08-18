@@ -1,5 +1,5 @@
 // Single source of truth for the Work OS team-setup documentation.
-// Rendered by build.js to: the multi-page HTML site, one Markdown file (repo), one DOCX per platform.
+// Rendered by build.js to the self-contained HTML documentation site.
 // Inline markup: **bold**, *italic*, `code`, [text](url), {gh:GitHub wording|az:Azure wording}.
 const h2 = (text, id) => ({ t: "h2", text, id });
 const h3 = (text, id) => ({ t: "h3", text, id });
@@ -16,7 +16,7 @@ const table = (header, rows, widths) => ({ t: "table", header, rows, widths });
 const terms = (items) => ({ t: "terms", items });
 const platform = (name, ...blocks) => ({ t: "platform", name, blocks }); // "github" | "azure"
 const details = (summary, ...blocks) => ({ t: "details", summary, blocks });
-const image = (file, alt, caption) => ({ t: "image", file, alt, caption });   // file in the build folder; HTML/DOCX embed it, MD shows the alt text
+const image = (file, alt, caption) => ({ t: "image", file, alt, caption });   // file in the build folder; the HTML embeds it
 const seq = (items) => ({ t: "seq", items });                    // the big-picture sequence: [{who, what, time, link}]
 const cards = (items) => ({ t: "cards", items });                // [{title, text, link}]
 
@@ -28,7 +28,7 @@ const doc = {
   siteTitle: "Work OS · Team setup",
   version: "v2.5 · August 2026",
   repoPath: "Documentation/",
-  intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch, and as a Word document per platform.",
+  intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
   sections: [
     // ================================================================= OVERVIEW
@@ -90,7 +90,7 @@ const doc = {
           "│   └── engineering/                 code registry + grounding for /code-qa",
           "├── governance/                      write policy · health reports · proposals",
           "├── os-installation/                 install and setup guides",
-          "└── Documentation/                   this documentation — site, Word editions, source",
+          "└── Documentation/                   this documentation — the site and its source",
         ], "The Work OS folder"),
         h2("How it stays in sync", "sync"),
         p("Three places, one loop: the shared repository in {gh:GitHub|az:Azure Repos} · Claude Code + git on your computer · your local files. Git carries files between the shared repository and your machine; Claude Code works on the local copy; auto-sync runs the loop for you after every response. You never hand-move files."),
@@ -228,7 +228,7 @@ const doc = {
           ["`.claude/team-learnings.md`", "Steering file", "Cross-cutting behaviour rules distilled from corrections (short, hard-capped)", "Injected at every session start; `/session-retro` and the capture loop route durable takeaways here"],
           ["`governance/`", "Steering file", "`write-policy.yaml` (the gated list + auto-sync settings), the write-back contract, the ingestion ledger, health reports, pending proposals", "The admin surface — see [How changes reach the team](#/overview/changes)"],
           ["`os-installation/`", "Templates & guides", "Install and setup guides, customization status, tool-integration logs", "Reference for the Work OS admin"],
-          ["`Documentation/`", "Templates & guides", "This documentation: the site, one Word edition per platform, and the source they are built from", "Read it, share it; change it through the gated flow"],
+          ["`Documentation/`", "Templates & guides", "This documentation: the site and the single source it is built from", "Read it, share it; change it through the gated flow"],
         ], [2300, 1400, 3200, 2500]),
         h2("product-development/ — the top level", "pd"),
         table(["Item", "Type", "What's in it", "How it's used"], [
@@ -341,7 +341,7 @@ const doc = {
 
       // ------------------------------------------------------------- stage 1 · repository admin
       { id: "repository", title: "Set up the repository", audience: "Stage 1 · Repository admin", time: "about 30 minutes, once", blocks: [
-        lead("You are the person who administers your {gh:GitHub organization|az:Azure DevOps project}. The repository you are about to create is the team's shared knowledge base: Claude Code reads it on each teammate's computer before it drafts anything and saves their finished work straight back into it — so everyone needs read *and* write access, not read-only, while step 4 protects `main` so that the few files steering the whole system still need a Work OS admin's approval. In this article you import the Work OS from SoftServe, create the admin group, give people access, and protect the main branch — all in the {gh:GitHub|az:Azure DevOps} web interface. Nothing to install."),
+        lead("You are the person who administers your {gh:GitHub organization|az:Azure DevOps project}. The repository you are about to create is the team's shared knowledge base: Claude Code reads it on each teammate's computer before it drafts anything and saves their finished work straight back into it — so everyone needs read *and* write access, not read-only. Step 4 protects `main`, so the few files steering the whole system still need a Work OS admin's approval. In this article you import the Work OS from SoftServe, create the admin group, give people access, and protect the main branch — all in the {gh:GitHub|az:Azure DevOps} web interface. Nothing to install."),
         h2("Before you start", "before"),
         checklist([
           "You can create repositories and change their settings in your {gh:GitHub organization (you are an organization owner)|az:Azure DevOps project (you are in Project Administrators)}.",
@@ -648,7 +648,7 @@ const doc = {
             "Repeat for every repository on the list.",
           ]),
           callout("why", "A team rather than named people: the next person who joins the Work OS then gets access to every repository by being added to the team once."),
-          callout("dont", "Grant **Write**. Claude reads product code and never changes it — *Read* is all the Work OS needs, on every repository."),
+          callout("dont", "Grant **Write**. Claude reads the code and never changes it — *Read* is all the Work OS needs, on every repository."),
           callout("note", "If the code sits in a **different GitHub organization** than the Work OS repository, each person also needs to be a member or an outside collaborator of that organization before a team or a repository can be shared with them."),
           callout("expected", "Every person can open every repository link in a browser and see the files. People added to a new team receive an e-mail from GitHub.")),
         platform("azure",
@@ -657,7 +657,7 @@ const doc = {
             "Select the **Readers** group → **Members › Add** → add every Work OS user. That gives them read access to the project's repositories.",
             "Only some repositories should be visible? Do it per repository instead: **Project settings › Repositories**, select the repository, open the **Security** tab, select the group or person, and set **Read** to **Allow**.",
           ]),
-          callout("dont", "Give **Contribute** or higher. Claude reads product code and never changes it — *Read* is all the Work OS needs, on every repository."),
+          callout("dont", "Give **Contribute** or higher. Claude reads the code and never changes it — *Read* is all the Work OS needs, on every repository."),
           callout("note", "If the code sits in a **different Azure DevOps project or organization** than the Work OS repository, each person also needs to be a user there first — a **Basic** access level is enough."),
           callout("expected", "Every person can open every repository under **Repos › Files** and see the code. If the page asks someone to sign in and then says they don't have access, they are not in the group yet.")),
         callout("check", "Ask one of the Work OS users — not just yourself — to open a repository link in their browser. If they can see the files, Claude will be able to read that code on their computer too. Note any repository the admin left out: Claude simply won't be able to answer about it."),
@@ -679,7 +679,7 @@ const doc = {
         ]),
         h2("Keeping it fresh", "refresh"),
         p("Ask Claude *\"refresh the code access\"* (`/connect-code --refresh`) now and then — it pulls the latest code for every repository you have and updates the maps. The weekly health check reminds you when the registry goes stale."),
-        p("Adding a repository later is the same two moves in the same order: read access for everyone first (step 2), then `/connect-code` with its link (step 3). New teammates need both — the repository admin adds them to the team or group, then they run step 4."),
+        p("Adding a repository later is the same two moves in the same order: read access for everyone first (step 2), then `/connect-code` with its link (step 3). A new teammate needs two things — the repository admin adds them to the team or group (step 2), then they run step 4 on their own computer."),
         callout("pass", "Ask *\"/code-qa how does <a feature you know> work today?\"* and get an answer that cites the code — with *\"show the evidence\"* revealing file and line references."),
       ]},
 
