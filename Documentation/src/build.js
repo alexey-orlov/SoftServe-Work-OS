@@ -41,14 +41,16 @@ function resolveInternal(href) {
 }
 
 // ================================================================ HTML SITE
+const WARN = new Set();
+const LEAK = /\b(GitHub\s*(\/|or|and)\s*Azure|Azure(\s+Repos| DevOps)?\s*(\/|or|and)\s*GitHub)\b/;
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const hinl = (text) => tokens(text).map((t) => {
   switch (t.k) {
-    case "t": return esc(t.v);
+    case "t": if (LEAK.test(t.v)) WARN.add(`both platforms in one sentence: "${t.v.trim().slice(0, 90)}"`); return esc(t.v);
     case "b": return `<strong>${hinl(t.v)}</strong>`;
     case "i": return `<em>${hinl(t.v)}</em>`;
     case "c": return `<code>${esc(t.v).replace(/([^\s])\/(?=.)/g, "$1/<wbr>")}</code>`;
-    case "a": return t.href.startsWith("#/") ? `<a href="${esc(t.href)}">${hinl(t.v)}</a>` : `<a href="${esc(t.href)}" target="_blank" rel="noopener">${hinl(t.v)}</a>`;
+    case "a": if (t.href.startsWith("#/") && !resolveInternal(t.href)) WARN.add(`unresolved link ${t.href} ("${plain(t.v)}")`); return t.href.startsWith("#/") ? `<a href="${esc(t.href)}">${hinl(t.v)}</a>` : `<a href="${esc(t.href)}" target="_blank" rel="noopener">${hinl(t.v)}</a>`;
     case "pf": return `<span data-platform="github">${hinl(t.gh)}</span><span data-platform="azure">${hinl(t.az)}</span>`;
   }
 }).join("");
@@ -230,14 +232,13 @@ figure.say pre::before{content:"“"; color:var(--accent); font-weight:700} figu
 button.copy{appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--muted); font:600 12px/1 var(--font); letter-spacing:0; text-transform:none; padding:4px 9px; border-radius:6px; cursor:pointer}
 button.copy:hover{color:var(--ink); border-color:var(--accent)}
 button.copy.done{color:var(--ok); border-color:var(--ok)}
-aside.co{display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:baseline; margin:10px 0 16px; padding:11px 14px; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:var(--radius); background:var(--panel)}
+aside.co{margin:10px 0 16px; padding:11px 14px; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:var(--radius); background:var(--panel)}
 aside.co p{margin:0}
-aside.co .co-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent-deep); white-space:nowrap; padding-top:2px}
+aside.co .co-label{display:block; margin:0 0 5px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent-deep)}
 aside.co-expected, aside.co-check, aside.co-pass{border-left-color:var(--orange); background:var(--accent-tint); border-color:var(--accent-soft)}
 aside.co-expected .co-label, aside.co-check .co-label, aside.co-pass .co-label{color:var(--orange)}
 aside.co-dont{border-left-color:var(--danger)} aside.co-dont .co-label{color:var(--danger)}
 aside.co-why{border-left-color:var(--accent-soft)}
-@media (max-width:560px){aside.co{grid-template-columns:1fr}}
 .tbl{overflow-x:auto; margin:6px 0 18px; border:1px solid var(--line); border-radius:var(--radius)}
 table{border-collapse:collapse; width:100%; font-size:14px}
 th,td{padding:10px 12px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line-soft)}
@@ -339,6 +340,7 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
 </script>`;
 fs.writeFileSync(path.join(OUT, "work-os-docs.html"), page);
 console.log("html →", "work-os-docs.html", page.length, "bytes,", flat.length, "articles");
+if (WARN.size) { for (const w of WARN) console.log("⚠", w); } else console.log("links ok · no both-platform leaks");
 
 // ================================================================ DOCX (one per platform)
 const D = require("docx");
@@ -367,7 +369,12 @@ function dx(blocks, pf, ctx = { list: null }) {
   const P = (text, o = {}) => new Paragraph({ children: dinl(text, pf, o.run || {}), spacing: { after: 120, line: 276 }, ...(o.para || {}) });
   const newList = () => { const n = ++inst; return (text) => new Paragraph({ children: dinl(text, pf), numbering: { reference: "steps", level: 0, instance: n }, spacing: { after: 80, line: 276 } }); };
   const codeBlock = (lines, label) => { const r = []; if (label) r.push(new Paragraph({ children: [new TextRun({ text: label, size: 15, color: GREY_600, bold: true, allCaps: true, characterSpacing: 20 })], spacing: { before: 60, after: 20 }, indent: { left: 240 } })); lines.forEach((l, i) => r.push(new Paragraph({ children: [new TextRun({ text: l, font: MONO, size: 17, color: INK })], shading: { type: ShadingType.CLEAR, fill: GREY_50 }, border: { ...(i === 0 ? { top: { style: BorderStyle.SINGLE, size: 4, color: GREY_300, space: 4 } } : {}), left: { style: BorderStyle.SINGLE, size: 12, color: BLUE, space: 8 }, ...(i === lines.length - 1 ? { bottom: { style: BorderStyle.SINGLE, size: 4, color: GREY_300, space: 4 } } : {}) }, indent: { left: 240 }, spacing: { before: i === 0 && !label ? 60 : 0, after: i === lines.length - 1 ? 160 : 0, line: 260 } }))); return r; };
-  const callout = (kind, text) => { const lbl = plainFor(CO_LABEL[kind], pf); const strong = ["expected", "check", "pass"].includes(kind); const rule = kind === "dont" ? RED : strong ? ORANGE : BLUE_75; return new Paragraph({ children: [new TextRun({ text: lbl.toUpperCase() + "  ", bold: true, color: kind === "dont" ? RED : strong ? ORANGE : BLUE_DARK, size: 15, characterSpacing: 15 }), ...dinl(text, pf, { size: 19, color: strong ? INK : TEXT })], shading: { type: ShadingType.CLEAR, fill: strong ? "EAF4FB" : GREY_50 }, border: { left: { style: BorderStyle.SINGLE, size: 18, color: rule, space: 8 } }, indent: { left: 240 }, spacing: { before: 40, after: 160, line: 264 } }); };
+  // Label on its own line above the body, so every callout's text starts at the same left edge
+  // (an inline label offsets the first line by its own width, which differs per kind).
+  const callout = (kind, text) => { const lbl = plainFor(CO_LABEL[kind], pf); const strong = ["expected", "check", "pass"].includes(kind); const rule = kind === "dont" ? RED : strong ? ORANGE : BLUE_75; const shell = { shading: { type: ShadingType.CLEAR, fill: strong ? "EAF4FB" : GREY_50 }, border: { left: { style: BorderStyle.SINGLE, size: 18, color: rule, space: 8 } }, indent: { left: 240 } }; return [
+    new Paragraph({ ...shell, keepNext: true, children: [new TextRun({ text: lbl.toUpperCase(), bold: true, color: kind === "dont" ? RED : strong ? ORANGE : BLUE_DARK, size: 15, characterSpacing: 15 })], spacing: { before: 40, after: 0, line: 240 } }),
+    new Paragraph({ ...shell, children: dinl(text, pf, { size: 19, color: strong ? INK : TEXT }), spacing: { before: 0, after: 160, line: 264 } }),
+  ]; };
   const cellBorder = { style: BorderStyle.SINGLE, size: 4, color: GREY_300 }, borders = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
   const tbl = (header, rows, widths) => { widths = widths || header.map(() => Math.floor(CONTENT_W / header.length)); const scale = CONTENT_W / widths.reduce((a, b) => a + b, 0); widths = widths.map((w) => Math.round(w * scale)); const hasHead = header.some((h) => h); const mk = (cells, isHead, ri) => new TableRow({ tableHeader: isHead, cantSplit: true, children: cells.map((c, i) => new TableCell({ width: { size: widths[i], type: WidthType.DXA }, borders, verticalAlign: VerticalAlign.TOP, margins: { top: 70, bottom: 70, left: 100, right: 100 }, shading: isHead ? { type: ShadingType.CLEAR, fill: BLUE, color: "auto" } : (i === 0 && !header[0]) ? { type: ShadingType.CLEAR, fill: GREY_100, color: "auto" } : ri % 2 === 1 ? { type: ShadingType.CLEAR, fill: GREY_50, color: "auto" } : undefined, children: [new Paragraph({ children: dinl(c, pf, isHead ? { bold: true, color: "FFFFFF", size: 17 } : { size: 17, ...(i === 0 && !header[0] ? { bold: true } : {}) }), spacing: { after: 0, line: 252 } })] })) }); return [new Table({ width: { size: CONTENT_W, type: WidthType.DXA }, columnWidths: widths, rows: [...(hasHead ? [mk(header, true, 0)] : []), ...rows.map((r, i) => mk(r, false, i))] }), new Paragraph({ children: [], spacing: { after: 120 } })]; };
   for (const b of blocks) {
@@ -381,7 +388,7 @@ function dx(blocks, pf, ctx = { list: null }) {
       case "checklist": b.items.forEach((i) => out.push(new Paragraph({ children: dinl(i, pf), numbering: { reference: "checks", level: 0 }, spacing: { after: 60, line: 276 } }))); break;
       case "code": out.push(...codeBlock(b.lines, b.label)); break;
       case "say": out.push(new Paragraph({ children: [new TextRun({ text: "Say to Claude", size: 15, color: BLUE_DARK, bold: true, allCaps: true, characterSpacing: 20 })], spacing: { before: 60, after: 20 }, indent: { left: 240 } }), new Paragraph({ children: [new TextRun({ text: "“" + b.text + "”", size: 20, color: INK })], shading: { type: ShadingType.CLEAR, fill: "F0F7FC" }, border: { left: { style: BorderStyle.SINGLE, size: 12, color: BLUE_75, space: 8 } }, indent: { left: 240 }, spacing: { after: 160, line: 264 } })); break;
-      case "callout": out.push(callout(b.kind, b.text)); break;
+      case "callout": out.push(...callout(b.kind, b.text)); break;
       case "table": out.push(...tbl(b.header, b.rows, b.widths)); break;
       case "steps": { const L = newList(); b.items.forEach((it) => { out.push(L(it.text)); out.push(...dx(it.sub, pf, { ...ctx, list: L })); }); break; }
       case "platform": if (b.name === pf) out.push(...dx(b.blocks, pf, ctx)); break;

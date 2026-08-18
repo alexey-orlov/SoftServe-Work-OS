@@ -26,12 +26,12 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.2 · August 2026",
+  version: "v2.3 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch, and as a Word document per platform.",
   home: ["overview", "work-os-101"],
   sections: [
-    // ================================================================= OVERVIEW (empty for now)
+    // ================================================================= OVERVIEW
     { id: "overview", title: "Overview", articles: [
 
       { id: "work-os-101", title: "Work OS 101", audience: "Everyone", time: "8 min read", blocks: [
@@ -58,14 +58,14 @@ const doc = {
           ["Context", "What the agent knows before you ask: business info, strategy, customers, decisions — shared, current, in one repository.", "Claude reads `business-info.md`, `segmentation-matrix.md` and `current-quarter.md` first; drafts cite your ICP, your segments and this quarter's bets. See [Context system](#/overview/context)."],
           ["Self-improvement", "Corrections become rules: the OS learns from use, so the same mistake isn't corrected twice.", "Correct something once — it becomes a rule in `team-learnings.md`, and every session for every PM starts already knowing it."],
           ["Workflow integration", "Agents act in your real systems — repository, docs, tickets, analytics — through connectors (MCP) and triggers.", "`/weekly-review` assembles the digest from the repository — and, once tools are connected, from your analytics and chat — and posts it where the team reads. See [Connect your tools](#/setup/tools)."],
-          ["Governance", "Access rules, write policies and review flows, so a shared OS stays safe, auditable and trusted.", "Everyday files flow freely; gated files change only with an explicit yes and an admin's approval; every change is a reviewable, revertible diff. See [How changes flow](#/faq/flow)."],
+          ["Governance", "Access rules, write policies and review flows, so a shared OS stays safe, auditable and trusted.", "Everyday files flow freely; gated files change only with an explicit yes and an admin's approval; every change is a reviewable, revertible diff. See [How changes reach the team](#/overview/changes)."],
         ], [2200, 3600, 3600]),
         h2("The underlying technology", "technology"),
         p("Nothing exotic — three well-understood parts, each replaceable:"),
         bullets([
           "**Claude Code** — Anthropic's agent. It runs on your computer (the desktop app), reads and writes files in the Work OS folder, runs skills, and talks to your tools through MCP connectors.",
           "**A git repository** — plain Markdown and YAML files in folders, versioned in {gh:GitHub|az:Azure Repos}. Git is how developers have shared and versioned work for years; here it carries the team's knowledge instead of code — audited, updated and versioned by default, tool-agnostic.",
-          "**Auto-sync and the write policy** — a small set of scripts and one policy file inside the repository. They save your work automatically, move everyday changes to the shared branch, and route changes to gated files through an approval. See [How changes flow](#/faq/flow).",
+          "**Auto-sync and the write policy** — a small set of scripts and one policy file inside the repository. They save your work automatically, move everyday changes to the shared branch, and route changes to gated files through an approval. See [How changes reach the team](#/overview/changes).",
         ]),
         h2("Where it lives — the repository", "repository"),
         p("Everything is a file in one folder tree. The same tree is on every teammate's computer and in {gh:GitHub|az:Azure Repos}; the [Context system](#/overview/context) article walks through it item by item."),
@@ -226,7 +226,7 @@ const doc = {
           ["`.claude/skills/`", "Steering file", "The skills — one folder per `/command`", "See [Skills and agents](#/overview/skills)"],
           ["`.claude/agents/`", "Steering file", "Reviewer personas + the code explorer", "Spun up by `/prd-challenge`, `/job-spec-challenge`, `/strategy-sprint`, `/code-qa`"],
           ["`.claude/team-learnings.md`", "Steering file", "Cross-cutting behaviour rules distilled from corrections (short, hard-capped)", "Injected at every session start; `/session-retro` and the capture loop route durable takeaways here"],
-          ["`governance/`", "Steering file", "`write-policy.yaml` (the gated list + auto-sync settings), the write-back contract, the ingestion ledger, health reports, pending proposals", "The admin surface — see [How changes flow](#/faq/flow) and the [Reference](#/faq/reference)"],
+          ["`governance/`", "Steering file", "`write-policy.yaml` (the gated list + auto-sync settings), the write-back contract, the ingestion ledger, health reports, pending proposals", "The admin surface — see [How changes reach the team](#/overview/changes)"],
           ["`os-installation/`", "Templates & guides", "Install and setup guides, customization status, tool-integration logs", "Reference for the Work OS admin"],
           ["`Documentation/`", "Templates & guides", "This documentation: the site, one Word edition per platform, and the source they are built from", "Read it, share it; change it through the gated flow"],
         ], [2300, 1400, 3200, 2500]),
@@ -272,6 +272,36 @@ const doc = {
         ], [2600, 1400, 3000, 2400]),
         callout("tip", "Two habits keep the context system trustworthy: **summaries first, raw data in subfolders** (a one-hour call becomes a short summary; the transcript stays underneath), and **every folder has a `CLAUDE.md` navigation file** that lists what's inside — Claude reads those to find its way, and `/wiki-lint` keeps them honest."),
       ]},
+
+      { id: "changes", title: "How changes reach the team", audience: "Everyone", time: "3 min read", blocks: [
+        lead("What happens between \"Claude finished a response\" and \"the team can see it\" — in plain words, and what you will see in {gh:GitHub|az:Azure Repos}."),
+        h2("Everyday changes", "everyday"),
+        steps([
+          "You ask Claude for something — a meeting summary, a decision record, a customer note. Claude writes the file.",
+          "When Claude finishes the response, auto-sync saves the change to your personal branch in the shared repository (a branch is a private working line; yours is named `sync/<your git name>`).",
+          "Auto-sync opens a small pull request from that branch into `main` — the team's shared line — and it merges by itself. Nobody has to look at it.",
+        ]),
+        callout("check", "On the repository page you'll see the file on `main` within about a minute, and under **Pull requests › {gh:Closed|az:Completed}** a pull request called *\"context: sync from sync/<name>\"*."),
+        h2("Changes to gated files", "gated"),
+        p("Gated files are the ones that steer the whole Work OS. The authoritative list lives in `governance/write-policy.yaml` (`tiers → gated`); everything else is an everyday file:"),
+        bullets([
+          "`CLAUDE.md` · `governance/` · `os-installation/` · `Documentation/` · `.claude/` · `.github/`",
+          "`product-development/feature-index.yaml`",
+          "`product-development/product/strategy/business-context/` (business-info, stakeholders, segmentation)",
+          "`product-development/product/handbook/templates/`",
+          "`product-development/engineering/`",
+        ]),
+        steps([
+          "You ask Claude to change a gated file. Before writing, Claude shows a **🔒 GATED FILE** prompt — you read the change and approve it.",
+          "When Claude finishes, auto-sync saves the change to your personal branch — but not to `main`. It waits there while you keep iterating.",
+          "When you're done, you say **\"propose the gated changes\"**. Claude opens a pull request with a plain-language description of everything that changed.",
+          "A Work OS admin reviews it — in {gh:GitHub|az:Azure Repos}, or by asking their own Claude — approves, and {gh:merges|az:completes} it. {gh:GitHub|az:Azure Repos} won't let anyone else. (An admin publishing their *own* gated change can ask Claude to do all three at once — see [Customize the Work OS, step 3](#/setup/customize/z3).)",
+          "Next time Claude finishes a response, your branch tidies itself — the approved change is now part of `main` for everyone.",
+        ]),
+        callout("check", "The pull request is titled *\"gated: …\"* and shows {gh:**Review required — Code owner review** from `os-admins`|az:**OS-Admins** as a required reviewer}."),
+        h2("Two people, one file", "conflicts"),
+        p("If two people change the same file, auto-sync tries to combine the changes; when it can't, it tells the person whose save is waiting exactly what to do (see [Troubleshooting](#/setup/troubleshooting)). Nothing is lost — the change stays on their branch."),
+      ]},
     ]},
 
     // ================================================================= SETUP
@@ -299,13 +329,13 @@ const doc = {
         seq([
           { who: "Stage 1 · Repository admin", what: "**Set up the repository** — import the Work OS from SoftServe, create the admin group, give people access, protect the main branch. Done in the {gh:GitHub|az:Azure DevOps} web interface.", time: "about 30 minutes", link: "#/setup/repository", label: "Set up the repository" },
           { who: "Stage 2 · Work OS admin", what: "**Set up your computer**, then **Customize the Work OS** (which also switches auto-sync on and ends with the first access test). Optional, when you're ready: **Connect your tools** and **Connect your product's code**.", time: "2–3 hours, resumable", link: "#/setup/customize", label: "Customize the Work OS" },
-          { who: "Stage 3 · All Work OS users", what: "**Set up your computer** and check that your work reaches the team. If the team uses connected tools or code, add your own part of those two articles.", time: "about 15 minutes each", link: "#/setup/computer", label: "Set up your computer" },
+          { who: "Stage 3 · All Work OS users", what: "**Set up your computer** and check that your work reaches the team. If the team uses connected tools or code, add your own part of those two articles.", time: "about 20 minutes each", link: "#/setup/computer", label: "Set up your computer" },
         ]),
         callout("note", "The order matters: Stage 3 can only start after the repository exists (Stage 1) and the Work OS admin has finished customization (Stage 2)."),
         h2("Two terms you will see everywhere", "terms"),
         terms([
-          { term: "Gated files", def: "The small set of files that steer the whole Work OS — its rules and settings, the document templates, and the business context (for example `business-info.md`). Changing one needs a Work OS admin's approval. Everything else is an *everyday file*. The full list is in the [Reference](#/faq/reference/gated-list)." },
-          { term: "Auto-sync", def: "The Work OS feature that saves your work to the shared repository every time Claude finishes a response — you never run git commands. Everyday files land straight away; gated changes wait until you say *\"propose the gated changes\"*, which opens a request a Work OS admin approves in {gh:GitHub|az:Azure Repos} (admins publish their own in one go). Details: [How changes flow](#/faq/flow)." },
+          { term: "Gated files", def: "The small set of files that steer the whole Work OS — its rules and settings, the document templates, and the business context (for example `business-info.md`). Changing one needs a Work OS admin's approval. Everything else is an *everyday file*. The full list is in [How changes reach the team](#/overview/changes/gated)." },
+          { term: "Auto-sync", def: "The Work OS feature that saves your work to the shared repository every time Claude finishes a response — you never run git commands. Everyday files land straight away; gated changes wait until you say *\"propose the gated changes\"*, which opens a request a Work OS admin approves in {gh:GitHub|az:Azure Repos} (admins publish their own in one go). Details: [How changes reach the team](#/overview/changes)." },
         ]),
       ]},
 
@@ -319,7 +349,7 @@ const doc = {
           "You have the names and e-mail addresses of the **initial Work OS admins**: one person from your company (permanent) and the SoftServe program lead (temporary). Both need an account in your {gh:GitHub organization|az:Azure DevOps organization} — invite the SoftServe person as {gh:an outside collaborator or organization member|az:a project user (a Basic access level is enough)}.",
           "You have the list of **initial Work OS users** (names and e-mail addresses).",
         ]),
-        platform("github", callout("note", "Private repositories on the GitHub **Free** plan don't support *rulesets*. Step 4 shows the equivalent *branch protection rule* for that case.")),
+        platform("github", callout("note", "Protecting `main` (step 4) needs **GitHub Team** or Enterprise Cloud while the repository is private: on the **Free** plan neither rulesets nor branch protection apply to private repositories. Check the plan now — step 4 covers what to do if the organization is on Free.")),
 
         h2("Step 1 — Get the Work OS from [SoftServe Work OS on GitHub](" + SRC + ")", "s1"),
         p("The initial version of the repository comes from the SoftServe team. Ask them for access to the source repository (and, if it is private, for the token to import it). Then import it into your {gh:organization|az:project} — no command line needed."),
@@ -337,7 +367,6 @@ const doc = {
           "When the import finishes, go to **Repos › Branches** and check that **`main`** is the default branch (⋯ menu → *Set as default branch* if not).",
         ])),
         callout("expected", "The repository page shows `CLAUDE.md`, `governance/`, `product-development/`, `os-installation/` and the other folders on `main`."),
-        callout("tip", "If your organization doesn't allow imports, give one SoftServe person temporary access to the empty repository and they will upload the content for you (about ten minutes). Remove the access afterwards."),
 
         h2("Step 2 — Create the Work OS admin group", "s2"),
         platform("github", steps([
@@ -390,7 +419,7 @@ const doc = {
             "Go to **Settings › General**, scroll to **Pull Requests**, tick **Allow auto-merge** and **Automatically delete head branches**. Keep **Allow rebase merging** on. Save.",
           ]),
           callout("note", "**Who are the \"Code Owners\"?** A file in the repository, `.github/CODEOWNERS`, that names `os-admins` as the reviewer for every gated file. The Work OS admin fills in your organization's name there during [Customize the Work OS](#/setup/customize) — until then gated pull requests can merge without review, which is fine during setup."),
-          callout("note", "**GitHub Free plan (private repository):** go to **Settings › Branches › Add branch protection rule**, branch name pattern `main`, tick *Require a pull request before merging* (approvals 0) and *Require review from Code Owners*, and under *Allow specified actors to bypass required pull requests* add `os-admins`. Same effect, older screen."),
+          callout("note", "**On the GitHub Free plan** a private repository cannot be protected at all — rulesets and branch protection are both limited to public repositories there. Upgrade the organization to **Team**, or run without the rule for now: Claude still shows the 🔒 prompt before every gated change and still routes it through a pull request, but nothing stops a direct push to `main`, so admin approval is a team convention rather than something GitHub enforces."),
           callout("dont", "Create a *push ruleset* for the gated folders. It would also block the branches that pull requests come from, and nobody could propose a change."),
           callout("expected", "**Settings › Rules** shows `main-pr-only` as *Active*. A pull request that changes a gated file will show *Review required — Code owner review*; one that doesn't will merge by itself. Members of `os-admins` can still push to `main` directly.")),
         platform("azure",
@@ -418,34 +447,44 @@ const doc = {
 
 
       // ------------------------------------------------------------- stage 2/3 · everyone
-      { id: "computer", title: "Set up your computer", audience: "Stage 2 (Work OS admin) and Stage 3 (everyone)", time: "about 15 minutes, once", blocks: [
-        lead("Get your own copy of the Work OS on your computer, connect it to the shared repository, and check that your work reaches the team. You will do everything in the **Claude Code desktop app** — Claude runs the technical steps for you."),
+      { id: "computer", title: "Set up your computer", audience: "Stage 2 (Work OS admin) and Stage 3 (everyone)", time: "about 20 minutes, once", blocks: [
+        lead("Get your own copy of the Work OS on your computer, connect it to the shared repository, and check that your work reaches the team. After a one-time install (step 1) you do everything in the **Claude Code desktop app** — Claude runs the technical steps for you."),
         h2("Before you start", "before"),
         checklist([
-          "The **repository admin** has given you access — you can open the repository page in your browser with the link they sent. {gh:If you received an invitation e-mail from GitHub, accept it first.|az:If the page asks you to sign in, use your Azure DevOps account.}",
+          "You have access to the Work OS repository. If you don't yet, ask the **repository admin** — through your organization's usual access request, if it has one — for {gh:**Write** access to the repository|az:membership of the project's **Contributors** group; that is what lets you read, clone and contribute}. You can tell you have it when the repository link they sent opens in your browser and shows the files (`CLAUDE.md`, `governance/`, `product-development/` …). {gh:If you received an invitation e-mail from GitHub, accept it first.|az:If the page asks you to sign in, use your Azure DevOps account; if it then says you don't have access, you are not in the group yet — ask again.}",
           "The **Work OS admin** has told you the Work OS is ready (Stage 2 done: customized, auto-sync on). *Skip this line if you are the Work OS admin doing Stage 2 yourself — you'll do that next.*",
-          "You have the **Claude Code desktop app** installed and are signed in (see `os-installation/installation-guide.md`).",
+          "You can install software on your computer, or you know how your organization provides it — an internal software catalog or self-service client, or a request to IT. Step 1 needs two tools: **Claude Code** and **Git**.",
         ]),
-        h2("Step 1 — Open a folder for the Work OS", "c1"),
+        h2("Step 1 — Install Claude Code and Git", "c1"),
+        p("Two tools, once. Get both the way your organization provides software — its software catalog or self-service client if it has one, otherwise from the links below."),
+        steps([
+          step("**Git** — the tool the Work OS runs on: it brings the repository to your computer, and auto-sync uses it to save your work. Install it from your organization's software catalog, or from [git-scm.com/downloads](https://git-scm.com/downloads), accepting the defaults. You'll check it in step 3.",
+            callout("note", "**Windows:** install Git *before* you open Claude Code — on Windows, Claude Code uses Git for Windows to run the Work OS's automation. If Claude Code is already open, close it and open it again after installing Git.")),
+          step("**Claude Code desktop app** — install it from your organization's software catalog, or from [claude.ai/download](https://claude.ai/download). Open it and sign in with the account your organization uses for Claude — usually your work e-mail. If you're not sure which account, the Work OS admin knows.",
+            callout("expected", "Claude Code opens and shows you as signed in, and asks for a project folder — that's step 2.")),
+        ]),
+        h2("Step 2 — Open a folder for the Work OS", "c2"),
         steps([
           "Create an empty folder on your computer, for example `Documents/work-os`.",
           "In the Claude Code desktop app, start a new session and choose that folder as the project folder.",
         ]),
-        h2("Step 2 — Ask Claude to bring in the Work OS", "c2"),
+        h2("Step 3 — Ask Claude to bring in the Work OS", "c3"),
         steps([
+          step("First, check that Git is in place — ask Claude:", say("Check that git is installed and tell me the version"),
+            callout("expected", "Claude answers with a version, for example `git version 2.4x`. If it says Git is missing, install it (step 1) and start a new session.")),
           step("Copy the repository link from {gh:the repository page → **Code › HTTPS**|az:**Repos › Files › Clone**} and ask Claude:",
             say("Clone <paste the repository link> into this folder, so that the repository's files are directly in it (git clone <link> .)"),
             callout("expected", "Claude confirms the clone and you see `CLAUDE.md`, `governance/`, `product-development/` … in the folder.")),
           step("Start a **new session** in the same folder — Claude now loads the Work OS.",
             callout("expected", "Claude opens with a short briefing: recent decisions, the current quarter, active initiatives. That's the Work OS talking.")),
         ]),
-        h2("Step 3 — Tell Claude who you are", "c3"),
+        h2("Step 4 — Tell Claude who you are", "c4"),
         steps([
           step("Auto-sync signs your changes with your name and e-mail. Ask Claude:",
             say("Set my git name to <Your Name> and my git e-mail to <you@company.com> for this repository"),
             callout("expected", "Claude confirms both values.")),
         ]),
-        h2("Step 4 — Sign in to {gh:GitHub|az:Azure DevOps} once", "c4"),
+        h2("Step 5 — Sign in to {gh:GitHub|az:Azure DevOps} once", "c5"),
         p("Auto-sync opens and merges pull requests on your behalf. For that it uses the {gh:GitHub|az:Azure} command-line tool, signed in as you. Claude handles it; you only confirm in the browser."),
         platform("github", steps([
           step("Ask Claude:",
@@ -458,12 +497,12 @@ const doc = {
             callout("expected", "Claude shows a code and a microsoft.com link. Open the link, enter the code, sign in with your work account. Claude then confirms you are signed in.")),
         ])),
         callout("tip", "Installing a tool may ask for your computer password. That is normal — it happens once."),
-        h2("Step 5 — Check that auto-sync is on", "c5"),
+        h2("Step 6 — Check that auto-sync is on", "c6"),
         steps([
           step("Ask Claude:", say("/auto-sync status"),
-            callout("expected", "**ON**, mode **pr**. If it says off and you are a Work OS user, ask the Work OS admin — the switch is shared and only admins turn it on. If you *are* the Work OS admin doing Stage 2, it will be off: skip step 6 for now and continue with [Customize the Work OS](#/setup/customize) — auto-sync is switched on there.")),
+            callout("expected", "**ON**, mode **pr**. If it says off and you are a Work OS user, ask the Work OS admin — the switch is shared and only admins turn it on. If you *are* the Work OS admin doing Stage 2, it will be off: skip step 7 for now and continue with [Customize the Work OS](#/setup/customize) — auto-sync is switched on there.")),
         ]),
-        h2("Step 6 — Check that your work reaches the team", "c6"),
+        h2("Step 7 — Check that your work reaches the team", "c7"),
         p("Two quick tests: an everyday change that lands by itself, and a gated change that waits for an admin."),
         steps([
           step("Ask Claude to create an everyday file, then wait until Claude finishes the response — that's when auto-sync runs:",
@@ -489,7 +528,7 @@ const doc = {
         callout("note", "**Work in progress.** The detailed walkthrough of the `/customize-os` conversation (naming, business context, templates) is being written. The steps below are complete for the access and auto-sync part."),
         h2("Before you start", "before"),
         checklist([
-          "You have finished [Set up your computer](#/setup/computer) steps 1–5 (folder, clone, name, sign-in; auto-sync will show *off* — expected).",
+          "You have finished [Set up your computer](#/setup/computer) steps 1–6 (install, folder, clone, name, sign-in; auto-sync will show *off* — expected).",
           "The repository admin has confirmed you are in the {gh:`os-admins` team|az:`OS-Admins` group}.",
           "You have your company's basics at hand: product, customers, how you name your documents (PRD / brief / one-pager …), two to four example documents in your house format.",
         ]),
@@ -596,14 +635,11 @@ const doc = {
         p("Ask Claude *\"refresh the code access\"* (`/connect-code --refresh`) now and then — it pulls the latest code and updates the maps. The weekly health check reminds you when the registry goes stale."),
         callout("pass", "Ask *\"/code-qa how does <a feature you know> work today?\"* and get an answer that cites the code — with *\"show the evidence\"* revealing file and line references."),
       ]},
-    ]},
 
-    // ================================================================= FAQ
-    { id: "faq", title: "FAQ", articles: [
       { id: "troubleshooting", title: "Troubleshooting", audience: "Everyone", time: "", blocks: [
         lead("What you might see, what it means, and what to do. Everything here is reported by Claude at the end of a response — you can always ask *\"what did auto-sync report?\"*"),
         h3("Claude notes \"NO pull request opened … {gh:gh is not logged in|az:az lacks the azure-devops extension}\"", "q1"),
-        p("Your {gh:GitHub|az:Azure} sign-in on this computer is missing or expired. Redo [Set up your computer, step 4](#/setup/computer/c4). The note names the branch that was pushed — a Work OS admin can merge it once by hand from the repository page."),
+        p("Your {gh:GitHub|az:Azure} sign-in on this computer is missing or expired. Redo [Set up your computer, step 5](#/setup/computer/c5). The note names the branch that was pushed — a Work OS admin can merge it once by hand from the repository page."),
         platform("github",
           h3("An everyday pull request stays \"left OPEN — could not merge yet\"", "q2"),
           p("Either *Allow auto-merge* is off in the repository settings ([Set up the repository, step 4](#/setup/repository/s4)) or a required check is still running. Auto-sync retries after every response.")),
@@ -622,61 +658,6 @@ const doc = {
         p("Yes, on your own — but your work stays on your computer until someone commits it by hand, and the team won't see it. Auto-sync is what makes it teamwork."),
         h3("Can two people work at the same time?", "q9"),
         p("Yes. Each person has their own branch; changes to different files never conflict. Changes to the same file are combined automatically when possible — see the rebase-conflict entry above for the rare case they aren't."),
-      ]},
-
-      { id: "flow", title: "How changes flow", audience: "Everyone", time: "3 min read", blocks: [
-        lead("What happens between \"Claude finished a response\" and \"the team can see it\" — in plain words, and what you will see in {gh:GitHub|az:Azure Repos}."),
-        h2("Everyday changes", "everyday"),
-        steps([
-          "You ask Claude for something — a meeting summary, a decision record, a customer note. Claude writes the file.",
-          "When Claude finishes the response, auto-sync saves the change to your personal branch in the shared repository (a branch is a private working line; yours is named `sync/<your git name>`).",
-          "Auto-sync opens a small pull request from that branch into `main` — the team's shared line — and it merges by itself. Nobody has to look at it.",
-        ]),
-        callout("check", "On the repository page you'll see the file on `main` within about a minute, and under **Pull requests › {gh:Closed|az:Completed}** a pull request called *\"context: sync from sync/<name>\"*."),
-        h2("Changes to gated files", "gated"),
-        steps([
-          "You ask Claude to change a gated file. Before writing, Claude shows a **🔒 GATED FILE** prompt — you read the change and approve it.",
-          "When Claude finishes, auto-sync saves the change to your personal branch — but not to `main`. It waits there while you keep iterating.",
-          "When you're done, you say **\"propose the gated changes\"**. Claude opens a pull request with a plain-language description of everything that changed.",
-          "A Work OS admin reviews it — in {gh:GitHub|az:Azure Repos}, or by asking their own Claude — approves, and {gh:merges|az:completes} it. {gh:GitHub|az:Azure Repos} won't let anyone else. (An admin publishing their *own* gated change can ask Claude to do all three at once — see [Customize the Work OS, step 3](#/setup/customize/z3).)",
-          "Next time Claude finishes a response, your branch tidies itself — the approved change is now part of `main` for everyone.",
-        ]),
-        callout("check", "The pull request is titled *\"gated: …\"* and shows {gh:**Review required — Code owner review** from `os-admins`|az:**OS-Admins** as a required reviewer}."),
-        h2("Two people, one file", "conflicts"),
-        p("If two people change the same file, auto-sync tries to combine the changes; when it can't, it tells the person whose save is waiting exactly what to do (see [Troubleshooting](#/faq/troubleshooting)). Nothing is lost — the change stays on their branch."),
-      ]},
-
-      { id: "reference", title: "Reference", audience: "Everyone", time: "", blocks: [
-        h2("Gated files", "gated-list"),
-        p("The list lives in `governance/write-policy.yaml` (`tiers → gated`) — this is a copy for orientation. Everything else is an everyday file."),
-        bullets([
-          "`CLAUDE.md` · `governance/` · `os-installation/` · `Documentation/` · `.claude/` · `.github/`",
-          "`product-development/feature-index.yaml`",
-          "`product-development/product/strategy/business-context/` (business-info, stakeholders, segmentation)",
-          "`product-development/product/handbook/templates/`",
-          "`product-development/engineering/`",
-        ]),
-        h2("Things you say to Claude", "commands"),
-        table(["Say", "What happens"], [
-          ["`/auto-sync status`", "Shows whether auto-sync is on, in which mode, and what is waiting on your branch"],
-          ["`/auto-sync on pr`", "Turns auto-sync on for a protected `main` — normally done inside `/customize-os` (Work OS admin, once)"],
-          ["`/connect-mcps connect to <tool>`", "Connects a tool (Linear, Slack, Amplitude, …) so Claude can read it live — see [Connect your tools](#/setup/tools)"],
-          ["`/connect-code <repository link>`", "Registers a product code repository and gives Claude read access on this computer — see [Connect your product's code](#/setup/code)"],
-          ["`propose the gated changes` (or `/propose`)", "Opens the pull request that carries your gated changes to the Work OS admins"],
-          ["{gh:`publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it`|az:`publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it`}", "Work OS admins only — Claude opens the pull request, approves it as you and {gh:merges|az:completes} it, using your admin rights ({gh:GitHub|az:Azure Repos} refuses the same request from a user). See [Customize the Work OS, step 3](#/setup/customize/z3)"],
-          ["`/customize-os` · `/customize-os continue`", "Runs or resumes the guided customization (Work OS admin)"],
-          ["`what did auto-sync report?`", "Repeats the last auto-sync note"],
-        ], [3800, 5600]),
-        h2("Behind the scenes", "internals"),
-        details("For the curious — the mechanics",
-          p("Each person works on a personal branch `sync/<git name>`. When Claude finishes a response, a script commits the changed files there — everyday files in one commit, gated files in another. Everyday commits are copied onto `main` through a small pull request that auto-merges (rebase); gated commits stay on the branch until *\"propose the gated changes\"* opens their pull request. The gated list is read from `governance/write-policy.yaml` at every run; {gh:`.github/CODEOWNERS`|az:the branch policy's path filter} is generated from the same list."),
-          p("Full technical guides in the repository: `os-installation/admin-setup-github.md`, `os-installation/admin-setup-azure-devops.md`, `os-installation/claude-code/scheduled-governance.md`, `governance/CLAUDE.md`."),
-        ),
-        h2("Where this documentation lives", "where"),
-        bullets([
-          "In the repository: `Documentation/` — the site (`work-os-docs.html`), one Word edition per platform, and the single source they are built from (`src/`). Gated: changes go through review like any core file.",
-          "The source of the Work OS: [SoftServe Work OS on GitHub](" + SRC + ") — maintained by SoftServe.",
-        ]),
       ]},
     ]},
   ],
