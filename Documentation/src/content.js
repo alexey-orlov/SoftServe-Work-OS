@@ -26,7 +26,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.3 · August 2026",
+  version: "v2.4 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch, and as a Word document per platform.",
   home: ["overview", "work-os-101"],
@@ -341,7 +341,7 @@ const doc = {
 
       // ------------------------------------------------------------- stage 1 · repository admin
       { id: "repository", title: "Set up the repository", audience: "Stage 1 · Repository admin", time: "about 30 minutes, once", blocks: [
-        lead("You are the person who administers your {gh:GitHub organization|az:Azure DevOps project}. In this article you import the Work OS from SoftServe, create the admin group, give people access, and protect the main branch — all in the {gh:GitHub|az:Azure DevOps} web interface. Nothing to install."),
+        lead("You are the person who administers your {gh:GitHub organization|az:Azure DevOps project}. The repository you are about to create is the team's shared knowledge base: Claude Code reads it on each teammate's computer before it drafts anything and saves their finished work straight back into it — so everyone needs read *and* write access, not read-only, while step 4 protects `main` so that the few files steering the whole system still need a Work OS admin's approval. In this article you import the Work OS from SoftServe, create the admin group, give people access, and protect the main branch — all in the {gh:GitHub|az:Azure DevOps} web interface. Nothing to install."),
         h2("Before you start", "before"),
         checklist([
           "You can create repositories and change their settings in your {gh:GitHub organization (you are an organization owner)|az:Azure DevOps project (you are in Project Administrators)}.",
