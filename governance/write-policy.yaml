@@ -76,6 +76,7 @@ tiers:
     - CLAUDE.md                                                    # root — steers every session (carries the business-fundamentals mirror block)
     - governance/**                                                # the write policy + write-back contract, plus the ledger, health reports and proposals inbox
     - os-installation/**                                           # install + setup guides, customization state, MCP integration logs
+    - Documentation/**                                             # the customer-facing documentation site + Word editions and their single source — what the whole team is told
     - .claude/**                                                   # skills, agents, hooks, settings, team learnings
     - .github/**                                                   # CI — the weekly lint + gated-path audit
 

@@ -1,0 +1,7 @@
+{
+  "name": "work-os-documentation",
+  "private": true,
+  "description": "Builds the Work OS documentation site and Word editions from content.js",
+  "scripts": { "build": "node build.js" },
+  "dependencies": { "docx": "^9.0.0", "image-size": "^2.0.0" }
+}

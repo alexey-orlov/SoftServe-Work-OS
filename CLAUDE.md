@@ -97,6 +97,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Reports | `product-development/product/reports/` | Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests; writers split by filename prefix |
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
 | Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per feature — `/launch-checklist` writes here |
+| Documentation | `Documentation/` | The customer-facing documentation a team is sent — one self-contained site (`work-os-docs.html`: Overview · Setup · FAQ, GitHub / Azure Repos switch) + one Word edition per platform, built from the single source in `src/`. Gated; rebuild with `node build.js` after editing `src/content.js` |
 
 ## Four Rules
 
