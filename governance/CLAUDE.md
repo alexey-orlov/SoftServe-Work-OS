@@ -16,7 +16,9 @@ BOTH the path list and the tier mechanics (its header comment). Do not copy eith
 other docs; point there. Orientation only: **auto** (default — agents write and commit
 directly; with auto-sync on, pushed too) · **gated** (steering files + system rules —
 your yes at the native write prompt, and never auto-committed or pushed; headless runs
-file a proposal in [proposals/](proposals/)). `/auto-sync on|off` flips the automation.
+file a proposal in [proposals/](proposals/)). `/auto-sync on direct|pr` / `off` flips the
+automation — `direct` for an open `main` (gated files held for the steward), `pr` for a
+pull-request-only `main` (gated files travel via `/propose`); `/customize-os` asks which.
 
 ## The enforcement chain
 

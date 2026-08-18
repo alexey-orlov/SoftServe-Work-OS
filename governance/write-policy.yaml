@@ -102,8 +102,11 @@ living-pages:
 # They live here, next to the tier list they respect, so the rule and the
 # behaviour cannot drift apart.
 #
-# Flip them with /auto-sync on|off (recommended) or by hand — this file is
+# Flip them with /auto-sync on direct|pr / off (recommended) or by hand — this file is
 # itself in the list above, so either way the change needs your in-session yes.
+# Two modes: direct (auto-merge.strategy ff-only|merge-commit — main accepts pushes;
+# gated files held for the steward) and pr (strategy pr — main is pull-request-only;
+# gated files travel via /propose). /customize-os asks which one the instance wants.
 # ---------------------------------------------------------------------------
 settings:
 

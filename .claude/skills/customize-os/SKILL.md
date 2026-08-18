@@ -1,6 +1,6 @@
 ---
 name: customize-os
-description: Adapt a deployed instance of this OS to a customer or org — interactive and resumable. Opens by confirming artifact naming (PRD / jobs / job specs — keep, or map to the org's terms; a mapping is executed repo-wide by the naming-conventions target: conventions block in business-info.md plus the full prose sweep, with machine identifiers and slash commands kept canonical). Reads customization state first, asks only for missing inputs, derives customized context files from the org's real artifacts, installs behind the gated write prompt, and ends every run with a readout — what changed and where, plus what's still needed (Critical / Other). Progress persists in os-installation/customization-status.md across sessions (/customize-os continue). Template targets — house PRD, jobs-breakdown, and job-spec formats (each derived from 2–4 example documents: blanked skeleton, guidance layer routing the owning skill's slot contract, subagent fidelity validation); pre-existing templates that entered the repo outside the skill are flagged, captured as inputs, and removed with approval. House formats land in customer instances only — in the master repo it stages output outside the repo. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "rename PRDs/jobs to our terms", "continue customization", "where does customization stand?". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
+description: Adapt a deployed instance of this OS to a customer or org — interactive and resumable. Opens by confirming artifact naming (PRD / jobs / job specs — keep, or map to the org's terms; a mapping is executed repo-wide by the naming-conventions target: conventions block in business-info.md plus the full prose sweep, with machine identifiers and slash commands kept canonical). Reads customization state first, asks only for missing inputs, derives customized context files from the org's real artifacts, installs behind the gated write prompt, and ends every run with a readout — what changed and where, plus what's still needed (Critical / Other) — after asking, once per instance, which auto-sync mode the org wants (direct or pr) and turning it on with your yes. Progress persists in os-installation/customization-status.md across sessions (/customize-os continue). Template targets — house PRD, jobs-breakdown, and job-spec formats (each derived from 2–4 example documents); pre-existing templates that entered the repo outside the skill are flagged, captured as inputs, and removed with approval. House formats land in customer instances only — in the master repo it stages output outside the repo. Use on /customize-os, "customize this OS for {customer}", "adopt our PRD format", "rename PRDs/jobs to our terms", "continue customization", "where does customization stand?". NOT for connecting tool servers (/connect-mcps), code access (/connect-code), or drafting an actual PRD (/prd-draft — run it after the template is installed).
 argument-hint: "[target|continue|status] [example file paths...]"
 group: os-admin
 ---
@@ -41,7 +41,7 @@ not started → gathering → derived → validated → installed → complete
 
 ```markdown
 # Customization Status — {Org}
-_updated: YYYY-MM-DD · mode: instance | staging ({path}) · naming: canonical (confirmed YYYY-MM-DD) | house — {OS term → house term, …} (mapped YYYY-MM-DD)_
+_updated: YYYY-MM-DD · mode: instance | staging ({path}) · naming: canonical (confirmed YYYY-MM-DD) | house — {OS term → house term, …} (mapped YYYY-MM-DD) · auto-sync: direct | pr (chosen YYYY-MM-DD, on | not yet on) | undecided_
 
 ## {target}
 - **Phase:** gathering | derived | validated | installed | complete
@@ -93,6 +93,7 @@ From args, the status file, or by asking. One target per run.
 | `naming-conventions` — the org's own artifact terms | **Implemented** (Step 3 note + Steps 4–5) | Execute the Step 0 mapping: Document Naming Conventions block in `business-info.md`, then the full prose sweep — inventory → classify → audit → apply → verify; machine identifiers and slash commands stay canonical |
 | `metric-conventions` — KPI tier names, required fields, artifact name | Manual (guided) | Fill `business-info.md` → "Metric Reporting Conventions" from the org's KPI docs; offer to draft the block from an example |
 | `fundamentals` — business-info, segmentation, stakeholders | Manual (pointer) | Route to `os-installation/` install guide and the living masters in `strategy/business-context/` |
+| `auto-sync` — which git landing mode the instance runs | **Implemented** (Step 6a) | Ask direct vs pr once, record it in the status header, turn it on via `/auto-sync on {mode}`; `/customize-os auto-sync` re-asks |
 
 **Extending this skill** (planned): new targets are new rows here plus a target-specific derivation note in Step 3 — the lifecycle, state format, interaction contract, and readout are shared and don't change. Other handbook templates (any file in `handbook/templates/`) follow the `prd-template` recipe as-is with a different consuming path.
 
@@ -138,6 +139,37 @@ Spawn a subagent given ONLY (a) the owning skill's drafting contract (`prd-templ
 3. Offer companions in the same run: the KPI section implies tier names → offer to fill `business-info.md` → "Metric Reporting Conventions" (gated); offer `/decision-log-entry` ("Adopted {org} house format for {target}", sources + score). All companions done → `complete`.
 4. **`naming-conventions`:** install = the Step 3 apply pass, then **post-apply verify** — re-run the full inventory; every remaining hit must fall in a keep or out-of-scope class (the run's own artifacts — conventions block, status file, decision record — intentionally name the OS terms in the mapping itself: expected, not residual), anything else gets fixed before the readout, and the residual counts by class go in the status file. Then the **mirror check**: any number or claim restated across the run's own artifacts must agree — a correction lands on every surface that carries it, or the other surfaces cite the status file instead of restating. A stray template the pre-existing check left at a consuming path is replaced here. Companions: `/decision-log-entry` ("Adopted house naming: {map}" — boundary line included); house-template titles aligned or queued. **Master repo: never sweep the master** — record the mapping, stage the conventions block with its "Install as:" header, and say in the readout that the sweep executes in the instance.
 
+## Step 6a — Choose the auto-sync mode (once per status file, at the close of the run)
+
+**Trigger:** the status header has no `auto-sync:` field (or `undecided`), or the run's
+target is `auto-sync`. Skipped in `status` mode and in master-repo staging runs (the
+mode belongs to the instance). Runs after the target's work, before the readout — the
+end of customization is when the org decides how work lands.
+
+Read first: `settings → auto-commit → enabled` and `settings → auto-merge → strategy` in
+`governance/write-policy.yaml`, the origin URL (`github.com` → GitHub guide, `dev.azure.com`
+/ `visualstudio.com` → Azure guide, none → the guide comes once the repo is on a server),
+and whether the server rule is in place if that is knowable (a `.github/CODEOWNERS` with a
+real team, the admin's word). Then ask ONE question, recommendation first, in plain words:
+
+- **pr — recommended when `main` is (or will be) pull-request-only on the server:** you
+  work on your own branch; everyday files reach `main` by themselves through small pull
+  requests that merge on their own; gated files (the OS's steering files and rules) go
+  to `main` only through a pull request an admin approves — "propose the gated changes"
+  when you are done. Needs the admin setup in `os-installation/admin-setup-{github|
+  azure-devops}.md` to actually enforce the approval, and `gh` / `az` logged in.
+- **direct — recommended for a solo steward or a small trusted team with an open
+  `main`:** everyday files are committed on `main` and pushed every turn; gated files
+  are written behind the write prompt and held until you say "commit and push the gated
+  changes" — they go to `main` too, just not by themselves. Nothing to set up on the server.
+- **later** — record `undecided`; ask again next run.
+
+Record the answer in the header (`auto-sync: pr (chosen YYYY-MM-DD, not yet on)`), then
+offer to turn it on now: on a yes, invoke `/auto-sync on {mode}` in this run (the flip is
+a gated edit — the write prompt still confirms it) and update the header to `on`; on a
+no, the readout's Automation line names the command. Never flip without the yes; never
+nag mid-run — this question lives here and in `/customize-os auto-sync` only.
+
 ## Step 6 — Record and close (mandatory, every run — including interrupted ones)
 
 Update the status file (phase, artifacts, inputs, open items, log line), then end with this readout:
@@ -157,13 +189,13 @@ Was the provided info sufficient?
   (or: ✓ sufficient — nothing outstanding for this phase)
 
 Next: {the single next action, and whose it is}
-Automation: {auto-sync is OFF — once the admin has done os-installation/admin-setup-{github|azure-devops}.md
-  (two roles, main pull-request-only), run /auto-sync on: every turn's work then lands by itself and
-  gated files travel through /propose. | auto-sync is ON ({strategy}) — nothing to do.}
+Automation: {auto-sync {mode} — ON (turned on this run) | chosen, turn on with /auto-sync on {mode}
+  {+ ", after the admin has done os-installation/admin-setup-{github|azure-devops}.md" for pr}
+  | undecided — ask again with /customize-os auto-sync}
 Resume anytime with /customize-os continue — state is saved.
 ```
 
-Rules: **Changed this run** lists real paths, never descriptions alone. The sufficiency split is honest — an item is Critical only if the phase genuinely cannot close without it; everything else is Other. Unanswered follow-ups land here, not in silence. **Automation line:** read `settings → auto-commit → enabled` and `settings → auto-merge → strategy` from `governance/write-policy.yaml`; when auto-commit is off, suggest `/auto-sync on` — once, here in the readout, never as a nag mid-run — and name the admin guide that matches the origin URL (`github.com` → `admin-setup-github.md`, `dev.azure.com` / `visualstudio.com` → `admin-setup-azure-devops.md`; no remote → say the guide comes after the repo is on a server). If the strategy is still a direct one while the guide says `main` is pull-request-only, add: "set `strategy: pr` in write-policy.yaml before turning it on."
+Rules: **Changed this run** lists real paths, never descriptions alone. The sufficiency split is honest — an item is Critical only if the phase genuinely cannot close without it; everything else is Other. Unanswered follow-ups land here, not in silence. **Automation line:** the outcome of Step 6a from the status header — mode, on or not, and the one command or guide that comes next; never a second question here.
 
 ---
 
@@ -188,7 +220,8 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 Before presenting to the user, verify:
 
 - [ ] **State first, state last:** the status file was read before anything else and updated before the readout — even if the run was interrupted mid-phase
-- [ ] **Readout complete:** paths for everything changed, sufficiency split into Critical / Other (or an explicit "sufficient"), a single named next action, and the Automation line (auto-sync suggested when it is off, with the matching admin guide named)
+- [ ] **Readout complete:** paths for everything changed, sufficiency split into Critical / Other (or an explicit "sufficient"), a single named next action, and the Automation line
+- [ ] **Auto-sync mode asked, not assumed** (Step 6a): the status header carries `auto-sync:` — direct, pr, or an explicit undecided — before the readout; the flip ran only on the user's yes
 - [ ] **Questions asked, not assumed:** every ambiguity was either asked as a follow-up or taken as a recommended default AND recorded as an open item — never silently guessed
 - [ ] **Zero content carry-over:** no real numbers, customer names, feature specifics, or quotes from the examples survive in a derived template — structure and voice rules only
 - [ ] **Every slot routed:** all of the owning skill's slot groups (`/prd-draft`'s four, `/jobs-breakdown`'s five, `/job-spec-draft`'s sixteen) have a named home in the guidance layer

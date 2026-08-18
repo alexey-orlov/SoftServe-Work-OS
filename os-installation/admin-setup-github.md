@@ -52,7 +52,8 @@ head branches** · keep *Allow rebase merging* on (squash and merge commit may s
 gh auth login
 ```
 
-Then, in the repo, `/auto-sync on`. From now on each turn end commits everyday work on the
+Then, in the repo, `/auto-sync on pr` (the mode for a pull-request-only `main`; `direct` is
+the other mode, for an open `main` — `/customize-os` asks which). From now on each turn end commits everyday work on the
 person's own branch and merges it to `main` through a self-merging pull request; gated
 files stay on the branch until they say "propose the gated changes" (or press **Create PR**
 in the Claude Code desktop app — GitHub only). Full mechanics: the header of

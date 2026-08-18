@@ -24,8 +24,9 @@ what each layer does, why it is shaped that way, and the optional variants.
   recommended server setup below) works on a branch per checkout, drains everyday commits
   to `main` through self-merging pull requests, and keeps gated commits on the branch
   until the person says "propose the gated changes" (`/propose`; on GitHub the desktop
-  Create PR button is equivalent). Flip with `/auto-sync on|off`. Leave it off to keep a
-  human shaping every commit.
+  Create PR button is equivalent). Flip with `/auto-sync on direct|pr` / `off`
+  (`/customize-os` asks which mode once per instance). Leave it off to keep a human
+  shaping every commit.
 
 Limit: hooks bind agent sessions only — not a human in a text editor, not bash
 redirection. That's what layers 2–3 are for. Details: `.claude/hooks/session-start.md`.
