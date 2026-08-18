@@ -64,6 +64,34 @@ if [ "${PROPOSALS:-0}" -gt 0 ] 2>/dev/null; then
   echo "$PROPOSALS pending proposal(s) in governance/proposals/ — review and apply or reject (gated: apply with an in-session yes, then land deliberately)"
 fi
 
+# --- pr strategy: gated work waiting on this branch, drains not yet merged -----------
+# Reads only local git state + the files auto-commit.sh keeps under .git/team-os/ — no network.
+POLICY=governance/write-policy.yaml
+if [ -f "$POLICY" ] && grep -q '^    strategy:[[:space:]]*pr' "$POLICY" 2>/dev/null && command -v git >/dev/null 2>&1; then
+  TARGET=$(sed -n 's/^    target-branch:[[:space:]]*//p' "$POLICY" | head -1 | sed 's/[[:space:]]*#.*$//'); TARGET=${TARGET:-main}
+  BR=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  GD=$(git rev-parse --git-dir 2>/dev/null)
+  if [ -n "$BR" ] && [ "$BR" != "HEAD" ] && git rev-parse --verify -q "origin/$TARGET" >/dev/null 2>&1; then
+    AHEAD=$(git rev-list --count "origin/$TARGET..HEAD" 2>/dev/null)
+    if [ "${AHEAD:-0}" -gt 0 ] 2>/dev/null; then
+      echo "--- Gated work waiting (pr flow) ---"
+      if [ "$BR" = "$TARGET" ]; then
+        echo "you are on $TARGET with $AHEAD unpushed commit(s) — $TARGET is pull-request-only; the next turn moves them to your branch"
+      else
+        GP=$(cat "$GD/team-os/gated-pr" 2>/dev/null)
+        PRREF=$(printf '%s' "$GP" | awk '{print $2}'); PRURL=$(printf '%s' "$GP" | awk '{print $3}')
+        if [ -n "$PRREF" ] && [ "$PRREF" != "-" ]; then
+          echo "$AHEAD commit(s) on $BR ahead of origin/$TARGET — pull request $PRREF open, awaiting admin approval${PRURL:+ · $PRURL}"
+        else
+          echo "$AHEAD commit(s) on $BR ahead of origin/$TARGET (gated work and/or everyday work still draining) — no pull request yet: say \"propose the gated changes\" when done iterating"
+        fi
+      fi
+      NOPR=$(awk '$3=="-"{print $2}' "$GD/team-os/drains" 2>/dev/null | sort -u | paste -sd', ' -)
+      [ -n "$NOPR" ] && echo "everyday drain branch(es) pushed but not merged (no PR tool): $NOPR → merge into $TARGET by hand"
+    fi
+  fi
+fi
+
 if [ -f .claude/.last-session-state ]; then
   echo "--- Last session left unfinished ---"
   cat .claude/.last-session-state

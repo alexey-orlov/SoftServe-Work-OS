@@ -1,6 +1,6 @@
 # Skills
 
-52 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+53 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -39,7 +39,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 4 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 8 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 9 |
 
 ### Communication & ops
 
@@ -132,6 +132,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [session-retro/](session-retro/) — End-of-session sweep of the live conversation for durable takeaways + the curation pass (team-learnings cap, entry staleness, stale proposals); routes per the contract table, admin targets by steward yes or proposal
 - [auto-sync/](auto-sync/) — One switch for hands-off git: autocommit + autopush of main for everything except gated files (write prompt + held from landing); on|off|status
 - [customize-os/](customize-os/) — Interactive, resumable instance customization: opens by confirming artifact naming (a chosen mapping executes repo-wide via the naming-conventions target; machine identifiers stay canonical), flags pre-existing out-of-band templates for capture-then-removal, derives customized context files from the org's real artifacts (template targets: house PRD, jobs-breakdown, and job-spec formats from 2–4 example documents), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
+- [propose/](propose/) — The "propose" step of the pr landing strategy: turns the gated commits auto-sync kept on your branch into ONE pull request with a plain-language description (files, why, commits, the Azure path-filter reminder when the gated list changed) via gh or az repos; --draft / --ready / --update; on GitHub the desktop Create PR button is the equivalent
 
 ## Gaps
 

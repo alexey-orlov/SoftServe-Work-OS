@@ -1,6 +1,6 @@
 ---
 name: auto-sync
-description: The one switch for hands-off git flow — /auto-sync on turns on autocommit of every turn's work on main and auto-push to origin, except gated files (the tiers list in governance/write-policy.yaml), which keep both gates — your in-session yes at write time, and never auto-committed or auto-pushed. Flips the settings block of write-policy.yaml (a gated edit you approve at the prompt), lands the flip itself, then reports success with the live gated list, how to change it, and the exact flow a gated file follows. /auto-sync off turns the automation off; /auto-sync status reports the switches without changing anything. Use on /auto-sync, "turn on autocommit / auto-push", "make everything land on main automatically", "stop auto-pushing", "is auto-sync on?". NOT for changing WHICH files are gated (edit the tiers list in write-policy.yaml — the report tells you how), not a bypass for gated files (those always land deliberately), and not the GitHub-side enforcement setup (os-installation/claude-code/scheduled-governance.md).
+description: The one switch for hands-off git flow — /auto-sync on turns on autocommit of every turn's work and auto-push to origin, except gated files (the tiers list in governance/write-policy.yaml), which keep both gates — your in-session yes at write time, and never landed on main by automation (direct strategies hold them uncommitted for you; the pr strategy commits them on your own branch and they reach main only through an admin-approved pull request via /propose). Flips the settings block of write-policy.yaml (a gated edit you approve at the prompt), lands the flip itself, then reports success with the live gated list, how to change it, and the exact flow a gated file follows in the configured strategy. /auto-sync off turns the automation off; /auto-sync status reports the switches without changing anything. Use on /auto-sync, "turn on autocommit / auto-push", "make everything land on main automatically", "stop auto-pushing", "is auto-sync on?". NOT for changing WHICH files are gated (edit the tiers list in write-policy.yaml — the report tells you how), not a bypass for gated files (those always land deliberately), not for opening the gated PR (/propose), and not the server-side enforcement setup (os-installation/admin-setup-github.md / admin-setup-azure-devops.md).
 argument-hint: "[on|off|status]"
 group: os-admin
 ---
@@ -36,6 +36,40 @@ Default mode is `on`. `off` and `status` below.
    state, do not print the success banner.
 5. **Report** — the template below, with the gated list read LIVE from the `tiers:`
    block of `governance/write-policy.yaml` (never a hardcoded copy).
+
+### If `auto-merge.strategy` is `pr` (pull-request-only target)
+
+Same flip, different behaviour — the hook works on a session branch and never pushes
+the target directly. Preconditions add: the PR tool for the platform is installed and
+logged in (`gh auth status` for GitHub, `az account show` + azure-devops extension for
+Azure Repos) — missing is not a blocker (the hook pushes branches and says what to merge
+by hand), but the report must say so. Print this banner instead of the one below,
+gated list still read live:
+
+```
+✅ Auto-sync is ON — pr flow (main is pull-request-only)
+
+From now on, at the end of every turn:
+• You work on your own branch ({branch-prefix}{you}; created from main when needed).
+• Everyday files are committed there and drained to main through a small pull
+  request that merges itself (no review needed).
+• Gated files are committed on your branch too — pushed, never merged by automation.
+  They reach main only through a pull request an admin approves.
+• When you are done iterating: say "propose the gated changes" (/propose){, or press
+  Create PR in the desktop app — GitHub only}.
+
+Gated files & directories (live from governance/write-policy.yaml):
+  {one line per entry in tiers → gated}
+
+Server side (admin, once): os-installation/admin-setup-github.md or
+admin-setup-azure-devops.md — until that is done the flow works but nothing enforces
+the approval.
+Turn off: /auto-sync off · Check: /auto-sync status
+```
+
+`status` in this strategy also prints: current branch, gated commits waiting
+(`git log --oneline origin/main..HEAD`), and the open gated PR if the hook recorded one
+(`.git/team-os/gated-pr`).
 
 ## Mode: off
 

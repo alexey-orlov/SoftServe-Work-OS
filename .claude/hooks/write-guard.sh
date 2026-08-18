@@ -78,6 +78,33 @@ done < "$POLICY"
 
 [ -z "$TIER" ] && exit 0
 
+# --- landing mode and who is asking -------------------------------------------------
+# settings → auto-merge → strategy decides what "approve" leads to; settings → write-guard →
+# non-steward decides whether a non-steward is asked or only warned in the pr strategy.
+cfg() {
+  awk -v grp="$1" -v key="$2" '
+    /^settings:/            { in_s=1; next }
+    in_s && /^[a-zA-Z_-]+:/ { in_s=0 }
+    in_s && $0 ~ "^  " grp ":" { in_g=1; next }
+    in_g && /^  [a-zA-Z_-]+:/  { in_g=0 }
+    in_g && $0 ~ "^    " key ":" {
+      sub("^    " key ":[ \t]*", ""); sub("#.*", "")
+      gsub(/^[ \t]+|[ \t]+$/, ""); gsub(/^"|"$/, "")
+      print; exit
+    }' "$POLICY"
+}
+STRATEGY=$(cfg "auto-merge" "strategy");     STRATEGY=${STRATEGY:-ff-only}
+NONSTEWARD=$(cfg "write-guard" "non-steward"); NONSTEWARD=${NONSTEWARD:-ask}
+STEWARD=$(sed -n 's/^steward:[[:space:]]*//p' "$POLICY" | head -1 | sed 's/[[:space:]]*#.*$//; s/^"//; s/"$//' | tr '[:upper:]' '[:lower:]')
+IS_STEWARD=0
+case "$STEWARD" in
+  ""|*"["*) ;;                                              # unset / placeholder → nobody is the steward
+  *) GNAME=$(git -C "$ROOT" config user.name 2>/dev/null | tr '[:upper:]' '[:lower:]')
+     GMAIL=$(git -C "$ROOT" config user.email 2>/dev/null | tr '[:upper:]' '[:lower:]')
+     { [ -n "$GNAME" ] && case "$STEWARD" in *"$GNAME"*) IS_STEWARD=1 ;; esac; } 2>/dev/null
+     { [ -n "$GMAIL" ] && case "$STEWARD" in *"$GMAIL"*) IS_STEWARD=1 ;; esac; } 2>/dev/null ;;
+esac
+
 # --- compose the prompt text -------------------------------------------------------
 # GROUP is the comment heading above the matched entry ("Steering files — the distilled
 # context …"); keep the part before the dash, lower-cased ("steering files").
@@ -87,20 +114,38 @@ WHY=""
 [ -n "$NOTE" ] && WHY="${WHY:+$WHY · }$NOTE"
 WHY="${WHY:+$WHY }(rule: $PAT)"
 
+if [ "$STRATEGY" = "pr" ]; then
+  LANDING="Approve → written now; auto-sync commits it on YOUR branch (never on the target branch) — it reaches the target only through a pull request an admin approves (say \"propose the gated changes\" when done). Reject → nothing is written. Unsure → reject and ask for the exact before/after."
+else
+  LANDING="Approve → written now, but NOT auto-committed or pushed (land it afterwards: \"commit and push the gated changes\", or git). Reject → nothing is written. Unsure → reject and ask for the exact before/after."
+fi
 REASON="🔒 GATED FILE — Team OS write policy · $REL
 Why: $WHY. Protected context — every change needs your explicit yes.
-Approve → written now, but NOT auto-committed or pushed (land it afterwards: \"commit and push the gated changes\", or git). Reject → nothing is written. Unsure → reject and ask for the exact before/after."
+$LANDING"
+
+DECISION="ask"
+if [ "$STRATEGY" = "pr" ] && [ "$IS_STEWARD" = 0 ] && [ "$NONSTEWARD" = "warn" ]; then
+  DECISION="allow"
+  REASON="⚠️ GATED FILE — Team OS write policy · $REL — written on your branch; it reaches the target branch only through a pull request an admin approves (\"propose the gated changes\" when done). Why gated: $WHY."
+fi
 
 # --- emit ------------------------------------------------------------------------
 if command -v python3 >/dev/null 2>&1; then
-  printf '%s' "$REASON" | python3 -c '
-import json,sys
-r = sys.stdin.read()
-print(json.dumps({"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":r}}))
+  printf '%s' "$REASON" | DECISION="$DECISION" python3 -c '
+import json,sys,os
+r = sys.stdin.read(); d = os.environ.get("DECISION","ask")
+out = {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":d,"permissionDecisionReason":r}}
+if d == "allow":
+    out["systemMessage"] = r          # allow = no dialog; the warning still reaches the user
+print(json.dumps(out))
 '
 else
   # Fallback without python3: single line, minimal JSON escaping
   ESC=$(printf '%s' "$REASON" | tr '\n' ' ' | sed 's/\\/\\\\/g; s/"/\\"/g')
-  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$ESC"
+  if [ "$DECISION" = "allow" ]; then
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"%s"},"systemMessage":"%s"}\n' "$ESC" "$ESC"
+  else
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$ESC"
+  fi
 fi
 exit 0

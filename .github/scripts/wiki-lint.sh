@@ -166,6 +166,17 @@ if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; t
   done
 fi
 
+# ---- Check 11: server-side mirror of the gated list (CODEOWNERS) is in sync ------------
+# .github/CODEOWNERS is generated from governance/write-policy.yaml by gated-paths.sh;
+# a stale copy means GitHub asks the wrong reviewers (or none) for gated pull requests.
+if [ -f .github/CODEOWNERS ] && [ -x .github/scripts/gated-paths.sh ]; then
+  if ! diff -q <(.github/scripts/gated-paths.sh --format codeowners 2>/dev/null) .github/CODEOWNERS >/dev/null 2>&1; then
+    warn "CODEOWNERS is out of sync with governance/write-policy.yaml — run: .github/scripts/gated-paths.sh --format codeowners --write"
+  fi
+  grep -q 'OWNER NOT SET' .github/CODEOWNERS 2>/dev/null && \
+    warn "CODEOWNERS owner is a placeholder — set reviewers.github-team in governance/write-policy.yaml (os-installation/admin-setup-github.md) or gated PRs need no approval"
+fi
+
 note ""
 note "== result: $FAIL problem(s) to fix, $WARN worth a look — run /wiki-lint in a session: it fixes the mechanical ones and suggests the rest =="
 [ "$FAIL" -eq 0 ]

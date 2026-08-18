@@ -26,20 +26,27 @@ file a proposal in [proposals/](proposals/)). `/auto-sync on|off` flips the auto
    matched rule and what approve/reject mean, so it is never confused with an ordinary
    permission ask.
 2. **Land time** — `.claude/hooks/auto-commit.sh` (Stop hook, the auto-sync engine —
-   flipped by `/auto-sync`) auto-commits and pushes auto-tier work each turn, and always
-   holds gated paths back for the user to land deliberately.
-3. **Server-side (optional)** — a GitHub push ruleset hard-stops non-steward pushes to
-   gated paths. Setup: `os-installation/claude-code/scheduled-governance.md`.
+   flipped by `/auto-sync`) auto-commits and pushes auto-tier work each turn. Gated paths
+   never reach the target branch by automation: direct strategies hold them back,
+   uncommitted, for the steward; the pr strategy (pull-request-only `main`) commits them
+   on the person's own branch, where they wait for `/propose` — the pull request an admin
+   approves.
+3. **Server-side (recommended)** — the rule on `main` that makes step 2's approval real:
+   GitHub ruleset + generated `.github/CODEOWNERS`, or the Azure Repos required-reviewer
+   policy with the generated path filter. Steps: `os-installation/admin-setup-github.md`
+   / `admin-setup-azure-devops.md`; background: `os-installation/claude-code/scheduled-governance.md`.
 4. **Audit** — `.github/workflows/wiki-lint.yml` runs the mechanical lint on every PR and
-   posts a weekly health issue listing every commit that touched a gated path.
+   posts a weekly health issue listing every commit that touched a gated path (and warns
+   when CODEOWNERS drifts from the policy).
 
 ## Changing the rules
 
 Steward only. The gated path list lives in ONE place — [write-policy.yaml](write-policy.yaml).
-The weekly audit in `.github/workflows/wiki-lint.yml` derives its list from it at run
-time; nothing to sync. The only manual mirror is the optional GitHub push ruleset (if
-you ever enable it — `os-installation/claude-code/scheduled-governance.md`): refresh it
-whenever you change the registry.
+The weekly audit derives its list from it at run time; `.github/CODEOWNERS` is regenerated
+from it by the turn-end hook (`.github/scripts/gated-paths.sh`); the Azure Repos path
+filter is the one mirror a person refreshes (`gated-paths.sh --format ado` — `/propose`
+reminds the approving admin; an optional pipeline can automate it), as is the optional
+GitHub push ruleset (`--format ruleset`).
 
 ## Contents
 
@@ -52,4 +59,4 @@ whenever you change the registry.
 ### Subfolders
 
 - [health/](health/) — Dated `/wiki-lint` reports. Written only by wiki-lint.
-- [proposals/](proposals/) — Pending gated-change proposals: from headless runs (which cannot ask), and from any run without the user's in-session yes (capture-loop takeaways, skill/template diffs). Surfaced by the session-start hook; apply/reject then delete — applying is the write prompt's yes, and the applied file still lands deliberately (gated files are never auto-pushed).
+- [proposals/](proposals/) — Pending gated-change proposals: from headless runs (which cannot ask), and from any run without the user's in-session yes (capture-loop takeaways, skill/template diffs). Surfaced by the session-start hook; apply/reject then delete — applying is the write prompt's yes, and the applied file still lands deliberately (gated files never reach `main` by automation). In the pr landing strategy the pull request opened by `/propose` is the primary channel; this folder is the fallback for runs that cannot open one.

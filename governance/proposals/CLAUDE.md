@@ -8,6 +8,11 @@ The landing spot for changes agents may not apply themselves. Two cases:
   (skills, agents, `.claude/team-learnings.md`, templates, structural changes) and the
   user's in-session yes wasn't available.
 
+In the pr landing strategy (`settings → auto-merge → strategy: pr`) an approved gated
+change travels as a pull request (`/propose`), not as a file here — this folder stays the
+fallback for runs that cannot open one (no PR tool or token) and for design proposals
+that span several gated files.
+
 One file per proposal: `{YYYY-MM-DD}-{slug}.md` containing the target path, the exact
 proposed before/after, the evidence/source that motivated it, and the proposer (skill or
 session). Surfaced by the session-start briefing; `/wiki-lint` flags proposals older
@@ -22,4 +27,6 @@ Delete the proposal file after applying or rejecting it.
 
 ### Files
 
-_Empty. Agent runs append entries here; humans clear them._
+_Agent runs append entries here; humans clear them._
+
+- [2026-08-18-branch-per-checkout-gated-pr-flow.md](2026-08-18-branch-per-checkout-gated-pr-flow.md) — Design proposal: PR-only `main` on Azure Repos + GitHub, branch per checkout, everyday commits drained to `main` automatically, gated commits accumulate until the user proposes (desktop Create PR on GitHub / `az repos pr` on Azure); path rule generated from write-policy.yaml

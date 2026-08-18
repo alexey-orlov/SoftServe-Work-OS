@@ -157,10 +157,13 @@ Was the provided info sufficient?
   (or: ✓ sufficient — nothing outstanding for this phase)
 
 Next: {the single next action, and whose it is}
+Automation: {auto-sync is OFF — once the admin has done os-installation/admin-setup-{github|azure-devops}.md
+  (two roles, main pull-request-only), run /auto-sync on: every turn's work then lands by itself and
+  gated files travel through /propose. | auto-sync is ON ({strategy}) — nothing to do.}
 Resume anytime with /customize-os continue — state is saved.
 ```
 
-Rules: **Changed this run** lists real paths, never descriptions alone. The sufficiency split is honest — an item is Critical only if the phase genuinely cannot close without it; everything else is Other. Unanswered follow-ups land here, not in silence.
+Rules: **Changed this run** lists real paths, never descriptions alone. The sufficiency split is honest — an item is Critical only if the phase genuinely cannot close without it; everything else is Other. Unanswered follow-ups land here, not in silence. **Automation line:** read `settings → auto-commit → enabled` and `settings → auto-merge → strategy` from `governance/write-policy.yaml`; when auto-commit is off, suggest `/auto-sync on` — once, here in the readout, never as a nag mid-run — and name the admin guide that matches the origin URL (`github.com` → `admin-setup-github.md`, `dev.azure.com` / `visualstudio.com` → `admin-setup-azure-devops.md`; no remote → say the guide comes after the repo is on a server). If the strategy is still a direct one while the guide says `main` is pull-request-only, add: "set `strategy: pr` in write-policy.yaml before turning it on."
 
 ---
 
@@ -185,7 +188,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 Before presenting to the user, verify:
 
 - [ ] **State first, state last:** the status file was read before anything else and updated before the readout — even if the run was interrupted mid-phase
-- [ ] **Readout complete:** paths for everything changed, sufficiency split into Critical / Other (or an explicit "sufficient"), a single named next action
+- [ ] **Readout complete:** paths for everything changed, sufficiency split into Critical / Other (or an explicit "sufficient"), a single named next action, and the Automation line (auto-sync suggested when it is off, with the matching admin guide named)
 - [ ] **Questions asked, not assumed:** every ambiguity was either asked as a follow-up or taken as a recommended default AND recorded as an open item — never silently guessed
 - [ ] **Zero content carry-over:** no real numbers, customer names, feature specifics, or quotes from the examples survive in a derived template — structure and voice rules only
 - [ ] **Every slot routed:** all of the owning skill's slot groups (`/prd-draft`'s four, `/jobs-breakdown`'s five, `/job-spec-draft`'s sixteen) have a named home in the guidance layer

@@ -4,9 +4,14 @@
 # edits it here; everything that enforces the policy reads from here:
 #   - .claude/hooks/write-guard.sh    (write time: native approval prompt on gated paths)
 #   - .claude/hooks/auto-commit.sh    (turn end: auto-commits/pushes auto-tier work,
-#                                      HOLDS gated paths for you — the auto-sync engine)
+#                                      HOLDS gated paths for you — the auto-sync engine;
+#                                      in the `pr` landing strategy it commits them on
+#                                      your own branch instead, never on the target)
 #   - .github/workflows/wiki-lint.yml (weekly audit: derives its path list from this
 #                                      file at run time — nothing to keep in sync)
+#   - .github/scripts/gated-paths.sh  (generates the server-side mirrors of the list:
+#                                      .github/CODEOWNERS for GitHub, the required-
+#                                      reviewer path filter for Azure Repos)
 #
 # Tier semantics — THE canonical statement. Other docs (governance/CLAUDE.md, the
 # write-back contract, proposals/CLAUDE.md) point here and never restate it:
@@ -21,9 +26,15 @@
 #               you: the comment heading above the matched entry, the entry's
 #               trailing # comment, and the pattern — write those comments for a
 #               person, they are the "why" the approver reads;
-#           (2) land time — auto-sync never commits or pushes these paths; you land
-#               them deliberately (say "commit and push the gated changes", or use
-#               git yourself).
+#           (2) land time — these paths never reach the target branch by automation.
+#               Direct strategies (ff-only / merge-commit): auto-sync never commits or
+#               pushes them; you land them deliberately (say "commit and push the
+#               gated changes", or use git yourself). PR strategy (`settings →
+#               auto-merge → strategy: pr`, for a PR-only target): auto-sync commits
+#               them on YOUR branch and pushes that branch, but they reach the target
+#               only through a pull request an admin approves — `/propose` opens it
+#               when you are done iterating (GitHub: the desktop Create PR button
+#               does the same).
 #           Headless/scheduled runs cannot ask: they file a proposal in
 #           governance/proposals/ instead of writing. (With governance/** gated as a
 #           whole, that inbox is gated too — before running anything headless, list
@@ -42,7 +53,17 @@
 version: 2
 
 # Who reviews the weekly protected-path audit and owns changes to this file.
+# The write-guard recognises stewards by matching `git config user.name` / `user.email`
+# against this value (case-insensitive substring), so "Name <email>" is the safest form.
 steward: "[Your Name]"   # ← fill during setup (see Team table in root CLAUDE.md)
+
+# Server-side reviewers for gated paths — the admin group that must approve a pull
+# request touching them. Read by .github/scripts/gated-paths.sh, which generates
+# .github/CODEOWNERS (GitHub) and prints the Azure Repos required-reviewer path filter.
+# Setup steps: os-installation/admin-setup-github.md / admin-setup-azure-devops.md.
+reviewers:
+  github-team: "@[org]/os-admins"   # ← GitHub team handle; must have write access to the repo
+  azure-group: "[Project]\\OS-Admins"  # ← Azure DevOps group shown in the branch policy (informational)
 
 tiers:
   gated:
@@ -103,25 +124,65 @@ settings:
     message-prefix: "context:"
 
   # After a successful commit: land the work on the target branch and push it.
-  # Already on the target (the normal case — sessions run on main): nothing to
-  # merge, this block only governs the push. On a side branch (worktree
-  # sessions): merge into the target first, then push.
+  # Direct strategies — already on the target (sessions run on main): nothing to
+  # merge, this block only governs the push; on a side branch (worktree sessions):
+  # merge into the target first, then push. PR strategy — see `pr` below.
   auto-merge:
     enabled: false
     target-branch: main
 
     #   ff-only      — merge only when target can fast-forward. No checkout, no
-    #                  merge commit, nothing to leave half-done. Recommended.
+    #                  merge commit, nothing to leave half-done. Recommended when
+    #                  the target accepts direct pushes.
     #   merge-commit — always create a merge commit. Requires checking the target
     #                  out and back; the hook restores your branch on any failure.
+    #   pr           — the target is PULL-REQUEST-ONLY on the server (branch policy /
+    #                  ruleset — see the admin setup guides in os-installation/). The
+    #                  session works on its own branch (created from the target when
+    #                  needed); each turn the hook makes two commits — everyday files,
+    #                  then gated files — drains the everyday commits to the target
+    #                  through a background pull request that merges itself, rebases
+    #                  the branch, and keeps the gated commits on the branch (pushed,
+    #                  no PR) until you say "propose the gated changes" (/propose).
+    #                  Knobs: the pr-flow block below.
     strategy: ff-only
 
     # Refuse to merge a side branch whose history touched protected paths (the hook
     # never commits those itself; a human may have committed some on the branch).
-    # Those land deliberately, by you.
+    # Those land deliberately, by you. (Direct strategies only — the pr strategy
+    # never merges the branch; it drains everyday commits one by one.)
     block-protected-tiers: true
 
     # Push the target branch to origin after each commit (and merge, if any).
     # /auto-sync on sets this true; pushing publishes, so the flip itself always
-    # goes through the write prompt.
+    # goes through the write prompt. In the pr strategy this governs every push
+    # (session branch + drain branches + PRs) — false = commit locally only.
     push: false
+
+  # Knobs for the pr strategy — read only when auto-merge.strategy is `pr`.
+  pr-flow:
+    # Session branch = <branch-prefix><git user.name, slugified>. Created from the
+    # target the first time the hook runs on the target itself; desktop worktree
+    # sessions already sit on their own branch and keep it.
+    branch-prefix: "sync/"
+
+    # Which CLI opens and merges the pull requests:
+    #   auto — detect from the origin URL (github.com / GHES → gh, dev.azure.com /
+    #          visualstudio.com → az). gh — GitHub CLI (`gh auth login`).
+    #   az   — Azure CLI with the azure-devops extension (`az login`,
+    #          `az extension add --name azure-devops`). none — push the branches,
+    #          open no PRs (the hook prints what to merge by hand).
+    # Missing or unauthenticated tool → same as none, and the turn-end note says so.
+    pr-tool: auto
+
+    # Commit subject prefix for gated-path commits on the session branch.
+    gated-prefix: "gated:"
+
+  # Behaviour of the write-time prompt for people who are NOT the steward above,
+  # in the pr strategy only (direct strategies always ask everyone):
+  #   ask  — the native approval prompt, as for the steward (default, stricter)
+  #   warn — the write goes through with a visible warning that the change lands
+  #          on their branch and reaches the target only via an approved PR.
+  #          Safe only once the server-side rule is in place.
+  write-guard:
+    non-steward: ask

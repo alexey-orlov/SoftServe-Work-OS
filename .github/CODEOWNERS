@@ -1,0 +1,16 @@
+# GENERATED from governance/write-policy.yaml (tiers → gated) by .github/scripts/gated-paths.sh — do not edit by hand.
+# Every path below needs an approving review from the OS admins before a pull request into the
+# target branch can merge (branch ruleset: Require a pull request → Require review from Code Owners).
+# Regenerate after changing the list or the team: .github/scripts/gated-paths.sh --format codeowners --write
+# ⚠️  OWNER NOT SET — fill reviewers.github-team in governance/write-policy.yaml and regenerate;
+#     until then GitHub ignores these lines and gated pull requests need NO approval.
+
+/product-development/feature-index.yaml @[org]/os-admins
+/product-development/product/strategy/business-context/ @[org]/os-admins
+/product-development/product/handbook/templates/ @[org]/os-admins
+/product-development/engineering/ @[org]/os-admins
+/CLAUDE.md @[org]/os-admins
+/governance/ @[org]/os-admins
+/os-installation/ @[org]/os-admins
+/.claude/ @[org]/os-admins
+/.github/ @[org]/os-admins

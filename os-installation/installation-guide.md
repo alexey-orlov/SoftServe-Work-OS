@@ -193,8 +193,10 @@ git init && git add -A && git commit -m "baseline: Team OS install"
 chmod +x .claude/hooks/*.sh
 ```
 
-When you push to GitHub, finish enforcement setup per
-`claude-code/scheduled-governance.md` (push ruleset + the wiki-lint Action activate there).
+When the repo lives on a server, the admin finishes enforcement once, before the team starts:
+`admin-setup-github.md` or `admin-setup-azure-devops.md` (two roles, `main` pull-request-only,
+gated paths need admin approval — ~15–20 minutes). Background and the optional layers:
+`claude-code/scheduled-governance.md`.
 
 ---
 

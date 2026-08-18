@@ -80,10 +80,32 @@ state) it exits immediately and does nothing.
   refuses to merge a branch whose history touched a gated path — land those deliberately.
   `push: true` pushes the target to origin after each commit — the auto-push half of
   auto-sync.
+- **`strategy: pr`** — for a pull-request-only target (the recommended server setup,
+  `os-installation/admin-setup-github.md` / `admin-setup-azure-devops.md`). The hook then
+  (1) moves a checkout that sits on the target onto its own branch (`pr-flow.branch-prefix`
+  + git user name; desktop worktree sessions keep theirs); (2) commits everyday files
+  (commit A) and gated files (commit B, `pr-flow.gated-prefix`) — the tree is always clean;
+  (3) fetches and rebases the branch onto the target (drops what already landed; a
+  branch whose whole content is already on the target is reset to it — e.g. after the
+  gated PR was squash-merged); (4) drains the everyday commits: cherry-pick onto
+  `origin/<target>` in a throwaway worktree → push `<prefix><user>--drain-<sha>` → pull
+  request + auto-merge/auto-complete via `pr-flow.pr-tool` (`gh` / `az`, auto-detected
+  from the origin URL) — asynchronous, tracked by patch-id in `.git/team-os/drains`, so
+  nothing drains twice and consecutive turns stack onto the one open drain; (5) pushes
+  the branch with `--force-with-lease`; (6) reports gated files waiting on the branch
+  and the open gated PR if any (`.git/team-os/gated-pr`, read by session-start).
+  Gated commits are never merged by the hook — `/propose` opens their pull request.
+  No PR tool / not logged in / `pr-tool: none`: drains are still pushed and the report
+  names the branch to merge by hand; everything else works. Two hooks in one checkout
+  serialise on `.git/team-os/lock`.
 
 Why the tier list and the switches share one file: the hook resolves scope against the
 same `gated:` list the write-guard enforces, so the rule and the automation
-cannot drift apart.
+cannot drift apart. The write-guard also reads `strategy` (its prompt says where an
+approved gated write goes) and `write-guard.non-steward` (in the pr strategy a
+non-steward can be *warned* instead of asked — safe only once the server-side rule
+exists; the steward, matched via `steward:` against `git config user.name/email`, is
+always asked).
 
 **Reporting.** Silent on a clean run with nothing held back. Anything else — files left
 uncommitted, a merge it refused, a push that failed — comes back as a non-blocking note in

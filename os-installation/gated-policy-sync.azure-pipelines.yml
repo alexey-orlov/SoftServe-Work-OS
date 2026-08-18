@@ -1,0 +1,59 @@
+# OPTIONAL — Azure Pipelines: keep the required-reviewer PATH FILTER on the target branch
+# in sync with governance/write-policy.yaml (tiers → gated).
+#
+# Not installed by default. The baseline is manual: after a change to the gated list merges,
+# the admin pastes the output of `.github/scripts/gated-paths.sh --format ado` into the
+# branch policy (os-installation/admin-setup-azure-devops.md, step 3) — /propose puts that
+# reminder into the pull request description. Install this pipeline only if you want that
+# step to happen by itself.
+#
+# Install: Pipelines → New pipeline → Azure Repos Git → this repo → Existing Azure Pipelines
+# YAML file → this path. Then: Project settings → Repositories → <repo> → Security → grant
+# "<Project> Build Service (<org>)" the permission "Edit policies"; and in the pipeline's
+# settings keep "Allow scripts to access the OAuth token" on (classic) — YAML pipelines
+# expose $(System.AccessToken) when it is mapped as below.
+#
+# Runs only when governance/write-policy.yaml changes on the target branch. If no
+# required-reviewer policy exists yet on that branch it warns and exits 0 — create the
+# policy once by hand (step 3); from then on the pipeline maintains its path filter.
+
+trigger:
+  branches:
+    include: [ main ]
+  paths:
+    include: [ governance/write-policy.yaml ]
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  targetBranch: main
+
+steps:
+- checkout: self
+  fetchDepth: 1
+
+- bash: |
+    set -euo pipefail
+    az extension add --name azure-devops --only-show-errors
+    echo "$SYSTEM_ACCESSTOKEN" | az devops login --organization "$SYSTEM_COLLECTIONURI"
+    az devops configure --defaults organization="$SYSTEM_COLLECTIONURI" project="$SYSTEM_TEAMPROJECT"
+
+    FILTER=$(bash .github/scripts/gated-paths.sh --format ado)
+    echo "path filter from write-policy.yaml: $FILTER"
+
+    REPO_ID=$(az repos show --repository "$BUILD_REPOSITORY_NAME" --query id -o tsv)
+    POLICY_ID=$(az repos policy list --repository-id "$REPO_ID" --branch "$TARGET_BRANCH" \
+                  --query "[?type.displayName=='Required reviewers' && isBlocking] | [0].id" -o tsv)
+    if [ -z "${POLICY_ID:-}" ] || [ "$POLICY_ID" = "None" ]; then
+      echo "##vso[task.logissue type=warning]No required-reviewer policy on $TARGET_BRANCH yet — create it once by hand (os-installation/admin-setup-azure-devops.md, step 3); this pipeline then keeps its path filter current."
+      exit 0
+    fi
+    az repos policy required-reviewer update --id "$POLICY_ID" --path-filter "$FILTER" --only-show-errors >/dev/null
+    echo "policy $POLICY_ID on $TARGET_BRANCH now filters: $FILTER"
+  displayName: Sync required-reviewer path filter from write-policy.yaml
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+    TARGET_BRANCH: $(targetBranch)

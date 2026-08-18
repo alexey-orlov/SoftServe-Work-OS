@@ -107,7 +107,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 
 ## Governance
 
-- **Write policy** — `governance/write-policy.yaml` is the single authoritative registry of protected context, two tiers: **auto** (default — agents write and commit directly; with auto-sync on, each turn also lands on `main` and pushes to origin) and **gated** (steering files + system rules — approve the exact change at the native write prompt; auto-sync never commits or pushes them, you land them deliberately; headless runs file a proposal in `governance/proposals/` instead). Flip the automation with `/auto-sync on|off`. Enforced by the write-guard and auto-commit hooks; audited weekly. Full map: `governance/CLAUDE.md`.
+- **Write policy** — `governance/write-policy.yaml` is the single authoritative registry of protected context, two tiers: **auto** (default — agents write and commit directly; with auto-sync on, each turn also lands on `main` — directly, or through a self-merging pull request when `main` is PR-only — and pushes to origin) and **gated** (steering files + system rules — approve the exact change at the native write prompt; automation never lands them on `main`: direct strategies hold them for you to land deliberately, the pr strategy keeps them on your branch until `/propose` opens the pull request an admin approves; headless runs file a proposal in `governance/proposals/` instead). Flip the automation with `/auto-sync on|off`. Enforced by the write-guard and auto-commit hooks; audited weekly. Full map: `governance/CLAUDE.md`.
 - **One writer per surface** — table in `governance/write-back-contract.md`.
 - **Mirror rule** — the Fundamentals block above summarizes `business-info.md`; whoever changes one updates the other in the same change.
 - **Failure visibility** — an automation that can drop work must surface its own failure; a silent success-shaped exit is the bug.
@@ -136,9 +136,9 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
 | Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/handbook/` | Competitive intel, vision docs, conventions |
 
-## Enforcement on GitHub
+## Enforcement on the server (GitHub or Azure Repos)
 
-Once pushed to GitHub, see `os-installation/claude-code/scheduled-governance.md`: the weekly lint Action (PR check + health issue; its gated-path audit derives the list from the write policy at run time), plus two optional, currently-unused layers — a push ruleset that hard-stops non-steward changes to gated paths (the one manual mirror of the list, refreshed at setup) and branch protection. Day-to-day auto-tier work commits straight to `main` — no PR required; with `/auto-sync on` it is pushed automatically too.
+Admin, once, before the team starts: `os-installation/admin-setup-github.md` or `admin-setup-azure-devops.md` — two roles, `main` pull-request-only, gated paths need an OS-admin's approval (GitHub: ruleset + generated `.github/CODEOWNERS`; Azure: required-reviewer policy with the generated path filter). Day-to-day auto-tier work still lands on `main` by itself — with `/auto-sync on` in the pr strategy the hook opens and merges those pull requests. Background, the weekly lint Action, and the optional layers (GitHub push ruleset, classic branch protection): `os-installation/claude-code/scheduled-governance.md`.
 
 ## Credits
 
