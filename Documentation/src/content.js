@@ -26,7 +26,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.4 · August 2026",
+  version: "v2.5 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch, and as a Word document per platform.",
   home: ["overview", "work-os-101"],
@@ -187,7 +187,7 @@ const doc = {
           ["`/auto-sync`", "The switch for the automatic saving and syncing (on / off / status)", "The mode", "The current state and the gated list"],
           ["`/propose`", "Opens the pull request that carries your gated changes to the admins", "Nothing — reads what's waiting on your branch", "A pull request with a plain-language description"],
           ["`/connect-mcps`", "Connects a tool so skills read it live", "The tool name", "A tested connection, wired into the skills that use it"],
-          ["`/connect-code`", "Registers product code repositories and grants read-only access on your computer", "The repository link", "A registry entry; local read access"],
+          ["`/connect-code`", "Registers your product's code repositories and grants read-only access on your computer", "The repository link", "A registry entry; local read access"],
           ["`/context-update`", "Folds new material into the wiki — threads, documents, facts — routed by type", "A path, pasted content, or nothing (sweep the inbox)", "Updated pages, navigation and ledger"],
           ["`/wiki-lint`", "Health-checks the repository and fixes mechanical drift", "Nothing", "A dated health report; fixes applied; suggestions listed"],
           ["`/feature-launch-gate`", "Pre-launch completeness check of the repository for a feature", "The feature", "A ship / not-yet verdict"],
@@ -205,7 +205,7 @@ const doc = {
           ["UX research analyst", "Research perspective; spots evidence gaps", "`/prd-challenge`"],
           ["PO / BA reviewer", "Rules, acceptance criteria and ticket-cuttability of a job spec", "`/job-spec-challenge`"],
           ["QA lead reviewer", "Testability of a job spec as written", "`/job-spec-challenge`"],
-          ["Code explorer", "Read-only investigator of your product code; returns findings with file-and-line citations", "`/code-qa`"],
+          ["Code explorer", "Read-only investigator of your product's codebase; returns findings with file-and-line citations", "`/code-qa`"],
         ], [2200, 4400, 2800]),
       ]},
 
@@ -265,8 +265,8 @@ const doc = {
         ], [2600, 1400, 3000, 2400]),
         h2("product-development/engineering/", "engineering"),
         table(["Item", "Type", "What's in it", "How it's used"], [
-          ["`code-repos.yaml`", "Registry", "Your product code repositories: purpose, coverage keywords, entry points, access tier", "Filled by `/connect-code`; how `/code-qa` finds the right code — see [Connect your product's code](#/setup/code)"],
-          ["`code-grounding.md`", "Steering file", "The rules every claim about product code follows: access tiers, citations, honesty rules", "Implemented by `/code-qa` and `/connect-code`"],
+          ["`code-repos.yaml`", "Registry", "Your product's code repositories: purpose, coverage keywords, entry points, access tier", "Filled by `/connect-code`; how `/code-qa` finds the right code — see [Connect your product's codebase](#/setup/code)"],
+          ["`code-grounding.md`", "Steering file", "The rules every claim about the product's codebase follows: access tiers, citations, honesty rules", "Implemented by `/code-qa` and `/connect-code`"],
           ["`codebases/`", "Living page", "Maps of large repositories — a table of contents per repository", "Fallback grounding for `/code-qa`; refreshed by `/connect-code --refresh`"],
           ["`plans/` · `tech-constraints.md`", "Deliverable / living page", "Implementation plans by area; technical constraints and the do-not-re-implement registry", "Engineers' check-in surface; text fallback for `/create-tickets`"],
         ], [2600, 1400, 3000, 2400]),
@@ -308,7 +308,7 @@ const doc = {
     { id: "setup", title: "Setup", articles: [
 
       { id: "overview", title: "Overview", audience: "Everyone — read first", time: "5 min read", blocks: [
-        lead("This guide helps you set up and customize the Work OS for your organization: one shared repository that every teammate and Claude Code work in, adapted to your company, and — where useful — connected to your tools and your product's code. Three roles, three stages, about half a day in total."),
+        lead("This guide helps you set up and customize the Work OS for your organization: one shared repository that every teammate and Claude Code work in, adapted to your company, and — where useful — connected to your tools and your product's codebase. Three roles, three stages, about half a day in total."),
         h2("What you'll have at the end", "outcome"),
         bullets([
           "**One source of truth.** Every teammate's Claude reads the same repository — the same business context, decisions and skills, always current.",
@@ -328,7 +328,7 @@ const doc = {
         p("Three stages, in this order. Each stage is one or more articles in this section — the names below are the article names."),
         seq([
           { who: "Stage 1 · Repository admin", what: "**Set up the repository** — import the Work OS from SoftServe, create the admin group, give people access, protect the main branch. Done in the {gh:GitHub|az:Azure DevOps} web interface.", time: "about 30 minutes", link: "#/setup/repository", label: "Set up the repository" },
-          { who: "Stage 2 · Work OS admin", what: "**Set up your computer**, then **Customize the Work OS** (which also switches auto-sync on and ends with the first access test). Optional, when you're ready: **Connect your tools** and **Connect your product's code**.", time: "2–3 hours, resumable", link: "#/setup/customize", label: "Customize the Work OS" },
+          { who: "Stage 2 · Work OS admin", what: "**Set up your computer**, then **Customize the Work OS** (which also switches auto-sync on and ends with the first access test). Optional, when you're ready: **Connect your tools** and **Connect your product's codebase**.", time: "2–3 hours, resumable", link: "#/setup/customize", label: "Customize the Work OS" },
           { who: "Stage 3 · All Work OS users", what: "**Set up your computer** and check that your work reaches the team. If the team uses connected tools or code, add your own part of those two articles.", time: "about 20 minutes each", link: "#/setup/computer", label: "Set up your computer" },
         ]),
         callout("note", "The order matters: Stage 3 can only start after the repository exists (Stage 1) and the Work OS admin has finished customization (Stage 2)."),
@@ -516,7 +516,7 @@ const doc = {
           step("Ask a Work OS admin to approve and merge it — in {gh:GitHub|az:Azure Repos}, or by telling their own Claude *\"approve and {gh:merge|az:complete} pull request <number>\"*.",
             callout("check", "Your change is on `main`. The next time Claude finishes a response, it notes that everything on your branch has landed and the branch is clean.")),
         ]),
-        callout("pass", "The everyday file landed by itself; the gated change could not be merged by you; it landed after an admin approved it. You're set — work as usual from here. If your team has connected tools or code, finish with your part of [Connect your tools](#/setup/tools) and [Connect your product's code](#/setup/code)."),
+        callout("pass", "The everyday file landed by itself; the gated change could not be merged by you; it landed after an admin approved it. You're set — work as usual from here. If your team has connected tools or code, finish with your part of [Connect your tools](#/setup/tools) and [Connect your product's codebase](#/setup/code)."),
         callout("tip", "**Clean-up:** ask Claude to delete the TEST summary — an everyday change, it lands by itself. Keep the `business-info.md` edit if it was a real correction."),
       ]},
 
@@ -525,7 +525,6 @@ const doc = {
 
       { id: "customize", title: "Customize the Work OS", audience: "Stage 2 · Work OS admin", time: "1–2 hours, once — resumable", blocks: [
         lead("You own the Work OS for your team. In this article you run the guided customization — which adapts the Work OS to your company and switches auto-sync on{gh:, name the approver team|az:}, publish the changes for everyone, and do the first access test. After that you invite the users."),
-        callout("note", "**Work in progress.** The detailed walkthrough of the `/customize-os` conversation (naming, business context, templates) is being written. The steps below are complete for the access and auto-sync part."),
         h2("Before you start", "before"),
         checklist([
           "You have finished [Set up your computer](#/setup/computer) steps 1–6 (install, folder, clone, name, sign-in; auto-sync will show *off* — expected).",
@@ -567,7 +566,7 @@ const doc = {
           step("Gated change — approve the 🔒 prompt, wait for Claude to finish, then publish:", say("In business-info.md, fill in the company name line"), platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it")),
             callout("check", "The {gh:merged|az:completed} pull request *\"gated: …\"* shows {gh:`os-admins` as code owner and *merged with bypass*|az:`OS-Admins` as required reviewer, approved by you}; the change is on `main`.")),
         ]),
-        callout("pass", "Both tests landed on `main`, and the gated one needed an admin. Stage 2 is complete — tell the users they can start Stage 3: [Set up your computer](#/setup/computer). When you're ready, continue with the optional [Connect your tools](#/setup/tools) and [Connect your product's code](#/setup/code)."),
+        callout("pass", "Both tests landed on `main`, and the gated one needed an admin. Stage 2 is complete — tell the users they can start Stage 3: [Set up your computer](#/setup/computer). When you're ready, continue with the optional [Connect your tools](#/setup/tools) and [Connect your product's codebase](#/setup/code)."),
       ]},
 
       { id: "tools", title: "Connect your tools", audience: "Stage 2 · Work OS admin, then each user for their own account", time: "5–20 minutes per tool — optional", blocks: [
@@ -603,8 +602,8 @@ const doc = {
         callout("pass", "Ask Claude something the tool answers — *\"what did we decide in yesterday's product sync?\"* (meeting recordings), *\"what's open in this sprint?\"* (task tracker) — and get a live answer instead of a request to paste something."),
       ]},
 
-      { id: "code", title: "Connect your product's code", audience: "Stage 2 · Work OS admin, then each user on their own computer", time: "15 minutes per repository — optional", blocks: [
-        lead("With read access to your product's source code, Claude answers product questions from the code itself — how a feature actually works today, what limits apply, whether a change is live — in plain language, with the evidence available on request. Optional. Read-only: Claude never changes the product code from the Work OS."),
+      { id: "code", title: "Connect your product's codebase", audience: "Stage 2 · Work OS admin, with the admin of your code repositories — then each user on their own computer", time: "about 30 minutes, plus 15 per extra repository — optional", blocks: [
+        lead("With read access to your product's source code, Claude answers product questions from the code itself — how a feature actually works today, what limits apply, whether a change is live — in plain language, with the evidence available on request. Optional. Read-only: Claude never changes the product's codebase from the Work OS."),
         h2("What it gives you", "what"),
         table(["You ask", "Skill", "Without the connection"], [
           ["\"How does the export limit actually work today?\" · \"Is the new pricing live?\" · \"Do we support SSO?\"", "`/code-qa` — answers from the code, concise, no jargon", "Claude says it has no grounded code access and gives you the exact question to ask an engineer"],
@@ -612,27 +611,75 @@ const doc = {
           ["\"Is this spec feasible?\" (inside PRD and job-spec work)", "`/job-spec-draft`, `/job-spec-challenge` — a feasibility check grounded in the code", "The check is marked as a to-do for engineering"],
         ], [3800, 3000, 2600]),
         h2("How it works", "how"),
-        p("Two parts, like tools. The Work OS keeps a small **registry** of your code repositories — what each one is for and which product areas it covers, in your own words. That is shared. Each person's **computer** holds a read-only copy of the code that Claude may read but never edit — that stays private and is never uploaded to the Work OS."),
+        p("Three parts. **Permission** comes first: everyone who will ask questions about the code needs read access to it, and only the person who administers those repositories can give it — the Work OS cannot grant it for them. Then the Work OS keeps a small shared **registry** of your repositories: what each one is for and which product areas it covers, in your own words. Finally, each person's **computer** holds a read-only copy of the code that Claude may read but never edit — that copy stays private and is never uploaded to the Work OS."),
+        h3("If your product lives in several repositories", "many"),
+        p("Most do — the app your customers use in one, the services behind it in another, mobile apps in a third. Each repository is connected separately and described in one sentence; that sentence is what lets Claude send a question to the right code, and when a question spans several repositories Claude looks in each of them. You don't have to do them all at once: start with the one or two that would answer most of your questions, and add the rest whenever you need them."),
+        callout("tip", "If instead all your product's code sits in one large repository, that is the simplest case — connect it once, and Claude will ask which folders matter so it doesn't wander through the rest."),
         h2("Before you start", "before"),
         checklist([
-          "You know which repositories matter to product questions and have their links (skip infrastructure and tooling repositories).",
-          "The people who will use it have read access to those repositories — their normal developer access. The {gh:GitHub|az:Azure DevOps} sign-in from [Set up your computer](#/setup/computer) usually covers it.",
+          "You have the links to the repositories that hold your product's code. Not sure which ones? Ask an engineer — step 1 is about narrowing the list.",
+          "You know who administers those repositories — often an engineering lead, sometimes the same person who created the Work OS repository. Step 2 is theirs to do, and nothing else works until it is done.",
+          "You have the list of people who will use the Work OS — the same list as in [Set up the repository](#/setup/repository/s3). Every one of them needs read access to the code.",
         ]),
-        h2("Step 1 — Register a repository for the team (Work OS admin)", "k1"),
+
+        h2("Step 1 — Decide which repositories to connect (Work OS admin)", "k1"),
+        steps([
+          "List the repositories holding the code behind the product decisions you make: the app your customers use, the services behind it, the mobile apps. Ask an engineer to confirm the list — it takes them a minute.",
+          "Leave out infrastructure, deployment and internal tooling repositories. They don't answer product questions, and they make every search noisier.",
+          "Order what's left by how often you would ask about it. Connect the top one or two now; the rest can follow at any time.",
+        ]),
+        callout("note", "Two or three repositories is a good place to start. Each one you add is another entry to keep fresh — and another place Claude has to look."),
+
+        h2("Step 2 — Give everyone read access to the code (repository admin)", "k2"),
+        p("Permission lives with the code, not with the Work OS: Claude reads your repositories using each person's own {gh:GitHub|az:Azure DevOps} sign-in, so every person must be allowed to read them. Product managers often are not — which is why this step is the one most easily missed. Send the request to whoever administers the repositories from step 1:"),
+        code([
+          "Could you give the people below read access to these repositories:",
+          "  <the links from step 1>",
+          "  <the people, or the team or group they are all in>",
+          "",
+          "Read access only, no write. It is for our Work OS: Claude Code answers",
+          "product questions from the code and never changes it.",
+        ], "Message to send"),
+        p("What they do — in the {gh:GitHub|az:Azure DevOps} web interface, no command line:"),
+        platform("github",
+          steps([
+            "Open the repository → **Settings › Collaborators and teams**.",
+            "**Add teams** → a team that contains every Work OS user → role **Read**. If no such team exists, create one first (organization page → **Teams › New team**, for example `work-os-readers`) and add the people to it.",
+            "Repeat for every repository on the list.",
+          ]),
+          callout("why", "A team rather than named people: the next person who joins the Work OS then gets access to every repository by being added to the team once."),
+          callout("dont", "Grant **Write**. Claude reads product code and never changes it — *Read* is all the Work OS needs, on every repository."),
+          callout("note", "If the code sits in a **different GitHub organization** than the Work OS repository, each person also needs to be a member or an outside collaborator of that organization before a team or a repository can be shared with them."),
+          callout("expected", "Every person can open every repository link in a browser and see the files. People added to a new team receive an e-mail from GitHub.")),
+        platform("azure",
+          steps([
+            "Open **Project settings › Permissions** in the project that holds the code.",
+            "Select the **Readers** group → **Members › Add** → add every Work OS user. That gives them read access to the project's repositories.",
+            "Only some repositories should be visible? Do it per repository instead: **Project settings › Repositories**, select the repository, open the **Security** tab, select the group or person, and set **Read** to **Allow**.",
+          ]),
+          callout("dont", "Give **Contribute** or higher. Claude reads product code and never changes it — *Read* is all the Work OS needs, on every repository."),
+          callout("note", "If the code sits in a **different Azure DevOps project or organization** than the Work OS repository, each person also needs to be a user there first — a **Basic** access level is enough."),
+          callout("expected", "Every person can open every repository under **Repos › Files** and see the code. If the page asks someone to sign in and then says they don't have access, they are not in the group yet.")),
+        callout("check", "Ask one of the Work OS users — not just yourself — to open a repository link in their browser. If they can see the files, Claude will be able to read that code on their computer too. Note any repository the admin left out: Claude simply won't be able to answer about it."),
+
+        h2("Step 3 — Register the repositories for the team (Work OS admin)", "k3"),
         steps([
           step("Ask Claude — one repository at a time:", say("/connect-code <paste the repository link>")),
           "Answer in your own words: what the repository is for, and which product areas it covers (the words your team uses — that is how Claude routes a question to the right code). For a very large repository Claude asks which folders matter.",
           step("Approve the 🔒 prompt — the registry is a gated file. Claude then copies the code to your computer (read-only) and grants itself read access there. For a large repository it offers to build a map of the code — say yes.",
             callout("expected", "`product-development/engineering/code-repos.yaml` lists the repository with its purpose and areas. Nothing about your computer or your credentials is written into it.")),
-          step("Publish the registry entry for everyone — as a Work OS admin, Claude opens the pull request, approves it as you and {gh:merges|az:completes} it:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
+          "Repeat for the next repository on your list. Registering several before you publish is fine — they travel together as one change.",
+          step("Publish the registry entries for everyone — as a Work OS admin, Claude opens the pull request, approves it as you and {gh:merges|az:completes} it:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
         ]),
-        h2("Step 2 — Get access on your own computer (each user)", "k2"),
+        h2("Step 4 — Get access on your own computer (each user)", "k4"),
         steps([
           step("Ask Claude:", say("/connect-code"),
-            callout("expected", "Claude finds the repositories the admin registered, copies them to your computer, and grants itself read-only access. It never changes the shared repository in this run.")),
+            callout("expected", "Claude finds every repository the admin registered, copies each one to your computer, and grants itself read-only access. It never changes the shared repository in this run."),
+            callout("note", "Nothing extra to sign in to — Claude uses the {gh:GitHub|az:Azure DevOps} sign-in from [Set up your computer](#/setup/computer/c5). If it reports that it cannot reach one of the repositories, you don't have read access to that one yet: ask the repository admin to add you (step 2).")),
         ]),
         h2("Keeping it fresh", "refresh"),
-        p("Ask Claude *\"refresh the code access\"* (`/connect-code --refresh`) now and then — it pulls the latest code and updates the maps. The weekly health check reminds you when the registry goes stale."),
+        p("Ask Claude *\"refresh the code access\"* (`/connect-code --refresh`) now and then — it pulls the latest code for every repository you have and updates the maps. The weekly health check reminds you when the registry goes stale."),
+        p("Adding a repository later is the same two moves in the same order: read access for everyone first (step 2), then `/connect-code` with its link (step 3). New teammates need both — the repository admin adds them to the team or group, then they run step 4."),
         callout("pass", "Ask *\"/code-qa how does <a feature you know> work today?\"* and get an answer that cites the code — with *\"show the evidence\"* revealing file and line references."),
       ]},
 
