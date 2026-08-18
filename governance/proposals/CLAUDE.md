@@ -27,6 +27,4 @@ Delete the proposal file after applying or rejecting it.
 
 ### Files
 
-_Agent runs append entries here; humans clear them._
-
-- [2026-08-18-branch-per-checkout-gated-pr-flow.md](2026-08-18-branch-per-checkout-gated-pr-flow.md) — Design proposal: PR-only `main` on Azure Repos + GitHub, branch per checkout, everyday commits drained to `main` automatically, gated commits accumulate until the user proposes (desktop Create PR on GitHub / `az repos pr` on Azure); path rule generated from write-policy.yaml
+_Empty. Agent runs append entries here; humans clear them._
