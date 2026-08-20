@@ -19,3 +19,4 @@ Product context, PRDs, customers, strategy, decisions, and the team handbook.
 - [reports/](reports/) — Periodic rollups: weekly reviews, portfolio pulses, status updates, batch-day digests
 - [planning/](planning/) — Daily plans and weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review`
 - [launches/](launches/) — Filled launch checklists and gate records, one per feature; `/launch-checklist` writes here
+- [prototypes/](prototypes/) — Clickable prototypes and prototype artifacts by feature slug: HTML previews, feedback logs, challenge reports, external-tool prompts, plus the shared design-system cache

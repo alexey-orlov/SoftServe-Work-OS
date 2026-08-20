@@ -1,6 +1,6 @@
 # Skills
 
-54 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+55 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -38,7 +38,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
-| [`prototyping`](#prototyping) | Sketches, clickable prototypes, handoff specs, journey maps. | 4 |
+| [`prototyping`](#prototyping) | Sketches, clickable prototypes, prototype critique and feedback rounds, journey maps. | 5 |
 | [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 10 |
 
 ### Communication & ops
@@ -113,12 +113,13 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 
 ### Prototyping
 
-`group: prototyping` — Sketches, clickable prototypes, handoff specs, journey maps.
+`group: prototyping` — Sketches, clickable prototypes, prototype critique and feedback rounds, journey maps.
 
 - [journey-map/](journey-map/) — Create user journey maps and customer journey maps (dual mode)
 - [napkin-sketch/](napkin-sketch/) — ASCII wireframes + browser capture for design matching
-- [prototype/](prototype/) — Route to the right prototyping tool and generate the prompt or spec: v0.dev, Lovable, Bolt.new, Claude Artifacts, Figma handoff, static HTML
-- [prototype-feedback/](prototype-feedback/) — Build → review → iterate prototype workflow. Structured feedback collection and iteration
+- [prototype/](prototype/) — Build a clickable prototype grounded in the job spec/PRD — Figma-first (token-faithful HTML audited by scripts/audit_tokens.py); without Figma, asks: connect it, external-tool prompt (v0/Lovable/Bolt), or plain HTML
+- [prototype-feedback/](prototype-feedback/) — Apply review feedback to an existing prototype: triage → batched decisions → surgical edits → audit → disposition log; spec changes route to the spec's writer
+- [prototype-challenge/](prototype-challenge/) — Single-pass critique of a built prototype, read-only: token audit, spec-alignment table, usability heuristics, eng/design/user lenses, prioritized must/should/nice report
 
 ### OS admin & governance
 

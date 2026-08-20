@@ -19,7 +19,7 @@ Create quick wireframes as ASCII art OR capture existing UI from browser to matc
 
 **Example:** "Sketch a settings page with tabs for Profile, Security, and Billing"
 
-**Output:** Wireframe delivered inline, also saved to `product-development/product/PRDs/prototypes/[feature]-napkin-sketch.md`
+**Output:** Wireframe delivered inline, also saved to `product-development/product/prototypes/[feature]-napkin-sketch.md`
 
 **Time:** 5-10 minutes per screen
 
@@ -567,7 +567,7 @@ Before creating any wireframe, check these sources:
 | User Research | `product-development/product/customers/*.md` | Pain points to solve, user quotes about current UX frustrations |
 | Stakeholder Profiles | `product-development/product/strategy/business-context/stakeholders.md` | Designer preferences (e.g., [design lead] wants accessibility-first), exec priorities |
 | Design System | Any design docs or style references in workspace | Colors, component patterns, layout conventions to follow |
-| Past Prototypes | `product-development/product/PRDs/prototypes/*.md` | Existing wireframes for consistency, decisions already made |
+| Past Prototypes | `product-development/product/prototypes/*.md` | Existing wireframes for consistency, decisions already made |
 | Business Context | `product-development/product/strategy/business-context/business-info.md` | Product type, user personas, platform (web/mobile/both) |
 
 **Priority:** PRD requirements first (the wireframe must match the spec), then user research (ground the design in real pain points), then past prototypes (maintain consistency).

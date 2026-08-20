@@ -15,6 +15,7 @@ const callout = (kind, text) => ({ t: "callout", kind, text }); // expected | ch
 const table = (header, rows, widths) => ({ t: "table", header, rows, widths });
 const terms = (items) => ({ t: "terms", items });
 const platform = (name, ...blocks) => ({ t: "platform", name, blocks }); // "github" | "azure"
+const method = (name, ...blocks) => ({ t: "method", name, blocks });     // "app" (Settings › Connectors — default) | "chat" (Claude does the whole setup in the conversation)
 const details = (summary, ...blocks) => ({ t: "details", summary, blocks });
 const image = (file, alt, caption) => ({ t: "image", file, alt, caption });   // file in the build folder; the HTML embeds it
 const seq = (items) => ({ t: "seq", items });                    // the big-picture sequence: [{who, what, time, link}]
@@ -26,7 +27,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.5 · August 2026",
+  version: "v2.7 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -175,8 +176,9 @@ const doc = {
         ], [1800, 3400, 2200, 2400]),
         h2("Prototyping", "g-proto"),
         table(["Skill", "What it does", "You give it", "You get"], [
-          ["`/prototype`", "Routes to the right prototyping tool and writes the prompt or spec", "A PRD, feature description or sketch", "A copy-paste prompt (v0, Lovable, Bolt, …) or a static HTML prototype"],
-          ["`/prototype-feedback`", "Build → review → iterate loop for a prototype", "A prototype link or description", "Structured feedback mapped to the PRD"],
+          ["`/prototype`", "Builds a clickable prototype that follows your design system — pulled live from Figma when it's connected; without Figma it asks: connect it, get a prompt for an external tool (v0, Lovable, Bolt), or build plain HTML", "A job spec or PRD — plus a Figma frame or screenshot, if you have one", "A self-contained clickable prototype in `product/prototypes/`, or a copy-paste prompt"],
+          ["`/prototype-challenge`", "Claude critiques a built prototype before you share it — design-system compliance, coverage of the spec, usability, and engineering / design / user lenses", "The prototype", "A prioritized must-fix / should-fix / nice-to-have report, saved next to the prototype"],
+          ["`/prototype-feedback`", "Applies a round of review feedback to a prototype — sorts every comment, asks you the open decisions in one batch, edits carefully, and logs what was applied, deferred or declined", "The feedback (a thread, notes, an annotated screenshot) and which prototype", "The updated prototype and a per-item log entry"],
           ["`/napkin-sketch`", "ASCII wireframes or a capture of an existing screen", "The screen or feature", "A wireframe to react to"],
           ["`/journey-map`", "User and customer journey maps", "The journey and persona", "A journey map in `customers/research-synthesis/`"],
         ], [1800, 3400, 2200, 2400]),
@@ -578,7 +580,7 @@ const doc = {
           ["**Team chat** — Slack, Microsoft Teams", "Post digests and drafts; read a thread you point at", "`/slack-message`, `/weekly-review`, `/portfolio-pulse`, `/status-update`", "Claude drafts the message; you paste it"],
           ["**Product analytics** — Amplitude, Mixpanel, PostHog, Pendo", "Query retention, activation and funnels live", "`/retention-analysis`, `/activation-analysis`, `/feature-metrics`, `/experiment-metrics`", "You export the numbers or paste a chart's data"],
           ["**Documents** — Notion, Confluence, Google Drive", "Read source documents when folding context into the Work OS", "`/context-update`, `/user-research-synthesis`, `/prd-draft`", "You paste or attach the document"],
-          ["**Design** — Figma", "Read designs and link prototypes", "`/prototype`, `/prototype-feedback`, `/create-tickets`", "You describe or link the design"],
+          ["**Design** — Figma", "Pull your design system's real colors, spacing and type, so prototypes are built against it — plus read designs and link them", "`/prototype`, `/prototype-feedback`, `/create-tickets`", "You describe or link the design; prototypes can't follow the design system automatically"],
           ["**Customer feedback** — Intercom", "Pull customer requests and conversations", "`/prioritize-requests`", "You paste the pile of requests"],
           ["**Calendar** — Google Calendar, Outlook", "Plan the day around meetings", "`/daily-plan`, `/meeting-agenda`", "You tell Claude your day"],
         ], [2500, 2700, 2500, 2200]),

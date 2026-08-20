@@ -55,7 +55,7 @@ Scan every package document for:
 ### 2) Prototype links present
 
 - **PRD:** the Meta Links row and the Solution section's Mockup/Prototype field. An empty `[Prototype]()` or a bare `[Link or embed]` fails.
-- **Job spec:** any prototype/mockup/Figma link, or a link into `PRDs/prototypes/` artifacts (`/napkin-sketch`, `/prototype`, `/code-first-draft` outputs) — the Handoff note is its natural home.
+- **Job spec:** any prototype/mockup/Figma link, or a link into `product/prototypes/` artifacts (`/napkin-sketch`, `/prototype`, `/code-first-draft` outputs) — the Handoff note is its natural home.
 - Repo-relative links must resolve to a real file (❌ if dead). External links (figma.com …) are reported *present, not verified*.
 - No prototype **with an explicit in-doc reason** (e.g. "no prototype — backend-only job, no user-facing surface") → ➖ quoting the reason. No prototype, no reason → ❌ with the route: `/prototype` (or link the existing Figma and register it under the feature-index `figma.prototype` key).
 

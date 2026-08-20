@@ -43,7 +43,7 @@ A job spec here describes **what a user must be able to do and why** — clear e
 | 6 | `product-development/product/customers/` (research-synthesis, feature-requests, call summaries) | The job in users' own words; variation signals; per-claim evidence |
 | 7 | `strategy/business-context/segmentation-matrix.md`, `customers/accounts/portfolio.yaml` | Reach denominators for §5 and §12 |
 | 8 | `product-development/analytics/` (metrics, investigations) | Baselines for §15 |
-| 9 | A prototype, if one exists (`PRDs/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the job spec |
+| 9 | A prototype, if one exists (`product/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the job spec |
 | 10 | `PRDs/{area}/reviews/` | Assumptions already ranked; challenges already answered |
 
 Ask only questions that block the job's definition (its object, its actors, its loop). Everything else drafts with `[GAP: what's missing — how to close it]`. `platform-model.md` / `tech-constraints.md` still `[TBD]` → carry `[GAP: platform model unfilled — constraints unverified]` / `[GAP: tech constraints unfilled — feasibility unverified]` in §9.

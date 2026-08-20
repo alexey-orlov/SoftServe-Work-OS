@@ -1,468 +1,119 @@
 ---
 name: prototype-feedback
-description: Build → review → iterate prototype workflow. Structured feedback collection and iteration.
-argument-hint: "[prototype link]"
+description: Apply review feedback to an existing prototype — triage every item (fidelity gap, token drift, design change, spec change, system gap, content realism, out of scope, unclear), resolve the decisions in one batched exchange, snapshot then edit the file surgically (never regenerate), re-run the token audit, and log every item's disposition in the prototype's feedback log so declined and deferred items stay answerable. Divergences are decisions — changes contradicting Figma are flagged as divergences; changes contradicting the job spec or PRD route back through /job-spec-draft or /prd-draft, never silently absorbed. Works on repo HTML prototypes and, via prompt-file updates, on external v0 / Lovable / Bolt ones. Use on /prototype-feedback, "here's the feedback on the prototype", "the PMs had comments", "design review said…", "apply this round of feedback", a pasted thread, transcript, or annotated screenshot about a prototype. NOT for generating the critique yourself (/prototype-challenge), building the prototype (/prototype), or feedback on production application code.
+argument-hint: "[prototype path or slug]"
 group: prototyping
 ---
 
-# Prototype Feedback Loop Workflow
+# Prototype Feedback
 
-Rapidly iterate on prototypes using AI-powered building and automated feedback collection.
+Apply a round of review feedback to an existing prototype without losing the three things that make it useful: alignment with the design system, alignment with the spec, and a record of why it looks the way it does.
 
-## Quick Start
+## Why this exists
 
-1. Share a prototype link (v0/Lovable/Bolt) or describe what you built
-2. The skill checks the related PRD, design system, and user research for context
-3. The skill runs a structured feedback analysis (PRD alignment, usability, multi-perspective)
-4. The skill delivers prioritized recommendations: must-fix, should-fix, and nice-to-have
-5. You iterate on the prototype and we repeat until validated
+Editing HTML from a list of comments is easy. Doing it over three rounds without the artifact degrading is not. Three failures cause most of the damage. First, the fastest way to satisfy "make that button darker" is to type a hex code, so token compliance erodes exactly when feedback volume is highest. Second, much of what arrives as "feedback" is not a report that the preview is wrong — it is a request for a design Figma doesn't contain, or a behavior the spec doesn't contain; applying those silently turns the preview into an unlabelled second source of truth, and someone later builds what nobody approved. Third, a reviewer whose comment disappears without explanation stops giving useful feedback, which costs far more than the comment did.
 
-**Example:** "Review my checkout prototype: [link]. PRD is in product-development/product/PRDs/{area}/checkout-redesign.md"
+So: triage first, edits second, and an explicit disposition for every item.
 
-**Output:** Saved to `product-development/product/PRDs/prototypes/[feature]-feedback-round-[N].md`
+## Step 1 — Gather both halves
 
-**Time:** 30 minutes per feedback round
+**The prototype and its context** (all under `product-development/product/prototypes/`):
 
-## Context Routing
+- The artifact — `{slug}.html`, or for an external build, `{slug}-{tool}-prompt.md`. Resolve the slug via `feature-index.yaml` if only a feature name was given.
+- `design-system/tokens.css` + `design-system.md` — the token set this preview is bound to, plus recorded gaps. (A plain-HTML prototype is bound to its own `:root` block instead.)
+- `{slug}-feedback-log.md` — the build record (source spec, coverage, gaps) and earlier rounds. **Read it before anything else.** Reviewers re-raise points already declined; "we decided against that in round 1 because X" is worth far more than quietly doing it this time.
+- The spec the build record links — the job spec or PRD. Needed to tell "the preview is wrong" from "the reviewer wants the spec changed".
 
-**Check these files before providing feedback:**
+**The feedback, in whatever form it arrives:** pasted text, a bullet list, a document, a meeting transcript; an annotated screenshot (view it — arrows and circles carry location information the text omits); a Slack/Teams/email thread (if a connector is available and the user points at a thread, offer to pull it — never go hunting uninvited).
 
-| Source | Files/Folders | What to Extract |
-|--------|---------------|-----------------|
-| PRD | `product-development/product/PRDs/{area}/` | Requirements, acceptance criteria, success metrics |
-| Design System | Figma links in `product-development/feature-index.yaml` (`figma:` keys) | Colors, typography, component patterns to match |
-| Stakeholder Profiles | `product-development/product/handbook/templates/stakeholder-*.md` | Who reviews this, their priorities and concerns |
-| User Research | `product-development/product/customers/` | User pain points, quotes, behavior patterns |
-| Past Prototypes | `product-development/product/PRDs/prototypes/` | Previous feedback rounds, resolved issues |
+If feedback references screens or elements the file doesn't have, say so rather than inventing them — the reviewer likely saw a different version (check `history/`).
 
-## Overview
+**If the feedback is approval, say so and stop.** "This looks great" is a complete result; making changes anyway to demonstrate effort wastes the reviewer's next round.
 
-**Tools:** v0/Lovable/Bolt + NotebookLM + Claude
-**When:** Validating new features before full build
+## Step 2 — Triage every item
 
----
+Split the feedback into individual items, even when it arrives as one paragraph — "love the dashboard but the table is cramped and can we use our new green" is three items with three dispositions. Classify each:
 
-## Feedback Analysis Template
+| Category | What it means | What to do |
+|---|---|---|
+| **Fidelity gap** | Preview doesn't match the Figma design | Fix the preview; re-read the Figma node if unsure which is right |
+| **Token drift** | Preview uses values outside the token set | Fix, then re-run the audit |
+| **Design change** | Reviewer wants what the Figma design doesn't show | A decision, not a fix — step 3 |
+| **Spec change** | Reviewer wants behavior the job spec / PRD doesn't contain (or contradicts) | A decision, not a fix — step 3; accepted changes route through the spec's writer |
+| **System gap** | Needs a token/component the design system lacks | Nearest existing token, record the gap, name it in the reply |
+| **Content realism** | Data, copy, or density reads as fake | Fix the preview |
+| **Out of scope** | Performance, APIs, real data, eng feasibility | Acknowledge and route (backlog, engineer); don't build it into a preview |
+| **Unclear** | "Feels off", "make it pop" | Diagnose from the file and propose — `references/vague-feedback.md` |
 
-Use this structure for every feedback round:
+Then locate each actionable item in the file — screen id and selector — before editing anything. An item you cannot locate is an item you cannot honestly mark as applied.
 
-### PRD Alignment Check
+## Step 3 — Resolve decisions before touching the file
 
-| PRD Requirement | Prototype Status | Gap? |
-|----------------|-----------------|------|
-| [Requirement 1] | Implemented / Partial / Missing | [Description if gap] |
-| [Requirement 2] | Implemented / Partial / Missing | [Description if gap] |
-| [Requirement 3] | Implemented / Partial / Missing | [Description if gap] |
+Four situations need the user. **Batch them into a single exchange**, each with a concrete proposal attached so a yes costs three words.
 
-### Usability Assessment
+- **Design changes diverging from Figma.** Apply in the preview and record a divergence, or keep the preview faithful and take it to Figma first. Neither is wrong — a preview is often exactly where design iterates — but it must be a deliberate decision, because the preview is what stakeholders will remember.
+- **Spec changes.** The preview can demonstrate the new behavior this round, but the requirement itself lands only through its one writer — `/job-spec-draft` (or `/prd-draft`). Offer to run it after this round; until then the log carries the divergence. Never quietly extend the prototype past the spec — that is exactly how UI choices masquerade as requirements.
+- **Contradictions between reviewers.** "Condense the table" (PM) and "more breathing room" (designer) cannot both land; picking one silently makes the other's review look ignored. Surface with both names attached.
+- **Genuine ambiguity.** Ask once, with the diagnosis done: "I'd raise the primary action to `--color-accent-strong` and add `--shadow-md` — does that land?" beats "what did you mean?".
 
-| Heuristic | Rating (1-5) | Issues | Recommendation |
-|-----------|-------------|--------|----------------|
-| Visibility of system status | | | |
-| Match between system and real world | | | |
-| User control and freedom | | | |
-| Consistency and standards | | | |
-| Error prevention | | | |
-| Recognition over recall | | | |
-| Flexibility and efficiency | | | |
-| Aesthetic and minimal design | | | |
+## Step 4 — Apply as one round
 
-### Multi-Perspective Feedback
-
-**Engineering view:** [Technical feasibility, performance concerns, implementation complexity, tech debt risks]
-
-**Design view:** [Visual consistency, interaction patterns, accessibility gaps, design system alignment]
-
-**User view:** [Ease of use, value clarity, friction points, learning curve, "would they actually use this?"]
-
-### Tool-Specific Feedback Adjustments
-
-Adjust feedback focus based on which tool generated the prototype:
-
-**v0.dev prototypes (single components):**
-- Focus on: Component behavior, interaction states, visual polish, responsive behavior
-- De-emphasize: Navigation flow, multi-page consistency, backend integration (v0 is component-level)
-- Ask: "Does this component work in isolation? How will it integrate with the existing UI?"
-
-**Lovable/Bolt.new prototypes (full-stack apps):**
-- Focus on: End-to-end user flow, page-to-page navigation, data persistence, error handling
-- De-emphasize: Pixel-perfect styling (these tools prioritize function over form)
-- Ask: "Does the full flow work? Are there dead ends or missing states?"
-
-**Claude Artifacts (quick mockups):**
-- Focus on: Conceptual accuracy, layout structure, content hierarchy
-- De-emphasize: Visual fidelity, interaction details (Artifacts are low-fidelity by nature)
-- Ask: "Does this capture the right concept? Is the information architecture correct?"
-
-**Figma prototypes (designer-created):**
-- Focus on: Design system compliance, accessibility, edge case handling, micro-interactions
-- De-emphasize: Technical feasibility (that's the engineer's feedback domain)
-- Ask: "Is this usable? Does it handle real-world scenarios beyond the happy path?"
-
-**ASCII/napkin sketches (from /napkin-sketch):**
-- Focus on: Layout logic, information hierarchy, flow completeness
-- De-emphasize: Everything visual (it's ASCII art, not a design comp)
-- Ask: "Is the structure right? Are we missing any screens or states?"
-
-### Prioritized Recommendations
-
-| # | Issue | Severity | Fix | Iteration |
-|---|-------|----------|-----|-----------|
-| 1 | [Must-fix before beta] | Critical | [Specific fix] | Current |
-| 2 | [Should-fix before GA] | Medium | [Specific fix] | Next |
-| 3 | [Nice-to-have polish] | Low | [Specific fix] | Later |
-
----
-
-## Workflow
-
-### Step 1: Build Initial Prototype
-
-**Using v0 (for UI components):**
+Snapshot first, so "what did it look like before?" stays answerable:
 
 ```bash
-# Go to v0.dev
-# Paste your feature description:
-
-"Build a task management interface with:
-- List view of tasks with checkboxes
-- Ability to add new tasks
-- Filter by status (all/active/completed)
-- Clean, modern design similar to Linear
-
-Include:
-- Search functionality
-- Due date display
-- Priority labels (high/medium/low)"
+cp product-development/product/prototypes/{slug}.html product-development/product/prototypes/history/{slug}-r{N}.html
 ```
 
-**v0 generates:**
-- React component
-- Fully functional prototype
-- Copy-paste ready code
+Then make targeted edits. **Do not regenerate the file.** Rebuilding discards everything nobody commented on — the realistic data reviewers grew used to, the states, the copy that was fine — and makes the round diff useless; a file that changed everywhere reads as a different prototype and reviewers start over. While editing: every new value references a token (a value with no token is a system gap to record, not a hex code to type); keep screen ids and DOM order stable (nav, `data-goto`, and reviewers' location references depend on them); a new screen or state joins the nav; new content matches the plausibility of what's around it.
 
-**Using Lovable (for full-stack apps):**
+**External-tool prototypes:** the same triage applies, but "apply" means targeted edits to `{slug}-{tool}-prompt.md` (with a `## Round {N} changes` note at the top) for the user to re-run in the tool — flag that a regenerated external build may shift things nobody asked to change.
+
+## Step 5 — Verify
 
 ```bash
-# Go to lovable.dev
-# Describe full feature:
-
-"Build a customer feedback submission portal:
-- Public form for submitting feedback
-- Backend to store submissions
-- Admin dashboard to review
-- Email notifications on new submissions"
+python .claude/skills/prototype/scripts/audit_tokens.py product-development/product/prototypes/{slug}.html --tokens product-development/product/prototypes/design-system/tokens.css
+diff product-development/product/prototypes/history/{slug}-r{N}.html product-development/product/prototypes/{slug}.html
 ```
 
-**Lovable generates:**
-- Frontend + backend
-- Database schema
-- Working prototype with real functionality
+The audit matters more after a feedback round than after the build — feedback pushes toward one-off values. Read the diff too: it catches edits that landed somewhere unintended and confirms the change set matches the items claimed as applied. If a browser tool is available, render the changed screens — cramped, unbalanced, and hard-to-scan can only be verified by eye.
 
-**Using Bolt (middle ground):**
-- Good for interactive prototypes
-- Handles forms, validation, multi-step flows
-- Between v0 (UI only) and Lovable (full stack)
+## Step 6 — Log and report
 
-**Pro tip:** Start with PRD from your PRD workflow, paste into AI builder, get 80% done automatically.
+Append to `{slug}-feedback-log.md`:
 
-### Step 2: Refine Prototype (30-60 min)
+```markdown
+## Round {N} — {date} — {source, e.g. #design-review thread}
 
-**Iterate with AI:**
+| Item | From | Category | Disposition | Note |
+|---|---|---|---|---|
+| Table rows too tight | Marta | Fidelity gap | Applied | Row height now --space-6, matches node 412:1058 |
+| Use the new green for CTAs | Ihor | Design change | Applied, diverges | Figma still shows --color-accent; flagged to Ihor |
+| Auto-approve small requests | Dana | Spec change | Deferred to spec | Needs /job-spec-draft — rule change, not a preview fix |
+| "Header feels heavy" | Dana | Unclear | Applied | Diagnosed: heading weight one step above system default |
 
-```
-"Make these changes:
-1. Move the search bar to the top right
-2. Add bulk actions (select multiple, mark complete)
-3. Make priority labels more prominent
-4. Add keyboard shortcuts (enter to add task, / for search)"
-```
+### Divergences from Figma
+- CTA fill uses --color-accent-new; Figma node 412:1058 still shows --color-accent (round {N})
 
-AI updates code in real-time. Test changes immediately.
+### Spec changes routed
+- Auto-approve threshold → /job-spec-draft, awaiting run
 
-**Polish details:**
-- [ ] Error states (what happens when something fails?)
-- [ ] Empty states (what shows when no data?)
-- [ ] Loading states (what shows while loading?)
-- [ ] Mobile responsive (does it work on phone?)
-
-### Step 3: Collect User Feedback (1 day)
-
-**Deploy prototype:**
-- v0: Export to CodeSandbox or Netlify
-- Lovable: One-click deploy
-- Bolt: Deploy to their hosting
-
-**Share with users:**
-
-**Email template:**
-```
-Subject: Quick feedback needed on [Feature] prototype
-
-Hi [Name],
-
-We're exploring [feature] and would love 15 minutes of your time to get feedback on a prototype.
-
-Try it here: [link]
-Then book time: [calendly link]
-
-Or just reply with your thoughts!
-
-Thanks,
-[You]
+### System gaps surfaced
+- No token for a 2px focus ring on dark surfaces; using --color-border-strong
 ```
 
-**Interview script:**
-```
-1. Don't explain anything. Just share link.
-2. Watch them try to use it (screen share).
-3. Ask: "What do you think this does?"
-4. Ask: "Try to [accomplish task]. Think out loud."
-5. Note: Where do they get confused? What surprises them?
-6. Ask: "Would you use this? Why/why not?"
-7. Ask: "What's missing? What would you change?"
-```
-
-**Capture everything:**
-- Record sessions (with permission)
-- Take notes
-- Screenshots of confused moments
-
-### Step 4: Synthesize Feedback (30 min)
-
-**Use NotebookLM:**
-
-1. Upload all interview transcripts
-2. Upload session recordings (transcribe first)
-3. Upload notes
-
-**Query:**
-```
-"Analyze these user feedback sessions:
-
-1. What patterns did you see?
-   - Where did users get confused?
-   - What worked well?
-   - What didn't work at all?
-
-2. Group feedback into themes
-
-3. Rate each issue by:
-   - Frequency (how many users hit this?)
-   - Severity (how bad is it?)
-
-4. Recommend top 3 changes for next iteration"
-```
-
-**Output:** Prioritized list of changes to make.
-
-### Step 5: Iterate Prototype (1-2 hours)
-
-**Make top changes:**
-
-```bash
-# Back to v0/Lovable/Bolt
-
-"Based on user feedback, make these changes:
-
-High priority:
-1. [Change 1 - 80% of users confused by X]
-2. [Change 2 - 60% of users couldn't find Y]
-3. [Change 3 - 100% of users asked for Z]
-
-Update the prototype to address these issues."
-```
-
-AI updates the prototype. Test yourself.
-
-### Step 6: Second Round of Feedback (1 day)
-
-**Same process, new users (if possible):**
-- Show updated prototype
-- See if issues are fixed
-- Discover new issues
-
-**Or test with same users:**
-- "Here's the updated version"
-- "Did we address your concerns?"
-- "What else needs work?"
-
-### Step 7: Decide to Build or Iterate (30 min)
-
-**Success criteria checklist:**
-- [ ] Users understand what it does (>80%)
-- [ ] Users can complete core tasks (>70%)
-- [ ] Users would actually use this (>60%)
-- [ ] No critical usability issues
-- [ ] Feedback is mostly positive
-
-**If yes:** Write real PRD and hand off to eng/design  
-**If no:** Another iteration or pivot
-
----
-
-## Automation Opportunities
-
-### Automated Feedback Collection
-
-**Using Typeform + Make.com:**
-
-1. User tries prototype
-2. Typeform survey pops up automatically
-3. Responses go to Airtable
-4. Claude synthesizes daily
-5. Slack notification with insights
-
-**Questions to ask:**
-- What were you trying to do?
-- Did you accomplish it? (Yes/No)
-- What was confusing?
-- What would you change?
-- Would you use this? (1-5 scale)
-
-### Automated Session Recording
-
-**Using FullStory or Hotjar:**
-- Tracks all user sessions
-- Shows where users click, scroll, rage-click
-- Heatmaps show attention patterns
-- AI can analyze patterns
-
-### Continuous Feedback Loop
-
-**Weekly cycle:**
-1. **Monday:** Build/update prototype
-2. **Tuesday-Thursday:** Collect feedback
-3. **Friday:** Synthesize and iterate
-4. **Repeat** until validated
-
----
-
-## Example: Full Cycle
-
-**Week 1:**
-- Built initial prototype (2 hours)
-- Tested with 5 users (1 day)
-- Found: Nobody understood the navigation
-- Iterated: Simplified nav (1 hour)
-
-**Week 2:**
-- Tested new version with 5 users (1 day)
-- Found: Nav fixed! But bulk actions confusing
-- Iterated: Redesigned bulk actions (1 hour)
-
-**Week 3:**
-- Tested again with 3 users (1 day)
-- Found: 100% success rate on core tasks
-- Decision: Validated! Write real PRD
-
-**Total time:** 3 weeks, ~12 hours of work  
-**Alternative:** 7-12 weeks, full build, then discover it's wrong
-
-**ROI:** 6-9 weeks saved, $50K+ in eng time saved
-
----
-
-## Common Mistakes
-
-**Don't:**
-- ❌ Build production code (it's a prototype!)
-- ❌ Make it perfect (good enough to test)
-- ❌ Test with only internal team (get real users)
-- ❌ Ignore negative feedback (embrace it)
-- ❌ Iterate forever (set a limit: 3-4 rounds max)
-
-**Do:**
-- ✅ Build fast, test fast, learn fast
-- ✅ Embrace rough edges (it's fine for a prototype)
-- ✅ Get in front of real users ASAP
-- ✅ Track feedback systematically
-- ✅ Know when to kill bad ideas early
-
----
-
-## Tool Recommendations
-
-**For UI prototypes:** v0.dev  
-**For full-stack apps:** Lovable.dev  
-**For interactive flows:** Bolt.new  
-**For feedback synthesis:** NotebookLM  
-**For session recording:** FullStory or Hotjar  
-**For surveys:** Typeform or Tally
-
-**Start free, upgrade if you're using daily.**
-
----
-
-## Advanced: Multi-Variant Testing
-
-**Test 2-3 approaches at once:**
-
-**Variant A:** Approach 1 (e.g., wizard-style onboarding)  
-**Variant B:** Approach 2 (e.g., dashboard-style onboarding)  
-**Variant C:** Approach 3 (e.g., tutorial-style onboarding)
-
-**Split users:**
-- 5 users per variant
-- See which performs best
-- Build the winner
-
-**Faster learning, better outcomes.**
-
----
-
-## Measuring Success
-
-**Prototype velocity:**
-- Ideas → prototype: <2 hours
-- Prototype → feedback: <2 days
-- Iterations per week: 2-3
-
-**Validation quality:**
-- User success rate: >70%
-- Would-use rate: >60%
-- Critical issues found: 0
-
-**Business impact:**
-- Features validated before build: 90%
-- Failed features caught early: 100%
-- Eng time saved: $50K+ per year
-
----
-
-**Time saved:** 6-9 weeks per feature
-**Cost saved:** $50K+ per year in eng time
-**Success rate:** 90% (vs. 40% building without validation)
-
----
-
-## Output Quality Self-Check
-
-Before delivering prototype feedback, verify:
-
-- [ ] **PRD alignment checked** -- Every PRD requirement is mapped to prototype status (implemented, partial, missing)
-- [ ] **Usability heuristics scored** -- At least 5 Nielsen heuristics rated with specific issues noted
-- [ ] **Multi-perspective feedback included** -- Engineering, design, and user viewpoints are all represented
-- [ ] **Recommendations are prioritized** -- Issues ranked by severity with clear fix descriptions and iteration assignment
-- [ ] **Context was checked** -- PRD, user research, and stakeholder profiles were referenced (not just generic feedback)
-- [ ] **Actionable next steps** -- PM knows exactly what to change in the next iteration
-- [ ] **Success criteria referenced** -- Feedback connects back to PRD success metrics and kill criteria
-- [ ] **Previous feedback rounds referenced** -- If this is round 2+, confirm previous issues were resolved
-
-If any check fails, fix it before delivering. Generic feedback wastes iteration cycles.
-
----
+Then report in the conversation with the same dispositions, briefly: lead with what changed, name what did not and why, and list divergences, routed spec changes, and gaps separately — those are the items someone else must act on. **Every item the user gave appears somewhere in the report**; silence on an item reads as it being lost.
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `governance/write-back-contract.md`:
+Full contract: `governance/write-back-contract.md`. The log file is already in `product/prototypes/CLAUDE.md` from the build (append it if somehow missing); history snapshots are exempt by that folder's convention. If a round materially changed what the prototype demonstrates, refresh the `prototype:` note in `feature-index.yaml` only with the user's confirm (gated). End the reply listing every repo path written or updated.
 
-1. Add a one-line entry for the new file at the END of the file list in its folder's
-   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
-   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
-   5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
-3. In the artifact's header, link the source material it was derived from.
-4. End your reply by listing every repo path you wrote or updated.
+## Traps
+
+- **Applying a design or spec change without flagging the divergence** — the one that causes real downstream damage.
+- **Editing the spec from this skill** — spec changes route through `/job-spec-draft` / `/prd-draft`, the one writer.
+- **Fixing a design-system complaint locally.** "Our blue is too dark" is feedback for the design-system owner; patching one preview hides the signal and guarantees the next preview has the same problem.
+- **Regenerating the file** instead of editing it.
+- **Answering vague feedback with a redesign** — diagnose, propose, ask once.
+- **Splitting the user's decisions into many small questions** — one exchange, all of them.
+- **Dropping items that are awkward to categorize** — deferred-with-reason is a legitimate disposition; missing is not.
+- **Treating volume as quality** — ten small edits that satisfy the letter of the feedback while the screen gets busier is not a successful round.

@@ -1,6 +1,6 @@
 ---
 name: code-first-draft
-description: Build the first-pass implementation of a PRD or job spec in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. A job spec (PRDs/{area}/*-job-spec.md) is the preferred source when one exists. Writes real code plus a summary in PRDs/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
+description: Build the first-pass implementation of a PRD or job spec in the product codebase — explore, plan, get approval, implement with tests; auto-switches to a standalone reference implementation when no codebase is connected. A job spec (PRDs/{area}/*-job-spec.md) is the preferred source when one exists. Writes real code plus a summary in product/prototypes/. NOT for answering what the code does today (/code-qa), UI-only mockups (/prototype), or setting up code access (/connect-code).
 argument-hint: "[PRD or feature] [--explore-only]"
 group: delivery
 ---
@@ -15,7 +15,7 @@ group: delivery
 
 **Example:** "Build the user preferences feature from product-development/product/PRDs/{area}/preferences.md"
 
-**Output:** Code in your codebase + summary saved to `product-development/product/PRDs/prototypes/[feature]-first-draft.md`
+**Output:** Code in your codebase + summary saved to `product-development/product/prototypes/[feature]-first-draft.md`
 
 **Time:** 1-3 hours depending on feature complexity
 
@@ -153,7 +153,7 @@ the user; keep this session's exploration findings in-session.
 
 ### Step 5: Summary Document
 
-Save to `product-development/product/PRDs/prototypes/[feature]-first-draft.md`:
+Save to `product-development/product/prototypes/[feature]-first-draft.md`:
 
 ```markdown
 # First Draft Implementation: [Feature]
@@ -221,7 +221,7 @@ Before choosing the prototype tech stack, check `product-development/product/str
 - Include a `README.md` with setup instructions (`npm install && npm run dev` or equivalent)
 - Add a header comment in every file: `// Reference prototype - not production code. Share with engineering as a starting point.`
 
-**Output:** Save all files to `product-development/product/PRDs/prototypes/[feature]-reference-impl/`
+**Output:** Save all files to `product-development/product/prototypes/[feature]-reference-impl/`
 
 **When presenting to PM:**
 > "No codebase detected, so I built a standalone reference prototype using [stack]. This is not production code -- share it with engineering as a starting point for the real implementation. They should adapt it to your actual codebase patterns, auth system, and infrastructure."
@@ -327,7 +327,7 @@ Before delivering the first draft, verify:
 - [ ] **Edge cases handled** -- Error states, empty states, loading states, and validation are implemented
 - [ ] **Inline comments for complex logic** -- Non-obvious code is explained; TODOs are marked for future work
 - [ ] **Summary document complete** -- Files created/modified, test coverage, known issues, and next steps documented
-- [ ] **Output saved to correct path** -- Summary at `product-development/product/PRDs/prototypes/[feature]-first-draft.md`, not `product-development/engineering/plans/{area}/`
+- [ ] **Output saved to correct path** -- Summary at `product-development/product/prototypes/[feature]-first-draft.md`, not `product-development/engineering/plans/{area}/`
 
 If any check fails, fix it before delivering. A first draft with failing tests or missing accessibility is not ready to share.
 

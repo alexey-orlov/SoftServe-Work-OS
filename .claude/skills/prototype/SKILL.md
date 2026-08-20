@@ -1,624 +1,147 @@
 ---
 name: prototype
-description: Make the solution visible before engineering commits — routes to the right prototyping tool ($1-$10-$100 rule) and generates the copy-paste prompt or spec: v0.dev, Lovable, Bolt.new, Claude Artifacts, Figma handoff, or static HTML. Saves every prompt to PRDs/prototypes/. NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), or collecting structured feedback on the built prototype (/prototype-feedback).
-argument-hint: "[lovable | v0 | bolt | artifacts | figma]"
+description: Build a clickable prototype grounded in the job spec or PRD — Figma-first. With the Figma MCP connected or a cached token extraction, it pulls the design system and builds a token-faithful, self-contained HTML preview, audited for compliance; without Figma it stops early and asks — connect Figma (/connect-mcps), generate an external-tool prompt (v0 / Lovable / Bolt), or build plain HTML without the design system. Reads the job spec (preferred) or PRD first, mines its rules and states, and ends with a requirements-coverage checklist; UI choices never become new requirements. Saves to product-development/product/prototypes/. Use on /prototype, "prototype this", a Figma frame/file/node URL to preview or click through, "make this screenshot match our design system", "can I see this before we build it". NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), critiquing a built prototype (/prototype-challenge), applying review feedback (/prototype-feedback), or production component code (/code-first-draft).
+argument-hint: "[figma-url | v0 | lovable | bolt | html]"
 group: prototyping
 ---
 
-## Quick Start
+# Prototype
 
-**What to provide:** A PRD, feature description, or napkin sketch you want turned into a prototype.
+Turn a job spec or PRD plus the product's design system into a clickable, self-contained HTML file the user can open, click through, and share — in minutes, with no build step. When the design system isn't reachable, fall back to whichever artifact the user picks: an external-tool prompt or plain HTML.
 
-```
-/prototype                              → I'll check your latest PRD and ask what type
-/prototype lovable                      → Generate a Lovable.dev prompt from your PRD
-/prototype v0                           → Generate a v0.dev prompt
-/prototype bolt                         → Generate a Bolt.new prompt
-/prototype artifacts                    → Build HTML/React right here
-/prototype figma                        → Create a Figma design handoff spec
-/prototype [paste feature description]  → I'll recommend the right prototype type
-```
+## Why this exists
 
-**What you get:** A ready-to-use prototype prompt or interactive prototype, matched to your PRD requirements, with all edge cases and states covered.
+The $1-$10-$100 rule: a PM-made prototype catches issues at $1, a designer rework costs $10, engineering building the wrong thing costs $100. But a preview that quietly invents its own colors, type scale, and spacing is worse than none — it sends reviewers arguing about the wrong pixels and teaches everyone the design system is optional. So when a design system exists, the whole job is *fidelity to the token set*, not visual flair. Tokens come from Figma. Behavior comes from the spec. Nothing is invented silently.
 
-**Time:** 5-15 minutes depending on complexity.
+A prototype is a throwaway hypothesis, not the component library — it does not go in `src/`, and its UI choices never become requirements.
 
----
+## Step 0 — Route by what's available (before any deep work)
 
-# /prototype - Advanced Prototyping
+Resolve the path FIRST, so a blocked run stops in seconds, not after minutes of reading:
 
-When the PM types `/prototype`, help them build interactive prototypes that bring PRD requirements to life. Choose the right tool for the job, generate detailed specs, and connect to the feedback loop.
+1. **An explicit argument wins — no routing question.** A Figma URL → Figma path against that file. `v0` / `lovable` / `bolt` → external-prompt path. `html` → plain-HTML path.
+2. **Cached extraction exists** (`product-development/product/prototypes/design-system/tokens.css`) → Figma path, using the cache. Works even when the MCP is offline; only a refresh needs it.
+3. **Figma MCP reachable?** Probe for Figma MCP tools (ToolSearch; an unauthenticated server counts as NOT set up). Reachable → Figma path.
+4. **None of the above → stop and ask, immediately.** Resolve only which feature is being prototyped (so the question is concrete), then ask ONE question:
+   - **Connect Figma first** — `/connect-mcps connect to figma`, then rerun; the prototype will follow the real design system.
+   - **External-tool prompt** — a paste-ready prompt for v0.dev, Lovable, or Bolt.new (which tool → see Step 4b).
+   - **Plain HTML** — build here, without the design system; honest but not brand-faithful.
 
-**The $1-$10-$100 Rule:**
-- $1: PM creates napkin sketch or prototype prompt --> catches issues early
-- $10: Designer reworks based on feedback --> moderate cost
-- $100: Engineering builds wrong thing --> expensive waste
+   When Figma IS available (cache or MCP), never ask this question.
 
-Prototyping is the cheapest way to validate your solution before committing engineering time.
+## Step 1 — Ground in the spec (all paths)
 
----
+- Resolve the requirements source: explicit path if given, else `product-development/feature-index.yaml` by feature name. Priority: **job spec** (`PRDs/{area}/*-job-spec.md` — the buildable contract) → **PRD** → previous prototypes, napkin sketches, and feedback logs in `product/prototypes/` → user research for the pain being solved.
+- No spec at all → offer `/prd-draft` first ("prototype without requirements = guessing"), or take a verbal brief and say the prototype is brief-grounded only.
+- Mine the spec for: capabilities, rules/ACs, variations, **states** (the spec's states, not just the generic UI set), and out-of-scope lines. These decide what the prototype must demonstrate.
+- **Guardrail:** the prototype is one hypothesis against the spec. Never edit spec files from this skill, and never present a UI choice as if it were a requirement.
 
-## Context Routing Logic (Internal - for Claude)
+## Step 2 — Establish the design system (Figma path)
 
-**Automatic Context Checks:**
-When this skill is invoked, immediately check:
+Check the cache: `design-system/tokens.css` + `design-system.md`. If present and no refresh was asked for, use it — re-extracting burns rate limits and produces previews that drift from each other. Never refresh silently; the user may have hand-corrected it.
 
-| Source | Files/Folders | Search Terms | What to Extract |
-|--------|---------------|--------------|-----------------|
-| Active PRDs | `product-development/product/PRDs/{area}/*.md` | feature name | Requirements, user flows, success metrics, edge cases |
-| Job specs | `product-development/product/PRDs/{area}/*-job-spec.md` | feature name | The per-job buildable contract: capabilities, rules/ACs, variations, states, constraints — the need this prototype hypothesizes an answer to |
-| Previous Prototypes | `product-development/product/PRDs/prototypes/*.md` | feature name | Previous versions, iteration history, feedback received |
-| User Research | `product-development/product/customers/*.md` | user pain, problem | User quotes, pain points, workflows to design for |
-| Napkin Sketches | `product-development/product/PRDs/prototypes/*-napkin*.md` | feature name | ASCII wireframes to convert to prototype |
-| Stakeholder Profiles | Stakeholder templates | design reviewers | Who will review this and what they care about |
-| Business Info | `product-development/product/strategy/business-context/business-info.md` | brand, product | Brand guidelines, product context, existing UI patterns |
-| Competitor Analysis | `product-development/product/competitive-research/competitive-landscape.md`, `competitive-matrix.md` | feature name | Competitor implementations for reference |
+No cache → extract (tool details: `references/figma-mcp.md`):
 
-**Context Priority:**
-1. Job spec (when one exists — the per-job contract), then PRD requirements and user flows FIRST (what to build)
-2. User research and pain points SECOND (who we're building for)
-3. Previous prototypes and napkin sketches THIRD (what we've already explored)
-4. Brand and competitor context FOURTH (how it should look/feel)
+- `get_variable_defs` on the library file or a representative frame — colors, spacing, typography, radii.
+- Thin result (file uses raw styles)? `get_libraries` to see what's subscribed, then `search_design_system` for core components — button, input, card, nav — and read their values.
+- `get_screenshot` of a component sheet as the visual reference for "correct".
 
-**Cross-Skill Links:**
-- If a job spec exists (`/job-spec-draft`) --> it is the natural input: the brief carries the need, the prototype is one hypothesis against it — mine its capabilities, rules, and states; never treat your UI choices as new requirements to write back
-- If no PRD exists --> suggest `/prd-draft` first ("Prototype without requirements = guessing")
-- If no user research --> suggest `/interview-guide` ("Who are you designing for?")
-- After prototype is built --> suggest `/prototype-feedback` for structured review
-- If the prototyped feature is AI-powered --> spec its behavior via `.claude/skills/prd-draft/reference/ai-prd.md` (behavior contract + examples) before prompting
-- If starting from scratch visually --> suggest `/napkin-sketch` first for quick layout
+Write the cache: `tokens.css` is a plain `:root` block with a source header (file, node URL, date, tool); `design-system.md` records where each group came from. **Keep Figma's own variable names** (`color/bg/subtle` → `--color-bg-subtle`) — renaming breaks a designer's ability to grep a value back to the variable they own. A value that doesn't exist in the design system is a **gap**: record it under `## Gaps` in `design-system.md`, use the nearest existing token, surface it in the reply. Gaps are useful signal for the design-system owner — suppressing them wastes the finding.
 
----
+## Step 3 — Read the visual target (Figma path)
 
-## When to Use
+**From a Figma frame URL:** `get_metadata` first — a sparse outline to find the frames worth building. Calling `get_design_context` on a whole page is the most common way these runs die: it floods the context window. Then per chosen frame: `get_design_context` asking explicitly for **plain HTML and CSS** (it defaults to React + Tailwind, which neither runs standalone nor matches the token set), paired with `get_screenshot` for layout ground truth. `download_assets` for real logos, illustrations, icons (SVG where possible, inlined) — approximated icons undermine trust in everything else.
 
-- **After PRD draft:** Visualize the solution before engineering review
-- **Before stakeholder review:** Show, don't tell -- prototypes beat slide decks
-- **During design exploration:** Test 2-3 approaches quickly
-- **For user testing:** Give users something to interact with
-- **Before XFN kickoff:** Align on the "what" with a tangible artifact
+**From a screenshot:** write an explicit read *before* any HTML — structure, regions, repeated components, visible states, data density — then map each element to a design-system component by name. Where screenshot and design system disagree, **the system wins**; name the conflict in the reply.
 
-## When NOT to Use
+**From the spec alone:** compose the screens from real design-system components. Same rules.
 
-- You don't have requirements yet (do `/prd-draft` first)
-- You're exploring the problem space, not the solution (do research first)
-- The feature is purely backend/API (no UI to prototype)
+Where the visual target and the **spec** disagree on behavior, the spec wins — flag it, don't silently pick.
 
----
+## Step 4 — Build (both HTML paths)
 
-## Workflow
+One file: `product-development/product/prototypes/{slug}.html`. All CSS and JS inline; no npm, no build step, no CDN framework. A `<link>` to Google Fonts is fine when the design system names a webfont; if unavailable, fall back to the nearest stack and note the substitution.
 
-### Step 1: Understand Requirements
+**Every value in the body references a token.** On the plain-HTML path there is no Figma, but the rule stands: define your own `:root` token block once and reference it everywhere — the audit then still enforces self-consistency — and note in the file header comment that it is not design-system-grounded.
 
-When the PM types `/prototype`, start by gathering context:
+Scaffold — hidden `.screen` sections, a sticky flow nav, and `data-goto` links so the happy path is genuinely clickable:
 
-```
-Let's build a prototype. First, let me check what we're working with...
+```html
+<style>
+  :root { /* tokens — pasted verbatim from design-system/tokens.css */ }
+  body { margin:0; font-family:var(--font-body); color:var(--color-text-primary);
+         background:var(--color-bg-default); }
+  .screen { display:none; }  .screen.active { display:block; }
+  .flownav { position:sticky; top:0; display:flex; gap:var(--space-2);
+             padding:var(--space-2); background:var(--color-bg-subtle); }
+</style>
+<nav class="flownav" id="flownav"></nav>
+<section class="screen active" id="dashboard" data-label="Dashboard">…</section>
+<script>
+  const screens=[...document.querySelectorAll('.screen')],nav=document.getElementById('flownav');
+  const show=id=>screens.forEach(s=>s.classList.toggle('active',s.id===id));
+  screens.forEach(s=>{const b=document.createElement('button');b.textContent=s.dataset.label;
+    b.onclick=()=>show(s.id);nav.append(b);});
+  document.querySelectorAll('[data-goto]').forEach(el=>el.onclick=()=>show(el.dataset.goto));
+</script>
 ```
 
-**Silently check:**
-1. Read most recent PRDs in `product-development/product/PRDs/{area}/`
-2. Check `product-development/product/PRDs/prototypes/` for previous versions
-3. Read any napkin sketches from `/napkin-sketch`
-4. Check user research for UX-relevant insights
+State lives in plain JS variables — **never localStorage or sessionStorage**; preview sandboxes block them and the file breaks silently.
 
-**Then present what you found:**
+What makes it read as real:
 
-```
-Here's what I know about this feature:
+- Plausible domain data — real-sounding names, amounts, dates, statuses. No lorem ipsum, no "Item 1".
+- Honest density — a table gets 8–12 rows, a dashboard looks populated.
+- **The spec's states plus the UI set**: default, hover, focus, disabled, error, empty, loading — simulate ~600ms on submit so loading is visible.
+- Accessibility is fidelity: real `<label>`s, visible focus rings, body text ≥14px, contrast ≥4.5:1, semantic landmarks.
+- About six screens per file max — beyond that, split into a second file. Prototype the risky flow, not the parts everyone already agrees on.
 
-**From PRD:** [Summary of requirements, user flow, key interactions]
-**User Research:** [Relevant pain points, quotes, user expectations]
-**Previous Prototypes:** [Any existing versions and what feedback they got]
-**Napkin Sketch:** [If one exists, reference it]
+## Step 4b — External-tool prompt path
 
-A few questions before we prototype:
-1. [Only ask what's genuinely missing -- skip if PRD covers it]
-2. What's the primary user flow to prototype? (If multiple, which is highest priority?)
-3. Who will review this? (Stakeholder context affects fidelity level)
-```
+No stored templates — compose the prompt fresh from the spec; consistency comes from this checklist, and per-tool scope from this table:
 
-**If no PRD exists:**
-```
-I don't see a PRD for this feature yet. Prototyping without requirements
-is risky -- we might build the wrong thing beautifully.
+| Tool | Scope the prompt to | The prompt must additionally give it |
+|---|---|---|
+| **v0.dev** | one component or page | precise layout regions + component behaviors |
+| **Lovable** | a multi-page app | pages with routes, the data model, an auth choice (usually "none") |
+| **Bolt.new** | a quick interactive flow | "keep it simple — prototype, not production" |
 
-Options:
-1. Run `/prd-draft` first (recommended -- 15 min)
-2. Give me a quick verbal brief and we'll prototype from that
-3. We're just exploring -- build something rough and iterate
+Every prompt covers: the user goal, the spec's flows step by step, **every spec state** plus empty/loading/error, realistic inline sample data, style pointers (brand block in `business-info.md` if filled), an explicit **out-of-scope** list, and the sentence "this is a throwaway prototype, not production code". Save as `product/prototypes/{slug}-{tool}-prompt.md`.
 
-Which works for you?
+## Step 5 — Audit before handing over (HTML paths)
+
+```bash
+python .claude/skills/prototype/scripts/audit_tokens.py product-development/product/prototypes/{slug}.html --tokens product-development/product/prototypes/design-system/tokens.css
 ```
 
----
+(Plain-HTML path: omit `--tokens` — the script still enforces the file's own token block, self-containment, storage-API bans, and filler-content checks.) Fix the errors rather than explaining them away. If a browser tool is available, screenshot the rendered file next to the Figma `get_screenshot` — layout errors are easier to see than to reason about.
 
-### Step 2: Choose Prototype Type
+## Step 6 — Coverage checklist (all paths)
 
-Based on the requirements and context, recommend the right tool:
+Map every spec requirement to the artifact: `[x]` covered (how) / `[ ]` not covered (why — out of scope for this prototype, deferred, not prototypable). No spec → state "brief-grounded; no spec to verify against". This is what keeps the prototype traceable instead of vibes.
 
-| Prototype Type | Best For | Fidelity | Time to Build | Shareable? |
-|---------------|----------|----------|---------------|------------|
-| **v0.dev** | UI components, pages, forms | High | 2-5 min | Yes (deployed URL) |
-| **Lovable.dev** | Full-stack apps with data, auth, multi-page | Very High | 5-15 min | Yes (deployed URL) |
-| **Bolt.new** | Quick full-stack, rapid iteration | High | 3-8 min | Yes (deployed URL) |
-| **Claude Artifacts** | Simple interactions, quick validation | Medium | 2-5 min | In Claude only |
-| **Figma Handoff** | Design-system work, high-fi specs | Spec only | 10-15 min | Figma file |
-| **HTML/CSS Static** | Email templates, simple landing pages | Medium | 5-10 min | HTML file |
+For HTML builds, open the companion record `product/prototypes/{slug}-feedback-log.md` with a `## Build — {date}` section: source spec link, token source (cache reused / refreshed / own block), the coverage checklist, gaps, conflicts and what was chosen. (`/prototype-feedback` appends review rounds to this same file.) For prompt builds, the checklist goes at the end of the prompt file.
 
-**Decision logic:**
+## Step 7 — Deliver
 
-```
-IF feature is a single UI component or page
-  → Recommend v0.dev ("Fast, high-quality, shareable URL")
-
-IF feature is multi-page with data models or auth
-  → Recommend Lovable.dev ("Full app, Supabase backend, deployed")
-
-IF feature needs rapid iteration and you want to move fast
-  → Recommend Bolt.new ("Quick to spin up, easy to modify")
-
-IF feature is simple interaction or quick concept test
-  → Recommend Claude Artifacts ("Build it right here, test immediately")
-
-IF team uses Figma and needs design-system alignment
-  → Recommend Figma Handoff ("Spec for your designer to build in Figma")
-
-IF feature is static content (email, landing page, docs)
-  → Recommend HTML/CSS ("Simple, no framework needed")
-```
-
-**Present the recommendation:**
-
-```
-Based on your requirements, I'd recommend **[Type]** because [reason].
-
-But here are your options:
-1. **v0.dev** - [Why it fits or doesn't]
-2. **Lovable.dev** - [Why it fits or doesn't]
-3. **Bolt.new** - [Why it fits or doesn't]
-4. **Claude Artifacts** - [Why it fits or doesn't]
-5. **Figma Handoff** - [Why it fits or doesn't]
-
-Which would you like?
-```
-
----
-
-### Step 3: Generate Prototype
-
-#### For v0.dev Prompts
-
-Generate a detailed prompt the PM can paste into v0.dev.
-
-**v0.dev Prompt Template:**
-
-```markdown
-# v0.dev Prototype Prompt: [Feature Name]
-
-## Paste this into v0.dev:
-
----
-
-Create a [component/page type] for [product context].
-
-**User Goal:** [What the user is trying to accomplish]
-
-**Layout:**
-- [Header/nav description]
-- [Main content area]
-- [Sidebar/secondary content]
-- [Footer/actions]
-
-**Key Components:**
-1. [Component 1] - [Behavior: what happens on click/hover/input]
-2. [Component 2] - [Behavior]
-3. [Component 3] - [Behavior]
-
-**Data to Display:**
-- [Field 1]: [Sample data]
-- [Field 2]: [Sample data]
-- [List/table]: [Sample items]
-
-**Interactions:**
-- When user [action], [result]
-- When user [action], [result]
-- When user [action], [result]
-
-**States to Handle:**
-- Default: [What the user sees first]
-- Empty state: [What to show when no data]
-- Loading state: [Skeleton/spinner/placeholder]
-- Error state: [What to show on failure]
-- Success state: [Confirmation/feedback]
-
-**Style:**
-- [Modern/minimal/playful/enterprise]
-- Color palette: [Primary, secondary, accent] or [brand colors from business-info]
-- Typography: [Clean sans-serif / specific font]
-- Spacing: [Generous/compact]
-
-**Responsive:**
-- Desktop: [Layout description]
-- Mobile: [How it adapts]
-
-**Do NOT include:** [Things to exclude -- e.g., auth flows, payment, admin panel]
-
----
-```
-
-Save to: `product-development/product/PRDs/prototypes/[feature-name]-v0-prompt.md`
-
----
-
-#### For Lovable.dev Prompts
-
-Generate a comprehensive prompt for Lovable.dev that produces a deployable app.
-
-**Lovable.dev Prompt Template:**
-
-```markdown
-# Lovable.dev Prototype Prompt: [Feature Name]
-
-## Paste this into Lovable.dev:
-
----
-
-Build a [app type] for [product context].
-
-**Overview:**
-[2-3 sentence description of what this app does and who it's for]
-
-**Pages/Views:**
-
-1. **[Page Name]** (route: /path)
-   - Purpose: [What this page does]
-   - Components:
-     - [Component]: [Behavior]
-     - [Component]: [Behavior]
-   - Data needed: [What data this page displays/collects]
-
-2. **[Page Name]** (route: /path)
-   - Purpose: [What this page does]
-   - Components: [...]
-   - Data needed: [...]
-
-**Data Model:**
-- [Entity 1]: [Fields: name, type, description]
-- [Entity 2]: [Fields]
-- [Relationships between entities]
-
-**User Flows:**
-1. [Flow name]: [Step 1] → [Step 2] → [Step 3] → [Outcome]
-2. [Flow name]: [Step 1] → [Step 2] → [Decision] → [Branch A / Branch B]
-
-**Authentication:** [None / Email login / OAuth / Magic link]
-
-**Sample Data:**
-[Provide 3-5 realistic data entries so the prototype looks real, not empty]
-
-**Key Interactions:**
-- [User action] → [System response]
-- [User action] → [System response]
-- [Edge case] → [How to handle]
-
-**Style & Branding:**
-- Feel: [Professional/playful/minimal/data-heavy]
-- Colors: [Palette]
-- Inspiration: [Reference apps or screenshots if available]
-
-**States:**
-- Empty state: [What to show]
-- Loading: [Behavior]
-- Error: [Message and recovery]
-- Success: [Confirmation]
-
-**Out of Scope:**
-- [What NOT to build -- keep the prototype focused]
-
----
-```
-
-Save to: `product-development/product/PRDs/prototypes/[feature-name]-lovable-prompt.md`
-
----
-
-#### For Bolt.new Prompts
-
-**Bolt.new Prompt Template:**
-
-```markdown
-# Bolt.new Prototype Prompt: [Feature Name]
-
-## Paste this into Bolt.new:
-
----
-
-Build a [app type] using [React/Next.js/vanilla].
-
-**What it does:**
-[Clear, concise description]
-
-**Main screen:**
-- [Layout description]
-- [Key interactive elements]
-- [Data display]
-
-**Interactions:**
-- [Action] → [Result]
-- [Action] → [Result]
-
-**Sample data:**
-[Provide inline JSON or describe sample entries]
-
-**Style:** [Minimal/modern] with [Tailwind/custom CSS]
-
-**Important:** Keep it simple. This is a prototype, not production code.
-
----
-```
-
-Save to: `product-development/product/PRDs/prototypes/[feature-name]-bolt-prompt.md`
-
----
-
-#### For Claude Artifacts (HTML/React)
-
-Build the prototype directly in the conversation.
-
-**Approach:**
-1. Create a single-file React component or HTML/CSS/JS
-2. Include all states (default, empty, loading, error, success)
-3. Use realistic sample data
-4. Make interactions functional (clicks, form inputs, transitions)
-5. Keep it self-contained (no external dependencies beyond React/Tailwind)
-
-**Structure:**
-```
-- Header/navigation
-- Main content area with primary user flow
-- Interactive elements that respond to user input
-- State transitions (show how the UI changes)
-- Footer/secondary actions
-```
-
-Save the code to: `product-development/product/PRDs/prototypes/[feature-name]-artifacts-v[N].md`
-
----
-
-#### For Figma Handoff Specs
-
-Generate a detailed design spec that a designer can implement in Figma.
-
-**Figma Handoff Template:**
-
-```markdown
-# Figma Design Spec: [Feature Name]
-
-## Overview
-[What this feature does and how it fits into the product]
-
-## User Flow
-[Step 1] → [Step 2] → [Decision Point] → [Outcomes]
-
-## Screens/Components Needed
-
-### Screen 1: [Name]
-**Layout:** [Description with rough dimensions]
-**Components:**
-| Component | Type | Behavior | States |
-|-----------|------|----------|--------|
-| [Name] | [Button/Input/Card/etc.] | [What it does] | [Default, Hover, Active, Disabled] |
-
-**Spacing:** [Grid system, margins, padding]
-**Typography:** [Heading sizes, body text, labels]
-**Colors:** [Which colors from palette]
-
-### Screen 2: [Name]
-[Repeat structure]
-
-## Component States
-- Default
-- Hover
-- Active/Pressed
-- Disabled
-- Loading
-- Error
-- Success
-
-## Responsive Behavior
-- Desktop (1440px): [Layout]
-- Tablet (768px): [Adaptations]
-- Mobile (375px): [Adaptations]
-
-## Accessibility
-- Focus states for keyboard nav
-- Color contrast requirements
-- Screen reader labels
-
-## Design Tokens to Use
-[Reference existing design system tokens if known]
-
-## References
-- [Competitor screenshot/URL]
-- [Existing product patterns to follow]
-- [Napkin sketch from /napkin-sketch]
-```
-
-Save to: `product-development/product/PRDs/prototypes/[feature-name]-figma-handoff.md`
-
----
-
-### Step 3b: Requirements Verification
-
-After generating the prototype prompt, include a checklist showing PRD requirement coverage. This ensures the prototype is traceable to the PRD and the PM knows what's covered vs what's not.
-
-```
-**Requirements Verified:**
-- [x] [Requirement from PRD that IS covered by this prototype]
-- [x] [Another covered requirement]
-- [ ] [Requirement NOT covered -- explain why: out of scope for this prototype / deferred to iteration 2]
-```
-
-**How to build this checklist:**
-1. Pull all requirements from the PRD (user flows, interactions, edge cases, success criteria)
-2. For each requirement, check if the prototype prompt explicitly addresses it
-3. Mark covered requirements with `[x]` and a brief note on how it's addressed
-4. Mark uncovered requirements with `[ ]` and state the reason (out of scope, deferred, not prototypable, etc.)
-5. If no PRD exists (PM chose to prototype from a verbal brief), note: "No PRD to verify against -- requirements based on verbal brief"
-
-This checklist goes at the end of the prototype output, before the "Next steps" section.
-
----
-
-### Step 4: Connect to Feedback Loop
-
-After generating the prototype, offer next steps:
-
-```
-Prototype ready! Saved to product-development/product/PRDs/prototypes/[filename].
-
-**Next steps:**
-1. **Test it:** [Instructions specific to type -- paste into v0, open in Lovable, etc.]
-2. **Get feedback:** Run `/prototype-feedback` for structured review
-3. **Iterate:** Come back with feedback and I'll generate v2
-4. **Share:** [How to share with stakeholders]
-
-**Want me to also:**
-- Generate a second option with a different approach?
-- Create a `/napkin-sketch` for a different screen in this flow?
-- Draft talking points for presenting this prototype?
-- Add AI behavior examples to the prompt (per `.claude/skills/prd-draft/reference/ai-prd.md`)?
-```
-
----
-
-## Iteration Workflow
-
-When the PM comes back with feedback:
-
-1. **Read previous prototype:** Check `product-development/product/PRDs/prototypes/[feature]-*` for history
-2. **Understand feedback:** What worked? What didn't? What changed?
-3. **Generate updated version:** Increment version number
-4. **Track changes:** Note what changed between versions
-
-**Version naming:** `[feature-name]-[type]-v[N].md`
-- v1: Initial prototype
-- v2: After first round of feedback
-- v3: After stakeholder review
-- vFinal: Approved for engineering handoff
-
----
-
-## Prototype Requirements Checklist
-
-Before generating any prototype, ensure you have:
-
-- [ ] **Primary user flow defined** (what does the user do, step by step?)
-- [ ] **Key data to display** (what content appears on screen?)
-- [ ] **Main interactions** (what can the user click/tap/input?)
-- [ ] **Success state** (what does "done" look like?)
-- [ ] **Error handling** (what happens when things go wrong?)
-- [ ] **Empty state** (what shows when there's no data?)
-
-If any are missing, ask before generating.
-
----
-
-## Anti-Patterns to Avoid
-
-**Prototyping without requirements:**
-- "Make it look good" is not a requirement. Start with `/prd-draft`.
-- At minimum, you need: user goal, key interactions, and success criteria.
-
-**Over-engineering a throwaway prototype:**
-- Prototypes are disposable. Don't add auth, payment, or admin panels.
-- Focus on the ONE flow that needs validation.
-
-**Prototyping the wrong thing:**
-- Prototype the risky/uncertain parts, not the obvious ones.
-- If everyone agrees on how login should work, don't prototype login.
-
-**Skipping states:**
-- Empty, loading, and error states reveal 80% of UX problems.
-- Always include them.
-
-**Not using real-ish data:**
-- "Lorem ipsum" and "Test User" make prototypes feel fake.
-- Use realistic names, numbers, and content.
-
-**Building the whole app:**
-- Prototype the critical path. Leave everything else out.
-- If the prototype has more than 3-4 screens, you're building too much.
-
-**Not connecting to feedback:**
-- A prototype without feedback is wasted effort.
-- Always run `/prototype-feedback` after sharing.
-
----
-
-## Integration with Other Skills
-
-**Before:**
-- `/prd-draft` - Define requirements (most important input)
-- `/job-spec-draft` - The per-job contract; when one exists it is the sharper input
-- `/napkin-sketch` - Quick ASCII wireframe to establish layout
-
-**After:**
-- `/prototype-feedback` - Structured review and iteration loop
-- `/prd-draft` - Update PRD based on prototype learnings
-- `/create-tickets` - Turn approved prototype into engineering tasks
-
-**Related:**
-- `/prd-challenge` - Full multi-lens critique, including whether this is the right solution
-- `/process-meeting` - Process user-testing interviews
-
----
-
-## Output Quality Self-Check
-
-Before presenting the prototype or prompt, verify:
-
-- [ ] Prototype matches PRD requirements (if PRD exists) -- no missing features, no added scope
-- [ ] All user-facing states included (default, empty, loading, error, success)
-- [ ] Sample data is realistic, not placeholder text
-- [ ] Primary user flow is complete from start to finish
-- [ ] Prompt is specific enough that two different AI tools would produce similar results
-- [ ] Edge cases from user research are addressed (if research exists)
-- [ ] File saved with correct naming convention: `[feature-name]-[type]-v[N].md`
-- [ ] Requirements verification checklist included (PRD requirements mapped to prototype coverage with reasons for any gaps)
-- [ ] Next steps are clear (how to test, how to iterate, how to get feedback)
-
----
+Present the file (render inline if a tool for that is available), then keep the reply short: where tokens came from and whether the cache was reused; screens built and the flow path; gaps and substitutions; conflicts (target vs system, target vs spec) and what was chosen; the coverage summary; anything assumed the user should check. Suggest `/prototype-challenge` before sharing widely, `/prototype-feedback` once comments come back.
 
 ## Write-back (mandatory)
 
-After saving, close the loop — full contract: `governance/write-back-contract.md`:
+Full contract: `governance/write-back-contract.md`:
 
-1. Add a one-line entry for the new file at the END of the file list in its folder's
-   `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
-   conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
-   5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
-3. In the artifact's header, link the source material it was derived from.
-4. End your reply by listing every repo path you wrote or updated.
+1. Append one line per new file at the END of the list in `product/prototypes/CLAUDE.md` (append-only; history snapshots are exempt by that folder's convention).
+2. Propose the `feature-index.yaml` addition — a `prototype:` key pointing at the artifact — and apply only after the user confirms (gated). Initiative-scoped → link from the initiative page.
+3. Source links live in the feedback log's build record (HTML) or the prompt file's header.
+4. End the reply listing every repo path written or updated.
 
----
+## Traps
 
-## Related Skills
-
-**Before this:**
-- `/prd-draft` - Clear requirements
-- `/job-spec-draft` - The per-job contract, when the initiative is past the cut
-- `/napkin-sketch` - Quick wireframe first
-
-**After this:**
-- `/prototype-feedback` - Structured review loop
-- `/create-tickets` - Engineering handoff
-- `/feature-results` - Measure impact post-launch
-
-**Parallel use:**
-- `/process-meeting` - Process user-testing interviews
-- `/prd-challenge` - Challenge the solution approach
+- **Asking the routing question when Figma is set up** — or not asking it, and silently inventing a design system, when it isn't.
+- **Shipping `get_design_context` output verbatim** — it's React + Tailwind by default; translate or ask for plain HTML up front.
+- **Calling `get_design_context` on a page or huge frame** — outline with `get_metadata` first, then drill.
+- **Refreshing the token cache without being asked** — the user may have hand-corrected it.
+- **Treating a screenshot as the spec when it contradicts the design system** — name the conflict, follow the system; and the *spec* outranks both on behavior.
+- **Writing UI choices back into the spec** — the prototype is a hypothesis; the spec's writer is `/job-spec-draft` / `/prd-draft`.
+- **Inventing logos, client names, or metrics** that will be screenshotted into a deck — mark illustrative data as illustrative.
+- **Drifting into production code** — if the user wants real components in the app, switch to `/code-first-draft` and say so.
