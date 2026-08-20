@@ -1,6 +1,6 @@
 ---
 name: prd-draft
-description: Draft and iterate a PRD as the living spine of feature definition. Every run re-reads the initiative's attached evidence, updates the draft, marks unbacked sections with [GAP:] markers instead of stopping, auto-runs the research that closes agent-closable gaps (bounded — up to three closers per run, only where the source exists), and ends with a readiness readout — what closed this run, what's backed, what's still assumed, what only humans can do, what's waiting on someone else. First run creates the initiative page and proposes the feature-index entry. Use on /prd-draft, "write the PRD", "update the PRD", "where does this feature stand?". NOT for challenging a finished draft (/prd-challenge — deliberately never auto-run), cutting the agreed PRD into buildable jobs (/jobs-breakdown → /job-spec-draft), or turning it into tickets (/create-tickets).
+description: Draft and iterate a PRD as the living spine of feature definition. An exploratory ask ("explore", "think through", "should we") stays a conversation — nothing is filed until the PM says to. First runs end turn one at an intake checkpoint — open essentials, played-back assumptions, the write plan; one yes covers the run, and only the PM's own "just draft it" skips the stop — then create the initiative page (exploring or active) and propose the feature-index entry. Later runs are autonomous: re-read the initiative's attached evidence, update the draft, mark unbacked sections with [GAP:] markers instead of stopping, auto-run the research that closes agent-closable gaps (bounded — up to three closers per run, only where the source exists), and end with a readiness readout — what moved, what's backed, what's still assumed, who owns each open gap, every file touched. Use on /prd-draft, "write the PRD", "update the PRD", "explore this idea", "where does this feature stand?". NOT for challenging a finished draft (/prd-challenge — deliberately never auto-run), cutting the agreed PRD into buildable jobs (/jobs-breakdown → /job-spec-draft), or turning it into tickets (/create-tickets).
 argument-hint: "[idea or slug] [--draft-only] [--ai]"
 group: definition
 ---
@@ -10,14 +10,15 @@ group: definition
 **What to provide:** A feature idea, problem statement, rough brief — or just the slug of an existing initiative to run another iteration.
 
 ```
+/prd-draft [exploratory ask]            → Thinking partner: sharpen the bet in conversation — nothing filed until you say so
 /prd-draft                              → Start from scratch with guided questions
-/prd-draft [paste your feature idea]    → First run: I skip questions you already answered
+/prd-draft [paste your feature idea]    → First run: one intake checkpoint (open questions + write plan), then draft
 /prd-draft [slug]                       → Later run: re-read the evidence, update, close closable gaps, report what moved
 /prd-draft [slug] --draft-only          → Fast pass: update the text only, skip the auto-research
 /prd-draft --ai                         → Include the AI behavior contract (see reference/ai-prd.md)
 ```
 
-**What you get, every run:** an updated PRD at `product-development/product/PRDs/{area}/{slug}-prd.md` (template: `product-development/product/handbook/templates/prd-template.md`), thin sections marked `[GAP: what's missing — how to close it]`, the agent-closable gaps **closed in the same run** (bounded auto-research — you confirm results, not permission), and a closing **readiness readout** — where the bet stands and who owns each remaining gap.
+**What you get, every drafting run:** an updated PRD at `product-development/product/PRDs/{area}/{slug}-prd.md` (template: `product-development/product/handbook/templates/prd-template.md`), thin sections marked `[GAP: what's missing — how to close it]`, the agent-closable gaps **closed in the same run** (bounded auto-research — you confirm results, not permission), and a closing **readiness readout** — where the bet stands, who owns each remaining gap, and every file the run touched.
 
 **Filename convention:** `{slug}-prd.md` — one file per feature, forever. The stage lives in the Meta table inside the document, never in the filename (a stage-suffixed filename would break the feature-index `prd:` key every time the stage advances).
 
@@ -29,12 +30,16 @@ A PRD here is not a one-shot document; it is the running state of a bet. Each `/
 
 ## The Loop
 
+**Exploration** (the ask is to explore, weigh, or think through — not yet to file):
+Stay in the conversation. Sharpen the problem, walk options and risks, name the evidence that would de-risk the bet — drawing on the same sources Step 1 reads. Write nothing: no PRD, no initiative page, no closers. Close by offering to file it; "draft it" enters the first run below, with everything the conversation settled counting as answered.
+
 **First run** (no initiative page exists for this work):
-1. Read context (Step 1) and ask only the questions the PM hasn't answered (Step 2).
-2. Draft the PRD with `[GAP:]` markers in every unbacked section (Step 3).
-3. Register the work: initiative page + feature-index proposal (Step 4).
-4. Run the auto-research pass on the closable gaps (Step 5).
-5. Close with the readiness readout (Step 6).
+1. Read context (Step 1).
+2. Stop at the intake checkpoint (Step 2): open questions, played-back answers, the write plan. The turn ends here — nothing is written until the PM replies.
+3. Draft the PRD with `[GAP:]` markers in every unbacked section (Step 3).
+4. Register the work: initiative page + feature-index proposal (Step 4).
+5. Run the auto-research pass on the closable gaps (Step 5).
+6. Close with the readiness readout (Step 6).
 
 **Every later run** (initiative page exists):
 1. Re-read the initiative page, the PRD, and every artifact linked since the last run (new call summaries, research syntheses, investigations, competitive updates, code answers).
@@ -43,7 +48,7 @@ A PRD here is not a one-shot document; it is the running state of a bet. Each `/
 4. Update the initiative page (`_updated:`, Activity line, new artifact links).
 5. Close with the readout — leading with **what moved this run**.
 
-Never refuse to draft because evidence is missing. The old "map first, or draft anyway?" prompt is gone: always draft, always mark — then close what you can yourself (Step 5). A `[GAP:]` in the right section beats a blocked PM; a gap closed in the same run beats both.
+Never refuse to draft because **evidence** is missing: always draft, always mark — then close what you can yourself (Step 5). A `[GAP:]` in the right section beats a blocked PM; a gap closed in the same run beats both. What does wait is first-run **intent**: one checkpoint before the first file exists (Step 2), because a guessed segment or hypothesis doesn't land as a `[GAP:]` — it lands as registered truth. After that one reply, nothing stops the loop again.
 
 ## Gap markers
 
@@ -75,11 +80,17 @@ Check, in this priority order:
 
 **Context health:** if `business-info.md` still has unfilled `[Your ...]` placeholders, say so and offer to fill it first (5 min) or proceed with the missing context marked as `[GAP:]`s. If strategy docs are empty, flag it and suggest `/write-prod-strategy` or `/strategy-sprint` — then proceed anyway.
 
-## Step 2: Ask Only What's Missing
+## Step 2: The Intake Checkpoint (first runs)
 
-**Adaptive rule:** check what the PM already provided and what Step 1 found. Skip answered questions. Open with: "Based on what you shared and what the repo holds, I have [X, Y]. Remaining questions: [only the gaps]."
+One message, and the turn ends on it — no file exists until the PM replies. Three parts, each as short as the input allows:
 
-**Required (any unanswered becomes a `[GAP:]`, not a blocker):**
+1. **Open questions** — the required list below, minus what's answered. **Answered means the PM said it in this conversation, or an artifact attached to this initiative says it.** Repo-wide context — strategy docs, `business-info.md`, old research — never silently answers a required question; it prefills part 2.
+2. **Played-back answers** — one line each: "From [source] I'm taking segment = X, today's alternative = Y — correct anything wrong."
+3. **The write plan** — the files this run will create, the lists it will append to, the closers it will run (Step 5), and the initiative status it files under (Step 4 — `exploring` or `active`). One "go" covers the whole run; no per-file prompts follow.
+
+Only the PM's own words skip the checkpoint ("just draft it", "no questions — go"), never a judgment that the input looks complete. A detailed brief empties part 1; it doesn't skip parts 2–3. Later runs have no checkpoint — questions raised by new evidence go to the readout instead.
+
+**Required (each item gets a disposition — answered, played back, or asked; still open after the reply → a `[GAP:]`, not a blocker):**
 
 1. **Problem & segment** — what user pain, and who exactly feels it (vertical / size band / use case)?
 2. **Frequency & criticality** — how often does it bite, and what does it cost when it does?
@@ -88,7 +99,7 @@ Check, in this priority order:
 5. **Strategy fit & lever** — which strategic bet does this support, and which **one or two** business levers is it for (acquisition / activation / retention / expansion-LTV / cost to serve)?
 6. **Stage** — Team Kickoff / Planning Review / XFN Kickoff / Solution Review / Launch Readiness / Impact Review?
 
-**Important:**
+**Important (ask only when the conversation is already there; otherwise draft with `[GAP:]`):**
 
 7. A/B test or full launch?
 8. Non-goals — what are we explicitly NOT doing?
@@ -98,7 +109,7 @@ Check, in this priority order:
 
 **AI features** (`--ai` or auto-detected): the three behavior questions in `reference/ai-prd.md` (example inputs, edge-case handling, never-do).
 
-**What NOT to ask:** technical implementation details (engineers own the how), exhaustive edge-case lists, final copy or UI details.
+**What NOT to ask:** technical implementation details (engineers own the how), exhaustive edge-case lists, final copy or UI details. And keep the checkpoint lean — the required six are the ceiling, not a script to read out.
 
 ## Step 3: Draft or Update
 
@@ -129,7 +140,7 @@ Whatever the section names, route the core evidence slots to wherever the templa
 A PRD is the anchor artifact — creating one registers the work:
 
 1. **Feature index**: read `product-development/feature-index.yaml`; draft the entry (`{area}: {slug}: prd: ...`) or add the PRD path to an existing key. Tier 2 (`governance/write-policy.yaml`): show the exact addition, apply only after the PM confirms.
-2. **Initiative page**: check `product-development/product/initiatives/` for an existing page first. None → create `{initiative-slug}.md` from `handbook/templates/initiative-page-template.md` (status `active`, PRD linked under Artifacts, the other artifact rows left `-` until they land), append its row to `initiatives/CLAUDE.md`, include the feature's `initiatives:` list addition in the same confirmed index change. Exists → link the PRD, bump `_updated:`.
+2. **Initiative page**: check `product-development/product/initiatives/` for an existing page first. None → create `{initiative-slug}.md` from `handbook/templates/initiative-page-template.md` (status as the checkpoint set it — `exploring` while the PM is still weighing the bet, `active` for committed work, promoted in place when they say so; PRD linked under Artifacts, the other artifact rows left `-` until they land), append its row to `initiatives/CLAUDE.md`, include the feature's `initiatives:` list addition in the same confirmed index change. Exists → link the PRD, bump `_updated:`.
 
 On later runs: keep the page current — every artifact this run folded in gets its Artifacts row filled, and one dated Activity line summarises the run.
 
@@ -146,7 +157,7 @@ Don't stop at naming the gaps — close the closable ones in the same run. A gap
 
 Rules for the pass:
 
-1. **Bounded: at most 3 closers per run, riskiest gaps first.** Keeps an iteration minutes, not an afternoon. Gaps beyond the budget stay named in the readout for the next run.
+1. **Bounded: at most 3 closers per run, riskiest gaps first.** Keeps an iteration minutes, not an afternoon. Gaps beyond the budget stay named in the readout for the next run. On a first run the chosen closers were already named in the checkpoint's write plan (Step 2).
 2. **Source-gated, never run-and-degraded.** A closer whose source is missing is not run — the gap stays open and the readout names the enabling step (`/connect-code`, connect the warehouse MCP, fill `segmentation-matrix.md`).
 3. **Parallel subagents, each following its own SKILL.md end to end** — writing its own artifact in its own home with its own write-back. This skill never inlines a shortcut version of another skill's method.
 4. **Fold and cite.** Each result closes its `[GAP:]` in the PRD, fills the initiative page's matching Artifacts row, and appears in the readout with its path. **The PM confirms results, not permission** — a wrong baseline is corrected by re-running, not pre-approved.
@@ -182,6 +193,11 @@ Only you can do these
 Waiting on someone else
   → Eng plan + RFC — Engineer (blocks the launch gate, not this PRD)
 
+Files this run touched
+  created    PRDs/billing/low-balance-alert-prd.md · initiatives/low-balance-alert.md
+  updated    initiatives/CLAUDE.md · analytics/investigations/billing/impact-sizing-low-balance-2026-08-09.md
+  proposed   feature-index.yaml entry (gated — awaiting your yes)
+
 2 gaps closed · 2 open · ready for the full critique? /prd-challenge
 ```
 
@@ -191,6 +207,7 @@ Rules for the readout:
 - **Backed** lines cite the artifact (path), not a feeling. **Still assumed** lines say *why* the agent couldn't close them — human evidence needed, source missing, or research budget spent.
 - **Human-only** work is named concretely (N interviews with whom, about what) with the supporting skills for before and after.
 - **Waiting on someone else** names artifacts owned by other roles per the root `CLAUDE.md` role table — engineering plans and RFCs belong to the Engineer; name them as pending, never write them.
+- **Files this run touched** ends every readout — every created, updated, and proposed-gated path (write-back step 4, made part of the template so it can't drop). With auto-sync on, the turn's work lands as one `context:` commit at turn end — reverting that commit undoes the run.
 
 With the auto-research pass, the loop drives itself on evidence. The one step deliberately left on the PM's trigger is `/prd-challenge` (Step 5, rule 7) — offer it explicitly when the gap count drops materially or a stage milestone approaches.
 

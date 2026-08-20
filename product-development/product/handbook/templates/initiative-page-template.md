@@ -1,6 +1,6 @@
 # [Initiative Name]
 
-_status: active — [one line: where this stands right now]_
+_status: [exploring | active] — [one line: where this stands right now]_
 _updated: [YYYY-MM-DD]_
 _target-feature(s): `feature-index.yaml#[area].[feature-slug]`_
 _owner: [Name from team roster]_
@@ -47,6 +47,8 @@ _owner: [Name from team roster]_
 Template rules (delete this comment when filling):
 - Copy to product-development/product/initiatives/{slug}.md; slug is immutable kebab-case.
 - Edit in place — this page always describes current truth. Never stack "UPDATE:" lines.
+- _status `exploring` = the bet is still being weighed — filed, but not yet committed work;
+  flip to `active` in place when the team commits.
 - Link artifacts and decisions; never restate their content here. "-" for empty sections.
 - Use [PENDING: path] for artifacts that are planned but not written yet.
 - Budget ≤120 lines. On ship/kill: set _status accordingly, link the gate verdict, keep lessons.

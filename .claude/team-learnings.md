@@ -35,3 +35,4 @@ rules as they come up._
 - 2026-08-03 — Customer summaries never include customer-side PII: role titles, not personal names.
 - 2026-08-03 — SQL queries always carry the `Last verified:` header with a real date — placeholder dates fail the launch gate.
 - 2026-08-03 — Skills stay universal: org- or customer-specific behavior (naming, formats, required fields) is read from customized context files (e.g. business-info.md convention blocks), never hardcoded in a skill; prefer extending an existing context file over creating a new one.
+- 2026-08-20 — Exploratory asks ("explore", "think through", "should we") stay conversational: create or update no files until the user says to file. Generative skills stop at one intake checkpoint before their first file; only the user's own words skip it, never a judgment that the input looks complete.

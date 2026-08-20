@@ -1,6 +1,6 @@
 ---
 name: jobs-breakdown
-description: Cut an agreed initiative into independently shippable jobs — the sequenced plan between the PRD (why this bet) and the per-job job specs (/job-spec-draft). Rebuilds the initiative's backbone from evidence, cuts walking-skeleton-first and widens by actor/capability/depth, gates every candidate against the four pressure tests + INVEST (a variation whose backbone differs end-to-end becomes its own job), sequences riskiest-assumption-first with dependency rationale, and writes the living breakdown to PRDs/{area}/{initiative-slug}-jobs-breakdown.md (template-driven, re-runnable — the job table is the live status board). Appends the jobs-breakdown: key to the feature-index entry (gated confirm; a missing entry gets the minimal registration proposed in the same gated change). Use on /jobs-breakdown, "break down the PRD/initiative", "cut this into jobs", "slice this initiative", "what do we build first?". NOT for writing the per-job contract (/job-spec-draft — runs next, one job at a time), drafting or updating the PRD itself (/prd-draft), or cutting dev-backlog tickets (/create-tickets — runs later, from an agreed job spec or PRD).
+description: Cut an agreed initiative into independently shippable jobs — the sequenced plan between the PRD (why this bet) and the per-job job specs (/job-spec-draft). First creation of a breakdown stops at an intake checkpoint — the bet being cut confirmed, the write plan stated; one yes covers the run. Rebuilds the initiative's backbone from evidence, cuts walking-skeleton-first and widens by actor/capability/depth, gates every candidate against the four pressure tests + INVEST (a variation whose backbone differs end-to-end becomes its own job), sequences riskiest-assumption-first with dependency rationale, and writes the living breakdown to PRDs/{area}/{initiative-slug}-jobs-breakdown.md (template-driven, re-runnable — the job table is the live status board). Appends the jobs-breakdown: key to the feature-index entry (gated confirm; a missing entry gets the minimal registration proposed in the same gated change). Use on /jobs-breakdown, "break down the PRD/initiative", "cut this into jobs", "slice this initiative", "what do we build first?". NOT for writing the per-job contract (/job-spec-draft — runs next, one job at a time), drafting or updating the PRD itself (/prd-draft), or cutting dev-backlog tickets (/create-tickets — runs later, from an agreed job spec or PRD).
 argument-hint: "[initiative-slug | PRD path]"
 group: definition
 ---
@@ -41,6 +41,8 @@ group: definition
 
 **Context health:** `platform-model.md` or `tech-constraints.md` still `[TBD]` → proceed, and carry `[GAP: platform model unfilled — constraints unverified]` (or the tech-constraints twin) as owned rows in the breakdown's §4 table. No reviews yet (first-run bet, `reviews/` empty) → derive risk from the PRD's own hypothesis and say so. Never silently skip a check.
 
+**First creation of a breakdown stops at an intake checkpoint — the turn ends before anything is written.** Short: which bet is being cut and its state (a contested or missing PRD → `/prd-draft` or `/prd-challenge` first, unless the PM says cut anyway); anything Step 1 left ambiguous about scope; and the write plan — the breakdown file, the gated `jobs-breakdown:` index addition, the initiative-page rows. One "go" covers the run; only the PM's own words skip the stop ("just cut it"). Later runs on an existing breakdown don't stop.
+
 ## Step 2: Rebuild the backbone
 
 Lay the initiative out as its end-to-end story before cutting anything: activities left to right as users live them, every actor named (including out-of-scope personas), core objects listed. Build it from the PRD and its evidence — interview quotes, current-state facts, `/code-qa` answers — not from imagination. The backbone is the seam; a cut that doesn't traverse it isn't a job, it's a component.
@@ -77,6 +79,7 @@ J-4 [name]   Net new       Won't-now — deferred to [when/why]
 
 Coverage: [N] PRD scope items → [N] covered · [M] explicitly out
 Cross-job decisions open: [n] — owners in §4
+Files this run touched: [created · updated · proposed (gated) — every path]
 Next: /job-spec-draft J-1
 ```
 

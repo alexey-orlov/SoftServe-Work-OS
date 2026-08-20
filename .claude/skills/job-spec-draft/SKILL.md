@@ -1,6 +1,6 @@
 ---
 name: job-spec-draft
-description: Write the buildable contract for ONE job — the level between the PRD (/prd-draft) and tickets (/create-tickets). Template-driven and proportionate (an Integration-type job is 2–3 pages; a risky net-new stateful one earns full depth), every load-bearing claim evidence-labeled. Runs a mandatory variation scan (company / user / situation dimensions — nuance vs branch vs different-job), then four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor capability evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus the engineering-confirmations list. Use on /job-spec-draft, "job spec J-2", "spec this job", "write the job contract". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into jobs (/jobs-breakdown — runs first), challenging a drafted spec (/job-spec-challenge — whose accepted verdicts fold back into the spec through this skill, its one writer), dev tickets (/create-tickets — runs after the job spec is agreed), or making the solution visible (/prototype — a job spec is its natural input).
+description: Write the buildable contract for ONE job — the level between the PRD (/prd-draft) and tickets (/create-tickets). First creation stops at an intake checkpoint — blocking questions + write plan; one yes covers the run; a missing breakdown becomes its first choice (spec anyway or /jobs-breakdown first). Template-driven and proportionate (Integration job 2–3 pages; risky net-new earns full depth), every load-bearing claim evidence-labeled. Mandatory variation scan (company/user/situation — nuance vs branch vs different-job), four parallel sweep subagents (capabilities+states, actors+permissions, situations+exceptions, cross-cutting; --market adds competitor evidence, never UI), a source-gated /code-qa feasibility pass with an explicit TODO when code access is missing, grounded prioritization (sourced Reach/Frequency/Severity; compliance/money/privacy/irreversibility auto-Must; effort stays Engineering's number), research routing with ≤3 bounded auto-closers, and a readout led by "decisions only you can make" plus engineering confirmations and every file touched. Use on /job-spec-draft, "job spec J-2", "spec this job", "write the job contract". NOT for the initiative-level PRD (/prd-draft), cutting the initiative into jobs (/jobs-breakdown — runs first), challenging a drafted spec (/job-spec-challenge — accepted verdicts fold back through this skill, its one writer), dev tickets (/create-tickets — after the spec is agreed), or making the solution visible (/prototype — a job spec is its natural input).
 argument-hint: "[job | breakdown row] [--market]"
 group: definition
 ---
@@ -11,11 +11,11 @@ group: definition
 
 ```
 /job-spec-draft [initiative] J-2            → Draft or update the contract for that job
-/job-spec-draft [job description]       → Ad-hoc: classify, scan, sweep, draft — flags the missing breakdown
+/job-spec-draft [job description]       → Ad-hoc: the checkpoint leads with the missing breakdown — spec anyway, or cut first
 /job-spec-draft [...] --market              → Adds the competitor-capability sweep (evidence, never UI)
 ```
 
-**What you get:** the living contract at `product-development/product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (template: `product-development/product/handbook/templates/job-spec-template.md`) — variations dispositioned, capabilities swept complete with state maps, rules with testable ACs, grounded scope priorities — and a closing readout: decisions only you can make, research routed by method, what Engineering must confirm before scope commits.
+**What you get:** the living contract at `product-development/product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (template: `product-development/product/handbook/templates/job-spec-template.md`) — variations dispositioned, capabilities swept complete with state maps, rules with testable ACs, grounded scope priorities — and a closing readout: decisions only you can make, research routed by method, what Engineering must confirm before scope commits, and every file the run touched.
 
 **Time:** minutes for an Integration-type job; a full net-new stateful contract is a working session.
 
@@ -46,7 +46,7 @@ A job spec here describes **what a user must be able to do and why** — clear e
 | 9 | A prototype, if one exists (`product/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the job spec |
 | 10 | `PRDs/{area}/reviews/` | Assumptions already ranked; challenges already answered |
 
-Ask only questions that block the job's definition (its object, its actors, its loop). Everything else drafts with `[GAP: what's missing — how to close it]`. `platform-model.md` / `tech-constraints.md` still `[TBD]` → carry `[GAP: platform model unfilled — constraints unverified]` / `[GAP: tech constraints unfilled — feasibility unverified]` in §9.
+**First creation of a spec stops at an intake checkpoint — the turn ends, nothing is written until the PM replies.** Three parts, each as short as the input allows: the open questions that block the job's definition (its object, its actors, its loop — plus the riskiest assumption when no breakdown row supplies one); played-back answers, one line each, taken from the breakdown row, PRD, and initiative page — generic repo context never silently answers, it gets played back too; and the write plan — spec file, breakdown-row bump, initiative-page rows, the gated `job-specs:` index addition, the closers Step 8 will run. One "go" covers the run; no per-file prompts follow. Only the PM's own words skip the stop ("just spec it"), never a judgment that the input looks complete — a worked breakdown row empties the questions, not the plan. Ad-hoc job with no breakdown → the checkpoint leads with that choice: spec anyway (flagged) or `/jobs-breakdown` first. Later runs on an existing spec don't stop. Everything beyond the blocking set drafts with `[GAP: what's missing — how to close it]`. `platform-model.md` / `tech-constraints.md` still `[TBD]` → carry `[GAP: platform model unfilled — constraints unverified]` / `[GAP: tech constraints unfilled — feasibility unverified]` in §9.
 
 ## Step 2: Classify the job
 
@@ -107,7 +107,7 @@ Every open question, provisional priority, and unverified assumption gets a §13
 | Competitor capability claim | `/competitor-analysis` |
 | Feasibility, current behavior | `/code-qa`, or the §14 `[TODO: eng consult]` |
 
-**Bounded auto-closers — at most 3 per run, riskiest first, source-gated:** a closer runs only when it's a repo-grounded skill AND its source exists (`code-repos.yaml` reachable, matrix filled, corpus present). Parallel subagents, each following its own SKILL.md end to end; results folded and cited; the PM confirms results, not permission. Gaps beyond the budget stay named in the readout. Never auto-run anything human-facing or outbound.
+**Bounded auto-closers — at most 3 per run, riskiest first, source-gated:** a closer runs only when it's a repo-grounded skill AND its source exists (`code-repos.yaml` reachable, matrix filled, corpus present). Parallel subagents, each following its own SKILL.md end to end; results folded and cited; the PM confirms results, not permission (on a first creation the closers were already named in the checkpoint's write plan). Gaps beyond the budget stay named in the readout. Never auto-run anything human-facing or outbound.
 
 ## Step 9: Synthesize and gate
 
@@ -130,6 +130,7 @@ Backed / Still assumed
 Research needed            → §13 rows: method + suggested skill per row
 Engineering must confirm   → §14 list — blocks scope commitment, not drafting
 Variations                 → [n dispositioned: X in, Y deferred, Z flagged to the breakdown]
+Files this run touched     → created / updated / proposed (gated) — every path; with auto-sync on, the turn's one commit reverts the run
 
 Next: [/job-spec-challenge when the draft has stabilised · the next job to job spec · /create-tickets when this one is agreed]
 ```
