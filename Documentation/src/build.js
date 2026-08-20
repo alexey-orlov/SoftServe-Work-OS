@@ -30,7 +30,7 @@ const plain = (text) => tokens(text).map((t) => t.k === "pf" ? plain(t.gh) : t.k
 
 // article index for internal links: "#/section/article[/heading]" → { s, a, h }
 const ARTICLES = []; doc.sections.forEach((s) => s.articles.forEach((a) => ARTICLES.push({ s, a })));
-function findHeading(a, id) { let found = null; (function walk(bs) { for (const b of bs) { if (found) return; if ((b.t === "h2" || b.t === "h3") && b.id === id) { found = b; return; } if (b.t === "platform") walk(b.blocks); if (b.t === "steps") b.items.forEach((it) => walk(it.sub)); if (b.t === "details") walk(b.blocks); } })(a.blocks); return found; }
+function findHeading(a, id) { let found = null; (function walk(bs) { for (const b of bs) { if (found) return; if ((b.t === "h2" || b.t === "h3") && b.id === id) { found = b; return; } if (b.t === "platform" || b.t === "method") walk(b.blocks); if (b.t === "steps") b.items.forEach((it) => walk(it.sub)); if (b.t === "details") walk(b.blocks); } })(a.blocks); return found; }
 function resolveInternal(href) {
   const m = /^#\/([\w-]+)\/([\w-]+)(?:\/([\w-]+))?$/.exec(href); if (!m) return null;
   const s = doc.sections.find((x) => x.id === m[1]); const a = s && s.articles.find((x) => x.id === m[2]); if (!a) return null;
@@ -63,7 +63,7 @@ const hnav = (text) => hinl(text, true);
 function endsInStepFlow(blocks, flow = false) {
   for (const b of blocks) {
     if (b.t === "steps") flow = true;
-    else if (b.t === "platform") flow = endsInStepFlow(b.blocks, flow);
+    else if (b.t === "platform" || b.t === "method") flow = endsInStepFlow(b.blocks, flow);
     else if (b.t === "callout" || b.t === "say" || b.t === "code") { /* keep flow */ }
     else flow = false;
   }
@@ -73,8 +73,11 @@ let copyId = 0;
 function html(blocks, ctx = { inStep: false, route: "", flow: false }) {
   const o = [];
   let flow = ctx.flow || false; // did the previous sibling leave us in a step procedure?
+  let prevMethod = false; // emit the compact method switch once, at the start of each run of method() blocks
   for (const b of blocks) {
     const stepAligned = flow && !ctx.inStep; // indent outcome callouts to the step-body column
+    if (b.t === "method" && !prevMethod) o.push(MTHSWITCH);
+    prevMethod = b.t === "method";
     switch (b.t) {
       case "h2": o.push(`<h2 id="${b.id}">${hinl(b.text)}</h2>`); break;
       case "h3": o.push(`<h3 id="${b.id}">${hinl(b.text)}</h3>`); break;
@@ -89,30 +92,36 @@ function html(blocks, ctx = { inStep: false, route: "", flow: false }) {
       case "table": { const cg = b.widths ? `<colgroup>${(() => { const t = b.widths.reduce((x, y) => x + y, 0); return b.widths.map((w) => `<col style="width:${Math.round(w / t * 100)}%">`).join(""); })()}</colgroup>` : ""; o.push(`<div class="tbl"><table>${cg}<thead><tr>${b.header.map((h) => `<th>${hinl(h)}</th>`).join("")}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c, i) => i === 0 && !b.header[0] ? `<th scope="row">${hinl(c)}</th>` : `<td>${hinl(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`); break; }
       case "steps": o.push(`<ol class="steps">${b.items.map((it) => `<li><div class="step-body"><p>${hinl(it.text)}</p>${html(it.sub, { ...ctx, inStep: true, flow: false })}</div></li>`).join("")}</ol>`); break;
       case "platform": o.push(`<div class="pf" data-platform="${b.name}">${html(b.blocks, { ...ctx, flow })}</div>`); break;
+      case "method": o.push(`<div class="mth" data-method="${b.name}">${html(b.blocks, { ...ctx, flow })}</div>`); break;
       case "details": o.push(`<details class="more"><summary>${esc(b.summary)}</summary>${html(b.blocks, { ...ctx, flow: false })}</details>`); break;
       case "image": { const data = fs.readFileSync(path.join(__dirname, b.file)).toString("base64"); o.push(`<figure class="ill"><img src="data:image/jpeg;base64,${data}" alt="${esc(b.alt)}" loading="lazy">${b.caption ? `<figcaption>${hinl(b.caption)}</figcaption>` : ""}</figure>`); break; }
       case "seq": o.push(`<ol class="seq">${b.items.map((i, n) => `<li><div class="seq-n">${n + 1}</div><div class="seq-body"><div class="seq-who">${esc(i.who)}</div><p>${hinl(i.what)}</p><div class="seq-foot"><span class="seq-time">${esc(i.time)}</span><a href="${esc(i.link)}">${esc(i.label)} →</a></div></div></li>`).join("")}</ol>`); break;
     }
     // Carry step-flow to the next sibling: steps open it; callout/say/code keep it; platform
-    // continues it only if its own tail is still in flow; anything else closes it.
+    // and method continue it only if their own tail is still in flow; anything else closes it.
     if (b.t === "steps") flow = true;
-    else if (b.t === "platform") flow = endsInStepFlow(b.blocks, flow);
+    else if (b.t === "platform" || b.t === "method") flow = endsInStepFlow(b.blocks, flow);
     else if (b.t === "callout" || b.t === "say" || b.t === "code") { /* keep flow */ }
     else flow = false;
   }
   return o.join("\n");
 }
-function navTree(blocks, pf = null, acc = []) {
+function navTree(blocks, pf = null, mth = null, acc = []) {
   for (const b of blocks) {
-    if (b.t === "h2" || b.t === "h3") acc.push({ id: b.id, text: b.text, pf, level: b.t === "h2" ? 2 : 3 });
-    else if (b.t === "platform") navTree(b.blocks, b.name, acc);
+    if (b.t === "h2" || b.t === "h3") acc.push({ id: b.id, text: b.text, pf, mth, level: b.t === "h2" ? 2 : 3 });
+    else if (b.t === "platform") navTree(b.blocks, b.name, mth, acc);
+    else if (b.t === "method") navTree(b.blocks, pf, b.name, acc);
   }
   return acc;
 }
 const flat = ARTICLES.map(({ s, a }) => ({ s, a, route: `${s.id}/${a.id}` }));
 // The platform switch sits under every article title (not in the header, where readers miss it). One instance per
 // article; all instances mirror <html data-platform>, so the choice — kept in localStorage — is the same on every page.
-const PFBAR = `<div class="pfbar"><span class="pfbar-label">Your platform</span><div class="seg" role="group" aria-label="Your platform"><button type="button" data-set="github" aria-pressed="true">GitHub</button><button type="button" data-set="azure" aria-pressed="false">Azure Repos</button></div></div>`;
+const PFBAR = `<div class="pfbar"><span class="pfbar-label">Your platform</span><div class="seg pf-seg" role="group" aria-label="Your platform"><button type="button" data-set="github" aria-pressed="true">GitHub</button><button type="button" data-set="azure" aria-pressed="false">Azure Repos</button></div></div>`;
+// The setup-method switch is NOT in the bar: a compact instance is emitted automatically directly above every
+// consecutive run of method() blocks — right where the instructions it swaps begin. All instances mirror
+// <html data-method> (kept in localStorage), so flipping any one flips them all.
+const MTHSWITCH = `<div class="mth-switch"><span class="mth-label">Setup method</span><div class="seg mth-seg" role="group" aria-label="Setup method"><button type="button" data-set="app" aria-pressed="true">Connectors screen</button><button type="button" data-set="chat" aria-pressed="false">Chat commands</button></div></div>`;
 const articlesHtml = flat.map(({ s, a, route }, idx) => {
   const rail = navTree(a.blocks);
   const prev = flat[idx - 1], next = flat[idx + 1];
@@ -125,7 +134,7 @@ const articlesHtml = flat.map(({ s, a, route }, idx) => {
     ${html(a.blocks, { route })}
     <nav class="pager">${prev ? `<a class="pager-prev" href="#/${prev.route}"><span>Previous</span><b>${esc(prev.a.title)}</b></a>` : "<span></span>"}${next ? `<a class="pager-next" href="#/${next.route}"><span>Next</span><b>${esc(next.a.title)}</b></a>` : ""}</nav>
   </div>
-  <nav class="rail" aria-label="On this page"><p class="rail-title">On this page</p><ol>${rail.map((h) => `<li class="l${h.level}"${h.pf ? ` data-platform="${h.pf}"` : ""}><a href="#/${route}/${h.id}" data-target="${h.id}">${hnav(h.text)}</a></li>`).join("")}</ol></nav>
+  <nav class="rail" aria-label="On this page"><p class="rail-title">On this page</p><ol>${rail.map((h) => `<li class="l${h.level}"${h.pf ? ` data-platform="${h.pf}"` : ""}${h.mth ? ` data-method="${h.mth}"` : ""}><a href="#/${route}/${h.id}" data-target="${h.id}">${hnav(h.text)}</a></li>`).join("")}</ol></nav>
 </article>`;
 }).join("\n");
 const placeholders = doc.sections.filter((s) => !s.articles.length).map((s) => `<article data-route="${s.id}/index" hidden><div class="art-main"><p class="crumb">${esc(s.title)}</p><h1>${esc(s.title)}</h1><div class="empty"><p>${hinl(s.placeholder || "Nothing here yet.")}</p></div></div><nav class="rail" aria-label="On this page"></nav></article>`).join("");
@@ -136,7 +145,7 @@ const mobileNav = `<details class="side-mobile"><summary>In this section</summar
 
 const page = `<title>${esc(doc.name)}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(){var p=null;try{p=new URLSearchParams(location.search).get("platform")||localStorage.getItem("wos-platform")}catch(e){}document.documentElement.setAttribute("data-platform",p==="azure"?"azure":"github")})()</script>
+<script>(function(){var p=null,m=null;try{var q=new URLSearchParams(location.search);p=q.get("platform")||localStorage.getItem("wos-platform");m=q.get("method")||localStorage.getItem("wos-method")}catch(e){}var r=document.documentElement;r.setAttribute("data-platform",p==="azure"?"azure":"github");r.setAttribute("data-method",m==="chat"?"chat":"app")})()</script>
 <style>
 :root{
   --accent:#1485C4; --accent-deep:#0E5E8B; --accent-soft:#D6EAF7; --accent-tint:#EEF6FC;
@@ -178,6 +187,8 @@ code{font-family:var(--mono); font-size:.86em; background:var(--code-bg); color:
 strong{color:var(--ink); font-weight:600}
 html[data-platform="github"] [data-platform="azure"]{display:none!important}
 html[data-platform="azure"] [data-platform="github"]{display:none!important}
+html[data-method="app"] [data-method="chat"]{display:none!important}
+html[data-method="chat"] [data-method="app"]{display:none!important}
 
 /* ---------- top bar */
 .top{position:sticky; top:0; z-index:30; background:var(--bg); border-bottom:1px solid var(--line)}
@@ -197,12 +208,18 @@ html[data-platform="azure"] [data-platform="github"]{display:none!important}
 .pfbar-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--ink)}
 .seg{position:relative; display:inline-grid; grid-template-columns:1fr 1fr; flex:0 0 auto; padding:3px; border:1px solid var(--line); border-radius:999px; background:var(--surface); box-shadow:inset 0 1px 2px rgba(10,37,64,.06)}
 .seg::before{content:""; position:absolute; top:3px; bottom:3px; left:3px; width:calc(50% - 3px); border-radius:999px; background:var(--seg-on); box-shadow:0 1px 2px rgba(10,37,64,.25); transition:transform .18s ease}
-html[data-platform="azure"] .seg::before{transform:translateX(100%)}
+html[data-platform="azure"] .pf-seg::before{transform:translateX(100%)}
+html[data-method="chat"] .mth-seg::before{transform:translateX(100%)}
 .seg button{position:relative; appearance:none; border:0; background:transparent; color:var(--muted); font:600 13.5px/1 var(--font); padding:8px 18px; border-radius:999px; cursor:pointer; white-space:nowrap; transition:color .18s}
 .seg button:hover{color:var(--ink)}
-html[data-platform="github"] .seg button[data-set="github"], html[data-platform="azure"] .seg button[data-set="azure"]{color:var(--seg-on-fg); cursor:default}
+html[data-platform="github"] .pf-seg button[data-set="github"], html[data-platform="azure"] .pf-seg button[data-set="azure"], html[data-method="app"] .mth-seg button[data-set="app"], html[data-method="chat"] .mth-seg button[data-set="chat"]{color:var(--seg-on-fg); cursor:default}
 .seg button:focus-visible{outline:none; border-radius:999px; box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
 @media (max-width:560px){.pfbar{padding:10px 12px} .pfbar-label{flex-basis:100%} .seg{width:100%}}
+
+/* ---------- setup-method switch — compact, sits inline directly above the instructions it swaps */
+.mth-switch{display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px; margin:2px 0 14px}
+.mth-switch .mth-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--faint)}
+.mth-switch .seg button{padding:5px 13px; font-size:12.5px}
 
 /* ---------- layout */
 .wrap{max-width:1400px; margin:0 auto; padding:0 28px; display:grid; grid-template-columns:240px minmax(0,1fr); gap:48px}
@@ -310,7 +327,7 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
 .pager a b{font-weight:600}
 .pager-next{text-align:right; grid-column:2}
 .foot{max-width:1400px; margin:0 auto; padding:18px 28px 40px; border-top:1px solid var(--line); font-size:12.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:8px 24px}
-@media print{.top,.side,.rail,.pager,.pfbar,button.copy{display:none!important} .wrap{display:block} article[hidden]{display:none!important} article{display:block} body{background:#fff}}
+@media print{.top,.side,.rail,.pager,.pfbar,.mth-switch,button.copy{display:none!important} .wrap{display:block} article[hidden]{display:none!important} article{display:block} body{background:#fff}}
 </style>
 
 <header class="top"><div class="top-in">
@@ -326,12 +343,16 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
 
 <script>
 (function(){
-  var root=document.documentElement, KEY="wos-platform";
-  // Resolved before first paint by the <script> in <head> (?platform= → localStorage → github); every article's switch mirrors it.
+  var root=document.documentElement, KEY="wos-platform", MKEY="wos-method";
+  // Both resolved before first paint by the <script> in <head> (?platform=/?method= → localStorage → default); every article's switch mirrors them.
   var pf=root.getAttribute("data-platform")==="azure"?"azure":"github";
+  var mth=root.getAttribute("data-method")==="chat"?"chat":"app";
   function setPf(p){root.setAttribute("data-platform",p); try{localStorage.setItem(KEY,p)}catch(e){}
-    document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===p))}); spy();}
-  document.querySelectorAll(".seg button").forEach(function(b){b.addEventListener("click",function(){setPf(b.dataset.set)})});
+    document.querySelectorAll(".pf-seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===p))}); spy();}
+  function setMth(m){root.setAttribute("data-method",m); try{localStorage.setItem(MKEY,m)}catch(e){}
+    document.querySelectorAll(".mth-seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===m))}); spy();}
+  document.querySelectorAll(".pf-seg button").forEach(function(b){b.addEventListener("click",function(){setPf(b.dataset.set)})});
+  document.querySelectorAll(".mth-seg button").forEach(function(b){b.addEventListener("click",function(){setMth(b.dataset.set)})});
 
   var articles=[].slice.call(document.querySelectorAll("article[data-route]"));
   var home="${doc.home.join("/")}", current=null;
@@ -372,7 +393,7 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
   })});
   document.querySelectorAll("ul.checks input").forEach(function(c){var k="wos-check-"+c.dataset.check; try{c.checked=localStorage.getItem(k)==="1"}catch(e){} c.addEventListener("change",function(){try{localStorage.setItem(k,c.checked?"1":"0")}catch(e){}})});
 
-  setPf(pf); route();
+  setPf(pf); setMth(mth); route();
 })();
 </script>`;
 fs.writeFileSync(path.join(OUT, "work-os-docs.html"), page);

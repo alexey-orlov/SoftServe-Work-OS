@@ -580,28 +580,96 @@ const doc = {
           ["**Team chat** — Slack, Microsoft Teams", "Post digests and drafts; read a thread you point at", "`/slack-message`, `/weekly-review`, `/portfolio-pulse`, `/status-update`", "Claude drafts the message; you paste it"],
           ["**Product analytics** — Amplitude, Mixpanel, PostHog, Pendo", "Query retention, activation and funnels live", "`/retention-analysis`, `/activation-analysis`, `/feature-metrics`, `/experiment-metrics`", "You export the numbers or paste a chart's data"],
           ["**Documents** — Notion, Confluence, Google Drive", "Read source documents when folding context into the Work OS", "`/context-update`, `/user-research-synthesis`, `/prd-draft`", "You paste or attach the document"],
-          ["**Design** — Figma", "Pull your design system's real colors, spacing and type, so prototypes are built against it — plus read designs and link them", "`/prototype`, `/prototype-feedback`, `/create-tickets`", "You describe or link the design; prototypes can't follow the design system automatically"],
+          ["**Design** — Figma ([step by step below](#/setup/tools/figma))", "Pull your design system's real colors, spacing and type, so prototypes are built against it — plus read designs and link them", "`/prototype`, `/prototype-feedback`, `/create-tickets`", "You describe or link the design; prototypes can't follow the design system automatically"],
           ["**Customer feedback** — Intercom", "Pull customer requests and conversations", "`/prioritize-requests`", "You paste the pile of requests"],
           ["**Calendar** — Google Calendar, Outlook", "Plan the day around meetings", "`/daily-plan`, `/meeting-agenda`", "You tell Claude your day"],
         ], [2500, 2700, 2500, 2200]),
         callout("tip", "A good first set: **meeting recordings**, your **task tracker**, and **team chat**. They remove the most copy-and-paste."),
         h2("How connecting works", "how"),
-        p("Each connection is a small standard connector (an *MCP server*) that lets Claude use the tool with your own login. Two parts: the **Work OS admin** connects a tool once and lets Claude record which skills use it — that record is shared with the team. Then **each person** connects the same tool on their own computer with their own account, so Claude acts as them, not as the admin."),
-        callout("note", "Your passwords and tokens never go into the Work OS repository or into chat. Claude keeps them in Claude Code's own settings on your computer."),
-        h2("Step 1 — Connect a tool for the team (Work OS admin)", "t1"),
-        steps([
-          step("Ask Claude — one tool at a time:", say("/connect-mcps connect to Linear")),
-          "Follow the conversation. Claude finds the official connector for the tool, sets it up, and asks you to sign in to the tool in your browser when needed. If Claude shows a command to run, ask it to run it for you.",
-          step("Claude tests the connection and records which Work OS skills will use the tool. Approve the 🔒 prompt (the record lives in gated files).",
-            callout("expected", "Claude reports the connection works and lists the skills it wired — for example \"`/create-tickets` will now create tickets in Linear\". A log is saved in `os-installation/mcp-integration-logs/`.")),
-          step("Publish the record for everyone — you're a Work OS admin, so Claude opens the pull request, approves it as you and {gh:merges|az:completes} it:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
-        ]),
+        p("Each connection is a small standard connector (an *MCP server*) that lets Claude use the tool with your own login. Two parts, in this order: first the **Work OS admin** connects a tool once and lets Claude record which skills use it — that record is shared with the team. Then **each person** connects the same tool with their own account, so Claude acts as them, not as the admin."),
+        p("There are two ways to make a connection, and the walkthroughs below are written for both. **Connectors screen** — well-known tools are in the Claude app's built-in directory, so connecting is a couple of clicks in **Settings › Connectors** plus a sign-in, and the connection works everywhere you use Claude, the Work OS included. **Chat commands** — you ask Claude in the conversation and it runs the whole setup itself; this route works for every tool, including ones the directory doesn't have."),
+        callout("note", "Your passwords and tokens never go into the Work OS repository or into chat. You always sign in on the tool's own page, and the connection stays in the Claude app on your computer."),
+        h2("Step 1 — Connect a tool for the team (Work OS admin — always first)", "t1"),
+        method("app",
+          steps([
+            step("In the Claude app, open **Settings › Connectors**, find the tool and select **Connect**. Sign in with your work account for that tool when the browser asks.",
+              callout("note", "Tool not in the list? Connect it in the chat instead: say `/connect-mcps connect to <tool>` and follow the conversation — that route covers every tool.")),
+            step("Back in the Work OS folder, start a new chat and have Claude record the connection for the team — one tool at a time:", say("/connect-mcps connect to Linear"),
+              callout("expected", "Claude finds the connection already live, tests it, and records which Work OS skills will use the tool — for example \"`/create-tickets` will now create tickets in Linear\". A log is saved in `os-installation/mcp-integration-logs/`. Approve the 🔒 prompt (the record lives in gated files).")),
+            step("Publish the record for everyone — you're a Work OS admin, so Claude opens the pull request, approves it as you and {gh:merges|az:completes} it:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
+          ])
+        ),
+        method("chat",
+          steps([
+            step("Ask Claude — one tool at a time:", say("/connect-mcps connect to Linear")),
+            "Follow the conversation. Claude finds the official connector for the tool, sets it up, and asks you to sign in to the tool in your browser when needed. If Claude shows a command to run, ask it to run it for you.",
+            step("Claude tests the connection and records which Work OS skills will use the tool. Approve the 🔒 prompt (the record lives in gated files).",
+              callout("expected", "Claude reports the connection works and lists the skills it wired — for example \"`/create-tickets` will now create tickets in Linear\". A log is saved in `os-installation/mcp-integration-logs/`.")),
+            step("Publish the record for everyone — you're a Work OS admin, so Claude opens the pull request, approves it as you and {gh:merges|az:completes} it:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
+          ])
+        ),
         h2("Step 2 — Connect the same tool for yourself (each user)", "t2"),
-        steps([
-          step("Ask Claude:", say("/connect-mcps connect to Linear"),
-            callout("expected", "Claude sees the tool is already registered for the team, sets up the connection on your computer, and asks you to sign in with your own account. Done in a minute or two.")),
-        ]),
+        method("app",
+          steps([
+            step("On your own computer, open **Settings › Connectors** in the Claude app, find the same tool, select **Connect** and sign in with your own account."),
+            step("Start a new chat in the Work OS folder — that's it, no commands to run.",
+              callout("note", "A chat that was already open when you connected doesn't see the new connection; a fresh one does.")),
+          ])
+        ),
+        method("chat",
+          steps([
+            step("Ask Claude:", say("/connect-mcps connect to Linear"),
+              callout("expected", "Claude sees the tool is already registered for the team, sets up the connection on your computer, and asks you to sign in with your own account. Done in a minute or two.")),
+          ])
+        ),
         callout("pass", "Ask Claude something the tool answers — *\"what did we decide in yesterday's product sync?\"* (meeting recordings), *\"what's open in this sprint?\"* (task tracker) — and get a live answer instead of a request to paste something."),
+        h2("Figma, step by step", "figma"),
+        p("Figma gets its own walkthrough for two reasons: it's the connection that lets `/prototype` build against your real design system instead of a lookalike, and Figma's own licensing decides which of its connectors will work for you — worth checking before anyone selects Connect."),
+        h3("Before you start — Figma licensing", "figma-before"),
+        p("Figma ships two connectors, and you may see both offered. They have different requirements:"),
+        table(["Connector", "What it needs", "Who it's for"], [
+          ["**Figma** — the web connector", "Any Figma plan and seat can connect. Full everyday use needs a **Dev or Full seat on a paid plan**; View and Collab seats — and the free Starter plan — get a small monthly allowance of Figma actions, enough to try it, not to work with.", "Everyone. This is the one to use for the Work OS."],
+          ["**Figma Desktop** — *local dev*", "The Figma desktop app running on your computer, plus a **Dev or Full seat on a paid plan**.", "Engineers generating code from a selected frame. Skip it for the Work OS."],
+        ], [2200, 4600, 2600]),
+        checklist([
+          "You know which Figma seats your team has. People who will use Figma through Claude every day should have a **Dev or Full seat**; occasional users can start on any seat and upgrade when they hit the allowance.",
+          "If your company signs in to Figma through single sign-on, everyone uses the **company sign-in**, not a personal Figma account — the designs live in the company workspace.",
+        ]),
+        callout("note", "Seats and allowances are Figma's rules and change over time — if the connection works but Figma answers stop coming after a handful of questions, you've hit a seat allowance, not a bug. Current numbers: [Figma's guide to its MCP server](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)."),
+        h3("Once, by the Work OS admin — before anyone else", "figma-admin"),
+        method("app",
+          steps([
+            step("In the Claude app, open **Settings › Connectors**, find **Figma** and select **Connect**. If two Figma rows appear, pick the web one — not *Desktop* (see above)."),
+            step("A browser tab opens to sign in. Use your **work Figma account** — the company sign-in if you have one — and complete any two-step verification your company requires.",
+              callout("note", "If the sign-in drops or asks for extra verification, finish that verification first — the email can take a few minutes — then select **Connect** again. To start over: **Settings › Connectors › Figma › Disconnect**.")),
+            step("In the Work OS folder, start a new chat and have Claude record the connection for the team:", say("/connect-mcps connect to Figma"),
+              callout("expected", "Claude finds the connection already live, tests it, and records that `/prototype`, `/prototype-feedback` and `/create-tickets` will use it. A log is saved in `os-installation/mcp-integration-logs/`. Approve the 🔒 prompt.")),
+            step("Publish the record for everyone:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
+          ])
+        ),
+        method("chat",
+          steps([
+            step("Ask Claude:", say("/connect-mcps connect to Figma")),
+            "Follow the conversation — Claude sets up Figma's official web connector and opens the sign-in. Use your **work Figma account** — the company sign-in if you have one — and complete any two-step verification your company requires.",
+            step("Claude tests the connection and records that `/prototype`, `/prototype-feedback` and `/create-tickets` will use it. Approve the 🔒 prompt (the record lives in gated files).",
+              callout("expected", "A log is saved in `os-installation/mcp-integration-logs/`.")),
+            step("Publish the record for everyone:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
+          ])
+        ),
+        h3("Then each person, with their own account", "figma-users"),
+        method("app",
+          steps([
+            step("Open **Settings › Connectors**, find **Figma**, select **Connect** — the web row, not *Desktop* — and sign in with your own work Figma account."),
+            step("Start a new chat in the Work OS folder — a chat that was open before you connected doesn't see Figma; a fresh one does."),
+          ])
+        ),
+        method("chat",
+          steps([
+            step("Ask Claude:", say("/connect-mcps connect to Figma"),
+              callout("expected", "Claude sees Figma is already registered for the team, connects it on your computer, and asks you to sign in with your own work Figma account.")),
+          ])
+        ),
+        callout("pass", "Paste a link to a Figma file you can open and ask Claude *\"what's on the first page of this file?\"* — and get a real answer. From then on `/prototype` pulls your design system's colors, spacing and type from Figma instead of guessing."),
       ]},
 
       { id: "code", title: "Connect your product's codebase", audience: "Stage 2 · Work OS admin, with the admin of your code repositories — then each user on their own computer", time: "about 30 minutes, plus 15 per extra repository — optional", blocks: [
