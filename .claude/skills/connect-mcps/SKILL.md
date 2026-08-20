@@ -1,6 +1,6 @@
 ---
 name: connect-mcps
-description: Connect MCP tool servers so skills read live tools instead of manual exports — guided setup one tool at a time (/connect-mcps connect to linear) or batch to walk several in one run. Remote-first — searches for an official hosted server and hands you the claude mcp add --transport http [tool] [url] command plus /mcp authentication, falling back to a local NPM/Docker server and only then to manual OAuth/API-token setup. Then tests the connection, discovers the tool catalog, categorizes the MCP (analytics, project management, research, transcription, communication, docs, design, search), adds an integration section with an offline fallback to every skill that benefits, proposes the root CLAUDE.md registry and query-routing updates (Tier 2 — confirm before applying), and logs the run to os-installation/mcp-integration-logs/. Credentials go to the MCP system, never into repo files. Use on /connect-mcps, "connect Amplitude / Linear / Notion / Figma", "connect our tools", "set up MCPs", "batch connect", "reconnect — my token expired", or when a skill reports no live data source. NOT for connecting the product code repo (/connect-code — repo registry and local clone access, not MCP tool servers), answering code questions (/code-qa), or routing an already-connected MCP (that happens automatically from the CLAUDE.md registry).
+description: Connect MCP tool servers so skills read live tools instead of manual exports — guided setup one tool at a time (/connect-mcps connect to linear) or batch to walk several in one run. Detects an already-live connection first (a connector added in the Claude app's Settings › Connectors counts — those reach Claude Code too) and skips straight to testing, skill wiring, and logging; otherwise suggests the app's Connectors screen for tools in Claude's directory, then falls back to the chat route — an official hosted server via claude mcp add + /mcp authentication, then a local NPM/Docker server, then manual OAuth/API tokens. Then tests the connection, discovers the tool catalog, categorizes the MCP, adds an integration section with an offline fallback to every skill that benefits, proposes the root CLAUDE.md registry and query-routing updates (gated — confirm before applying), logs the run to os-installation/mcp-integration-logs/, and suggests the matching /customize-os target when the wired tool's toolchain.yaml surface is still undecided. Credentials go to the MCP system, never into repo files. Use on /connect-mcps, "connect Figma / Linear / Notion", "connect our tools", "set up MCPs", "batch connect", "reconnect — my token expired", or when a skill reports no live data source. NOT for choosing a team's standing approach per surface (/customize-os writes those to product-development/toolchain.yaml), connecting the product code repo (/connect-code), or answering code questions (/code-qa).
 argument-hint: "[tool name | batch]"
 group: os-admin
 ---
@@ -50,32 +50,41 @@ Then provide multiple tool names when prompted.
 
 When you run `/connect-mcps connect to [tool name]`, the skill will:
 
-1. **Check for official remote MCP server** - Search for hosted MCP servers (priority method)
-2. **If remote server exists** - Guide you to use `claude mcp add --transport http [tool] [url]`
-3. **If no remote server** - Research manual setup (OAuth, API tokens)
-4. **Guide credential entry** - Prompt you for required credentials
-5. **Test connection** - Verify the connection works and discover available tools
-6. **Map to skills** - Automatically determine which Team OS skills benefit from this MCP
-7. **Update workspace** - Add integration instructions to relevant skills and update CLAUDE.md registry
-8. **Enable intelligent routing** - Your natural language queries will automatically route to the right MCP
+1. **Check if it's already connected** - A connector added in the Claude app (**Settings › Connectors**) or a prior registration counts; already live → skip setup, go straight to test + wiring (Steps 5–8)
+2. **Point to the Connectors screen** - When the tool is in the Claude app's built-in connector directory, that's the easiest route; otherwise search for an official hosted MCP server
+3. **If remote server exists** - Guide you to use `claude mcp add --transport http [tool] [url]`
+4. **If no remote server** - Research manual setup (OAuth, API tokens)
+5. **Guide credential entry** - Prompt you for required credentials
+6. **Test connection** - Verify the connection works and discover available tools
+7. **Map to skills** - Automatically determine which Team OS skills benefit from this MCP
+8. **Update workspace** - Add integration instructions to relevant skills and update CLAUDE.md registry, plus the toolchain cross-check (Step 6)
+9. **Enable intelligent routing** - Your natural language queries will automatically route to the right MCP
 
 **Priority Order:**
-- ✅ **First:** Check for official remote MCP server (e.g., Figma, Stripe)
-- ⚙️ **Second:** Local MCP server via NPM/Docker
+- ✅ **Zeroth:** Already connected — via the Claude app's Settings › Connectors or a prior registration → record and wire, no setup
+- ✅ **First:** The Claude app's connector directory (Settings › Connectors — one sign-in serves Claude chats and Claude Code alike)
+- ✅ **Second:** Official remote MCP server via `claude mcp add` (e.g., Figma, Stripe)
+- ⚙️ **Third:** Local MCP server via NPM/Docker
 - 🔑 **Last:** Manual OAuth/API token setup
 
 ## Step-by-Step Workflow
 
-### Step 1: Parse Tool Name
+### Step 1: Parse Tool Name & Detect an Existing Connection
 
 When you run `/connect-mcps connect to amplitude`:
 - Extract tool name: "amplitude"
 - Normalize and validate the name
-- Check if already connected (skip if duplicate)
+- **Probe for an existing connection FIRST:** search the session's tools (ToolSearch) for the tool's MCP tools. A connector the user added in the Claude app's **Settings › Connectors** shows up here too — those connections work in Claude Code as well. An unauthenticated server counts as NOT connected.
+- **Already connected → skip Steps 2–4 entirely.** Go straight to Step 5 (test + discover), then wiring and registry (Steps 6–8). This is the normal path when the team follows the documentation's Connectors-screen route — connect in the app first, then run this skill to record it. Re-running for an already-wired tool refreshes its record (the "reconnect" case).
 
-### Step 2: Check for Official Remote MCP Server (Priority #1)
+### Step 2: Offer the Connectors Screen, Then Check for an Official Remote MCP Server
 
-**IMPORTANT:** Always check for official remote MCP servers FIRST before manual setup.
+**Not yet connected? Two routes — offer the app route first:**
+
+- **Connectors screen (default suggestion):** if the tool is in the Claude app's built-in connector directory (Figma, Slack, Notion, Linear, and other well-known tools), the easiest path is: open **Settings › Connectors**, find the tool, **Connect**, sign in with the work account — then rerun `/connect-mcps connect to [tool]` so the connection gets tested and recorded (Step 1 detects it). One sign-in serves Claude chats and Claude Code alike.
+- **Chat route (works for every tool, including ones the directory doesn't have):** continue below.
+
+**IMPORTANT:** On the chat route, always check for official remote MCP servers FIRST before manual setup.
 
 The skill will search the web for:
 - "[tool name] official MCP server"
@@ -174,6 +183,8 @@ Based on the MCP category, the skill automatically maps it to relevant skills:
 → competitor-analysis, competitive-intel
 
 **Multi-category MCPs** are mapped to multiple skill groups.
+
+**Toolchain cross-check (after wiring):** read `product-development/toolchain.yaml`. If the tool just wired maps to a surface whose key is still `undecided` — e.g., a design MCP while `prototyping.approach: undecided` — add one line to the final report suggesting the matching `/customize-os` target (`/customize-os design-system`). Never set the choice from this skill: connections are this skill's job; standing choices belong to `/customize-os` and toolchain.yaml.
 
 ### Step 7: Update Skill Files
 

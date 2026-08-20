@@ -6,6 +6,7 @@
 #     until then GitHub ignores these lines and gated pull requests need NO approval.
 
 /product-development/feature-index.yaml @[org]/os-admins
+/product-development/toolchain.yaml @[org]/os-admins
 /product-development/product/strategy/business-context/ @[org]/os-admins
 /product-development/product/handbook/templates/ @[org]/os-admins
 /product-development/engineering/ @[org]/os-admins

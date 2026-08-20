@@ -69,6 +69,7 @@ tiers:
   gated:
     # Steering files — the distilled context every session leans on.
     - product-development/feature-index.yaml                       # the product map
+    - product-development/toolchain.yaml                           # per-surface tool/approach choices — skills route by it instead of re-asking
     - product-development/product/strategy/business-context/**     # who we are — company, ICP, personas, pricing, stakeholders, segments, platform model
     - product-development/product/handbook/templates/**            # templates shape every future document
     - product-development/engineering/**                           # build realities — tech constraints, code registry + grounding contract, plans, codebase maps

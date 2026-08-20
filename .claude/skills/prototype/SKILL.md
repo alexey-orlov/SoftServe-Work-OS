@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Build a clickable prototype grounded in the job spec or PRD — Figma-first. With the Figma MCP connected or a cached token extraction, it pulls the design system and builds a token-faithful, self-contained HTML preview, audited for compliance; without Figma it stops early and asks — connect Figma (/connect-mcps), generate an external-tool prompt (v0 / Lovable / Bolt), or build plain HTML without the design system. Reads the job spec (preferred) or PRD first, mines its rules and states, and ends with a requirements-coverage checklist; UI choices never become new requirements. Saves to product-development/product/prototypes/. Use on /prototype, "prototype this", a Figma frame/file/node URL to preview or click through, "make this screenshot match our design system", "can I see this before we build it". NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), critiquing a built prototype (/prototype-challenge), applying review feedback (/prototype-feedback), or production component code (/code-first-draft).
+description: Build a clickable prototype grounded in the job spec or PRD — routed by the team's recorded design approach in product-development/toolchain.yaml (set or changed via /customize-os design-system: Figma MCP, another design MCP, Claude Design, a screenshots folder, external-tool prompts, or plain HTML), Figma-first when nothing is recorded. With the Figma MCP connected or a cached token extraction, it pulls the design system and builds a token-faithful, self-contained HTML preview, audited for compliance; with no recorded approach and no Figma it stops early and asks — connect Figma (/connect-mcps), generate an external-tool prompt (v0 / Lovable / Bolt), or build plain HTML without the design system. Reads the job spec (preferred) or PRD first, mines its rules and states, and ends with a requirements-coverage checklist; UI choices never become new requirements. Saves to product-development/product/prototypes/. Use on /prototype, "prototype this", a Figma frame/file/node URL to preview or click through, "make this screenshot match our design system", "can I see this before we build it". NOT for requirements (/prd-draft first), ASCII wireframes (/napkin-sketch), critiquing a built prototype (/prototype-challenge), applying review feedback (/prototype-feedback), or production component code (/code-first-draft).
 argument-hint: "[figma-url | v0 | lovable | bolt | html]"
 group: prototyping
 ---
@@ -19,15 +19,23 @@ A prototype is a throwaway hypothesis, not the component library — it does not
 
 Resolve the path FIRST, so a blocked run stops in seconds, not after minutes of reading:
 
-1. **An explicit argument wins — no routing question.** A Figma URL → Figma path against that file. `v0` / `lovable` / `bolt` → external-prompt path. `html` → plain-HTML path.
-2. **Cached extraction exists** (`product-development/product/prototypes/design-system/tokens.css`) → Figma path, using the cache. Works even when the MCP is offline; only a refresh needs it.
-3. **Figma MCP reachable?** Probe for Figma MCP tools (ToolSearch; an unauthenticated server counts as NOT set up). Reachable → Figma path.
-4. **None of the above → stop and ask, immediately.** Resolve only which feature is being prototyped (so the question is concrete), then ask ONE question:
+1. **An explicit argument wins — no routing question.** A Figma URL → Figma path against that file. `v0` / `lovable` / `bolt` → external-prompt path. `html` → plain-HTML path. An argument that contradicts the recorded team choice (below) is a one-run override — say so in the reply.
+2. **The team's recorded choice** — `product-development/toolchain.yaml` → `prototyping.approach`, set by `/customize-os design-system`. Follow it without asking; when its tool is unreachable, stop and name the recorded approach — offer the fix (`/connect-mcps`) or an explicit one-off fallback, never a silent downgrade.
+   - `figma-mcp` → Figma path (cache first, then MCP, as below). No cache and MCP unreachable → stop as above.
+   - `design-mcp` → the same shape against the named MCP: probe its tools, extract what it offers into the same `design-system/tokens.css` cache format with the source recorded. Unreachable → stop as above.
+   - `claude-design` → the recorded `design-url` is the visual target: read/screenshot it when Claude Design tools are reachable; tokens follow the screenshots recipe (derive once, cache, mark approximate). Unreachable → ask for an exported screenshot of the relevant frames, and say why.
+   - `screenshots` → the folder at `params.screenshots-dir` is the visual reference: derive an approximate token block from the screenshots once, cache it in `design-system/tokens.css` with `source: screenshots` and mark it approximate in `design-system.md`. Empty folder → stop and ask for screenshots.
+   - `external-prompts` → external-prompt path with `params.preferred-tool`, no routing question.
+   - `plain-html` → plain-HTML path; the file header notes it is not design-system-grounded, by team choice.
+   - `undecided`, key or file missing → continue below.
+3. **Cached extraction exists** (`product-development/product/prototypes/design-system/tokens.css`) → Figma path, using the cache. Works even when the MCP is offline; only a refresh needs it.
+4. **Figma MCP reachable?** Probe for Figma MCP tools (ToolSearch; an unauthenticated server counts as NOT set up). Reachable → Figma path.
+5. **None of the above → stop and ask, immediately.** Resolve only which feature is being prototyped (so the question is concrete), then ask ONE question:
    - **Connect Figma first** — `/connect-mcps connect to figma`, then rerun; the prototype will follow the real design system.
    - **External-tool prompt** — a paste-ready prompt for v0.dev, Lovable, or Bolt.new (which tool → see Step 4b).
    - **Plain HTML** — build here, without the design system; honest but not brand-faithful.
 
-   When Figma IS available (cache or MCP), never ask this question.
+   Mention once that `/customize-os design-system` records a standing choice so this question stops appearing. When Figma IS available (cache or MCP) or an approach is recorded, never ask this question.
 
 ## Step 1 — Ground in the spec (all paths)
 
@@ -137,7 +145,8 @@ Full contract: `governance/write-back-contract.md`:
 
 ## Traps
 
-- **Asking the routing question when Figma is set up** — or not asking it, and silently inventing a design system, when it isn't.
+- **Asking the routing question when Figma is set up or an approach is recorded in toolchain.yaml** — or not asking it, and silently inventing a design system, when neither holds.
+- **Silently downgrading a recorded approach** — the recorded tool being unreachable is a stop-and-say moment, not a license to build plain HTML; and an explicit argument that overrides the record is named as a one-run override in the reply.
 - **Shipping `get_design_context` output verbatim** — it's React + Tailwind by default; translate or ask for plain HTML up front.
 - **Calling `get_design_context` on a page or huge frame** — outline with `get_metadata` first, then drill.
 - **Refreshing the token cache without being asked** — the user may have hand-corrected it.

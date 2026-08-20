@@ -22,7 +22,7 @@ const seq = (items) => ({ t: "seq", items });                    // the big-pict
 const cards = (items) => ({ t: "cards", items });                // [{title, text, link}]
 
 const SRC = "https://github.com/alexey-orlov/SoftServe-Work-OS";
-const ADO_FILTER = "/product-development/feature-index.yaml;/product-development/product/strategy/business-context/*;/product-development/product/handbook/templates/*;/product-development/engineering/*;/CLAUDE.md;/governance/*;/os-installation/*;/Documentation/*;/.claude/*;/.github/*";
+const ADO_FILTER = "/product-development/feature-index.yaml;/product-development/toolchain.yaml;/product-development/product/strategy/business-context/*;/product-development/product/handbook/templates/*;/product-development/engineering/*;/CLAUDE.md;/governance/*;/os-installation/*;/Documentation/*;/.claude/*;/.github/*";
 
 const doc = {
   name: "Work OS Team Setup",
@@ -177,7 +177,7 @@ const doc = {
         ], [1800, 3400, 2200, 2400]),
         h2("Prototyping", "g-proto"),
         table(["Skill", "What it does", "You give it", "You get"], [
-          ["`/prototype`", "Builds a clickable prototype that follows your design system — pulled live from Figma when it's connected; without Figma it asks: connect it, get a prompt for an external tool (v0, Lovable, Bolt), or build plain HTML", "A job spec or PRD — plus a Figma frame or screenshot, if you have one", "A self-contained clickable prototype in `product/prototypes/`, or a copy-paste prompt"],
+          ["`/prototype`", "Builds a clickable prototype that follows your design system — the way your team set it up (Figma live, another design tool, Claude Design, a screenshots folder, or none); with no standing choice and no Figma it asks: connect it, get a prompt for an external tool (v0, Lovable, Bolt), or build plain HTML", "A job spec or PRD — plus a Figma frame or screenshot, if you have one", "A self-contained clickable prototype in `product/prototypes/`, or a copy-paste prompt"],
           ["`/prototype-challenge`", "Claude critiques a built prototype before you share it — design-system compliance, coverage of the spec, usability, and engineering / design / user lenses", "The prototype", "A prioritized must-fix / should-fix / nice-to-have report, saved next to the prototype"],
           ["`/prototype-feedback`", "Applies a round of review feedback to a prototype — sorts every comment, asks you the open decisions in one batch, edits carefully, and logs what was applied, deferred or declined", "The feedback (a thread, notes, an annotated screenshot) and which prototype", "The updated prototype and a per-item log entry"],
           ["`/napkin-sketch`", "ASCII wireframes or a capture of an existing screen", "The screen or feature", "A wireframe to react to"],
@@ -186,7 +186,7 @@ const doc = {
         h2("OS admin & governance", "g-admin"),
         p("Setting the Work OS up, and keeping the repository honest before and after a feature ships. Mostly the Work OS admin's — described in the Setup section."),
         table(["Skill", "What it does", "You give it", "You get"], [
-          ["`/customize-os`", "Adapts the Work OS to your company — naming, business context, templates, auto-sync mode", "Your company's basics and example documents", "Customized context files + a readout; resumable"],
+          ["`/customize-os`", "Adapts the Work OS to your company — naming, business context, templates, the prototyping design approach, auto-sync mode", "Your company's basics and example documents", "Customized context files + a readout; resumable"],
           ["`/auto-sync`", "The switch for the automatic saving and syncing (on / off / status)", "The mode", "The current state and the gated list"],
           ["`/propose`", "Opens the pull request that carries your gated changes to the admins", "Nothing — reads what's waiting on your branch", "A pull request with a plain-language description"],
           ["`/connect-mcps`", "Connects a tool so skills read it live", "The tool name", "A tested connection, wired into the skills that use it"],
@@ -236,6 +236,7 @@ const doc = {
         h2("product-development/ — the top level", "pd"),
         table(["Item", "Type", "What's in it", "How it's used"], [
           ["`feature-index.yaml`", "Registry", "Master lookup: every feature mapped to its PRD, plan, metrics, experiments, tickets and initiative", "First stop for any \"state of feature X\" question; every repo-writing skill updates it"],
+          ["`toolchain.yaml`", "Registry", "The team's standing tool and approach choices, one entry per working surface — today: how prototypes follow your design system", "Written by `/customize-os` (re-run the target to change a choice); `/prototype` follows it instead of asking every time"],
           ["`inbox/`", "Raw material (drop zone)", "Transient landing zone for integration drops — transcripts, exports. Nothing lives here for long", "Swept by `/context-update`; transcripts are handed to `/process-meeting`, which files them to their home"],
         ], [2300, 1400, 3200, 2500]),
         h2("product-development/product/", "product"),
@@ -534,12 +535,13 @@ const doc = {
           "You have finished [Set up your computer](#/setup/computer) steps 1–6 (install, folder, clone, name, sign-in; auto-sync will show *off* — expected).",
           "The repository admin has confirmed you are in the {gh:`os-admins` team|az:`OS-Admins` group}.",
           "You have your company's basics at hand: product, customers, how you name your documents (PRD / brief / one-pager …), two to four example documents in your house format.",
+          "Optional: you know where your design system lives — a Figma library, another design tool, or a folder of product screenshots. Fine to skip; it can be set any time later.",
         ]),
         h2("Step 1 — Run the guided customization", "z1"),
         p("`/customize-os` is a conversation. It reads what is already customized, asks only for what is missing, writes the customized context files behind the 🔒 prompt, and ends with a readout of what changed and what is still needed. You can stop any time and continue later with `/customize-os continue`."),
         steps([
           step("Ask Claude:", say("/customize-os")),
-          "Answer the questions: how your company names its documents (keep the Work OS names or map them to yours), your business context, your document formats (from example documents). Approve each 🔒 prompt after reading the change.",
+          "Answer the questions: how your company names its documents (keep the Work OS names or map them to yours), your business context, your document formats (from example documents), and how prototypes should follow your design system — Figma, another design tool, Claude Design, a folder of screenshots, prompts for an external tool, or plain HTML. Skipping is fine: answer later, or change your mind any time, with `/customize-os design-system`. Approve each 🔒 prompt after reading the change.",
           step("Near the end Claude asks which **auto-sync mode** the team wants. Answer **pr** (the mode for a protected `main` — changes move through pull requests) and say **yes** to switch it on now.",
             callout("expected", "Claude confirms **\"Auto-sync is ON — pr mode (main is pull-request-only)\"** and lists the gated files. From the next response on, your work is saved to your branch automatically; the customization changes are waiting there for approval.")),
           "Read the closing readout: what changed and where, and what is still open (Critical / Other). `os-installation/customization-status.md` keeps the state for the next session.",

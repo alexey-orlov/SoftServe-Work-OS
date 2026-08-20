@@ -63,7 +63,8 @@ const hnav = (text) => hinl(text, true);
 function endsInStepFlow(blocks, flow = false) {
   for (const b of blocks) {
     if (b.t === "steps") flow = true;
-    else if (b.t === "platform" || b.t === "method") flow = endsInStepFlow(b.blocks, flow);
+    else if (b.t === "platform") flow = endsInStepFlow(b.blocks, flow);
+    else if (b.t === "method") flow = false; // method runs render as a bordered card — its edge closes the procedure
     else if (b.t === "callout" || b.t === "say" || b.t === "code") { /* keep flow */ }
     else flow = false;
   }
@@ -73,11 +74,17 @@ let copyId = 0;
 function html(blocks, ctx = { inStep: false, route: "", flow: false }) {
   const o = [];
   let flow = ctx.flow || false; // did the previous sibling leave us in a step procedure?
-  let prevMethod = false; // emit the compact method switch once, at the start of each run of method() blocks
+  // Consecutive method() blocks merge into one tabbed card: the switch renders as the card's tab
+  // bar, so the control is physically attached to the instructions it swaps (SDK-docs code-tab
+  // pattern) instead of floating above them.
+  const merged = [];
   for (const b of blocks) {
+    const last = merged[merged.length - 1];
+    if (b.t === "method" && last && last.t === "methodgroup") last.methods.push(b);
+    else merged.push(b.t === "method" ? { t: "methodgroup", methods: [b] } : b);
+  }
+  for (const b of merged) {
     const stepAligned = flow && !ctx.inStep; // indent outcome callouts to the step-body column
-    if (b.t === "method" && !prevMethod) o.push(MTHSWITCH);
-    prevMethod = b.t === "method";
     switch (b.t) {
       case "h2": o.push(`<h2 id="${b.id}">${hinl(b.text)}</h2>`); break;
       case "h3": o.push(`<h3 id="${b.id}">${hinl(b.text)}</h3>`); break;
@@ -92,15 +99,16 @@ function html(blocks, ctx = { inStep: false, route: "", flow: false }) {
       case "table": { const cg = b.widths ? `<colgroup>${(() => { const t = b.widths.reduce((x, y) => x + y, 0); return b.widths.map((w) => `<col style="width:${Math.round(w / t * 100)}%">`).join(""); })()}</colgroup>` : ""; o.push(`<div class="tbl"><table>${cg}<thead><tr>${b.header.map((h) => `<th>${hinl(h)}</th>`).join("")}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c, i) => i === 0 && !b.header[0] ? `<th scope="row">${hinl(c)}</th>` : `<td>${hinl(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`); break; }
       case "steps": o.push(`<ol class="steps">${b.items.map((it) => `<li><div class="step-body"><p>${hinl(it.text)}</p>${html(it.sub, { ...ctx, inStep: true, flow: false })}</div></li>`).join("")}</ol>`); break;
       case "platform": o.push(`<div class="pf" data-platform="${b.name}">${html(b.blocks, { ...ctx, flow })}</div>`); break;
-      case "method": o.push(`<div class="mth" data-method="${b.name}">${html(b.blocks, { ...ctx, flow })}</div>`); break;
+      case "methodgroup": o.push(`<section class="mth-card">${MTHTABS}${b.methods.map((m) => `<div class="mth" data-method="${m.name}">${html(m.blocks, { ...ctx, flow })}</div>`).join("")}</section>`); break;
       case "details": o.push(`<details class="more"><summary>${esc(b.summary)}</summary>${html(b.blocks, { ...ctx, flow: false })}</details>`); break;
       case "image": { const data = fs.readFileSync(path.join(__dirname, b.file)).toString("base64"); o.push(`<figure class="ill"><img src="data:image/jpeg;base64,${data}" alt="${esc(b.alt)}" loading="lazy">${b.caption ? `<figcaption>${hinl(b.caption)}</figcaption>` : ""}</figure>`); break; }
       case "seq": o.push(`<ol class="seq">${b.items.map((i, n) => `<li><div class="seq-n">${n + 1}</div><div class="seq-body"><div class="seq-who">${esc(i.who)}</div><p>${hinl(i.what)}</p><div class="seq-foot"><span class="seq-time">${esc(i.time)}</span><a href="${esc(i.link)}">${esc(i.label)} →</a></div></div></li>`).join("")}</ol>`); break;
     }
     // Carry step-flow to the next sibling: steps open it; callout/say/code keep it; platform
-    // and method continue it only if their own tail is still in flow; anything else closes it.
+    // continues it only if its own tail is still in flow; a method card's border closes the
+    // procedure visually, so it (and anything else) closes it.
     if (b.t === "steps") flow = true;
-    else if (b.t === "platform" || b.t === "method") flow = endsInStepFlow(b.blocks, flow);
+    else if (b.t === "platform") flow = endsInStepFlow(b.blocks, flow);
     else if (b.t === "callout" || b.t === "say" || b.t === "code") { /* keep flow */ }
     else flow = false;
   }
@@ -118,10 +126,11 @@ const flat = ARTICLES.map(({ s, a }) => ({ s, a, route: `${s.id}/${a.id}` }));
 // The platform switch sits under every article title (not in the header, where readers miss it). One instance per
 // article; all instances mirror <html data-platform>, so the choice — kept in localStorage — is the same on every page.
 const PFBAR = `<div class="pfbar"><span class="pfbar-label">Your platform</span><div class="seg pf-seg" role="group" aria-label="Your platform"><button type="button" data-set="github" aria-pressed="true">GitHub</button><button type="button" data-set="azure" aria-pressed="false">Azure Repos</button></div></div>`;
-// The setup-method switch is NOT in the bar: a compact instance is emitted automatically directly above every
-// consecutive run of method() blocks — right where the instructions it swaps begin. All instances mirror
+// The setup-method switch is NOT in the bar and never floats free: it renders as the tab bar of
+// the card built around each run of method() blocks (see html()), so the toggle sits on the exact
+// instructions it swaps — like the language tabs on an SDK code sample. All instances mirror
 // <html data-method> (kept in localStorage), so flipping any one flips them all.
-const MTHSWITCH = `<div class="mth-switch"><span class="mth-label">Setup method</span><div class="seg mth-seg" role="group" aria-label="Setup method"><button type="button" data-set="app" aria-pressed="true">Connectors screen</button><button type="button" data-set="chat" aria-pressed="false">Chat commands</button></div></div>`;
+const MTHTABS = `<div class="mth-tabs" role="group" aria-label="Setup method"><button type="button" data-set="app" aria-pressed="true">Connectors screen</button><button type="button" data-set="chat" aria-pressed="false">Chat commands</button></div>`;
 const articlesHtml = flat.map(({ s, a, route }, idx) => {
   const rail = navTree(a.blocks);
   const prev = flat[idx - 1], next = flat[idx + 1];
@@ -209,17 +218,20 @@ html[data-method="chat"] [data-method="app"]{display:none!important}
 .seg{position:relative; display:inline-grid; grid-template-columns:1fr 1fr; flex:0 0 auto; padding:3px; border:1px solid var(--line); border-radius:999px; background:var(--surface); box-shadow:inset 0 1px 2px rgba(10,37,64,.06)}
 .seg::before{content:""; position:absolute; top:3px; bottom:3px; left:3px; width:calc(50% - 3px); border-radius:999px; background:var(--seg-on); box-shadow:0 1px 2px rgba(10,37,64,.25); transition:transform .18s ease}
 html[data-platform="azure"] .pf-seg::before{transform:translateX(100%)}
-html[data-method="chat"] .mth-seg::before{transform:translateX(100%)}
 .seg button{position:relative; appearance:none; border:0; background:transparent; color:var(--muted); font:600 13.5px/1 var(--font); padding:8px 18px; border-radius:999px; cursor:pointer; white-space:nowrap; transition:color .18s}
 .seg button:hover{color:var(--ink)}
-html[data-platform="github"] .pf-seg button[data-set="github"], html[data-platform="azure"] .pf-seg button[data-set="azure"], html[data-method="app"] .mth-seg button[data-set="app"], html[data-method="chat"] .mth-seg button[data-set="chat"]{color:var(--seg-on-fg); cursor:default}
+html[data-platform="github"] .pf-seg button[data-set="github"], html[data-platform="azure"] .pf-seg button[data-set="azure"]{color:var(--seg-on-fg); cursor:default}
 .seg button:focus-visible{outline:none; border-radius:999px; box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
 @media (max-width:560px){.pfbar{padding:10px 12px} .pfbar-label{flex-basis:100%} .seg{width:100%}}
 
-/* ---------- setup-method switch — compact, sits inline directly above the instructions it swaps */
-.mth-switch{display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px; margin:2px 0 14px}
-.mth-switch .mth-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--faint)}
-.mth-switch .seg button{padding:5px 13px; font-size:12.5px}
+/* ---------- setup-method tabs — the tab bar of the card wrapping each run of method() blocks, styled like the top-nav tabs / an SDK code sample's language tabs */
+.mth-card{border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); margin:2px 0 22px; overflow:hidden}
+.mth-tabs{display:flex; gap:18px; padding:0 16px; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto}
+.mth-tabs button{appearance:none; border:0; background:transparent; color:var(--muted); font:500 13px/1 var(--font); padding:10px 2px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; white-space:nowrap; transition:color .15s}
+.mth-tabs button:hover{color:var(--ink)}
+html[data-method="app"] .mth-tabs button[data-set="app"], html[data-method="chat"] .mth-tabs button[data-set="chat"]{color:var(--accent-deep); border-bottom-color:var(--accent); cursor:default}
+.mth-card .mth{padding:16px 18px}
+.mth-card .mth > :last-child{margin-bottom:0}
 
 /* ---------- layout */
 .wrap{max-width:1400px; margin:0 auto; padding:0 28px; display:grid; grid-template-columns:240px minmax(0,1fr); gap:48px}
@@ -327,7 +339,7 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
 .pager a b{font-weight:600}
 .pager-next{text-align:right; grid-column:2}
 .foot{max-width:1400px; margin:0 auto; padding:18px 28px 40px; border-top:1px solid var(--line); font-size:12.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:8px 24px}
-@media print{.top,.side,.rail,.pager,.pfbar,.mth-switch,button.copy{display:none!important} .wrap{display:block} article[hidden]{display:none!important} article{display:block} body{background:#fff}}
+@media print{.top,.side,.rail,.pager,.pfbar,.mth-tabs,button.copy{display:none!important} .wrap{display:block} article[hidden]{display:none!important} article{display:block} body{background:#fff}}
 </style>
 
 <header class="top"><div class="top-in">
@@ -350,9 +362,9 @@ figure.ill figcaption{display:block; font-size:12.5px; color:var(--muted); margi
   function setPf(p){root.setAttribute("data-platform",p); try{localStorage.setItem(KEY,p)}catch(e){}
     document.querySelectorAll(".pf-seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===p))}); spy();}
   function setMth(m){root.setAttribute("data-method",m); try{localStorage.setItem(MKEY,m)}catch(e){}
-    document.querySelectorAll(".mth-seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===m))}); spy();}
+    document.querySelectorAll(".mth-tabs button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.set===m))}); spy();}
   document.querySelectorAll(".pf-seg button").forEach(function(b){b.addEventListener("click",function(){setPf(b.dataset.set)})});
-  document.querySelectorAll(".mth-seg button").forEach(function(b){b.addEventListener("click",function(){setMth(b.dataset.set)})});
+  document.querySelectorAll(".mth-tabs button").forEach(function(b){b.addEventListener("click",function(){setMth(b.dataset.set)})});
 
   var articles=[].slice.call(document.querySelectorAll("article[data-route]"));
   var home="${doc.home.join("/")}", current=null;

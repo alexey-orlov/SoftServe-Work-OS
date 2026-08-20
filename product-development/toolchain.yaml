@@ -1,0 +1,40 @@
+# Toolchain — which tool or approach each workflow surface of this team's OS uses.
+#
+# The org's standing CHOICES, one key per surface — distinct from connection state:
+# /connect-mcps makes tool servers reachable and records the wiring; THIS file records
+# what the team decided to work with, so skills route by it instead of re-asking.
+#
+#   Written by /customize-os — one guided choice target per key (e.g.
+#   `/customize-os design-system` for `prototyping:`). Re-running a target re-asks
+#   the full question, so a choice can be changed later the same way it was made.
+#   Read by the skills named in each key's comment.
+#   /connect-mcps reads it only to suggest the matching /customize-os target after
+#   wiring a tool whose surface is still `undecided` — it never sets choices.
+#
+# Gated (governance/write-policy.yaml): every change goes through the 🔒 write prompt.
+# The master ships every key `undecided` — a fresh instance decides via /customize-os,
+# or skips and lets the consuming skills ask at run time.
+
+version: 1
+
+# How prototypes get their design grounding. Read by /prototype (Step 0 routing);
+# /prototype-challenge and /prototype-feedback inherit the token cache it produces.
+# Set or change with: /customize-os design-system
+prototyping:
+  approach: undecided   # figma-mcp | design-mcp | claude-design | screenshots | external-prompts | plain-html | undecided
+  # Parameters by approach — fill only what the chosen approach needs:
+  #   figma-mcp:        library-url — the design-system file/library tokens are extracted from
+  #   design-mcp:       mcp-name (as registered) + source-url or equivalent
+  #   claude-design:    design-url — the Claude Design space/board holding the system
+  #   screenshots:      screenshots-dir (default product-development/product/prototypes/design-system/screenshots/)
+  #   external-prompts: preferred-tool — v0 | lovable | bolt
+  #   plain-html:       (none)
+  params: {}
+  decided:              # YYYY-MM-DD, set by /customize-os; empty while undecided
+  notes: ""             # one line of rationale, if any
+
+# Future surfaces follow the same shape — add a key here plus a /customize-os target row.
+# Candidates (not yet implemented as targets):
+#   ticketing:      tracker + route (mcp | text-fallback) — read by /create-tickets
+#   product-truth:  where "what does the product do" questions ground first
+#                   (code | documentation | other) — read by /code-qa
