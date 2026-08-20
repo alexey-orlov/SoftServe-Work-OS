@@ -27,7 +27,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.8 · August 2026",
+  version: "v2.9 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -625,9 +625,9 @@ const doc = {
           ])
         ),
         callout("pass", "Ask Claude something the tool answers — *\"what did we decide in yesterday's product sync?\"* (meeting recordings), *\"what's open in this sprint?\"* (task tracker) — and get a live answer instead of a request to paste something."),
-        h2("Figma, step by step", "figma"),
-        p("Figma gets its own walkthrough for two reasons: it's the connection that lets `/prototype` build against your real design system instead of a lookalike, and Figma's own licensing decides which of its connectors will work for you — worth checking before anyone selects Connect."),
-        h3("Before you start — Figma licensing", "figma-before"),
+        h2("Connect Figma", "figma"),
+        p("Figma connects like any other tool — the Work OS admin first, then each person — with two Figma-specific details to check before anyone selects **Connect**: which of Figma's two connectors to pick, and what your Figma plan and seats allow."),
+        h3("Before you start", "figma-before"),
         p("Figma ships two connectors, and you may see both offered. They have different requirements:"),
         table(["Connector", "What it needs", "Who it's for"], [
           ["**Figma** — the web connector", "Any Figma plan and seat can connect. Full everyday use needs a **Dev or Full seat on a paid plan**; View and Collab seats — and the free Starter plan — get a small monthly allowance of Figma actions, enough to try it, not to work with.", "Everyone. This is the one to use for the Work OS."],
@@ -638,10 +638,10 @@ const doc = {
           "If your company signs in to Figma through single sign-on, everyone uses the **company sign-in**, not a personal Figma account — the designs live in the company workspace.",
         ]),
         callout("note", "Seats and allowances are Figma's rules and change over time — if the connection works but Figma answers stop coming after a handful of questions, you've hit a seat allowance, not a bug. Current numbers: [Figma's guide to its MCP server](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)."),
-        h3("Once, by the Work OS admin — before anyone else", "figma-admin"),
+        h3("Step 1 — Connect Figma for the team (Work OS admin)", "figma-admin"),
         method("app",
           steps([
-            step("In the Claude app, open **Settings › Connectors**, find **Figma** and select **Connect**. If two Figma rows appear, pick the web one — not *Desktop* (see above)."),
+            step("In the Claude app, open **Settings › Connectors**, find **Figma** and select **Connect**. If two Figma rows appear, pick the web one — not *Desktop* (see [Before you start](#/setup/tools/figma-before))."),
             step("A browser tab opens to sign in. Use your **work Figma account** — the company sign-in if you have one — and complete any two-step verification your company requires.",
               callout("note", "If the sign-in drops or asks for extra verification, finish that verification first — the email can take a few minutes — then select **Connect** again. To start over: **Settings › Connectors › Figma › Disconnect**.")),
             step("In the Work OS folder, start a new chat and have Claude record the connection for the team:", say("/connect-mcps connect to Figma"),
@@ -658,7 +658,7 @@ const doc = {
             step("Publish the record for everyone:", platform("github", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and merge it")), platform("azure", say("Publish the gated changes for everyone — I'm a Work OS admin: open the pull request, approve it and complete it"))),
           ])
         ),
-        h3("Then each person, with their own account", "figma-users"),
+        h3("Step 2 — Connect Figma for yourself (each user)", "figma-users"),
         method("app",
           steps([
             step("Open **Settings › Connectors**, find **Figma**, select **Connect** — the web row, not *Desktop* — and sign in with your own work Figma account."),
