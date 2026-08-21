@@ -156,6 +156,52 @@ const routes = {
   'PUT /api/state': async (q, body) => saveState(body),
 };
 
+// ---------------------------------------------------------------- live events
+// fs.watch (recursive) + Server-Sent Events: connected consoles re-render when
+// the repo changes — a Claude session committing, a hand edit, another console.
+
+const sseClients = new Set();
+
+function broadcast(payload) {
+  const msg = `data: ${JSON.stringify(payload)}\n\n`;
+  for (const c of sseClients) { try { c.write(msg); } catch { sseClients.delete(c); } }
+}
+
+let pendingChanges = new Set();
+let flushTimer = null;
+function noteChange(rel) {
+  pendingChanges.add(rel);
+  clearTimeout(flushTimer);
+  flushTimer = setTimeout(() => {
+    const paths = [...pendingChanges].slice(0, 20);
+    pendingChanges = new Set();
+    broadcast({ type: 'repo-changed', paths });
+  }, 350);
+}
+
+function watchRepo() {
+  try {
+    fsp.watch(repo.ROOT, { recursive: true }, (eventType, fname) => {
+      if (!fname) return noteChange('(repo)');
+      const rel = String(fname).split(path.sep).join('/');
+      // .git fires constantly during operations — only ref/HEAD moves (= commits,
+      // branch switches) are worth a refresh.
+      if (rel === '.git' || rel.startsWith('.git/')) {
+        if (rel === '.git/HEAD' || rel.startsWith('.git/refs/')) noteChange('(git)');
+        return;
+      }
+      if (rel === 'os-console/state.json') return; // prefs writes must not loop refreshes
+      if (rel.endsWith('.DS_Store') || rel.startsWith('node_modules/') || rel.startsWith('_extracted-personal/')) return;
+      noteChange(rel);
+    });
+    console.log('  watching the repo — open consoles refresh live');
+  } catch (e) {
+    console.log(`  fs.watch unavailable here (${e.message}) — live refresh off, the ⟳ button still works`);
+  }
+}
+
+setInterval(() => { for (const c of sseClients) { try { c.write(': hb\n\n'); } catch { sseClients.delete(c); } } }, 30000).unref();
+
 // ---------------------------------------------------------------- static files
 
 const MIME = {
@@ -186,6 +232,13 @@ const server = http.createServer(async (req, res) => {
       const out = await routes[key](url.searchParams, body);
       return json(res, 200, out);
     }
+    if (key === 'GET /api/events') {
+      res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-store', 'Connection': 'keep-alive' });
+      res.write(': connected\n\n');
+      sseClients.add(res);
+      req.on('close', () => sseClients.delete(res));
+      return;
+    }
     if (key === 'GET /api/raw') {
       const { rel, abs } = repo.resolveSafe(url.searchParams.get('path'));
       const mime = repo.mimeFor(rel);
@@ -211,6 +264,7 @@ server.listen(PORT, HOST, () => {
   console.log(`  →  http://${HOST}:${PORT}`);
   console.log(`  repo: ${repo.ROOT}`);
   console.log('  write tiers come from governance/write-policy.yaml — gated files are badged; a save is your approval');
+  watchRepo();
   console.log('');
 });
 

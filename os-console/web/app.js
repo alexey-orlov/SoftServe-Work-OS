@@ -39,7 +39,7 @@ function parseHash() {
   return { name: pathPart.split('/')[0] || 'home', params: new URLSearchParams(query || '') };
 }
 
-async function render() {
+async function render(preserveScroll = false) {
   const { name, params } = parseHash();
   const mod = ROUTES[name] || home;
   document.querySelectorAll('.nav-item').forEach((n) => {
@@ -48,6 +48,7 @@ async function render() {
       || ((name === 'file' || name === 'edit') && n.dataset.route === 'library'));
   });
   const view = document.getElementById('view');
+  const prevScroll = view.scrollTop;
   view.replaceChildren();
   setCrumbs(null);
   try {
@@ -57,7 +58,7 @@ async function render() {
     view.replaceChildren(el('div', { class: 'page' },
       el('div', { class: 'card' }, el('h3', {}, 'This view failed to load'), el('div', { class: 'hint' }, e.message))));
   }
-  view.scrollTop = 0;
+  view.scrollTop = preserveScroll ? prevScroll : 0;
 }
 
 function buildNav() {
@@ -122,12 +123,76 @@ function wireSearch() {
   });
 }
 
+// ---- live refresh -----------------------------------------------------------
+// The server watches the repo (fs.watch) and streams change events; open views
+// re-render so the console always mirrors disk. Auto-refresh holds back while
+// you are typing (editor, any focused field, open modal) — the ⟳ button gets an
+// orange dot instead, and catches up as soon as you are done.
+
+const refreshBtn = document.getElementById('refresh-btn');
+let pendingRefresh = false;
+
+function canAutoRefresh() {
+  if (parseHash().name === 'edit') return false;
+  if (document.getElementById('modal-root').childElementCount > 0) return false;
+  const a = document.activeElement;
+  if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.id !== 'search') return false;
+  return true;
+}
+
+function markPending() {
+  pendingRefresh = true;
+  refreshBtn.classList.add('attention');
+}
+
+function doRefresh() {
+  pendingRefresh = false;
+  refreshBtn.classList.remove('attention');
+  render(true);
+  refreshChrome();
+}
+
+function catchUpIfPending() {
+  if (pendingRefresh && canAutoRefresh()) doRefresh();
+}
+
+function wireLive() {
+  refreshBtn.append(icon('refresh'));
+  refreshBtn.addEventListener('click', doRefresh);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'r' && !e.metaKey && !e.ctrlKey && !e.altKey
+      && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) doRefresh();
+  });
+  // catch up once typing/modals finish
+  document.addEventListener('focusout', () => setTimeout(catchUpIfPending, 60));
+  new MutationObserver(() => setTimeout(catchUpIfPending, 60))
+    .observe(document.getElementById('modal-root'), { childList: true });
+
+  const es = new EventSource('/api/events');
+  es.onmessage = (m) => {
+    let detail;
+    try { detail = JSON.parse(m.data); } catch { return; }
+    if (detail.type !== 'repo-changed') return;
+    const { name, params } = parseHash();
+    if (name === 'edit') {
+      const open = params.get('path');
+      if (open && (detail.paths || []).includes(open)) {
+        toast('This file just changed on disk — reopen before saving, or your save will be rejected.', 'err');
+      }
+      markPending();
+      return;
+    }
+    if (canAutoRefresh()) doRefresh(); else markPending();
+  };
+}
+
 // ---- boot ------------------------------------------------------------------
 
 buildNav();
 wireSearch();
-window.addEventListener('hashchange', render);
+wireLive();
+window.addEventListener('hashchange', () => render(false));
 window.addEventListener('console:saved', refreshChrome);
 await loadState();
 refreshChrome();
-render();
+render(false);

@@ -30,6 +30,11 @@ binds localhost only.
   the auto-sync switchboard; in the `pr` strategy landing stays with the hooks and `/propose`.
 - **Guided programs stay in Claude Code.** Setup steps, `/auto-sync` flips, and drafting
   skills are handed off as copyable commands, not reimplemented.
+- **Live refresh.** The server watches the repo (`fs.watch`, `.git` noise filtered to
+  ref/HEAD moves) and streams change events over SSE (`/api/events`); open views
+  re-render automatically. Auto-refresh holds back while the person is typing or has a
+  modal open — the ⟳ button shows a dot and catches up on blur. Where `fs.watch` is
+  unavailable the button alone still works.
 - `state.json` (gitignored) holds console-only prefs — pins, recents. Never canonical truth.
 
 ## Contents

@@ -112,6 +112,11 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
 
 /* ---------- topbar & search ---------- */
 
+#refresh-btn { position: relative; margin-left: auto; flex: none; }
+#refresh-btn.attention::after {
+  content: ''; position: absolute; top: 1px; right: 1px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--warm);
+}
 #topbar {
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
   padding: 10px 34px; border-bottom: 1px solid var(--line);
