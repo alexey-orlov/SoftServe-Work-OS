@@ -2,7 +2,7 @@
 
 **Purpose:** Strategic considerations for building AI-powered products. Context for AI product decisions and positioning.
 
-**Source:** OpenAI's AI Product Sense Framework. Adapted for the SoftServe Team OS.
+**Source:** OpenAI's AI Product Sense Framework. Adapted for the SoftServe Work OS.
 
 ---
 
@@ -363,4 +363,4 @@
 - `/experiment-metrics` - Choose AI metrics
 - `/define-north-star` - Align AI features to North Star
 
-**Source:** OpenAI's AI Product Sense Framework. Adapted for the SoftServe Team OS.
+**Source:** OpenAI's AI Product Sense Framework. Adapted for the SoftServe Work OS.

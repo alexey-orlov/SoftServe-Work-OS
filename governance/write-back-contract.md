@@ -87,7 +87,8 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    skills — the ones that consume raw sources: `/context-update`, `/process-meeting`, and
    `/user-research-synthesis` (when handed raw transcripts directly). One repo-root-relative
    path per line, kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing
-   is re-judged.
+   is re-judged. One removal exception: `/demo-data remove` strips exactly the lines its
+   manifest records (synthetic content leaving the repo takes its ledger lines with it).
 7. **Run visibility.** A skill that processed multiple items reports what it did —
    processed / folded / skipped counts and every path touched. Nothing is handled silently.
 8. **Initiative joins are declared, not inferred.** Records that can touch current work
@@ -115,11 +116,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `planning/` (forward plans) | by filename prefix: `*-daily-plan.md` / `*-draft.md` → `/daily-plan` · `*-weekly-plan.md` → `/weekly-plan` |
 | `meetings/retros/lessons-learned.md` | append-only, by `/process-meeting`, `/weekly-review`, and `/context-update` |
 | `meetings/{type}/docs/feedback-*.md` | `/meeting-feedback` |
-| `product-development/inbox/` | integrations (and humans) drop files; `/context-update` sweeps gate them; `/process-meeting` moves them out to their transcript home; humans clear junk (file + ledger line together) |
+| `product-development/inbox/` | integrations (and humans) drop files, `/demo-data` drops its marked synthetic raw files; `/context-update` sweeps gate them; `/process-meeting` moves them out to their transcript home; humans clear junk (file + ledger line together) |
 | `customers/feature-requests/` records | created by `/process-meeting`; `tracker_ref` set only by `/create-tickets` push mode |
 | navigation list re-ordering | `/wiki-lint` only (its mechanical repairs, run by default) |
 | `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
-| `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel |
+| `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel; `/customize-os` may seed landscape and matrix rows once during guided setup |
 | `competitive-research/intel/` monthly records | `/competitor-analysis` monitoring mode only — append-only, one `{YYYY-MM}.md` per run |
 | `product/PRDs/{area}/` PRD files (`{slug}-prd.md`) | `/prd-draft` — creates and iterates; other skills link, never edit the PRD body |
 | `product/PRDs/{area}/` jobs-breakdown + job-spec files | by filename suffix: `{initiative-slug}-jobs-breakdown.md` → `/jobs-breakdown` · `{initiative-slug}-{job-slug}-job-spec.md` → `/job-spec-draft` — living docs, edited in place by their writer; other skills link, never edit |
@@ -128,5 +129,8 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `product/launches/` | `{slug}-launch-checklist.md` → `/launch-checklist` · `{slug}-gate-{date}.md` verdicts → `/feature-launch-gate` |
 | `analytics/metrics/{area}/` | by filename prefix: `feature-metrics-*` → `/feature-metrics` · `{job}-experiment-metrics.md` → `/experiment-metrics` · `north-star-*` → `/define-north-star` · `metrics-framework-*` / `metric-hierarchy-*` → `/metrics-framework` |
 | `.claude/team-learnings.md` | gated — agents propose entries via the capture loop in that file's header, `/session-retro`, or `governance/proposals/`, applied only on the user's in-session yes |
-| `strategy/business-context/platform-model.md` | PM fills and maintains (gated); skills read only — `/job-spec-draft` and `/jobs-breakdown` cite it, never edit it |
-| `engineering/tech-constraints.md` | Engineer fills and maintains (gated); skills read only — confirmed answers from job specs' Engineering-confirmations lists are folded in by the Engineer, not by skills |
+| `strategy/business-context/platform-model.md` | PM fills and maintains (gated; `/customize-os` may fill it during guided setup from the PM's own sources); skills read only — `/job-spec-draft` and `/jobs-breakdown` cite it, never edit it |
+| `engineering/tech-constraints.md` | Engineer fills and maintains (gated; `/customize-os` may fill it during guided setup from the Engineer's own sources); skills read only — confirmed answers from job specs' Engineering-confirmations lists are folded in by the Engineer, not by skills |
+| `strategy/business-context/` initial population — `business-info.md`, `stakeholders.md`, `segmentation-matrix.md` | `/customize-os` (guided setup, gated per file); afterwards the living-page and mirror rules above govern ongoing edits |
+| `os-installation/customization-status.md` + `customization-facts.yaml` | `/customize-os` — program state and the resolved-facts annex, updated once per run at the close |
+| `os-installation/demo-data-manifest.md` | `/demo-data` — created by generate, cleared by remove |

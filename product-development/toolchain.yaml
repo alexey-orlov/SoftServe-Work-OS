@@ -33,6 +33,19 @@ prototyping:
   decided:              # YYYY-MM-DD, set by /customize-os; empty while undecided
   notes: ""             # one line of rationale, if any
 
+# Where user-research and meeting records come from. Consulted when loading or locating
+# research material; /connect-mcps suggests the matching target after wiring a
+# transcripts/notes tool while this is undecided.
+# Set or change with: /customize-os research-source
+user-research:
+  source: undecided     # inbox-manual | mcp | undecided
+  # Parameters by source:
+  #   inbox-manual: (none) — people drop files into product-development/inbox/ per its CLAUDE.md
+  #   mcp:          mcp-name (as registered) — the connected tool records are pulled from
+  params: {}
+  decided:              # YYYY-MM-DD, set by /customize-os; empty while undecided
+  notes: ""             # one line of rationale, if any
+
 # Future surfaces follow the same shape — add a key here plus a /customize-os target row.
 # Candidates (not yet implemented as targets):
 #   ticketing:      tracker + route (mcp | text-fallback) — read by /create-tickets

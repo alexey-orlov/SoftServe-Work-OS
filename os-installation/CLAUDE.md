@@ -23,3 +23,5 @@ Everything needed to install this OS on your machine and confirm it works.
 ### Created on demand
 
 - `mcp-integration-logs/` — Written by `/connect-mcps` when a tool is connected
+- `customization-status.md` + `customization-facts.yaml` — Written by `/customize-os`: the guided-setup program state and the resolved-facts annex (what was populated, from which source)
+- `demo-data-manifest.md` — Written by `/demo-data`: every synthetic path and edit, so removal is exact; deleted when the demo data is removed

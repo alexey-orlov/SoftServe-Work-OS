@@ -2,7 +2,7 @@
 
 **Purpose:** Quick reference for the 13 types of growth loops. Use when designing viral mechanics or growth features.
 
-**Source:** Reforge's growth content. Adapted for the SoftServe Team OS.
+**Source:** Reforge's growth content. Adapted for the SoftServe Work OS.
 
 ---
 
@@ -290,4 +290,4 @@
 - `/retention-analysis` - Retention strengthens loops
 - `product-development/product/strategy/frameworks/plg-iceberg-framework.md` - Growth loops as Layer 3
 
-**Source:** Reforge's growth content. Adapted for the SoftServe Team OS.
+**Source:** Reforge's growth content. Adapted for the SoftServe Work OS.

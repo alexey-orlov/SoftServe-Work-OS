@@ -74,7 +74,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Area | File | Description |
 |------|------|-------------|
 | Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
-| Toolchain | `product-development/toolchain.yaml` | Per-surface tool/approach choices — prototyping design grounding now; ticketing, product-truth later. Written by `/customize-os` (re-run a target to change a choice), read by the consuming skills before they ask; `/connect-mcps` suggests the matching target when a wired tool's surface is still undecided |
+| Toolchain | `product-development/toolchain.yaml` | Per-surface tool/approach choices — prototyping design grounding and the user-research source now; ticketing, product-truth later. Written by `/customize-os` (re-run a target to change a choice), read by the consuming skills before they ask; `/connect-mcps` suggests the matching target when a wired tool's surface is still undecided |
 | Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
 | Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry + auto-sync switches), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending gated-change proposals) |
 | Write-back contract | `governance/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |

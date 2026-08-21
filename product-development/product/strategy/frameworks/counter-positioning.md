@@ -2,7 +2,7 @@
 
 **Purpose:** Framework for building a business model that incumbents can't copy without hurting themselves. Context for differentiation strategy.
 
-**Source:** Hamilton Helmer's "7 Powers" (one of the 7). Adapted for the SoftServe Team OS.
+**Source:** Hamilton Helmer's "7 Powers" (one of the 7). Adapted for the SoftServe Work OS.
 
 ---
 
@@ -228,4 +228,4 @@ We expect 2-3 years before they respond, giving us time to build [defensibility]
 - `product-development/product/strategy/frameworks/7-powers-framework.md` - Full list of durable advantages
 - `/strategy-sprint` - Apply in strategy planning
 
-**Source:** Hamilton Helmer's "7 Powers". Adapted for the SoftServe Team OS.
+**Source:** Hamilton Helmer's "7 Powers". Adapted for the SoftServe Work OS.

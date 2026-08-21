@@ -88,6 +88,8 @@ Please read each one and organize them into the appropriate folders in product-d
 
 **General rule:** Upload any document that helps Claude understand your product/company context
 
+**Keep the list of what you uploaded handy** — Setup Step 2's guided customization uses these same documents as its sources.
+
 ✅ **Mark complete when:** Your work documents are organized in product-development/
 
 ---
@@ -96,29 +98,31 @@ Please read each one and organize them into the appropriate folders in product-d
 
 **What we're doing:** Customizing the Team OS for your company
 
-```bash
-# First, let's see what context files exist
-ls product-development/
+**The guided way (recommended):**
 
-# Now customize one
-claude "Help me fill out product-development/product/strategy/business-context/business-info.md. My company is called [YourCompany], we make [product description]. Our main competitor is [competitor]. We have [user count] users and are [stage], growing [growth rate]."
+```bash
+claude "/customize-os"
 ```
 
-**Expected result:**
-- Claude helps you fill out the template
-- Creates or updates the file
-- Asks clarifying questions if needed
+The guided setup opens with the context step: it shows a table of what the steering
+files need (highly recommended vs. can-wait), takes the documents you already have —
+point it at the ones from Step 1, or drop more — and populates `business-info.md`, the
+root `CLAUDE.md` "Company & Product Fundamentals" block, stakeholder profiles, the
+segmentation matrix, and this quarter's goals from what your documents actually say.
+It then reports, row by row, what's filled and what's still an honest gap, offers web
+research for the public facts it couldn't find, and keeps going from there — initiative
+pages, design system, research source, naming, house templates. It saves its own
+progress: stop anytime and resume with
+
+```bash
+claude "/customize-os continue"
+```
 
 **Manual option:**
-Open `product-development/product/strategy/business-context/business-info.md` in your editor and fill it out yourself.
-
-**Then mirror the highlights into the root `CLAUDE.md`.** It has a "Company & Product Fundamentals" block near the top — product one-liner, ICP, business model, North Star, competitors, this quarter's focus. That block loads in every session, so it's what makes Claude answer as *your* company rather than a generic one. Ask Claude to do it:
-
-```bash
-claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-development/product/strategy/business-context/business-info.md. Keep it to the existing bullets — it's a summary, not a copy."
-```
-
-**Also fill out:**
+Open `product-development/product/strategy/business-context/business-info.md` in your
+editor and fill it out yourself; then mirror the highlights into the root `CLAUDE.md`
+"Company & Product Fundamentals" block (it loads every session — a summary, not a copy),
+and continue with:
 - This quarter's goals (`product-development/product/strategy/current-quarter.md`)
 - Stakeholder profiles (`product-development/product/strategy/business-context/stakeholders.md`)
 - Segmentation matrix — account counts and ARR by vertical × size band (`product-development/product/strategy/business-context/segmentation-matrix.md`); B2B teams only, delete the use-case sections if single-product
@@ -126,7 +130,7 @@ claude "Fill the Company & Product Fundamentals block in CLAUDE.md from product-
 
 > Personal context and working preferences stay in your **personal** OS — they are never committed here. See the Privacy Contract in [CLAUDE.md](../CLAUDE.md).
 
-✅ **Mark complete when:** Key context files are filled out
+✅ **Mark complete when:** The customization report shows every highly-recommended row filled (or a gap you consciously accepted) — or, on the manual path, the key context files are filled out
 
 ---
 
@@ -301,25 +305,20 @@ User 5: 'I end up scrolling through lists instead of using search because it's u
 
 ## Test 7: Context Personalization
 
-**What we're testing:** You can customize the system
+**What we're testing:** Your customization is tracked and resumable
 
 ```bash
-# First, let's see what context files exist
-ls product-development/
-
-# Now customize one
-claude "Help me fill out product-development/product/strategy/business-context/business-info.md. My company is called TaskFlow, we make a project management app for remote teams. Our main competitor is Asana. We have 50K users and are pre-product-market-fit, growing 20% month over month."
+claude "/customize-os status"
 ```
 
 **Expected result:**
-- Claude helps you fill out the template
-- Creates or updates the file
-- Asks clarifying questions if needed
+- A progress report across the setup sequence — which steps are done, which are open
+- What context was populated in Setup Step 2 shows as filled; nothing is changed by this command
 
-**Manual option:**
-Open `product-development/product/strategy/business-context/business-info.md` in Cursor or any editor and fill it out yourself.
+(Filling context with a made-up company is deliberately NOT the test here — after Setup
+Step 2 your context files hold real data, and a test run would overwrite it.)
 
-✅ **Mark complete when:** You have at least one context file filled out
+✅ **Mark complete when:** The status report matches what you actually did in Setup Step 2
 
 ---
 

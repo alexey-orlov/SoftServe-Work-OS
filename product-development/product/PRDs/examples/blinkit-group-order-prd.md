@@ -1,5 +1,8 @@
 # Group Order Feature for Blinkit
 
+> EXAMPLE — teaching sample, not a live spec. Every figure, market claim, and competitor
+> statement in it is an illustrative invention, not sourced fact.
+
 **Stage:** Solution Review
 **Last Updated:** January 7, 2026
 **Owner:** Product Team
@@ -378,4 +381,4 @@ If <4/6 criteria met → Pause, iterate, retest
 
 ---
 
-*PRD Version 1.0 - Created using PM Operating System framework*
+*Teaching example — structure follows this repo's PRD conventions.*

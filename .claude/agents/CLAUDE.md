@@ -13,3 +13,4 @@ Subagent definitions.
 ### Files
 
 - [code-explorer.md](code-explorer.md) — Read-only product-codebase investigator dispatched by /code-qa; returns findings with repo@sha citations
+- [context-extractor.md](context-extractor.md) — Read-only fact extractor dispatched by /customize-os context population; returns manifest-keyed fact sheets, quote-or-absent, never inferred

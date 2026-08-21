@@ -2,7 +2,7 @@
 
 **Purpose:** Reference doc for understanding the 7 durable competitive advantages. Use this as context when doing strategy work with `/strategy-sprint`.
 
-**Source:** Hamilton Helmer's "7 Powers" book. Adapted for the SoftServe Team OS.
+**Source:** Hamilton Helmer's "7 Powers" book. Adapted for the SoftServe Work OS.
 
 ---
 
@@ -95,4 +95,4 @@
 - `/strategy-sprint` - Use this framework in strategy planning
 - `product-development/product/strategy/frameworks/counter-positioning.md` - Deep dive on counter-positioning
 
-**Source:** Hamilton Helmer's "7 Powers". Adapted for the SoftServe Team OS.
+**Source:** Hamilton Helmer's "7 Powers". Adapted for the SoftServe Work OS.

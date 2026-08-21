@@ -1,6 +1,6 @@
 # Skills
 
-55 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+56 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -24,7 +24,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 ```
 
 - **No restated defaults.** `disable-model-invocation` and `user-invocable` are omitted: every skill here is deliberately both user- and model-invocable — descriptions are the natural-language router, cron runs (`/weekly-review --digest`, `/wiki-lint`) and skill-to-skill orchestration (`/prd-challenge`, `/context-update` → `/process-meeting`) require model invocation, and `disable-model-invocation: true` would also drop the description from context and block scheduled/subagent use. Set a non-default flag only when a new skill genuinely needs it (external side effects on explicit user timing → `disable-model-invocation: true`; background knowledge with no meaningful command → `user-invocable: false`) and record the reason here.
-- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: pm-handoff at ~1,470).
+- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: customize-os at ~1,510).
 - **`argument-hint` is always double-quoted** — unquoted `[...]` parses as a YAML list.
 - **No other keys.** `group` is the only custom key; if tooling ever needs machine-readable extras, use the Agent Skills spec's `metadata:` map instead of new top-level keys.
 
@@ -39,7 +39,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, prototype critique and feedback rounds, journey maps. | 5 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 10 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 11 |
 
 ### Communication & ops
 
@@ -132,9 +132,10 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
 - [session-retro/](session-retro/) — End-of-session sweep of the live conversation for durable takeaways + the curation pass (team-learnings cap, entry staleness, stale proposals); routes per the contract table, admin targets by steward yes or proposal
 - [auto-sync/](auto-sync/) — One switch for hands-off git, two modes: `direct` (open main — non-gated committed + pushed every turn, gated held for the steward) and `pr` (pull-request-only main — branch per person, non-gated drained via self-merging PRs, gated via /propose); on [direct|pr] | off | status
-- [customize-os/](customize-os/) — Interactive, resumable instance customization: opens by confirming artifact naming (a chosen mapping executes repo-wide via the naming-conventions target; machine identifiers stay canonical), flags pre-existing out-of-band templates for capture-then-removal, derives customized context files from the org's real artifacts (template targets: house PRD, jobs-breakdown, and job-spec formats from 2–4 example documents; the design-system choice target records prototyping design grounding in `toolchain.yaml`, skippable and re-runnable), installs gated in customer instances only; state persists in os-installation/customization-status.md and every run ends with a changed-what-where + Critical/Other sufficiency readout
+- [customize-os/](customize-os/) — The guided setup program, interactive and resumable: populate the steering context from the org's real documents (manifest-driven — every item ends filled, GAP, or N/A; optional web enrichment), create initiative pages and fold their material, set the design-system and user-research choices in `toolchain.yaml`, assess demo readiness (delegating `/demo-data`), resolve artifact naming repo-wide, derive house PRD / jobs-breakdown / job-spec templates from examples, and close with the auto-sync mode + a plain-language gated-list walkthrough; installs gated in customer instances only, state persists in os-installation/customization-status.md, every run ends with a changed-what-where + Critical/Other readout
 - [propose/](propose/) — The "propose" step of the pr landing strategy: turns the gated commits auto-sync kept on your branch into ONE pull request with a plain-language description (files, why, commits, the Azure path-filter reminder when the gated list changed) via gh or az repos; --draft / --ready / --update; on GitHub the desktop Create PR button is the equivalent
 - [docs-update/](docs-update/) — The one way into the customer-facing documentation in `Documentation/`: edit mode applies a requested change to the single source (`src/content.js`) in the docs' own vocabulary and conventions, sync mode checks every stated fact against its source of truth in the repo (write policy, skills index, agents, hooks, admin guides, connection skills) and corrects what went stale — never adding articles unasked; both rebuild the site, verify, and report article › section
+- [demo-data/](demo-data/) — Small, internally consistent synthetic demo data for a customer instance: scenario approved before anything is written, raw artifacts run through the real pipeline (`/process-meeting`, `/context-update`) so records stay consistent by construction, everything `[DEMO]`-marked and manifest-recorded; `remove` reverses the manifest exactly
 
 ## Gaps
 

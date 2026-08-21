@@ -21,13 +21,12 @@ const image = (file, alt, caption) => ({ t: "image", file, alt, caption });   //
 const seq = (items) => ({ t: "seq", items });                    // the big-picture sequence: [{who, what, time, link}]
 const cards = (items) => ({ t: "cards", items });                // [{title, text, link}]
 
-const SRC = "https://github.com/alexey-orlov/SoftServe-Work-OS";
 const ADO_FILTER = "/product-development/feature-index.yaml;/product-development/toolchain.yaml;/product-development/product/strategy/business-context/*;/product-development/product/handbook/templates/*;/product-development/engineering/*;/CLAUDE.md;/governance/*;/os-installation/*;/Documentation/*;/.claude/*;/.github/*";
 
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v2.9 · August 2026",
+  version: "v3.0 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -186,7 +185,7 @@ const doc = {
         h2("OS admin & governance", "g-admin"),
         p("Setting the Work OS up, and keeping the repository honest before and after a feature ships. Mostly the Work OS admin's — described in the Setup section."),
         table(["Skill", "What it does", "You give it", "You get"], [
-          ["`/customize-os`", "Adapts the Work OS to your company — naming, business context, templates, the prototyping design approach, auto-sync mode", "Your company's basics and example documents", "Customized context files + a readout; resumable"],
+          ["`/customize-os`", "Adapts the Work OS to your company, in one guided sequence — business context populated from your real documents (with a row-by-row report and optional web research), initiative pages, the design and research-source choices, naming, templates, auto-sync mode", "Your company's documents, a few initiative names, example documents", "Populated context files + a coverage report; resumable"],
           ["`/auto-sync`", "The switch for the automatic saving and syncing (on / off / status)", "The mode", "The current state and the gated list"],
           ["`/propose`", "Opens the pull request that carries your gated changes to the admins", "Nothing — reads what's waiting on your branch", "A pull request with a plain-language description"],
           ["`/connect-mcps`", "Connects a tool so skills read it live", "The tool name", "A tested connection, wired into the skills that use it"],
@@ -195,6 +194,7 @@ const doc = {
           ["`/wiki-lint`", "Health-checks the repository and fixes mechanical drift", "Nothing", "A dated health report; fixes applied; suggestions listed"],
           ["`/feature-launch-gate`", "Pre-launch completeness check of the repository for a feature", "The feature", "A ship / not-yet verdict"],
           ["`/session-retro`", "End-of-session sweep for durable takeaways", "Nothing", "Rules routed to the right place, or a proposal"],
+          ["`/demo-data`", "Generates a small, clearly marked set of demo content — an initiative, meetings, decisions, research — through the same pipeline real records take, and removes it cleanly later", "A yes to the scenario it proposes", "Demo content, all `[DEMO]`-marked; one-command removal"],
         ], [1800, 3400, 2200, 2400]),
         h2("Agents", "agents"),
         p("You don't run agents directly — skills do. Knowing them explains where a report's perspectives come from."),
@@ -236,7 +236,7 @@ const doc = {
         h2("product-development/ — the top level", "pd"),
         table(["Item", "Type", "What's in it", "How it's used"], [
           ["`feature-index.yaml`", "Registry", "Master lookup: every feature mapped to its PRD, plan, metrics, experiments, tickets and initiative", "First stop for any \"state of feature X\" question; every repo-writing skill updates it"],
-          ["`toolchain.yaml`", "Registry", "The team's standing tool and approach choices, one entry per working surface — today: how prototypes follow your design system", "Written by `/customize-os` (re-run the target to change a choice); `/prototype` follows it instead of asking every time"],
+          ["`toolchain.yaml`", "Registry", "The team's standing tool and approach choices, one entry per working surface — today: how prototypes follow your design system, and where research and meeting records come from", "Written by `/customize-os` (re-run the target to change a choice); the skills that need each choice follow it instead of asking every time"],
           ["`inbox/`", "Raw material (drop zone)", "Transient landing zone for integration drops — transcripts, exports. Nothing lives here for long", "Swept by `/context-update`; transcripts are handed to `/process-meeting`, which files them to their home"],
         ], [2300, 1400, 3200, 2500]),
         h2("product-development/product/", "product"),
@@ -356,7 +356,7 @@ const doc = {
         ]),
         platform("github", callout("note", "Protecting `main` (step 4) needs **GitHub Team** or Enterprise Cloud while the repository is private: on the **Free** plan neither rulesets nor branch protection apply to private repositories. Check the plan now — step 4 covers what to do if the organization is on Free.")),
 
-        h2("Step 1 — Get the Work OS from [SoftServe Work OS on GitHub](" + SRC + ")", "s1"),
+        h2("Step 1 — Get the Work OS", "s1"),
         p("The initial version of the repository comes from the SoftServe team. Ask them for access to the source repository (and, if it is private, for the token to import it). Then import it into your {gh:organization|az:project} — no command line needed."),
         platform("github", steps([
           "In GitHub, open the **+** menu in the top-right corner and select **Import repository**.",
@@ -528,21 +528,23 @@ const doc = {
 
       // ------------------------------------------------------------- stage 2 · work OS admin
 
-      { id: "customize", title: "Customize the Work OS", audience: "Stage 2 · Work OS admin", time: "1–2 hours, once — resumable", blocks: [
+      { id: "customize", title: "Customize the Work OS", audience: "Stage 2 · Work OS admin", time: "2–3 hours, once — resumable", blocks: [
         lead("You own the Work OS for your team. In this article you run the guided customization — which adapts the Work OS to your company and switches auto-sync on{gh:, name the approver team|az:}, publish the changes for everyone, and do the first access test. After that you invite the users."),
         h2("Before you start", "before"),
         checklist([
           "You have finished [Set up your computer](#/setup/computer) steps 1–6 (install, folder, clone, name, sign-in; auto-sync will show *off* — expected).",
           "The repository admin has confirmed you are in the {gh:`os-admins` team|az:`OS-Admins` group}.",
-          "You have your company's basics at hand: product, customers, how you name your documents (PRD / brief / one-pager …), two to four example documents in your house format.",
+          "You have the documents that describe your company at hand — a deck or one-pager, an org chart, this quarter's OKRs, an account or segmentation list, competitive notes. Claude reads them where they are; the more you can point at, the more gets filled for you.",
+          "You can name a few current initiatives (three is a good start) and point at any briefs or call notes behind them.",
+          "You know how you name your documents (PRD / brief / one-pager …) and have two to four example documents in your house format.",
           "Optional: you know where your design system lives — a Figma library, another design tool, or a folder of product screenshots. Fine to skip; it can be set any time later.",
         ]),
         h2("Step 1 — Run the guided customization", "z1"),
         p("`/customize-os` is a conversation. It reads what is already customized, asks only for what is missing, writes the customized context files behind the 🔒 prompt, and ends with a readout of what changed and what is still needed. You can stop any time and continue later with `/customize-os continue`."),
         steps([
           step("Ask Claude:", say("/customize-os")),
-          "Answer the questions: how your company names its documents (keep the Work OS names or map them to yours), your business context, your document formats (from example documents), and how prototypes should follow your design system — Figma, another design tool, Claude Design, a folder of screenshots, prompts for an external tool, or plain HTML. Skipping is fine: answer later, or change your mind any time, with `/customize-os design-system`. Approve each 🔒 prompt after reading the change.",
-          step("Near the end Claude asks which **auto-sync mode** the team wants. Answer **pr** (the mode for a protected `main` — changes move through pull requests) and say **yes** to switch it on now.",
+          "Answer as it goes — the guided run works through your setup in order. Your **business context** comes first: Claude shows a table of what the context files need, reads the documents you point it at, fills the files from what they actually say (what it can't find stays an honest, visible gap — nothing is made up), reports row by row what's filled and what's missing, and offers to research the public facts on the web. Then your **current initiatives** — a page per initiative, with any briefs or call notes folded in. Then the standing choices: how prototypes follow your **design system** (Figma, another design tool, Claude Design, a folder of screenshots, prompts for an external tool, or plain HTML), where **research and meeting records** come from, and whether there is enough real material for a first **demo** (if not, `/demo-data` can generate a small, clearly marked set and remove it later). Then how your company **names its documents** (keep the Work OS names or map them to yours) and your **document formats**, from your example documents. Skipping any step is fine — answer later, or change a choice by re-running it, e.g. `/customize-os design-system`. Approve each 🔒 prompt after reading the change.",
+          step("Near the end Claude asks which **auto-sync mode** the team wants, shows in plain words which files need an admin's approval versus which are written freely (confirm the list or adjust it), and asks who approves gated changes. Answer **pr** (the mode for a protected `main` — changes move through pull requests) and say **yes** to switch it on now.",
             callout("expected", "Claude confirms **\"Auto-sync is ON — pr mode (main is pull-request-only)\"** and lists the gated files. From the next response on, your work is saved to your branch automatically; the customization changes are waiting there for approval.")),
           "Read the closing readout: what changed and where, and what is still open (Critical / Other). `os-installation/customization-status.md` keeps the state for the next session.",
         ]),
@@ -552,7 +554,8 @@ const doc = {
           steps([
             step("Ask Claude — replace `<your-org>` with your GitHub organization name — and approve the 🔒 prompt:",
               say("Set reviewers.github-team in governance/write-policy.yaml to @<your-org>/os-admins and regenerate .github/CODEOWNERS"),
-              callout("expected", "Claude confirms both files changed. When it finishes the response, auto-sync saves them on your branch, next to the customization changes.")),
+              callout("expected", "Claude confirms both files changed. When it finishes the response, auto-sync saves them on your branch, next to the customization changes."),
+              callout("note", "Already named the team during the guided run? Asking again is safe — Claude confirms it's set and changes nothing.")),
           ])),
         platform("azure",
           p("Nothing to do on Azure Repos — the repository admin already chose `OS-Admins` as the required reviewer in the branch policy. Continue with step 3.")),

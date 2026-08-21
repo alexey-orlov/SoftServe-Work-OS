@@ -43,9 +43,8 @@ tables:
     pii: true
     partition_key: signup_date
     last_validated: 2026-04-15
-    used_by:
-      - feature-index.yaml#onboarding.first-run-experience
-    schema_doc: schemas/onboarding/users.md
+    used_by: []   # fill as dashboards, queries, or feature-index entries reference this table
+    # no schema_doc yet — add one under schemas/ when column-level detail is written
 
   organizations:
     database: ANALYTICS
@@ -62,7 +61,7 @@ tables:
     used_by:
       - dashboards/billing/credit-usage-dashboards.md
       - feature-index.yaml#billing.credit-usage-dashboard
-    schema_doc: schemas/billing/organizations.md
+    # no schema_doc yet — add one under schemas/ when column-level detail is written
 
   billing_events:
     database: ANALYTICS
@@ -99,7 +98,7 @@ tables:
       - queries/billing/churn_by_segment.sql
       - metrics/billing/billing-metrics.md
       - feature-index.yaml#billing.credit-usage-dashboard
-    schema_doc: schemas/billing/subscriptions.md
+    # no schema_doc yet — add one under schemas/ when column-level detail is written
 
   promo_offers:
     database: ANALYTICS

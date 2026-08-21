@@ -1,15 +1,15 @@
 # Skill Guide — Instance Setup and the Definition Chain
 
-How six skills work, one page each: the setup skill that teaches the OS your org's document formats, and the five skills that carry a bet from idea to buildable contract.
+How six skills work, one page each: the setup skill that teaches the OS your org's context, tools, and document formats, and the five skills that carry a bet from idea to buildable contract.
 
 **Read this when:** You want to know what a `/`-command actually does before running it, or you are explaining the definition chain to someone new.
 
-_updated: 2026-08-14 · source: each skill's `SKILL.md` in `.claude/skills/`_
+_updated: 2026-08-21 · source: each skill's `SKILL.md` in `.claude/skills/`_
 
 ## How the six fit together
 
 ```
-/customize-os        installs YOUR house templates + YOUR artifact names
+/customize-os        installs YOUR context + YOUR house templates + YOUR artifact names
         │                (everything below then emits your format, unchanged skills)
         ▼
 /prd-draft  ──►  /prd-challenge  ──►  /jobs-breakdown  ──►  /job-spec-draft  ──►  /job-spec-challenge  ──►  /create-tickets
@@ -38,49 +38,52 @@ Two rules run through all of them: **the template owns the format** (skills stay
 
 | Field | Detail |
 |-------|--------|
-| **Purpose** | Adapt a deployed copy of this OS to one customer or org, so universal skills produce documents in the org's own format and vocabulary. Org-specific content lives in customized context files — never hardcoded into a skill. |
-| **When used** | Right after install, before real PRDs are written · when the org wants its own PRD / breakdown / job-spec format adopted · when the org calls these artifacts something else (brief, epic, slice, feature spec) · to resume an unfinished customization · to ask where customization stands. |
-| **Data it takes in** | Org name<br>2–4 **real, filled** example documents in the house format (`.docx`, `.pdf`, `.md` — filled beats blank, they show voice)<br>An existing house template, if one exists (wins on structure)<br>House rules the examples can't show — approval ladder, confidentiality footer, naming conventions<br>The naming decision (keep OS terms, or map to the org's)<br>Its own state file from previous sessions |
-| **What it outputs** | A house template at `product-development/product/handbook/templates/{prd\|jobs-breakdown\|job-spec}-template.md` — blanked skeleton + per-section guidance the drafting skills read<br>For a naming map: a **Document Naming Conventions** block in `business-info.md` plus a repo-wide prose sweep<br>An updated `os-installation/customization-status.md` (the resumable state)<br>Optionally a decision-log entry recording the adoption<br>A closing readout: what changed and where, what's still missing (Critical / Other), the single next action |
-| **Not for** | Connecting tool servers (`/connect-mcps`), code access (`/connect-code`), or writing an actual PRD (`/prd-draft` — run it *after* the template is installed). |
+| **Purpose** | Adapt a deployed copy of this OS to one customer or org — one guided, resumable sequence from populating the steering context out of the org's real documents through initiative pages, tool choices, artifact naming, and house templates. Org-specific content lives in customized context files — never hardcoded into a skill. |
+| **When used** | Right after install, to populate the steering context and create the first initiative pages · when the org wants its own PRD / breakdown / job-spec format adopted · when the org calls these artifacts something else (brief, epic, slice, feature spec) · to set or change the design-system or user-research choice · to check demo readiness · to resume an unfinished customization · to ask where customization stands. |
+| **Data it takes in** | Org name, product name(s), official domain<br>Source documents for context population — decks, one-pagers, org charts, OKR docs, CRM/segmentation exports (read in place, never copied into the repo)<br>Names of 3+ current or recent initiatives, with any briefs/transcripts behind them<br>2–4 **real, filled** example documents per house-template target (`.docx`, `.pdf`, `.md` — filled beats blank, they show voice)<br>House rules the examples can't show — approval ladder, confidentiality footer, naming conventions<br>Its own state files from previous sessions |
+| **What it outputs** | Populated steering files — `business-info.md`, the root `CLAUDE.md` fundamentals block, `stakeholders.md`, `segmentation-matrix.md`, `current-quarter.md` — every item filled, an honest GAP, or N/A, with a row-by-row coverage report (optional web enrichment for public facts)<br>Initiative pages with their material folded in<br>The `prototyping:` and `user-research:` choices in `toolchain.yaml`<br>A house template at `handbook/templates/{prd\|jobs-breakdown\|job-spec}-template.md`; for a naming map, a **Document Naming Conventions** block plus the repo-wide prose sweep<br>Updated state: `os-installation/customization-status.md` + `customization-facts.yaml` (values, sources, provenance)<br>A closing readout: what changed and where, what's still missing (Critical / Other), sequence position, the single next action |
+| **Not for** | Connecting tool servers (`/connect-mcps`), code access (`/connect-code`), generating synthetic demo data (`/demo-data` — customize-os only assesses readiness and delegates), or writing an actual PRD (`/prd-draft` — run it *after* customization). |
 
 ### How it works, step by step
 
 | Step | What happens |
 |------|--------------|
 | 0 — Read state | Reads `customization-status.md` **first**, then looks for answers in the repo and any documents you pointed at. It only asks for what it genuinely can't find. |
-| 0b — Confirm naming (once) | Explains the three artifact names (PRD / jobs / job specs) and asks one question: keep them, or map them to your words? States the boundary before you choose — a map changes every human-facing surface (titles, headings, prose, readouts) while slash commands and file names stay canonical, because master-maintained skills read those literally. |
-| 1 — Resolve the target | One target per run, from your argument, the state file, or a question. |
-| 2 — Gather | Flags any house template that entered the repo outside this skill (it bypassed derivation and competes with the consuming path), captures it as an input, removes it on your explicit yes. Then collects examples and house rules. |
-| 3 — Derive | Extracts structure from each example → keeps what's common (majority items flagged, one-offs asked about) → blanks every piece of real content into `[bracketed placeholders]` → writes the guidance layer that routes **every** slot the owning skill needs into a named home → adds top matter and a drafting checklist. Zero real numbers, names, or feature specifics survive. |
-| 4 — Validate | A fresh subagent drafts a synthetic document using **only** the derived template — the real examples are withheld. Failures are fixed template-side, then re-run once. The score is recorded. |
-| 5 — Install | Writes to the consuming path behind the gated approval prompt (customer instance), or stages outside the repo with an "Install as:" header (SoftServe master — its universal defaults are never overwritten). Offers companions: the metric-conventions block, a decision-log entry. |
-| 6 — Record and close | Updates the state file and prints the readout — every run ends here, including interrupted ones. |
+| 1 — Preflight (once) | Confirms which repo this is (customer instance vs. SoftServe master — the master stages outputs outside the repo, never overwrites its universal defaults) and captures org name, product name(s), and the official domain. |
+| 2 — The guided sequence | Runs the next open step. **context-core**: shows what the steering files need, reads your documents through extractor subagents (every value carries a verbatim quote — nothing invented), resolves conflicts by source precedence (a dedicated source beats a passing mention, newer beats older, your word beats any document), installs behind the gated prompt, verifies, and reports row by row — filled / GAP / N-A — then offers web research for the public-fact gaps only. Then **initiatives** (3+ pages, material folded via the ingestion skills) → **design-system** and **research-source** (toolchain choices; meeting cadences) → **demo-readiness** (assess; delegate gaps to `/demo-data`) → **naming-conventions** (keep or map, one question, swept repo-wide on a map) → **house templates** (gather 2–4 filled examples → derive a blanked skeleton + guidance layer → validate with a fresh subagent → install) → **metric-conventions**. Any step can be run by name; skips are recorded with their consequence; prerequisites are enforced with the reason; material that belongs to a later step is parked and used when that step runs. |
+| 3 — Auto-sync close (once) | At the end of whichever run gets there: how work lands (direct vs. pr), a plain-language walkthrough of which files need your yes vs. which agents write freely (confirm as shipped, or adjust stricter/looser), and who stewards the OS. |
+| 4 — Record and close | Updates the state files and prints the readout — what changed and where, Critical / Other gaps, sequence position, the single next action. Every run ends here, including interrupted ones. |
 
 ### Options
 
 **Commands**
 
-1. `/customize-os` — read state, resume the top in-progress target, or start guided
+1. `/customize-os` — read state; resume where the sequence left off, or start guided
 2. `/customize-os continue` — the same, explicitly
 3. `/customize-os status` — report progress across all targets, change nothing
-4. `/customize-os naming-conventions` — adopt the org's own artifact terms, repo-wide
+4. `/customize-os context-core` — populate (or re-run) the steering-context step by name
 5. `/customize-os prd-template ~/a.docx ~/b.docx` — run one target with inputs up front
 
-**Targets**
+**Targets** (the guided sequence runs them in this order; each also runs by name)
 
-- `prd-template` — house PRD / brief format *(implemented)*
-- `jobs-breakdown-template` — house format for the initiative → jobs cut *(implemented)*
-- `job-spec-template` — house format for the per-job contract *(implemented)*
+- `context-core` — populate the general steering context from real documents; coverage report + optional web enrichment *(implemented; `fundamentals` is accepted as an alias)*
+- `initiatives` — create the org's initiative pages and fold their material in *(implemented)*
+- `design-system` — how prototypes get design grounding → `toolchain.yaml` *(implemented)*
+- `research-source` — where research/meeting records come from + meeting cadences → `toolchain.yaml` *(implemented)*
+- `demo-readiness` — enough real data to demo? assess, or delegate gaps to `/demo-data` *(implemented)*
 - `naming-conventions` — execute the artifact-name mapping repo-wide *(implemented)*
+- `prd-template` / `jobs-breakdown-template` / `job-spec-template` — house formats *(implemented)*
 - `metric-conventions` — KPI tier names and required fields *(guided, manual)*
-- `fundamentals` — business-info, segmentation, stakeholders *(pointer to the install guide)*
+- `auto-sync` — landing mode + the gated-list walkthrough *(implemented; also runs once automatically at the close)*
 
 **Choice points**
 
 - Naming: **keep canonical** · **map** (partial maps are fine — e.g. jobs → epics, job specs kept)
 - Mode: **customer instance** (install at the consuming path) · **master repo** (derive and stage outside the repo)
+- Web enrichment: **research selected public-fact gaps** · **skip** (web fills gaps only, never overwrites what you provided)
+- Worked examples: once real content lands — **remove per category** (reference-clean) · **keep**
 - A pre-existing stray template: **remove** (recommended, after capturing it as an input) · **keep** (recorded as a drift risk)
+- Auto-sync: **direct** · **pr** · **later** — plus the gated list **as shipped** · **stricter** · **looser**
 
 **Lifecycle every target moves through:** `not started → gathering → derived → validated → installed → complete`
 

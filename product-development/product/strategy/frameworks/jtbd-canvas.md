@@ -2,7 +2,7 @@
 
 **Purpose:** Framework for understanding what "job" customers hire your product to do. Use when defining product strategy or analyzing user needs.
 
-**Source:** JTBD theory (Clayton Christensen). Adapted for the SoftServe Team OS.
+**Source:** JTBD theory (Clayton Christensen). Adapted for the SoftServe Work OS.
 
 ---
 
@@ -162,4 +162,4 @@ When [situation], I want to [motivation], so I can [outcome]
 - `/user-research-synthesis` - Extract jobs from interviews
 - `/strategy-sprint` - Use JTBD in strategy planning
 
-**Source:** Clayton Christensen's JTBD theory. Adapted for the SoftServe Team OS.
+**Source:** Clayton Christensen's JTBD theory. Adapted for the SoftServe Work OS.

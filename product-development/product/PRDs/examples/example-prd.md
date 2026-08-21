@@ -1,5 +1,8 @@
 # Voice Notes to Task Creation (AI Feature)
 
+> EXAMPLE — teaching sample, not a live spec. People, quotes, figures, and competitor
+> claims in it are illustrative inventions, not sourced fact.
+
 **Stage:** Solution Review  
 **Last Updated:** January 5, 2026  
 **Owner:** Sarah Chen  

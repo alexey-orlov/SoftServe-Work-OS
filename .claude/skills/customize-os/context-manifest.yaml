@@ -1,0 +1,417 @@
+# Context Manifest — the coverage spine of the customize-os context-core target.
+#
+# One row per steering item the guided setup must account for. This single file drives
+# FOUR surfaces, which is what guarantees they never drift apart:
+#   1. the intake table shown to the user (rendered from `groups`, coarse level)
+#   2. the extraction targets given to context-extractor subagents (`items`)
+#   3. the completion report (same groups/items, with per-item filled | GAP status)
+#   4. the web-enrichment candidate list (`web: true` items still at GAP)
+#
+# Granularity rule: items sit at the ### subsection level of their target file. Field-level
+# detail (the individual bracketed placeholders inside a subsection) is defined by the
+# template itself and is NOT duplicated here — the write stage fills a subsection's fields
+# from the template, the verify stage checks every placeholder inside a covered subsection
+# is either filled or explicitly `[GAP: …]`-marked. One source of field truth: the template.
+#
+# Drift guard: the verify stage cross-checks every `section` below against the actual
+# headings of `file` at run time. A mismatch (template evolved, manifest didn't) is
+# reported in the readout — never silently skipped. Keep this file in the same change as
+# any steering-template heading change.
+#
+# `web:` marks items whose facts are typically discoverable from authoritative public
+# sources (company site, docs, pricing page, filings, reputable press). It gates ONLY
+# eligibility for the optional web-enrichment pass — never a license to infer. Judgment
+# sections (positioning, differentiation thesis, personas, internal metrics) stay
+# web: false even when adjacent facts are public.
+#
+# Read by: /customize-os (targets/context-core.md). Written by: skill maintainers only.
+
+version: 1
+updated: 2026-08-20
+
+groups:
+  # tier: core — the "highly recommended" half of the intake table.
+  - id: company-basics
+    label: "Company & product identity"
+    tier: core
+    sources_hint: "website + one-pager, pitch/sales deck, About page"
+  - id: customers
+    label: "Customers — segments, ICP, personas"
+    tier: core
+    sources_hint: "sales deck, ICP one-pager, persona docs, CRM export"
+  - id: value-prop
+    label: "Problem & value proposition"
+    tier: core
+    sources_hint: "pitch deck, website messaging, positioning doc"
+  - id: strategy-goals
+    label: "Mission, strategy & current OKRs"
+    tier: core
+    sources_hint: "strategy memo, OKR doc / planning sheet"
+  - id: business-model
+    label: "Business model, pricing & key metrics"
+    tier: core
+    sources_hint: "pricing page, board/metrics deck (facts extracted, file never stored)"
+  - id: team-channels
+    label: "Team roster & channels"
+    tier: core
+    sources_hint: "org chart, Slack workspace (a connected Slack/GitHub MCP can pull IDs)"
+  - id: stakeholders
+    label: "Stakeholder map"
+    tier: core
+    sources_hint: "org chart + who-cares-about-what notes; not web-discoverable"
+  - id: segmentation
+    label: "Segmentation matrix (accounts + ARR)"
+    tier: core
+    sources_hint: "a dedicated segmentation sheet/CRM export beats any doc that merely mentions segments"
+  # tier: later — the "nice to have, can set up later" half.
+  - id: market-competition
+    label: "Market & competitive landscape"
+    tier: later
+    sources_hint: "competitive docs, analyst notes; web-enrichable for public facts"
+  - id: gtm
+    label: "Go-to-market motion"
+    tier: later
+    sources_hint: "GTM/marketing plan, sales playbook"
+  - id: product-dev
+    label: "Product development process"
+    tier: later
+    sources_hint: "engineering handbook, process docs"
+  - id: culture
+    label: "Culture, values & product principles"
+    tier: later
+    sources_hint: "values page, internal principles doc"
+  - id: platform-model
+    label: "Platform model (product internals)"
+    tier: later
+    sources_hint: "architecture/permission docs — filled with PM + Engineer together"
+  - id: tech-constraints
+    label: "Tech constraints & do-not-re-implement registry"
+    tier: later
+    sources_hint: "Engineer-owned — collect from the engineering lead"
+
+items:
+  # ── business-info.md ────────────────────────────────────────────────────────
+  - id: bi-basic-info
+    group: company-basics
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Company Overview > Basic Information"
+    what: "Company name, official website/domain, founded, stage, headcount, funding, HQ"
+    web: true
+  - id: bi-core-product
+    group: company-basics
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Product Information > Core Product"
+    what: "Product name(s), one-sentence definition, what it does and for whom"
+    web: true
+  - id: bi-product-categories
+    group: company-basics
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Product Information > Product Categories"
+    what: "Major product areas / modules / use-case categories"
+    web: true
+  - id: root-fundamentals
+    group: company-basics
+    file: CLAUDE.md
+    section: "Company & Product Fundamentals"
+    what: "The repo's H1 title line and the session-start summary block — derived from business-info, never asked separately"
+    web: false
+    derived_from: business-info   # mirror rule: written in the SAME gated change as its sources
+  - id: bi-customer-segments
+    group: customers
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Target Market > Customer Segments"
+    what: "The segments served, in the org's own vocabulary"
+    web: true
+  - id: bi-icp
+    group: customers
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Target Market > Ideal Customer Profile (ICP)"
+    what: "Role, company size band, industry, geography of the ideal buyer"
+    web: true
+  - id: bi-personas
+    group: customers
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Target Market > Buyer Personas"
+    what: "Named personas — goals, pains, buying role"
+    web: false
+  - id: bi-problem
+    group: value-prop
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Value Proposition > Problem Statement"
+    what: "The core problem solved, one paragraph"
+    web: true
+  - id: bi-solution
+    group: value-prop
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Value Proposition > Solution Statement"
+    what: "How the product solves it"
+    web: true
+  - id: bi-uvp
+    group: value-prop
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Value Proposition > Unique Value Proposition"
+    what: "Why this product over alternatives — the stated differentiator"
+    web: true
+  - id: bi-mission
+    group: strategy-goals
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Strategy & Goals > Company Mission"
+    what: "Mission / vision statement"
+    web: true
+  - id: bi-okrs
+    group: strategy-goals
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Strategy & Goals > Current OKRs and Product Strategy"
+    what: "Strategy summary here; the quarter detail lives in current-quarter.md (items q-*)"
+    web: false
+  - id: q-objectives
+    group: strategy-goals
+    file: product-development/product/strategy/current-quarter.md
+    section: "Objectives"
+    what: "This quarter's objectives + measurable KRs with owners"
+    web: false
+  - id: q-themes
+    group: strategy-goals
+    file: product-development/product/strategy/current-quarter.md
+    section: "Strategic Themes"
+    what: "The quarter's themes"
+    web: false
+  - id: q-inflight
+    group: strategy-goals
+    file: product-development/product/strategy/current-quarter.md
+    section: "In Flight"
+    what: "What is actively being worked (cross-links to initiative pages once those exist)"
+    web: false
+  - id: q-notdoing
+    group: strategy-goals
+    file: product-development/product/strategy/current-quarter.md
+    section: "Explicitly Not Doing"
+    what: "Named non-goals for the quarter"
+    web: false
+  - id: bi-revenue-model
+    group: business-model
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Business Model > Revenue Model"
+    what: "Subscription / usage / marketplace shape, tiers, price points"
+    web: true
+  - id: bi-key-metrics
+    group: business-model
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Business Model > Key Metrics"
+    what: "ARR, NRR, churn, North Star metric and its definition"
+    web: false
+  - id: root-team
+    group: team-channels
+    file: CLAUDE.md
+    section: "Team"
+    what: "Function, name, GitHub handle, Slack ID, escalation path per teammate"
+    web: false
+  - id: root-slack
+    group: team-channels
+    file: CLAUDE.md
+    section: "Slack Channels"
+    what: "Channel, ID, visibility, purpose"
+    web: false
+  - id: bi-communication
+    group: team-channels
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Key Resources > Communication"
+    what: "Where the team communicates and which channel is for what"
+    web: false
+  # ── stakeholders.md ─────────────────────────────────────────────────────────
+  - id: st-exec
+    group: stakeholders
+    file: product-development/product/strategy/business-context/stakeholders.md
+    section: "Executive Leadership"
+    what: "CEO / CPO / VP Eng / Head of Design — what each cares about, how to get buy-in"
+    web: false
+  - id: st-functional
+    group: stakeholders
+    file: product-development/product/strategy/business-context/stakeholders.md
+    section: "Functional Leaders"
+    what: "Sales / CS / Marketing leads and their concerns"
+    web: false
+  - id: st-ics
+    group: stakeholders
+    file: product-development/product/strategy/business-context/stakeholders.md
+    section: "Key Individual Contributors"
+    what: "The ICs whose opinion moves decisions"
+    web: false
+  - id: st-external
+    group: stakeholders
+    file: product-development/product/strategy/business-context/stakeholders.md
+    section: "External Stakeholders"
+    what: "Key customers / partners with standing influence"
+    web: false
+  - id: st-comms
+    group: stakeholders
+    file: product-development/product/strategy/business-context/stakeholders.md
+    section: "Communication Matrix"
+    what: "Who is informed / consulted / approving, on what cadence"
+    web: false
+  # ── segmentation-matrix.md ──────────────────────────────────────────────────
+  - id: seg-axes
+    group: segmentation
+    file: product-development/product/strategy/business-context/segmentation-matrix.md
+    section: "Segment Axes"
+    what: "The axes the org actually segments by (vertical × size band × use-case category)"
+    web: false
+  - id: seg-rules
+    group: segmentation
+    file: product-development/product/strategy/business-context/segmentation-matrix.md
+    section: "Counting Rules"
+    what: "What counts as an account, how ARR is attributed"
+    web: false
+  - id: seg-general
+    group: segmentation
+    file: product-development/product/strategy/business-context/segmentation-matrix.md
+    section: "General Matrix — all paying accounts"
+    what: "Account counts + ARR per cell — a dedicated segmentation source beats any passing mention"
+    web: false
+  - id: seg-categories
+    group: segmentation
+    file: product-development/product/strategy/business-context/segmentation-matrix.md
+    section: "Per-Category Matrices"
+    what: "Per-use-case-category breakdowns, if the org tracks them"
+    web: false
+  # ── market & competition (tier: later) ──────────────────────────────────────
+  - id: bi-market-size
+    group: market-competition
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Market & Competition > Market Size"
+    what: "TAM/SAM/SOM or the org's own sizing"
+    web: true
+  - id: bi-competitive-landscape
+    group: market-competition
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Market & Competition > Competitive Landscape"
+    what: "Summary here; detail lives in competitive-research/ (items cl-*, cm-*)"
+    web: true
+  - id: cl-competitors
+    group: market-competition
+    file: product-development/product/competitive-research/competitive-landscape.md
+    section: "Competitors at a glance"
+    what: "Direct / indirect / status-quo competitor lists with one-liners"
+    web: true
+  - id: cl-positioning
+    group: market-competition
+    file: product-development/product/competitive-research/competitive-landscape.md
+    section: "Positioning map"
+    what: "Judgment content — where each player sits; never web-filled"
+    web: false
+  - id: cl-thesis
+    group: market-competition
+    file: product-development/product/competitive-research/competitive-landscape.md
+    section: "Differentiation thesis"
+    what: "Judgment content — why we win; never web-filled"
+    web: false
+  - id: cl-winlose
+    group: market-competition
+    file: product-development/product/competitive-research/competitive-landscape.md
+    section: "Where we win / where we lose"
+    what: "Internal evidence (sales notes, lost-deal reasons); never web-filled"
+    web: false
+  - id: cm-general
+    group: market-competition
+    file: product-development/product/competitive-research/competitive-matrix.md
+    section: "General"
+    what: "Capability comparison rows — public product-doc facts are fair game"
+    web: true
+  # ── gtm / process / culture (tier: later) ───────────────────────────────────
+  - id: bi-sales-motion
+    group: gtm
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Go-to-Market > Sales Motion"
+    what: "PLG / sales-led / hybrid, deal cycle, who sells"
+    web: true
+  - id: bi-marketing
+    group: gtm
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Go-to-Market > Marketing Strategy"
+    what: "Main channels and motions"
+    web: false
+  - id: bi-dev-process
+    group: product-dev
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Product Development > Development Process"
+    what: "How the team ships — cadence, rituals, definition of done (also home of the Document Naming Conventions block the naming target installs)"
+    web: false
+  - id: bi-team-structure
+    group: product-dev
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Product Development > Team Structure"
+    what: "Squads / pods / functions and how product work is organized"
+    web: false
+  - id: bi-values
+    group: culture
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Culture & Values > Company Values"
+    what: "Stated company values"
+    web: true
+  - id: bi-principles
+    group: culture
+    file: product-development/product/strategy/business-context/business-info.md
+    section: "Culture & Values > Product Principles"
+    what: "How the org makes product tradeoffs — rarely public"
+    web: false
+  # ── product internals (tier: later, collected from the team) ────────────────
+  - id: pm-all
+    group: platform-model
+    file: product-development/product/strategy/business-context/platform-model.md
+    section: "(whole file — 9 numbered sections per its template)"
+    what: "Account/permission model, personas vs system knowledge, enums, localization, compliance carve-outs"
+    web: false
+    owner: pm+engineer
+  - id: tc-all
+    group: tech-constraints
+    file: product-development/engineering/tech-constraints.md
+    section: "(whole file — 7 numbered sections per its template)"
+    what: "Stack constraints, API conventions, NFR floors, do-not-re-implement registry"
+    web: false
+    owner: engineer
+
+# Shared facts — one fact, several homes. The resolve stage settles each fact ONCE and
+# every consumer item is written from that single value; the verify stage checks the
+# surfaces still agree before the report renders. This is what keeps ARR in the
+# fundamentals block, business-info Key Metrics, and the segmentation totals from
+# drifting apart at install time.
+facts:
+  - id: company-product-oneliner
+    label: "Company + product one-liner"
+    consumers: [bi-basic-info, bi-core-product, root-fundamentals]
+  - id: icp
+    label: "Ideal customer profile"
+    consumers: [bi-icp, root-fundamentals]
+  - id: problem-statement
+    label: "Core problem solved"
+    consumers: [bi-problem, root-fundamentals]
+  - id: pricing-shape
+    label: "Business model + pricing shape"
+    consumers: [bi-revenue-model, root-fundamentals]
+  - id: arr
+    label: "ARR / revenue"
+    consumers: [bi-key-metrics, root-fundamentals, seg-general]
+  - id: north-star
+    label: "North Star metric + its definition"
+    consumers: [bi-key-metrics, root-fundamentals]
+  - id: competitor-list
+    label: "Named main competitors"
+    consumers: [bi-competitive-landscape, cl-competitors, cm-general, root-fundamentals]
+  - id: quarter-focus
+    label: "This quarter's focus theme"
+    consumers: [q-themes, root-fundamentals]
+  - id: segments
+    label: "Customer segments / segmentation axes vocabulary"
+    consumers: [bi-customer-segments, seg-axes]
+
+# Adjacent setup surfaces the intake table POINTS AT but context-core never collects —
+# each has its own owner; listing them keeps the "what else exists" picture honest:
+handled-elsewhere:
+  - "Product code access → /connect-code (engineering/code-repos.yaml)"
+  - "Tool servers (Slack, tracker, analytics, design) → /connect-mcps"
+  - "Metric reporting conventions → /customize-os metric-conventions"
+  - "House document formats → /customize-os template targets"
+  - "Prototyping design grounding → /customize-os design-system"
+  - "User-research source + meeting cadences → /customize-os research-source"
+  - "Initiative pages & per-initiative context → /customize-os initiatives"
+  - "Audience writing guides (handbook/writing-guides/) → planned target; fill by hand meanwhile"

@@ -2,7 +2,7 @@
 
 **Purpose:** The 8 layers of PLG that drive self-serve product adoption. Context for understanding what's visible vs hidden in successful PLG companies.
 
-**Source:** SoftServe Team OS product strategy frameworks
+**Source:** SoftServe Work OS product strategy frameworks
 
 ---
 
@@ -284,4 +284,4 @@ Expected impact: +15% organic signups in 90 days
 - `/expansion-strategy` - Layer 2 (Pricing/Monetization)
 - `/define-north-star` - Align metrics to PLG
 
-**Source:** SoftServe Team OS product strategy frameworks
+**Source:** SoftServe Work OS product strategy frameworks

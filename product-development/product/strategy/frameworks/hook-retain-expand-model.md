@@ -2,7 +2,7 @@
 
 **Purpose:** Three-phase framework for thinking about user lifecycle and revenue growth. Context for building sustainable product-led businesses.
 
-**Source:** SoftServe Team OS product strategy frameworks
+**Source:** SoftServe Work OS product strategy frameworks
 
 ---
 
@@ -320,4 +320,4 @@ If skipped:
 - `/retention-analysis` - Retain phase deep-dive
 - `/expansion-strategy` - Expand phase tactics
 
-**Source:** SoftServe Team OS product strategy frameworks
+**Source:** SoftServe Work OS product strategy frameworks
