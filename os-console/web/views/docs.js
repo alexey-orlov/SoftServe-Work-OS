@@ -22,21 +22,24 @@ export async function render(view, params) {
   const sec = d.sections.find((x) => x.id === sId) || d.sections[0];
   setCrumbs([{ label: 'Documentation' }, { label: sec.title }]);
 
-  const bar = el('div', { class: 'editor-bar' },
-    el('span', { style: 'font-weight:650; font-size:13.5px' }, d.title),
-    el('span', { class: 'tag' }, sec.title),
+  // No bar of our own either — the crumb slot carries the few actions, the
+  // page belongs to the docs. Embedded mode hides the site's header (the
+  // console sidebar does section navigation); "Open in tab" gets the
+  // untouched standalone site.
+  const actions = [
+    el('a', {
+      class: 'btn small quiet', style: 'margin-left:12px',
+      href: `/docs-site${sec.href}`, target: '_blank', rel: 'noopener',
+      title: 'Open the standalone site (with its own header) in a browser tab',
+    }, icon('external'), 'Open in tab'),
     d.stale ? el('span', {
-      class: 'pill warn',
-      title: 'Documentation/src is newer than the built site — the page below may be behind the source',
+      class: 'pill warn', style: 'margin-left:8px',
+      title: 'Documentation/src is newer than the built site — the pages shown may be behind the source',
     }, 'Source newer than site') : null,
-    d.stale ? cmdChip('/docs-update sync') : null,
-    el('span', { class: 'grow' }),
-    el('span', { class: 'hint', style: 'margin:0' }, 'Read-only — change it with'),
-    cmdChip('/docs-update'),
-    el('a', { class: 'btn small quiet', href: `/docs-site${sec.href}`, target: '_blank', rel: 'noopener' },
-      icon('external'), 'Open in tab'),
-  );
+    d.stale ? el('span', { style: 'margin-left:6px' }, cmdChip('/docs-update sync')) : null,
+  ].filter(Boolean);
+  document.getElementById('crumb-slot').append(...actions);
 
-  view.append(el('div', { class: 'editor-page' }, bar,
-    el('iframe', { class: 'docs-frame', src: `/docs-site${sec.href}`, title: `${d.title} — ${sec.title}` })));
+  view.append(el('div', { class: 'editor-page' },
+    el('iframe', { class: 'docs-frame', src: `/docs-site?embed=1${sec.href}`, title: `${d.title} — ${sec.title}` })));
 }

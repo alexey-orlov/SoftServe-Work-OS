@@ -39,9 +39,13 @@ binds localhost only.
   derived from the built site's own section tabs; each entry shows
   `Documentation/work-os-docs.html` in an in-app panel (`/docs-site`), deep-linked via
   the site's public `#/section/article` hash routes. The only contract is that file +
-  those URLs — nothing reads `content.js` internals, the group disappears when the file
-  is absent, and the console never writes docs (`/docs-update` is the one writer; a
-  staleness pill flags when `Documentation/src` is newer than the built site).
+  those URLs + three selectors (`header.top`, `.side`, `.rail`) that the embed mode
+  (`/docs-site?embed=1`) hides/re-anchors at serve time so the site's own header does
+  not duplicate the console sidebar — the file on disk is never modified, and if the
+  selectors change the header simply shows again. Nothing reads `content.js` internals,
+  the group disappears when the file is absent, and the console never writes docs
+  (`/docs-update` is the one writer; a staleness pill flags when `Documentation/src`
+  is newer than the built site).
 - `state.json` (gitignored) holds console-only prefs — pins, recents. Never canonical truth.
 
 ## Contents

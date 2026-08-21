@@ -239,6 +239,20 @@ const server = http.createServer(async (req, res) => {
       const st = repo.statOrNull(docs.SITE);
       if (!st) return json(res, 404, { error: 'Documentation/work-os-docs.html is not present in this instance' });
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      if (url.searchParams.get('embed') === '1') {
+        // Embedded in the console: the console sidebar already does section
+        // navigation, so hide the site's own header and re-anchor the two
+        // sticky panels that assumed its 60px height. Injected at serve time —
+        // the file on disk stays untouched; if the site's selectors ever
+        // change, this degrades to simply showing the header again.
+        const style = '<style id="console-embed">header.top{display:none}'
+          + '.side{top:0; height:100vh}'
+          + '.rail{top:24px; max-height:calc(100vh - 24px)}</style>';
+        const html = repo.readText(docs.SITE);
+        // The built site omits </head> (valid HTML5) — anchor after <title>,
+        // and if even that changes, appending at the end still applies.
+        return res.end(html.includes('</title>') ? html.replace('</title>', `</title>${style}`) : html + style);
+      }
       return fsp.createReadStream(repo.resolveSafe(docs.SITE).abs).pipe(res);
     }
     if (key === 'GET /api/events') {
