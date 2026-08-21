@@ -26,6 +26,7 @@ const templates = require('./lib/adapters/templates');
 const governance = require('./lib/adapters/governance');
 const activity = require('./lib/adapters/activity');
 const learnings = require('./lib/adapters/learnings');
+const docs = require('./lib/adapters/docs');
 
 const PORT = Number(process.env.OS_CONSOLE_PORT || 4820);
 const HOST = '127.0.0.1';
@@ -154,6 +155,8 @@ const routes = {
 
   'GET /api/state': () => loadState(),
   'PUT /api/state': async (q, body) => saveState(body),
+
+  'GET /api/docs': () => docs.build(),
 };
 
 // ---------------------------------------------------------------- live events
@@ -231,6 +234,12 @@ const server = http.createServer(async (req, res) => {
       const body = (req.method === 'PUT' || req.method === 'POST') ? await readBody(req) : null;
       const out = await routes[key](url.searchParams, body);
       return json(res, 200, out);
+    }
+    if (key === 'GET /docs-site') {
+      const st = repo.statOrNull(docs.SITE);
+      if (!st) return json(res, 404, { error: 'Documentation/work-os-docs.html is not present in this instance' });
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      return fsp.createReadStream(repo.resolveSafe(docs.SITE).abs).pipe(res);
     }
     if (key === 'GET /api/events') {
       res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-store', 'Connection': 'keep-alive' });

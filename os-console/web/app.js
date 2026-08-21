@@ -12,10 +12,12 @@ import * as templates from '/views/templates.js';
 import * as governance from '/views/governance.js';
 import * as activity from '/views/activity.js';
 import * as learnings from '/views/learnings.js';
+import * as docsView from '/views/docs.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
   edit: editor, steering, templates, governance, activity, learnings,
+  docs: docsView,
 };
 
 const NAV = {
@@ -43,9 +45,14 @@ async function render(preserveScroll = false) {
   const { name, params } = parseHash();
   const mod = ROUTES[name] || home;
   document.querySelectorAll('.nav-item').forEach((n) => {
-    n.classList.toggle('active', n.dataset.route === name
+    let active = n.dataset.route === name
       || (name === 'initiative' && n.dataset.route === 'initiatives')
-      || ((name === 'file' || name === 'edit') && n.dataset.route === 'library'));
+      || ((name === 'file' || name === 'edit') && n.dataset.route === 'library');
+    if (n.dataset.section) {
+      active = name === 'docs'
+        && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));
+    }
+    n.classList.toggle('active', active);
   });
   const view = document.getElementById('view');
   const prevScroll = view.scrollTop;
@@ -68,6 +75,26 @@ function buildNav() {
       box.append(el('a', { class: 'nav-item', href: `#/${route}`, dataset: { route } }, icon(ico), label));
     }
   }
+}
+
+// Documentation nav is derived from the built site's own section tabs — the
+// group only appears when Documentation/work-os-docs.html exists.
+async function mountDocsNav() {
+  try {
+    const d = await api.get('/api/docs');
+    if (!d.exists || !d.sections.length) return;
+    const slot = document.getElementById('nav-docs');
+    const group = el('nav', { class: 'nav-group', 'aria-label': 'Documentation' });
+    d.sections.forEach((s, i) => {
+      const ds = { route: 'docs', section: s.id };
+      if (i === 0) ds.first = '';
+      group.append(el('a', {
+        class: 'nav-item', href: `#/docs?s=${encodeURIComponent(s.id)}`, dataset: ds,
+      }, icon('doc'), s.title));
+    });
+    slot.append(el('div', { class: 'nav-label' }, 'Documentation'), group);
+    if (parseHash().name === 'docs') render(true); // booted straight into docs — fix active state
+  } catch { /* docs absent — no group */ }
 }
 
 async function refreshChrome() {
@@ -182,6 +209,13 @@ function wireLive() {
       markPending();
       return;
     }
+    if (name === 'docs') {
+      // Don't reload the reader's page for unrelated repo changes — only when
+      // the built site itself was rebuilt.
+      refreshChrome();
+      if ((detail.paths || []).some((p) => p.startsWith('Documentation/'))) doRefresh();
+      return;
+    }
     if (canAutoRefresh()) doRefresh(); else markPending();
   };
 }
@@ -189,6 +223,7 @@ function wireLive() {
 // ---- boot ------------------------------------------------------------------
 
 buildNav();
+mountDocsNav();
 wireSearch();
 wireLive();
 window.addEventListener('hashchange', () => render(false));

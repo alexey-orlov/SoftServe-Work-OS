@@ -35,6 +35,13 @@ binds localhost only.
   re-render automatically. Auto-refresh holds back while the person is typing or has a
   modal open — the ⟳ button shows a dot and catches up on blur. Where `fs.watch` is
   unavailable the button alone still works.
+- **Documentation is embedded as a black box.** The sidebar's Documentation group is
+  derived from the built site's own section tabs; each entry shows
+  `Documentation/work-os-docs.html` in an in-app panel (`/docs-site`), deep-linked via
+  the site's public `#/section/article` hash routes. The only contract is that file +
+  those URLs — nothing reads `content.js` internals, the group disappears when the file
+  is absent, and the console never writes docs (`/docs-update` is the one writer; a
+  staleness pill flags when `Documentation/src` is newer than the built site).
 - `state.json` (gitignored) holds console-only prefs — pins, recents. Never canonical truth.
 
 ## Contents

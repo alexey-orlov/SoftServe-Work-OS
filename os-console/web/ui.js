@@ -50,6 +50,7 @@ const ICONS = {
   external: '<path d="M14 5h5v5"/><path d="M19 5l-9 9"/><path d="M19 13v6H5V5h6"/>',
   back: '<path d="M15 5l-7 7 7 7"/>',
   refresh: '<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3v4.5h-4.5"/>',
+  doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/>',
 };
 
 export function icon(name) {
