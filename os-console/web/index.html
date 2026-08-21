@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work OS Console</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231485C4'/%3E%3Cpath d='M9 10h6v6H9zM17 10h6v2h-6zM17 14h6v2h-6zM9 18h14v2H9zM9 22h10v2H9z' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="shell">
+  <aside id="side">
+    <div class="brand">
+      <div class="brand-mark">OS</div>
+      <div class="brand-text">
+        <div class="brand-name" id="brand-name">Work OS</div>
+        <div class="brand-sub">Console</div>
+      </div>
+    </div>
+    <nav id="nav-primary" class="nav-group" aria-label="Primary"></nav>
+    <div class="nav-label">Manage</div>
+    <nav id="nav-manage" class="nav-group" aria-label="Manage"></nav>
+    <div class="side-foot">
+      <div id="git-chip" class="git-chip" title="git status"></div>
+    </div>
+  </aside>
+  <div id="body">
+    <header id="topbar">
+      <div id="crumb-slot"></div>
+      <div class="search-wrap">
+        <input id="search" type="search" placeholder="Search the wiki…  ( / )" autocomplete="off" spellcheck="false">
+        <div id="search-results" class="search-results" hidden></div>
+      </div>
+    </header>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+<div id="toasts"></div>
+<div id="modal-root"></div>
+<script src="/vendor/marked.min.js"></script>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

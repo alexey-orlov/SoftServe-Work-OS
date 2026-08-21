@@ -10,4 +10,7 @@
 # Quarantined personal content pending manual review
 _extracted-personal/
 
+# OS Console per-user prefs overlay (pins, recents) — never canonical truth
+os-console/state.json
+
 .DS_Store

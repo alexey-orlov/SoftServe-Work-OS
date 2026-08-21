@@ -1,0 +1,46 @@
+# OS Console
+
+A local web UI over this repo — friendly navigation, initiative grouping, steering-file
+management, setup status, governance state, and the activity log, without touching the
+underlying folder structure. Zero install: it runs on the Node.js already required by
+the docs build, with its two MIT-licensed libraries vendored in `vendor/`.
+
+**Read this when:** You want the human-facing window onto the OS, or you are extending it.
+
+## Run
+
+```bash
+node os-console/server.js
+```
+
+Then open http://127.0.0.1:4820 (set `OS_CONSOLE_PORT` to change the port). The server
+binds localhost only.
+
+## How it relates to the OS
+
+- **Everything displayed is derived** from the canonical registries — `governance/write-policy.yaml`,
+  `product-development/feature-index.yaml`, `toolchain.yaml`, initiative pages, and folder
+  CLAUDE.md navigation files. The console adds no second source of truth.
+- **Writes respect the write policy.** One endpoint resolves every path against the policy's
+  gated globs; gated files are badged in the UI and a save there is the person's approval
+  (the human is the approver the gate exists for). The console never writes scripts, `.git/`,
+  or anything outside the repo.
+- **Every save commits immediately** (`console:` prefix, pathspec-limited) so concurrent
+  Claude sessions never sweep console edits into their own turn-end commits. Pushing follows
+  the auto-sync switchboard; in the `pr` strategy landing stays with the hooks and `/propose`.
+- **Guided programs stay in Claude Code.** Setup steps, `/auto-sync` flips, and drafting
+  skills are handed off as copyable commands, not reimplemented.
+- `state.json` (gitignored) holds console-only prefs — pins, recents. Never canonical truth.
+
+## Contents
+
+### Files
+
+- [server.js](server.js) — HTTP server: API routes, static files, localhost-only
+- [state.json] — created on demand; per-user prefs overlay (gitignored)
+
+### Subfolders
+
+- [lib/](lib/) — Server core (repo safety, policy, git, markdown parsing) + one adapter per surface
+- [web/](web/) — No-build ES-module frontend: shell, shared UI toolkit, one module per view
+- [vendor/](vendor/) — Vendored js-yaml 4.1.0 + marked 12.0.2 (MIT, headers retained)
