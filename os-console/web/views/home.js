@@ -1,6 +1,7 @@
-// Home — setup & health dashboard. Every signal derived from repo state.
+// Home — the OS at a glance: live counts, setup progress widget, PR leaders,
+// pins and recents. The full setup checklist lives in #/setup.
 import { api, getState } from '/api.js';
-import { el, pill, cmdChip, meter, timeAgo, setCrumbs, spinner, mdRender, icon } from '/ui.js';
+import { el, meter, timeAgo, setCrumbs, spinner, icon } from '/ui.js';
 
 export async function render(view) {
   view.append(spinner());
@@ -16,7 +17,7 @@ export async function render(view) {
     el('div', { class: 'grow' },
       el('h1', {}, o.product.name ? `${o.product.name} — Team OS` : 'Your Work OS'),
       el('div', { class: 'sub', style: 'margin:0' },
-        o.product.name ? o.product.line : 'The shared knowledge base, seen from above. Finish setup below — each step is a guided program you run in Claude Code.'),
+        o.product.name ? o.product.line : 'The shared knowledge base, seen from above.'),
     ),
     el('div', { class: 'row' },
       el('span', { class: `pill ${o.autoSync.on ? 'ok' : 'todo'}`, title: o.autoSync.label },
@@ -25,13 +26,14 @@ export async function render(view) {
     ),
   ));
 
-  // stat tiles
+  // stat tiles — the PR count arrives async (it may shell the platform CLI)
+  const prTileN = el('div', { class: 'n' }, '…');
   page.append(el('div', { class: 'tiles', style: 'margin-bottom:14px' },
     tile(o.counts.initiatives, 'Active initiatives', '#/initiatives'),
     tile(o.counts.accounts, 'Customer accounts', '#/library?path=product-development%2Fproduct%2Fcustomers%2Faccounts'),
-    tile(o.counts.mcps, 'Tools connected', '#/governance'),
+    tile(o.counts.mcps, 'Tools connected', '#/setup'),
     tile(o.counts.learnings, 'Team learnings', '#/learnings'),
-    tile(o.counts.proposals, 'Proposals waiting', '#/governance'),
+    el('a', { class: 'tile', href: '#/proposed' }, prTileN, el('div', { class: 't' }, 'PRs waiting')),
   ));
 
   const split = el('div', { class: 'split' });
@@ -40,37 +42,29 @@ export async function render(view) {
   const right = el('div', {});
   split.append(left, right);
 
-  // setup card
+  // setup progress widget — the checklist itself lives in #/setup
   const doneAll = o.progress.done === o.progress.total;
-  const setup = el('div', { class: 'card' },
-    el('div', { class: 'row', style: 'margin-bottom:10px' },
-      el('h3', { class: 'grow' }, doneAll ? 'Setup — complete' : 'Set up this OS'),
-      meter(o.progress.done, o.progress.total),
+  left.append(el('div', { class: 'card' },
+    el('div', { class: 'row', style: 'margin-bottom:8px' },
+      el('h3', { class: 'grow' }, 'Set up this OS'),
+      doneAll ? el('span', { class: 'pill ok' }, 'Complete') : null),
+    meter(o.progress.done, o.progress.total, `${o.progress.done} of ${o.progress.total} steps completed`),
+    el('div', { class: 'row', style: 'margin-top:12px' },
+      el('div', { class: 'hint grow', style: 'margin:0' },
+        doneAll ? 'Everything derived from the repo checks out.' : 'Each remaining step is a guided program you run in Claude Code.'),
+      el('a', { class: 'btn small', href: '#/setup' }, doneAll ? 'Review' : 'Continue setup'),
     ),
-    el('div', { class: 'hint' }, 'Derived live from the repo — placeholders left, undecided choices, missing state files. Copy a command and run it in Claude Code; this page updates as the repo changes.'),
+  ));
+
+  // PR leaders — humans, by merged PRs; loads async
+  const leadersCard = el('div', { class: 'card' },
+    el('h3', {}, 'Most active — merged PRs'),
+    el('div', { class: 'hint' }, 'People only (bots filtered), by pull requests merged on the shared repo.'),
+    el('div', { class: 'spin', style: 'padding:14px' }, 'Checking the repo host…'),
   );
-  for (const s of o.steps) {
-    setup.append(el('div', { class: 'step' },
-      pill(s.state),
-      el('div', { class: 'body' },
-        el('div', { class: 'title' }, s.title),
-        el('div', { class: 'detail' }, s.detail)),
-      s.command && s.state !== 'done' ? cmdChip(s.command) : null,
-    ));
-  }
-  left.append(setup);
+  left.append(leadersCard);
 
-  if (o.customization) {
-    left.append(el('div', { class: 'card' },
-      el('div', { class: 'row' },
-        el('h3', { class: 'grow' }, 'Customization program'),
-        el('a', { class: 'btn small', href: `#/file?path=${encodeURIComponent(o.customization.path)}` }, 'Open full status')),
-      el('div', { class: 'hint' }, 'Where /customize-os left off.'),
-      mdRender(o.customization.text, o.customization.path),
-    ));
-  }
-
-  // pinned + recents
+  // pinned + recents + last commit
   const st = getState();
   if (st.pins.length) {
     right.append(el('div', { class: 'card' },
@@ -98,6 +92,42 @@ export async function render(view) {
         el('a', { class: 'btn small', href: '#/activity', style: 'margin-top:10px' }, 'All activity'))
       : el('div', { class: 'hint' }, 'No history.'),
   ));
+
+  // async fills (never block first paint; ignore failures — tiles stay honest)
+  api.get('/api/proposed').then((d) => {
+    prTileN.textContent = d.prs.available ? String(d.prs.items.length) : '—';
+    if (!d.prs.available) prTileN.title = d.prs.note || '';
+  }).catch(() => { prTileN.textContent = '—'; });
+
+  api.get('/api/leaders').then((L) => {
+    const body = [];
+    if (!L.available) {
+      body.push(el('div', { class: 'hint', style: 'margin:0' }, L.note || 'Repo host CLI not available.'));
+    } else if (!L.week.length && !L.month.length) {
+      body.push(el('div', { class: 'hint', style: 'margin:0' }, 'No merged PRs in the last 30 days.'));
+    } else {
+      body.push(el('div', { class: 'grid cols-2' },
+        leaderCol('This week', L.week),
+        leaderCol('This month', L.month)));
+    }
+    leadersCard.replaceChildren(
+      el('h3', {}, 'Most active — merged PRs'),
+      el('div', { class: 'hint' }, 'People only (bots filtered), by pull requests merged on the shared repo.'),
+      ...body);
+  }).catch(() => {
+    leadersCard.querySelector('.spin').textContent = 'Leaderboard unavailable.';
+  });
+}
+
+function leaderCol(title, rows) {
+  return el('div', {},
+    el('div', { class: 'subgroup', style: 'margin-top:2px' }, title),
+    rows.length
+      ? el('div', {}, rows.map((r, i) => el('div', { class: 'leader' },
+        el('span', { style: 'color:var(--muted); width:16px' }, `${i + 1}.`),
+        el('span', {}, r.login),
+        el('span', { class: 'n' }, String(r.count)))))
+      : el('div', { class: 'hint', style: 'margin:0' }, 'No merged PRs.'));
 }
 
 function tile(n, label, href) {

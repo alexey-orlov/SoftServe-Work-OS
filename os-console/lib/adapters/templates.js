@@ -6,6 +6,7 @@ const path = require('path');
 const repo = require('../repo');
 const git = require('../git');
 const md = require('../mdparse');
+const policy = require('../policy');
 
 const DIR = 'product-development/product/handbook/templates';
 
@@ -23,6 +24,7 @@ const SUGGEST = {
 };
 
 function build() {
+  const pol = policy.load();
   const descs = md.navDescriptions(DIR);
   const items = [];
   for (const e of repo.listDir(DIR)) {
@@ -33,6 +35,7 @@ function build() {
       name: e.name,
       title: md.firstHeading(text) || e.name.replace(/-template\.md$/, ''),
       desc: descs[e.rel] || '',
+      tier: policy.tierFor(e.rel, pol).tier,
       suggest: SUGGEST[e.name] || 'product-development/{where-it-belongs}.md',
       lines: text.split('\n').length,
     });

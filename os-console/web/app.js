@@ -13,11 +13,13 @@ import * as governance from '/views/governance.js';
 import * as activity from '/views/activity.js';
 import * as learnings from '/views/learnings.js';
 import * as docsView from '/views/docs.js';
+import * as setup from '/views/setup.js';
+import * as proposedView from '/views/proposed.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
   edit: editor, steering, templates, governance, activity, learnings,
-  docs: docsView,
+  docs: docsView, setup, proposed: proposedView,
 };
 
 const NAV = {
@@ -28,9 +30,11 @@ const NAV = {
     ['activity', 'Activity', 'clock'],
   ],
   manage: [
+    ['setup', 'Set up this OS', 'sliders'],
+    ['proposed', 'Proposed changes', 'pr'],
     ['steering', 'Steering', 'compass'],
     ['templates', 'Templates', 'copy'],
-    ['governance', 'Governance', 'shield'],
+    ['governance', 'Gated files', 'shield'],
     ['learnings', 'Learnings', 'bulb'],
   ],
 };

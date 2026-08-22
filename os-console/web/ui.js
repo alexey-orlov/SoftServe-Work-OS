@@ -51,6 +51,8 @@ const ICONS = {
   back: '<path d="M15 5l-7 7 7 7"/>',
   refresh: '<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3v4.5h-4.5"/>',
   doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/>',
+  pr: '<circle cx="6" cy="5.5" r="2.3"/><circle cx="6" cy="18.5" r="2.3"/><circle cx="18" cy="18.5" r="2.3"/><path d="M6 8v8"/><path d="M12.5 5.5H16a2 2 0 0 1 2 2v8.5"/><path d="M14.5 3.5l-2 2 2 2"/>',
+  sliders: '<path d="M4 8h9M17.5 8H20M4 16h2.5M11 16h9"/><circle cx="15.2" cy="8" r="2.2"/><circle cx="8.2" cy="16" r="2.2"/>',
 };
 
 export function icon(name) {
@@ -81,6 +83,15 @@ export function tierPill(tier) {
   return tier === 'gated'
     ? el('span', { class: 'pill gate', title: 'Gated steering file (write-policy) — saving from the console is your approval' }, icon('lock'), 'Gated')
     : el('span', { class: 'pill plain', title: 'Auto tier — agents write this freely' }, 'Auto');
+}
+
+// Small badge for file listings: present only on gated paths (absence = auto tier).
+export function gatedTag(tier) {
+  if (tier !== 'gated') return null;
+  return el('span', {
+    class: 'pill gate mini',
+    title: 'Gated (write-policy) — needs a human\'s approval to change; never lands by automation',
+  }, icon('lock'), 'Gated');
 }
 
 export function cmdChip(cmd) {
@@ -229,6 +240,7 @@ export function filePicker({ title = 'Pick a file', onPick, startPath = 'product
         },
         icon(entry.type === 'dir' ? 'folder' : 'file'),
         el('span', {}, entry.name),
+        gatedTag(entry.tier),
         el('span', { class: 'd grow' }, entry.desc || ''),
         ),
       ));

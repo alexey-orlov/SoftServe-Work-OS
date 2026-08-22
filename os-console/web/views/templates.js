@@ -1,35 +1,77 @@
-// Templates — the governed scaffold registry. "Use" copies to the right home;
-// editing the template itself is a gated steering change.
+// Templates & writing guides — the two handbook registries. "Use" copies a
+// template to its canonical home; editing a template is a gated steering change.
 import { api } from '/api.js';
-import { el, icon, toast, modal, field, setCrumbs, spinner, cmdChip } from '/ui.js';
+import { el, icon, toast, modal, field, setCrumbs, spinner, cmdChip, gatedTag } from '/ui.js';
+
+// Business-language descriptions per template (fallback: the repo's own nav line).
+const TEMPLATE_DESCS = {
+  'prd-template.md': 'Define a feature before building it — the problem, who it serves, what is in and out, and how success is measured.',
+  'initiative-page-template.md': 'One living page for a piece of work — where it stands, what exists, what is still open.',
+  'launch-checklist-template.md': 'Everything that must be true before a feature ships, prioritized and owned.',
+  'retrospective-template.md': 'Capture what went well and what didn\'t while it is fresh — and what the team changes next time.',
+  'interview-template.md': 'Run a customer conversation that yields evidence, not opinions — questions, checklist, debrief.',
+  'competitor-teardown-template.md': 'A competitor profile the team keeps current — offer, pricing, strengths, where we win.',
+  'competitive-area-matrix-template.md': 'Capability-by-capability comparison against competitors for one product area.',
+  'jobs-breakdown-template.md': 'Cut an agreed feature into sequenced, independently buildable jobs.',
+  'job-spec-template.md': 'The buildable contract for one job — rules, acceptance criteria, edge cases — ready to become tickets.',
+};
+
+const GUIDES_DIR = 'product-development/product/handbook/writing-guides';
 
 export async function render(view) {
   view.append(spinner());
-  const d = await api.get('/api/templates');
+  const [d, guides] = await Promise.all([
+    api.get('/api/templates'),
+    api.get(`/api/library?path=${encodeURIComponent(GUIDES_DIR)}`).catch(() => null),
+  ]);
   view.replaceChildren();
   setCrumbs([{ label: 'Templates' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);
   page.append(
-    el('h1', {}, 'Templates'),
+    el('h1', {}, 'Templates & writing guides'),
     el('div', { class: 'sub' },
-      'Blank scaffolds with bracketed placeholders — copy, don\'t edit in place. "Use" stamps a copy at its canonical destination and commits it. Editing a template changes every future document (gated — your save is the approval).'),
+      'The team\'s agreed starting points. Templates are copied, never filled in place — "Use" stamps a copy at its destination. Writing guides set the house style per audience.'),
   );
 
+  // templates
+  page.append(el('h2', { class: 'section', style: 'margin-top:8px' }, 'Templates'));
   page.append(el('div', { class: 'init-grid' }, d.items.map((t) => {
     return el('div', { class: 'init-card', style: 'cursor:default' },
-      el('div', { class: 'name' }, t.title),
-      el('div', { class: 'status-line' }, t.desc || ''),
-      el('div', { class: 'path' }, t.suggest),
+      el('div', { class: 'row' },
+        el('div', { class: 'name grow', style: 'padding-right:0' }, t.title),
+        gatedTag(t.tier)),
+      el('div', { class: 'status-line', style: '-webkit-line-clamp:3' }, TEMPLATE_DESCS[t.name] || t.desc || ''),
+      el('div', { class: 'path', style: 'font-size:10px; opacity:.55' }, t.suggest),
       el('div', { class: 'row', style: 'margin-top:4px' },
         el('button', { class: 'btn small primary', onclick: () => useModal(t) }, icon('plus'), 'Use'),
         el('a', { class: 'btn small', href: `#/file?path=${encodeURIComponent(t.path)}` }, 'Preview'),
-        el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(t.path)}`, title: 'Gated — changes every future doc' }, icon('lock'), 'Edit'),
-        el('span', { class: 'right tag' }, `${t.lines} lines`),
+        el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(t.path)}`, title: 'Gated — changes every future document made from this template' }, icon('lock'), 'Edit'),
       ),
     );
   })));
+
+  // writing guides
+  if (guides && guides.entries) {
+    const rows = guides.entries.filter((e) => e.type === 'file' && e.name !== 'CLAUDE.md');
+    if (rows.length) {
+      page.append(el('h2', { class: 'section' }, 'Writing guides'));
+      const card = el('div', { class: 'card' },
+        el('div', { class: 'hint' }, 'How we write for each audience — loaded by drafting skills, worth skimming yourself.'));
+      for (const g of rows) {
+        card.append(el('div', { class: 'art-row' },
+          el('span', { class: 'val grow' },
+            el('a', { href: `#/file?path=${encodeURIComponent(g.rel)}`, style: 'font-weight:600' },
+              g.name.replace(/\.md$/, '').replace(/^./, (c) => c.toUpperCase())),
+            ' ', gatedTag(g.tier),
+            el('span', { class: 'mini' }, g.desc || '')),
+          el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(g.rel)}` }, icon('edit')),
+        ));
+      }
+      page.append(card);
+    }
+  }
 
   page.append(el('div', { class: 'card', style: 'margin-top:18px' },
     el('h3', {}, 'Filling one out with help'),

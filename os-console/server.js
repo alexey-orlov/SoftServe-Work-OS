@@ -26,6 +26,8 @@ const templates = require('./lib/adapters/templates');
 const governance = require('./lib/adapters/governance');
 const activity = require('./lib/adapters/activity');
 const learnings = require('./lib/adapters/learnings');
+const prs = require('./lib/adapters/prs');
+const proposed = require('./lib/adapters/proposed');
 const docs = require('./lib/adapters/docs');
 
 const PORT = Number(process.env.OS_CONSOLE_PORT || 4820);
@@ -152,6 +154,12 @@ const routes = {
     const hits = gitlib.grep(q.get('q') || '');
     return { hits: hits.map((h) => ({ ...h, area: activity.areaFor(h.path) })) };
   },
+
+  'GET /api/proposed': (q) => proposed.build(q.get('refresh') === '1'),
+
+  'GET /api/leaders': (q) => prs.leaders(q.get('refresh') === '1'),
+
+  'GET /api/tiers': (q) => library.tiers((q.get('paths') || '').split('|').filter(Boolean)),
 
   'GET /api/state': () => loadState(),
   'PUT /api/state': async (q, body) => saveState(body),

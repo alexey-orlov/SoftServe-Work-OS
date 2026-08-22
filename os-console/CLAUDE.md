@@ -30,6 +30,10 @@ binds localhost only.
   the auto-sync switchboard; in the `pr` strategy landing stays with the hooks and `/propose`.
 - **Guided programs stay in Claude Code.** Setup steps, `/auto-sync` flips, and drafting
   skills are handed off as copyable commands, not reimplemented.
+- **Pull requests & leaderboards** (Proposed changes, Home) shell the platform CLI
+  read-only — `gh` for GitHub origins, `az` for Azure Repos, detected from the git
+  origin — cached for 5 minutes. A missing or unauthenticated CLI degrades to an
+  honest note, never an error.
 - **Live refresh.** The server watches the repo (`fs.watch`, `.git` noise filtered to
   ref/HEAD moves) and streams change events over SSE (`/api/events`); open views
   re-render automatically. Auto-refresh holds back while the person is typing or has a

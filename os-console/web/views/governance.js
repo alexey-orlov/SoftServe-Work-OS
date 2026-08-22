@@ -1,20 +1,20 @@
-// Governance — auto-sync switchboard state, the gated list with its "why"
-// comments, proposals inbox, and server-side enforcement signals.
+// Gated files — which paths need a human first, the auto-sync switchboard,
+// and the enforcement chain. Reads live from governance/write-policy.yaml.
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, timeAgo, setCrumbs, spinner } from '/ui.js';
+import { el, icon, pill, cmdChip, setCrumbs, spinner } from '/ui.js';
 
 export async function render(view) {
   view.append(spinner());
   const d = await api.get('/api/governance');
   view.replaceChildren();
-  setCrumbs([{ label: 'Governance' }]);
+  setCrumbs([{ label: 'Gated files' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);
   page.append(
-    el('h1', {}, 'Governance'),
+    el('h1', {}, 'Gated files'),
     el('div', { class: 'sub' },
-      'How changes land, and which paths need a human first. Everything below reads live from governance/write-policy.yaml — the same registry the hooks enforce.'),
+      'The paths that need a human before they change, and how everything else lands automatically. Everything below reads live from governance/write-policy.yaml — the same registry the hooks enforce. What is currently waiting for review sits in Proposed changes.'),
   );
 
   const split = el('div', { class: 'split' });
@@ -64,15 +64,12 @@ export async function render(view) {
   }
   left.append(gatedCard);
 
-  // proposals
+  // what's waiting lives in Proposed changes now
   right.append(el('div', { class: 'card' },
-    el('h3', {}, `Proposals inbox (${d.proposals.length})`),
-    el('div', { class: 'hint' }, 'Gated changes filed by runs that could not ask (headless, scheduled). Apply or reject, then delete.'),
-    d.proposals.length
-      ? el('div', {}, d.proposals.map((p) => el('div', { class: 'art-row' },
-        el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(p.path)}` }, p.title),
-        el('span', { class: 'tag' }, timeAgo(p.mtimeMs)))))
-      : el('div', { class: 'empty' }, 'Nothing waiting.'),
+    el('h3', {}, 'Waiting for review?'),
+    el('div', { class: 'hint', style: 'margin-bottom:8px' },
+      `Open pull requests and the proposals inbox (${d.proposals.length} filed) moved to their own queue.`),
+    el('a', { class: 'btn small', href: '#/proposed' }, icon('pr'), 'Open Proposed changes'),
   ));
 
   // enforcement
@@ -96,13 +93,4 @@ export async function render(view) {
       d.stewardPlaceholder ? pill('todo', 'Placeholder') : pill('done', 'Set')),
   ));
 
-  // living pages + health
-  right.append(el('div', { class: 'card' },
-    el('h3', {}, 'Health reports'),
-    d.health.length
-      ? el('div', {}, d.health.slice(0, 5).map((h) => el('div', { class: 'art-row' },
-        el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(h.path)}` }, h.name),
-        el('span', { class: 'tag' }, timeAgo(h.mtimeMs)))))
-      : el('div', { class: 'hint', style: 'margin:0' }, 'No /wiki-lint report yet — ', cmdChip('/wiki-lint')),
-  ));
 }
