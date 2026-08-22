@@ -152,7 +152,8 @@ const firstRoute = (s) => s.articles.length ? `${s.id}/${s.articles[0].id}` : `$
 const tabs = doc.sections.map((s) => `<a class="tab" data-section="${s.id}" href="#/${firstRoute(s)}">${esc(s.title)}</a>`).join("");
 const mobileNav = `<details class="side-mobile"><summary>In this section</summary><div class="side-mobile-in"></div></details>`;
 
-const page = `<title>${esc(doc.name)}</title>
+const page = `<meta charset="utf-8">
+<title>${esc(doc.name)}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>(function(){var p=null,m=null;try{var q=new URLSearchParams(location.search);p=q.get("platform")||localStorage.getItem("wos-platform");m=q.get("method")||localStorage.getItem("wos-method")}catch(e){}var r=document.documentElement;r.setAttribute("data-platform",p==="azure"?"azure":"github");r.setAttribute("data-method",m==="chat"?"chat":"app")})()</script>
 <style>
