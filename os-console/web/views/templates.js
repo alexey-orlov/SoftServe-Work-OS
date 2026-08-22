@@ -36,12 +36,13 @@ export async function render(view) {
   );
 
   // templates
-  page.append(el('h2', { class: 'section', style: 'margin-top:8px' }, 'Templates'));
+  page.append(el('h2', { class: 'group-head', style: 'margin-top:12px' }, 'Templates'),
+    el('div', { style: 'height:10px' }));
   page.append(el('div', { class: 'init-grid' }, d.items.map((t) => {
     return el('div', { class: 'init-card', style: 'cursor:default' },
-      el('div', { class: 'row' },
+      el('div', { class: 'row', style: 'align-items:flex-start' },
         el('div', { class: 'name grow', style: 'padding-right:0' }, t.title),
-        gatedTag(t.tier)),
+        el('span', { style: 'margin-top:2px' }, gatedTag(t.tier))),
       el('div', { class: 'status-line', style: '-webkit-line-clamp:3' }, TEMPLATE_DESCS[t.name] || t.desc || ''),
       el('div', { class: 'path', style: 'font-size:10px; opacity:.55' }, t.suggest),
       el('div', { class: 'row', style: 'margin-top:4px' },
@@ -56,7 +57,8 @@ export async function render(view) {
   if (guides && guides.entries) {
     const rows = guides.entries.filter((e) => e.type === 'file' && e.name !== 'CLAUDE.md');
     if (rows.length) {
-      page.append(el('h2', { class: 'section' }, 'Writing guides'));
+      page.append(el('h2', { class: 'group-head' }, 'Writing guides'),
+        el('div', { style: 'height:10px' }));
       const card = el('div', { class: 'card' },
         el('div', { class: 'hint' }, 'How we write for each audience — loaded by drafting skills, worth skimming yourself.'));
       for (const g of rows) {

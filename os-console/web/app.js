@@ -7,7 +7,6 @@ import * as initiatives from '/views/initiatives.js';
 import * as library from '/views/library.js';
 import * as fileView from '/views/file.js';
 import * as editor from '/views/editor.js';
-import * as steering from '/views/steering.js';
 import * as templates from '/views/templates.js';
 import * as governance from '/views/governance.js';
 import * as activity from '/views/activity.js';
@@ -18,8 +17,9 @@ import * as proposedView from '/views/proposed.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
-  edit: editor, steering, templates, governance, activity, learnings,
+  edit: editor, templates, governance, activity, learnings,
   docs: docsView, setup, proposed: proposedView,
+  steering: governance, // absorbed into Gated files — old links land there
 };
 
 const NAV = {
@@ -32,7 +32,6 @@ const NAV = {
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
     ['proposed', 'Proposed changes', 'pr'],
-    ['steering', 'Steering', 'compass'],
     ['templates', 'Templates', 'copy'],
     ['governance', 'Gated files', 'shield'],
     ['learnings', 'Learnings', 'bulb'],

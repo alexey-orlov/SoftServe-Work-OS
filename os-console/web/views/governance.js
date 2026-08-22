@@ -1,11 +1,15 @@
-// Gated files — which paths need a human first, the auto-sync switchboard,
-// and the enforcement chain. Reads live from governance/write-policy.yaml.
+// Gated files — which paths need a human first, the auto-sync switchboard, the
+// enforcement chain, and the steering files themselves with their freshness.
+// Reads live from governance/write-policy.yaml (+ the steering adapter).
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, setCrumbs, spinner } from '/ui.js';
+import { el, icon, pill, cmdChip, setCrumbs, spinner, tierPill, timeAgo } from '/ui.js';
 
 export async function render(view) {
   view.append(spinner());
-  const d = await api.get('/api/governance');
+  const [d, steer] = await Promise.all([
+    api.get('/api/governance'),
+    api.get('/api/steering').catch(() => null),
+  ]);
   view.replaceChildren();
   setCrumbs([{ label: 'Gated files' }]);
 
@@ -93,4 +97,39 @@ export async function render(view) {
       d.stewardPlaceholder ? pill('todo', 'Placeholder') : pill('done', 'Set')),
   ));
 
+  // steering files & freshness — the content behind the gates, one audit table
+  if (steer && steer.rows && steer.rows.length) {
+    const GROUPS = [
+      ['core', 'Core steering'],
+      ['business', 'Business context'],
+      ['living', 'Living pages (auto tier — edit in place)'],
+    ];
+    page.append(el('h2', { class: 'group-head' }, 'Steering files — freshness'),
+      el('div', { class: 'hint', style: 'margin:2px 0 12px' },
+        'The files these gates protect, and how current each one is. Reading them is easier in the Library — this table is the audit.'));
+    const tbody = el('tbody', {});
+    for (const [key, label] of GROUPS) {
+      const rows = steer.rows.filter((r) => r.group === key);
+      if (!rows.length) continue;
+      tbody.append(el('tr', {}, el('td', { colspan: '5', style: 'padding-top:14px' },
+        el('div', { class: 'subgroup', style: 'margin:0' }, label))));
+      for (const r of rows) {
+        tbody.append(el('tr', { class: 'click', onclick: () => { location.hash = `#/file?path=${encodeURIComponent(r.path)}`; } },
+          el('td', { style: 'width:32%' },
+            el('a', { href: `#/file?path=${encodeURIComponent(r.path)}`, onclick: (ev) => ev.stopPropagation() }, r.title),
+            el('span', { class: 'mini' }, r.role)),
+          el('td', {}, el('span', { class: 'path' }, r.path)),
+          el('td', { style: 'width:70px' }, tierPill(r.tier)),
+          el('td', { style: 'white-space:nowrap; color:var(--muted); font-size:12px' },
+            r.updatedHeader ? `_updated ${r.updatedHeader}` : timeAgo(r.lastChange)),
+          el('td', { style: 'width:50px; text-align:right' },
+            el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(r.path)}`, onclick: (ev) => ev.stopPropagation() }, icon('edit'))),
+        ));
+      }
+    }
+    page.append(el('div', { class: 'card scroll-x', style: 'padding:6px 10px' },
+      el('table', { class: 'data' },
+        el('thead', {}, el('tr', {}, el('th', {}, 'File'), el('th', {}, 'Path'), el('th', {}, 'Tier'), el('th', {}, 'Updated'), el('th', {}, ''))),
+        tbody)));
+  }
 }

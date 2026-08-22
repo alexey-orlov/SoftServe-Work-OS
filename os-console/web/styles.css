@@ -188,18 +188,26 @@ h2.section { font-size: 12px; font-weight: 650; letter-spacing: .07em; text-tran
 .pill.plain  { background: var(--todo-tint); color: var(--ink-2); font-weight: 550; }
 
 .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); padding: 1.5px 8px; border-radius: 999px; white-space: nowrap; }
-.pill.mini { font-size: 9.5px; padding: 1px 7px; }
-.pill.mini svg { width: 10px; height: 10px; }
+/* xs badge — sized down, safe inside tables ("mini" is taken by td subtitle lines) */
+.pill.xs { font-size: 10px; padding: 1.5px 8px; gap: 4px; vertical-align: middle; }
+.pill.xs svg { width: 10.5px; height: 10.5px; }
 
-/* library: quick-access subgroups + the hard split before the raw tree */
+/* heading hierarchy: h1 (page) → .group-head (primary group) → .subgroup (small caps) */
+.group-head {
+  font-size: 16px; font-weight: 680; letter-spacing: -.01em; color: var(--ink);
+  margin: 30px 0 2px;
+}
+.group-head:first-of-type { margin-top: 18px; }
 .subgroup {
   font-size: 11px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--muted); margin: 16px 0 8px;
+  color: var(--muted); margin: 14px 0 8px;
 }
 .zone-split {
-  margin: 34px 0 0; padding-top: 24px; border-top: 2px solid var(--line);
+  margin: 38px 0 0; padding-top: 26px; border-top: 2px solid var(--line);
 }
-.tile .row-t { display: flex; align-items: center; gap: 7px; font-weight: 640; font-size: 13.5px; }
+.tile .row-t { display: flex; align-items: flex-start; gap: 7px; font-weight: 640; font-size: 13.5px; }
+.tile .row-t > svg { margin-top: 2.5px; flex: none; }
+.tile .row-t .pill { margin-left: auto; flex: none; margin-top: 2px; }
 .tile .d { font-size: 12px; color: var(--muted); margin-top: 3px; }
 
 /* leaders (home) */

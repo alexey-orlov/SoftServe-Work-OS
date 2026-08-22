@@ -93,14 +93,17 @@ export async function render(view, params) {
     );
     const tileRefs = [];
     for (const section of QUICK) {
-      page.append(el('h2', { class: 'section' }, section.title));
+      page.append(el('h2', { class: 'group-head' }, section.title));
       for (const group of section.groups) {
         if (group.name) page.append(el('div', { class: 'subgroup' }, group.name));
+        else page.append(el('div', { style: 'height:10px' }));
         page.append(el('div', { class: 'tiles' }, group.items.map((q) => {
           const href = q.kind === 'file'
             ? `#/file?path=${encodeURIComponent(q.target)}`
             : `#/library?path=${encodeURIComponent(q.target)}`;
-          const nameRow = el('div', { class: 'row-t' }, icon(q.kind === 'file' ? 'file' : 'folder'), q.name);
+          const nameRow = el('div', { class: 'row-t' },
+            icon(q.kind === 'file' ? 'file' : 'folder'),
+            el('span', { class: 'grow' }, q.name));
           tileRefs.push({ target: q.target, nameRow });
           return el('a', { class: 'tile', href, title: q.target },
             nameRow,
@@ -118,7 +121,7 @@ export async function render(view, params) {
 
     // the hard split before the raw tree
     page.append(el('div', { class: 'zone-split' },
-      el('h2', { class: 'section', style: 'margin:0 0 4px' }, 'Raw folder tree'),
+      el('h2', { class: 'group-head', style: 'margin:0 0 2px' }, 'Raw folder tree'),
       el('div', { class: 'hint', style: 'margin:0 0 12px' },
         'The same files by actual location — for when you know where things live. 🔒 Gated = needs a human\'s approval to change.'),
     ));

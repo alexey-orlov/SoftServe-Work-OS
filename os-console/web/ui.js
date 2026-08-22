@@ -89,7 +89,7 @@ export function tierPill(tier) {
 export function gatedTag(tier) {
   if (tier !== 'gated') return null;
   return el('span', {
-    class: 'pill gate mini',
+    class: 'pill gate xs',
     title: 'Gated (write-policy) — needs a human\'s approval to change; never lands by automation',
   }, icon('lock'), 'Gated');
 }
