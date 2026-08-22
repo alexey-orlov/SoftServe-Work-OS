@@ -1,15 +1,21 @@
-// Gated files — which paths need a human first, the auto-sync switchboard, the
-// enforcement chain, and the steering files themselves with their freshness.
-// Reads live from governance/write-policy.yaml (+ the steering adapter).
+// Gated files — one reconciled structure: each protection rule from
+// write-policy.yaml with what it covers right now and how fresh that content
+// is. Auto-sync, the review pointer, and the enforcement chain sit beside it;
+// living pages (auto tier, watched for freshness) close the page.
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, setCrumbs, spinner, tierPill, timeAgo } from '/ui.js';
+import { el, icon, pill, cmdChip, timeAgo, setCrumbs, spinner } from '/ui.js';
+
+// Where a tree rule is best managed inside the console.
+function manageLink(pattern) {
+  if (pattern.startsWith('product-development/product/handbook/templates')) return { href: '#/templates', label: 'Templates view' };
+  if (pattern.startsWith('Documentation')) return { href: '#/docs', label: 'Docs view' };
+  const dir = pattern.replace(/\/\*\*$/, '');
+  return { href: `#/library?path=${encodeURIComponent(dir)}`, label: 'Browse' };
+}
 
 export async function render(view) {
   view.append(spinner());
-  const [d, steer] = await Promise.all([
-    api.get('/api/governance'),
-    api.get('/api/steering').catch(() => null),
-  ]);
+  const d = await api.get('/api/governance');
   view.replaceChildren();
   setCrumbs([{ label: 'Gated files' }]);
 
@@ -18,7 +24,7 @@ export async function render(view) {
   page.append(
     el('h1', {}, 'Gated files'),
     el('div', { class: 'sub' },
-      'The paths that need a human before they change, and how everything else lands automatically. Everything below reads live from governance/write-policy.yaml — the same registry the hooks enforce. What is currently waiting for review sits in Proposed changes.'),
+      'What needs a human before it changes. Each rule below comes live from governance/write-policy.yaml — shown with the files it covers today and how current they are. A save from the console on any of them is your approval; what is waiting for review sits in Proposed changes.'),
   );
 
   const split = el('div', { class: 'split' });
@@ -27,9 +33,57 @@ export async function render(view) {
   const right = el('div', {});
   split.append(left, right);
 
-  // auto-sync
+  // ---- the one protection structure: rule → coverage → freshness ----
+  const card = el('div', { class: 'card' },
+    el('div', { class: 'row' },
+      el('h3', { class: 'grow' }, `What needs approval (${d.protected.length} rules)`),
+      el('a', { class: 'btn small', href: `#/edit?path=${encodeURIComponent(d.policyPath)}` }, icon('lock'), 'Edit policy')),
+  );
+  let lastHeading = null;
+  for (const p of d.protected) {
+    if (p.heading && p.heading !== lastHeading) {
+      lastHeading = p.heading;
+      card.append(el('div', { class: 'subgroup' }, p.heading.replace(/\s*—.*$/, '')));
+    }
+    if (p.single) {
+      // one rule = one file — show it as the file itself
+      const f = p.files[0] || { path: p.pattern, title: p.pattern.split('/').pop() };
+      card.append(el('div', { class: 'art-row' },
+        icon('file'),
+        el('span', { class: 'val grow' },
+          el('a', { href: `#/file?path=${encodeURIComponent(f.path)}`, style: 'font-weight:600' }, f.title),
+          el('span', { class: 'mini' }, p.note || f.role || '')),
+        el('span', { class: 'when' },
+          f.updatedHeader ? `_updated ${f.updatedHeader}` : timeAgo(f.lastChange)),
+        el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(f.path)}` }, icon('edit')),
+      ));
+    } else {
+      // one rule = a tree — the rule row, then its notable steering files
+      const link = manageLink(p.pattern);
+      card.append(el('div', { class: 'art-row' },
+        icon('folder'),
+        el('span', { class: 'val grow' },
+          el('span', { class: 'path', style: 'color:var(--ink-2); font-weight:600' }, p.pattern),
+          el('span', { class: 'mini' }, p.note || '')),
+        p.count !== null ? el('span', { class: 'tag' }, `${p.count} files`) : null,
+        el('a', { class: 'btn small quiet', href: link.href }, link.label),
+      ));
+      for (const f of p.files) {
+        card.append(el('div', { class: 'art-row', style: 'padding-left:34px; border-bottom:0; padding-top:2px; padding-bottom:4px' },
+          el('span', { class: 'val grow', style: 'font-size:12.5px' },
+            el('a', { href: `#/file?path=${encodeURIComponent(f.path)}` }, f.title)),
+          el('span', { class: 'when' },
+            f.updatedHeader ? `_updated ${f.updatedHeader}` : timeAgo(f.lastChange)),
+          el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(f.path)}` }, icon('edit')),
+        ));
+      }
+    }
+  }
+  left.append(card);
+
+  // ---- auto-sync ----
   const a = d.autoSync;
-  left.append(el('div', { class: 'card' },
+  right.append(el('div', { class: 'card' },
     el('div', { class: 'row' },
       el('h3', { class: 'grow' }, 'Auto-sync'),
       el('span', { class: `pill ${a.on ? 'ok' : 'todo'}` }, a.on ? `On — ${a.mode}` : 'Off')),
@@ -47,36 +101,15 @@ export async function render(view) {
       cmdChip('/auto-sync on direct'), cmdChip('/auto-sync on pr'), cmdChip('/auto-sync off'), cmdChip('/auto-sync status')),
   ));
 
-  // gated list
-  const gatedCard = el('div', { class: 'card' },
-    el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, `Gated paths (${d.gated.length})`),
-      el('a', { class: 'btn small', href: `#/edit?path=${encodeURIComponent(d.policyPath)}` }, icon('lock'), 'Edit policy')),
-    el('div', { class: 'hint' },
-      'Agents need your in-session yes to write these; automation never lands them on the target branch. In the console they carry the Gated badge — your save is the approval.'),
-  );
-  let lastHeading = null;
-  for (const g of d.gated) {
-    if (g.heading && g.heading !== lastHeading) {
-      lastHeading = g.heading;
-      gatedCard.append(el('div', { style: 'font-size:11.5px; font-weight:650; color:var(--muted); margin:12px 0 2px' }, g.heading));
-    }
-    gatedCard.append(el('div', { style: 'padding:6px 0; border-bottom:1px solid var(--line-soft)' },
-      el('div', { class: 'path', style: 'color:var(--ink-2)' }, g.pattern),
-      g.note ? el('div', { style: 'color:var(--muted); font-size:12px; margin-top:1px' }, g.note) : null,
-    ));
-  }
-  left.append(gatedCard);
-
-  // what's waiting lives in Proposed changes now
+  // ---- review pointer ----
   right.append(el('div', { class: 'card' },
     el('h3', {}, 'Waiting for review?'),
     el('div', { class: 'hint', style: 'margin-bottom:8px' },
-      `Open pull requests and the proposals inbox (${d.proposals.length} filed) moved to their own queue.`),
+      `Open pull requests and the proposals inbox (${d.proposals.length} filed) live in their own queue.`),
     el('a', { class: 'btn small', href: '#/proposed' }, icon('pr'), 'Open Proposed changes'),
   ));
 
-  // enforcement
+  // ---- enforcement chain ----
   right.append(el('div', { class: 'card' },
     el('h3', {}, 'Enforcement chain'),
     el('div', { class: 'art-row' },
@@ -97,39 +130,24 @@ export async function render(view) {
       d.stewardPlaceholder ? pill('todo', 'Placeholder') : pill('done', 'Set')),
   ));
 
-  // steering files & freshness — the content behind the gates, one audit table
-  if (steer && steer.rows && steer.rows.length) {
-    const GROUPS = [
-      ['core', 'Core steering'],
-      ['business', 'Business context'],
-      ['living', 'Living pages (auto tier — edit in place)'],
-    ];
-    page.append(el('h2', { class: 'group-head' }, 'Steering files — freshness'),
+  // ---- living pages: watched, explicitly NOT gated ----
+  if (d.living && d.living.length) {
+    page.append(
+      el('h2', { class: 'group-head' }, 'Living pages — watched, not gated'),
       el('div', { class: 'hint', style: 'margin:2px 0 12px' },
-        'The files these gates protect, and how current each one is. Reading them is easier in the Library — this table is the audit.'));
-    const tbody = el('tbody', {});
-    for (const [key, label] of GROUPS) {
-      const rows = steer.rows.filter((r) => r.group === key);
-      if (!rows.length) continue;
-      tbody.append(el('tr', {}, el('td', { colspan: '5', style: 'padding-top:14px' },
-        el('div', { class: 'subgroup', style: 'margin:0' }, label))));
-      for (const r of rows) {
-        tbody.append(el('tr', { class: 'click', onclick: () => { location.hash = `#/file?path=${encodeURIComponent(r.path)}`; } },
-          el('td', { style: 'width:32%' },
-            el('a', { href: `#/file?path=${encodeURIComponent(r.path)}`, onclick: (ev) => ev.stopPropagation() }, r.title),
-            el('span', { class: 'mini' }, r.role)),
-          el('td', {}, el('span', { class: 'path' }, r.path)),
-          el('td', { style: 'width:70px' }, tierPill(r.tier)),
-          el('td', { style: 'white-space:nowrap; color:var(--muted); font-size:12px' },
-            r.updatedHeader ? `_updated ${r.updatedHeader}` : timeAgo(r.lastChange)),
-          el('td', { style: 'width:50px; text-align:right' },
-            el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(r.path)}`, onclick: (ev) => ev.stopPropagation() }, icon('edit'))),
-        ));
-      }
+        'Current-truth pages agents edit freely (auto tier). They are listed here because stale steering misleads — /wiki-lint checks the same list.'),
+    );
+    const lp = el('div', { class: 'card' });
+    for (const f of d.living) {
+      lp.append(el('div', { class: 'art-row' },
+        el('span', { class: 'val grow' },
+          el('a', { href: `#/file?path=${encodeURIComponent(f.path)}` }, f.title),
+          el('span', { class: 'mini' }, f.role || '')),
+        el('span', { class: 'when' },
+          f.updatedHeader ? `_updated ${f.updatedHeader}` : timeAgo(f.lastChange)),
+        el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(f.path)}` }, icon('edit')),
+      ));
     }
-    page.append(el('div', { class: 'card scroll-x', style: 'padding:6px 10px' },
-      el('table', { class: 'data' },
-        el('thead', {}, el('tr', {}, el('th', {}, 'File'), el('th', {}, 'Path'), el('th', {}, 'Tier'), el('th', {}, 'Updated'), el('th', {}, ''))),
-        tbody)));
+    page.append(lp);
   }
 }

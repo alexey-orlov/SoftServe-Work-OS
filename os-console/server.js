@@ -142,7 +142,7 @@ const routes = {
   'POST /api/templates/use': async (q, body) =>
     templates.use(body.template, body.dest, policy.load().settings),
 
-  'GET /api/governance': () => governance.build(),
+  'GET /api/governance': () => governance.pageData(),
 
   'GET /api/activity': (q) => activity.build(q.get('limit')),
 

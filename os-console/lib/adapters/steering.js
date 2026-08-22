@@ -20,6 +20,11 @@ const CORE = [
 function row(rel, role, group, pol) {
   const text = repo.isTextPath(rel) ? repo.readTextOrNull(rel) : null;
   const meta = text ? md.metaLines(text) : {};
+  // Some pages pack several _key:_ fields on one line — keep only the updated
+  // value itself, capped, so displays can rely on it being short.
+  const updated = meta.updated
+    ? meta.updated.split('·')[0].replace(/_+\s*$/, '').trim().slice(0, 26)
+    : null;
   return {
     path: rel,
     exists: repo.exists(rel),
@@ -27,7 +32,7 @@ function row(rel, role, group, pol) {
     role: role || '',
     group,
     tier: policy.tierFor(rel, pol).tier,
-    updatedHeader: meta.updated || null,
+    updatedHeader: updated,
     lastChange: repo.exists(rel) ? gitlib.lastChangeIso(rel) : null,
     lines: text ? text.split('\n').length : null,
   };
