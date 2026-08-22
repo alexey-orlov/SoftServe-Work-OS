@@ -40,6 +40,40 @@ export async function render(view) {
   }
   left.append(steps);
 
+  // toolchain — the org's standing choices, one per workflow surface
+  const SURFACE_LABELS = {
+    prototyping: ['Prototyping', 'Where prototypes get their design grounding'],
+    'user-research': ['User research', 'Where research and meeting records come from'],
+  };
+  if (o.toolchain && o.toolchain.length) {
+    const tcCard = el('div', { class: 'card' },
+      el('div', { class: 'row' },
+        el('h3', { class: 'grow' }, 'Toolchain — standing choices'),
+        el('a', {
+          class: 'btn small quiet', href: `#/file?path=${encodeURIComponent('product-development/toolchain.yaml')}`,
+          title: 'The registry behind this block (gated)',
+        }, 'toolchain.yaml')),
+      el('div', { class: 'hint' },
+        'One choice per workflow surface — skills route by these instead of re-asking. Re-running the /customize-os target changes a choice the same way it was made.'),
+    );
+    for (const t of o.toolchain) {
+      const [label, sub] = SURFACE_LABELS[t.surface] || [t.surface, ''];
+      tcCard.append(el('div', { class: 'step' },
+        t.decided ? pill('done') : pill('todo'),
+        el('div', { class: 'body' },
+          el('div', { class: 'title' }, label, ' — ',
+            el('span', { style: t.decided ? 'color:var(--accent-ink)' : 'color:var(--muted); font-weight:480' }, t.choice)),
+          el('div', { class: 'detail' },
+            sub,
+            t.decidedDate ? ` · decided ${t.decidedDate}` : '',
+            t.notes ? ` · ${t.notes}` : '',
+            t.params ? ` · ${Object.entries(t.params).map(([k, v]) => `${k}: ${v}`).join(', ')}` : '')),
+        cmdChip(t.command),
+      ));
+    }
+    left.append(tcCard);
+  }
+
   if (o.customization) {
     right.append(el('div', { class: 'card' },
       el('div', { class: 'row' },

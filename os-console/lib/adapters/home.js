@@ -42,6 +42,9 @@ function toolchainState() {
         surface: key,
         choice,
         decided: choice !== 'undecided',
+        decidedDate: val.decided || null,
+        notes: val.notes || '',
+        params: val.params && Object.keys(val.params).length ? val.params : null,
         command: key === 'prototyping' ? '/customize-os design-system' : key === 'user-research' ? '/customize-os research-source' : '/customize-os',
       });
     }
@@ -139,6 +142,7 @@ function build() {
   return {
     product,
     steps,
+    toolchain: tc,
     progress: { done, total: steps.length },
     customization: customization ? { path: 'os-installation/customization-status.md', text: customization.slice(0, 4000) } : null,
     counts: {
