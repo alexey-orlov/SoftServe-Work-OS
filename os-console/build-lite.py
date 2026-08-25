@@ -324,17 +324,37 @@ BOOT_JS = r"""
     muts.forEach(function (m) { m.addedNodes.forEach(rewriteEl); });
   }).observe(document.documentElement, { childList: true, subtree: true });
 
-  // ---- snapshot banner + auto-upgrade to the full console
+  // ---- header hint + auto-upgrade to the full console. The hint IS the
+  // upgrade path: it names the one command; the page does the rest itself.
+  var CMD = 'python3 os-console/server.py';
   function mountBanner() {
     var bar = document.createElement('div');
     bar.id = 'lite-banner';
-    bar.style.cssText = 'position:sticky;top:0;z-index:1000;background:#1485C4;color:#fff;'
-      + 'font:12px/1.6 system-ui,sans-serif;padding:5px 14px;display:flex;gap:14px;align-items:center;';
-    bar.innerHTML = '<b>Read-only snapshot</b>'
-      + '<span>' + (LITE.meta.branch || '') + '@' + LITE.meta.sha
-      + (LITE.meta.builtAt ? ' · built ' + LITE.meta.builtAt.slice(0, 16).replace('T', ' ') : '') + '</span>'
-      + '<span id="lite-probe" style="margin-left:auto;opacity:.85">switches to the full console automatically when one is running here</span>';
+    bar.style.cssText = 'background:#f6f8fa;color:#48505a;border-bottom:1px solid #e1e4e8;'
+      + 'font:12px/1.8 system-ui,sans-serif;padding:5px 14px;display:flex;gap:10px;'
+      + 'align-items:center;flex-wrap:wrap;';
+    var msg = document.createElement('span');
+    msg.id = 'lite-probe';
+    msg.innerHTML = 'Read-only view. To edit, run '
+      + '<code id="lite-cmd" title="Click to copy · Windows: py -3 os-console\\server.py" '
+      + 'style="background:#fff;border:1px solid #d5dae0;border-radius:4px;padding:1px 7px;'
+      + 'font:11px/1.6 ui-monospace,Consolas,monospace;cursor:pointer">' + CMD + '</code>'
+      + ' in the repo folder — this page upgrades to the full console by itself.';
+    var meta = document.createElement('span');
+    meta.style.cssText = 'margin-left:auto;opacity:.55;white-space:nowrap';
+    meta.textContent = 'snapshot ' + (LITE.meta.branch || '') + '@' + LITE.meta.sha
+      + (LITE.meta.builtAt ? ' · ' + LITE.meta.builtAt.slice(0, 10) : '');
+    bar.append(msg, meta);
     document.body.insertBefore(bar, document.body.firstChild);
+    var cmd = document.getElementById('lite-cmd');
+    if (cmd) cmd.addEventListener('click', function () {
+      try {
+        navigator.clipboard.writeText(CMD).then(function () {
+          cmd.textContent = 'copied ✓';
+          setTimeout(function () { cmd.textContent = CMD; }, 1400);
+        });
+      } catch (e) { /* clipboard unavailable — the text is still there to select */ }
+    });
   }
 
   function probeFull() {
@@ -344,7 +364,7 @@ BOOT_JS = r"""
     realFetch(url, opts).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.console === true) {
         var probe = document.getElementById('lite-probe');
-        if (probe) probe.textContent = 'full console found — switching…';
+        if (probe) probe.textContent = 'Full console found — switching…';
         location.replace('http://127.0.0.1:' + FULL_PORT + '/' + (location.hash || ''));
       }
     }).catch(function () { /* not running — stay in light mode */ });
