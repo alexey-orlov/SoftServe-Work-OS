@@ -87,10 +87,11 @@ def write_text(rel, content):
     return r['rel']
 
 
-# Directory listing with junk filtered out. console-lite.html is the generated
-# snapshot artifact — machine output, not wiki content, and listing it would
-# make each snapshot bake the previous one.
-SKIP_NAMES = {'.git', '.DS_Store', 'node_modules', '_extracted-personal', 'console-lite.html'}
+# Directory listing with junk filtered out. os-console/console.html is the
+# generated snapshot artifact — machine output, not wiki content, and listing
+# it would make each snapshot bake the previous one.
+SKIP_NAMES = {'.git', '.DS_Store', 'node_modules', '_extracted-personal', '__pycache__'}
+SKIP_RELS = {'os-console/console.html'}
 
 
 def _name_key(name):
@@ -109,6 +110,9 @@ def list_dir(rel):
     for name in os.listdir(r['abs']):
         if name in SKIP_NAMES:
             continue
+        rel = name if out in ('', '.') else '%s/%s' % (out, name)
+        if rel in SKIP_RELS:
+            continue
         p = os.path.join(r['abs'], name)
         try:
             s = os.stat(p)
@@ -117,7 +121,7 @@ def list_dir(rel):
         is_dir = os.path.isdir(p)
         entries.append({
             'name': name,
-            'rel': name if out in ('', '.') else '%s/%s' % (out, name),
+            'rel': rel,
             'type': 'dir' if is_dir else 'file',
             'size': None if is_dir else s.st_size,
             'mtimeMs': mtime_ms(s),

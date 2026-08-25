@@ -3,7 +3,7 @@
 # of everything the full console shows, openable with zero setup — from a
 # static host, a file share, or straight out of the clone. Python 3.8+ stdlib.
 #
-#   python3 os-console/build-lite.py        →  os-console/console-lite.html
+#   python3 os-console/build-console.py        →  os-console/console.html
 #
 # The snapshot embeds the UNCHANGED web/ frontend (modules inlined via an
 # import map, absolute-path imports rewritten to bare "console/…" specifiers)
@@ -12,7 +12,7 @@
 # the upgrade path — probes http://127.0.0.1:4820/api/ping every few seconds
 # and hands off to the full console (keeping the current view) the moment one
 # is running on the machine. CI rebuilds this file on every push to main
-# (.github/workflows/console-lite.yml); Azure instances run this script from
+# (.github/workflows/build-console.yml); Azure instances run this script from
 # their pipeline or by hand instead.
 import base64
 import json
@@ -29,7 +29,7 @@ from pylib.adapters import (  # noqa: E402
     proposed, prs, steering, templates,
 )
 
-OUT = os.path.join(BASE, 'console-lite.html')
+OUT = os.path.join(BASE, 'console.html')
 MAX_TEXT = 300 * 1024   # per-file content cap in the snapshot
 MAX_IMAGE = 300 * 1024  # images above this stay a placeholder
 
@@ -112,6 +112,24 @@ def collect():
         except Exception:
             pass
 
+    # Normalize listing timestamps to git-derived times: fresh CI checkouts and
+    # the artifact write itself must not leak build-time filesystem noise into
+    # the snapshot. Dirs take the newest committed file beneath them.
+    subtree_max = {}
+    for rel, meta in file_meta.items():
+        t = meta['mtimeMs'] or 0
+        parts = rel.split('/')[:-1]
+        for i in range(len(parts) + 1):
+            d = '/'.join(parts[:i])
+            if t > subtree_max.get(d, 0):
+                subtree_max[d] = t
+    for payload in lib_payloads.values():
+        for e in payload['entries']:
+            if e['type'] == 'dir':
+                e['mtimeMs'] = subtree_max.get(e['rel'], 0)
+            elif e['rel'] in file_meta:
+                e['mtimeMs'] = file_meta[e['rel']]['mtimeMs']
+
     head = gitlib.git(['rev-parse', '--short', 'HEAD'])
     built = gitlib.git(['log', '-1', '--pretty=%cI'])  # source commit date — deterministic per commit
     st = gitlib.status_info()
@@ -126,6 +144,11 @@ def collect():
     if os.environ.get('GITHUB_REF_NAME'):
         overview['git']['branch'] = branch
         activity_payload['status']['branch'] = branch
+    # The artifact this script writes must not count as repo dirt in its own snapshot.
+    artifact = 'os-console/console.html'
+    activity_payload['status']['uncommitted'] = [
+        e for e in activity_payload['status']['uncommitted'] if e['path'] != artifact]
+    overview['git']['dirty'] = len(activity_payload['status']['uncommitted'])
 
     return {
         'meta': {
@@ -169,7 +192,7 @@ BOOT_JS = r"""
 
   var LITE = JSON.parse(document.getElementById('lite-data').textContent);
   window.__LITE__ = LITE;
-  var STATE_KEY = 'os-console-lite-state';
+  var STATE_KEY = 'os-console-snapshot-state';
 
   function areaFor(p) {
     for (var i = 0; i < LITE.areaMap.length; i++) {
@@ -439,7 +462,7 @@ def main():
     html = build_html(data)
     with open(OUT, 'w', encoding='utf-8', newline='') as f:
         f.write(html)
-    print('console-lite.html: %.1f KB · %d files baked (%d with text, %d images) · %d dirs · source %s@%s' % (
+    print('console.html: %.1f KB · %d files baked (%d with text, %d images) · %d dirs · source %s@%s' % (
         len(html.encode('utf-8')) / 1024.0,
         len(data['fileMeta']), len(data['fileText']), len(data['rawImages']),
         len(data['library']), data['meta']['branch'], data['meta']['sha']))

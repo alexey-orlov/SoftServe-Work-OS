@@ -17,18 +17,18 @@ python3 os-console/server.py     # Windows: py -3 os-console\server.py
 Then open http://127.0.0.1:4820 (set `OS_CONSOLE_PORT` to change the port). The server
 binds localhost only.
 
-No Python on the machine? Open [console-lite.html](console-lite.html) instead — the
+No Python on the machine? Open [console.html](console.html) instead — the
 zero-setup light mode below.
 
 ## Light mode — the zero-setup snapshot
 
-`console-lite.html` is the whole console as ONE self-contained read-only file: the same
+`console.html` is the whole console as ONE self-contained read-only file: the same
 frontend with every view's data, all wiki file contents, a client-side search index, and
 the built docs site baked in. Open it from the clone, a file share, or any static host —
-no runtime, no install, nothing to approve. Built by `build-lite.py` (same Python stdlib);
-on GitHub the `console-lite` workflow rebuilds and commits it on every push to main, so
+no runtime, no install, nothing to approve. Built by `build-console.py` (same Python stdlib);
+on GitHub the `build-console` workflow rebuilds and commits it on every push to main, so
 the file in the repo is always the latest state of main. Azure instances run
-`python3 os-console/build-lite.py` from a pipeline (or by hand) instead.
+`python3 os-console/build-console.py` from a pipeline (or by hand) instead.
 
 **Two modes, one behavior:** the light page probes `http://127.0.0.1:4820/api/ping`
 (the server's one CORS-open endpoint — a static "I am the console" flag, no data) on
@@ -83,8 +83,8 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
 
 - [server.py](server.py) — HTTP server: API routes, static files, SSE live refresh, localhost-only
 - [state.json] — created on demand; per-user prefs overlay (gitignored)
-- [build-lite.py](build-lite.py) — Bakes the zero-setup snapshot; run by the console-lite workflow on every push to main
-- [console-lite.html](console-lite.html) — Light mode: the console as one read-only file, no runtime needed; auto-switches to a running full console
+- [build-console.py](build-console.py) — Bakes the zero-setup snapshot; run by the build-console workflow on every push to main
+- [console.html](console.html) — Light mode: the console as one read-only file, no runtime needed; auto-switches to a running full console
 
 ### Subfolders
 
