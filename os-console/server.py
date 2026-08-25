@@ -291,6 +291,32 @@ class Handler(BaseHTTPRequestHandler):
         ext = os.path.splitext(abs_path)[1].lower()
         self.send_bytes(200, MIME.get(ext, 'text/plain; charset=utf-8'), body)
 
+    def serve_ping(self, method):
+        # The one CORS-open endpoint: lets the read-only snapshot page (any
+        # origin) detect a running full console and hand off to it. It exposes
+        # a static "I am the console" flag only — every data route stays
+        # same-origin. Private-Network-Access headers keep the probe working as
+        # browsers tighten public→local requests.
+        if method == 'OPTIONS':
+            self.send_response(204)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', '*')
+            if self.headers.get('Access-Control-Request-Private-Network') == 'true':
+                self.send_header('Access-Control-Allow-Private-Network', 'true')
+            self.send_header('Content-Length', '0')
+            self.end_headers()
+            return
+        body = json.dumps({'console': True, 'app': 'work-os-console'}).encode('utf-8')
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Cache-Control', 'no-store')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Private-Network', 'true')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def serve_sse(self):
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream')
@@ -349,6 +375,8 @@ class Handler(BaseHTTPRequestHandler):
 
         key = '%s %s' % (method, pathname)
         try:
+            if pathname == '/api/ping':
+                return self.serve_ping(method)
             if key in ROUTES:
                 body = self.read_body() if method in ('PUT', 'POST') else None
                 return self.send_json(200, ROUTES[key](Query, body))
@@ -397,6 +425,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         self.handle_request('PUT')
+
+    def do_OPTIONS(self):
+        self.handle_request('OPTIONS')
 
 
 # ---------------------------------------------------------------- server

@@ -87,8 +87,10 @@ def write_text(rel, content):
     return r['rel']
 
 
-# Directory listing with junk filtered out.
-SKIP_NAMES = {'.git', '.DS_Store', 'node_modules', '_extracted-personal'}
+# Directory listing with junk filtered out. console-lite.html is the generated
+# snapshot artifact — machine output, not wiki content, and listing it would
+# make each snapshot bake the previous one.
+SKIP_NAMES = {'.git', '.DS_Store', 'node_modules', '_extracted-personal', 'console-lite.html'}
 
 
 def _name_key(name):

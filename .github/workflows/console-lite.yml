@@ -1,0 +1,44 @@
+# Rebuild the console's zero-setup snapshot (os-console/console-lite.html) on
+# every push to main, and commit it back. The paths-ignore filter keeps the
+# bot's own commit from re-triggering the build. GH_TOKEN lets the snapshot's
+# "Proposed changes" view bake real pull-request data via the preinstalled gh.
+name: console-lite
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'os-console/console-lite.html'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: console-lite
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history — the snapshot bakes per-file last-change dates
+
+      - name: Build snapshot
+        run: python3 os-console/build-lite.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- os-console/console-lite.html && [ -z "$(git status --porcelain os-console/console-lite.html)" ]; then
+            echo "snapshot unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add os-console/console-lite.html
+          git commit -m "console: rebuild lite snapshot"
+          git push
