@@ -1,7 +1,6 @@
 # Home adapter — setup & health at a glance. Every signal is DERIVED from
 # observable repo state (placeholders, undecided keys, absent on-demand files),
 # so the dashboard can never disagree with reality.
-# Port of lib/adapters/home.js — keep the two in lockstep.
 import re
 
 from .. import gitlib

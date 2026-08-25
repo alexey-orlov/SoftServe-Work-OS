@@ -1,5 +1,4 @@
 # Repo filesystem layer — every path the console touches goes through resolve_safe().
-# Port of lib/repo.js — keep the two in lockstep (see os-console/CLAUDE.md).
 import os
 import re
 import stat as statmod
@@ -60,7 +59,7 @@ def stat_or_null(rel):
 
 
 def mtime_ms(st):
-    # ns/1e6, matching Node's stat.mtimeMs derivation bit-for-bit.
+    # ns/1e6 — milliseconds with sub-ms precision, the mtimeMs the frontend expects.
     return st.st_mtime_ns / 1e6 if st else None
 
 
@@ -93,14 +92,14 @@ SKIP_NAMES = {'.git', '.DS_Store', 'node_modules', '_extracted-personal'}
 
 
 def _name_key(name):
-    # Approximates Node's localeCompare ordering: case-insensitive first,
-    # lowercase before uppercase on ties.
+    # Locale-style ordering: case-insensitive first, lowercase before
+    # uppercase on ties.
     return (name.casefold(), name.swapcase())
 
 
 def list_dir(rel):
     r = resolve_safe(rel or '.')
-    st = os.stat(r['abs'])  # nonexistent path raises here, like Node's statSync
+    st = os.stat(r['abs'])  # nonexistent path raises here
     if not statmod.S_ISDIR(st.st_mode):
         raise http_err(400, '%s is not a directory' % r['rel'])
     out = r['rel']

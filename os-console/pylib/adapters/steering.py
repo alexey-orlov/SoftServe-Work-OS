@@ -1,6 +1,5 @@
 # Steering adapter — the files that steer every agent session, in one flat list.
 # Derived from the write policy (gated tier + living-pages), never hardcoded lists.
-# Port of lib/adapters/steering.js — keep the two in lockstep.
 import posixpath
 import re
 

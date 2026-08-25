@@ -1,5 +1,4 @@
 # Team learnings adapter — .claude/team-learnings.md (gated: a save is the approval).
-# Port of lib/adapters/learnings.js — keep the two in lockstep.
 import re
 
 from .. import gitlib

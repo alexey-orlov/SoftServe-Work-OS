@@ -1,5 +1,4 @@
 # Activity adapter — recent repo history with friendly area labels.
-# Port of lib/adapters/activity.js — keep the two in lockstep.
 import re
 
 from .. import gitlib

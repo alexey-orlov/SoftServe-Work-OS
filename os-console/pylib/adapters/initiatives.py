@@ -1,7 +1,6 @@
 # Initiatives adapter — joins the living initiative pages with feature-index.yaml.
 # The pages and the index stay canonical; this module only reads and does
 # surgical line edits (status, attach, create) that a person would make by hand.
-# Port of lib/adapters/initiatives.js — keep the two in lockstep.
 import posixpath
 import re
 

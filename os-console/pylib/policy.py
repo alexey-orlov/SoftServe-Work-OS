@@ -1,6 +1,5 @@
 # Write-policy layer — the console derives tier decisions from the SAME registry the
 # write-guard hook enforces on agents: governance/write-policy.yaml. Nothing is hardcoded.
-# Port of lib/policy.js — keep the two in lockstep.
 import re
 
 from . import miniyaml

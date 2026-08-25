@@ -1,1 +1,1 @@
-# Python twin of os-console/lib — see os-console/CLAUDE.md ("Two runtimes, one contract").
+# Server core + one adapter per surface for the OS Console — see os-console/CLAUDE.md.

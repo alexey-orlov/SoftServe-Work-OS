@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-# Work OS Console — Python runtime. Zero install on any machine with Python 3.8+:
+# Work OS Console — local web UI over this repo. Zero install on any machine
+# with Python 3.8+ (standard library only, no packages):
 #
 #   python3 os-console/server.py        →  http://127.0.0.1:4820
 #   (Windows: py -3 os-console\server.py)
 #
-# The exact same console as server.js, for machines where Node.js is not
-# available or not approved: same API routes, same web/ frontend, same
-# write-policy enforcement and per-save commits. Keep the two runtimes in
-# lockstep — see os-console/CLAUDE.md ("Two runtimes, one contract").
-# One deliberate difference: live refresh uses a polling watcher (Python has no
-# stdlib fs.watch), so change events arrive within ~2s instead of instantly.
+# Reads the same registries the OS's hooks and skills read (write-policy.yaml,
+# feature-index.yaml, toolchain.yaml, initiative pages, folder CLAUDE.md files).
+# Writes go through ONE endpoint that resolves the write-policy tier for every
+# path; each save is committed immediately (`console:` prefix) so concurrent
+# Claude sessions never sweep console edits into their own commits. Gated files
+# are badged in the UI — saving one IS the human approval. Binds localhost only.
+# Live refresh uses a polling watcher, so change events arrive within ~2s.
 import errno
 import json
 import os
@@ -171,7 +173,7 @@ def broadcast(payload):
 def _scan_repo():
     """Snapshot of file mtimes under the repo (junk pruned), plus a .git
     ref/HEAD signature (= commits, branch switches — the only .git noise worth
-    a refresh, mirroring server.js)."""
+    a refresh)."""
     files = {}
     root = repo.ROOT
     for dirpath, dirnames, filenames in os.walk(root):
@@ -241,7 +243,7 @@ class Handler(BaseHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
     server_version = 'os-console'
 
-    def log_message(self, fmt, *args):  # quiet — the Node runtime logs only errors
+    def log_message(self, fmt, *args):  # quiet — only errors are worth the console
         pass
 
     def send_json(self, status, data):

@@ -1,7 +1,6 @@
 # Library adapter — the friendly repo browser. Folder CLAUDE.md navigation files
 # (written for agents) double as the human-readable annotations here. Every
 # entry carries its write-policy tier so listings can badge gated paths.
-# Port of lib/adapters/library.js — keep the two in lockstep.
 import re
 import stat as statmod
 

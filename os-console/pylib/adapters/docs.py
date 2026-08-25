@@ -2,7 +2,6 @@
 # contract with Documentation/ is the built site file and its public hash
 # routes (#/section/article); nothing here reads content.js internals, and the
 # console never writes docs (/docs-update is the one writer).
-# Port of lib/adapters/docs.js — keep the two in lockstep.
 import re
 
 from .. import repo

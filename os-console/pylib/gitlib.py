@@ -1,6 +1,5 @@
 # Git layer — read history/status, and commit console saves so concurrent Claude
 # sessions never sweep console edits into their own turn-end commits.
-# Port of lib/git.js — keep the two in lockstep.
 import re
 import shutil
 import subprocess

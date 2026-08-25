@@ -1,13 +1,12 @@
-# YAML loading for the Python console runtime. The Node runtime uses vendored
-# js-yaml; this is a small dependency-free parser covering the subset the OS
-# registries actually use: block mappings/sequences, nested blocks, quoted +
-# plain scalars, flow [] / {}, comments, booleans/ints/floats/null, and bare
-# dates (coerced to the same ISO string JSON.stringify makes of js-yaml's Date
-# objects). Anchors, tags, and multi-doc streams are out of scope — the
-# registries never use them. Deliberately NOT PyYAML: PyYAML's YAML-1.1
-# semantics (datetime.date objects, on/off booleans) diverge from js-yaml and
-# datetime objects would break JSON serialization. Parity-checked against
-# js-yaml over the repo's YAML corpus.
+# YAML loading for the console — a small dependency-free parser covering the
+# subset the OS registries actually use: block mappings/sequences, nested
+# blocks, quoted + plain scalars, flow [] / {}, comments, booleans/ints/
+# floats/null, block scalars, and bare dates (returned as the ISO-8601 string
+# their JSON form uses, e.g. 2026-08-20T00:00:00.000Z). Anchors, tags, and
+# multi-doc streams are out of scope — the registries never use them.
+# Deliberately NOT PyYAML, even where installed: its YAML-1.1 semantics
+# (datetime.date objects, on/off booleans) differ, and datetime objects would
+# break JSON serialization of API responses.
 import re
 from datetime import datetime, timezone
 
@@ -24,8 +23,8 @@ _TS_RE = re.compile(r'^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{
 
 
 def _iso_like_jsyaml(s):
-    """js-yaml's default schema turns bare dates/timestamps into JS Date objects,
-    which JSON.stringify renders as e.g. 2026-08-20T00:00:00.000Z — match that."""
+    """Bare dates/timestamps come back as full ISO-8601 UTC strings
+    (e.g. 2026-08-20T00:00:00.000Z) — the form the frontend has always seen."""
     if _DATE_RE.match(s):
         return s + 'T00:00:00.000Z'
     try:

@@ -99,7 +99,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
 | Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per feature — `/launch-checklist` writes here |
 | Documentation | `Documentation/` | The customer-facing documentation a team is sent — one self-contained site (`work-os-docs.html`, GitHub / Azure Repos switch), built from the single source in `src/content.js`. Gated. Change it with `/docs-update` (edit a specific thing, or `sync` to bring every stated fact back in line with the repo) |
-| OS Console | `os-console/` | Local web UI over this repo — friendly navigation, initiative grouping, steering/template management, setup + governance status, activity log. Run `node os-console/server.js` → http://127.0.0.1:4820. Derives everything from the canonical registries; saves respect the write policy and commit with the `console:` prefix |
+| OS Console | `os-console/` | Local web UI over this repo — friendly navigation, initiative grouping, steering/template management, setup + governance status, activity log. Run `python3 os-console/server.py` → http://127.0.0.1:4820. Derives everything from the canonical registries; saves respect the write policy and commit with the `console:` prefix |
 
 ## Four Rules
 

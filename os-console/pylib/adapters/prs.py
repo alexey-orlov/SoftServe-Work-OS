@@ -2,7 +2,6 @@
 # Shells the platform CLI read-only (gh for GitHub origins, az for Azure Repos),
 # detected from the git origin like the pr-flow hook does. Results are cached
 # (TTL below); missing/unauthenticated CLIs degrade to an honest note, never an error.
-# Port of lib/adapters/prs.js — keep the two in lockstep.
 import json
 import re
 import shutil

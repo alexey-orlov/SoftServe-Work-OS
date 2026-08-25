@@ -1,6 +1,5 @@
 # Markdown parsing helpers for the wiki's house conventions:
 # _key: value_ metadata lines, ## sections, CLAUDE.md navigation bullets.
-# Port of lib/mdparse.js — keep the two in lockstep.
 import posixpath
 import re
 from datetime import datetime, timezone

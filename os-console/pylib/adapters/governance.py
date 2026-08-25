@@ -1,7 +1,6 @@
 # Governance adapter — auto-sync state, the gated list with its human comments,
 # pending proposals, and server-side enforcement signals. page_data() adds the
 # reconciled "rule → what it covers → freshness" structure for the view.
-# Port of lib/adapters/governance.js — keep the two in lockstep.
 import re
 
 from .. import mdparse as md

@@ -1,7 +1,6 @@
 # Templates adapter — the governed scaffold registry. Copy, don't edit in place:
 # "Use" stamps a copy at the right destination; editing the template itself is a
 # gated steering change (the save is the approval).
-# Port of lib/adapters/templates.js — keep the two in lockstep.
 import posixpath
 import re
 

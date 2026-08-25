@@ -1,7 +1,6 @@
 # Proposed changes adapter — everything waiting for a human in one place:
 # open pull requests, the gated-change proposals inbox, health reports, and
 # the weekly review reports.
-# Port of lib/adapters/proposed.js — keep the two in lockstep.
 import re
 
 from .. import repo
