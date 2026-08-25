@@ -13,4 +13,7 @@ _extracted-personal/
 # OS Console per-user prefs overlay (pins, recents) — never canonical truth
 os-console/state.json
 
+# Python bytecode caches (the console's Python runtime)
+__pycache__/
+
 .DS_Store
