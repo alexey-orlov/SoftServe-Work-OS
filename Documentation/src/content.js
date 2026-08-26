@@ -26,7 +26,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v3.2 · August 2026",
+  version: "v3.3 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -572,14 +572,14 @@ const doc = {
           "The **Work OS admin** has told you the Work OS is ready (Stage 2 done: customized, auto-sync on). *Skip this line if you are the Work OS admin doing Stage 2 yourself — you'll do that next.*",
         ]),
         h2("Step 1 — Request the tools from your organization", "c0"),
-        p("Installing software usually needs your organization's approval. Request everything in one go — through the software catalog, self-service client, or IT request your organization uses — so nothing blocks you halfway through:"),
-        bullets([
+        p("Installing software usually needs your organization's approval. Request everything in one go — through the software catalog, self-service client, or IT request your organization uses — and tick each item off as the permission to install it is granted:"),
+        checklist([
           "**Claude Code desktop app** — where all your Work OS work happens.",
           "**Git** — brings the repository to your computer and saves your work.",
           "**{gh:GitHub CLI (`gh`)|az:Azure CLI (`az`), with its Azure DevOps extension}** — lets auto-sync open and merge pull requests as you. Claude installs it in step 6 if it's missing; the approval is what to secure here.",
           "**Python 3** (version 3.8 or newer; the standard installation, no additional packages) — runs the full version of the Work OS console page, installed in step 2.",
         ]),
-        callout("check", "Each tool is in the software catalog, or IT has confirmed you may install it from the vendor's site. Approvals still pending? You can start anyway — steps 2–5 need only Claude Code and Git."),
+        callout("check", "An item counts as granted when the tool is in the software catalog, or IT has confirmed you may install it from the vendor's site. Approvals still pending? You can start anyway — steps 2–5 need only Claude Code and Git."),
         h2("Step 2 — Install the tools", "c1"),
         p("Get each tool the way step 1 cleared it — the software catalog or self-service client if your organization has one, otherwise the links below."),
         steps([
