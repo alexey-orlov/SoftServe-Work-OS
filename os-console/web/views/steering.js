@@ -3,7 +3,7 @@
 // Data: /api/steering (steering.page_data()) — derived from the write policy
 // and the canonical registries, never a hardcoded list.
 import { api } from '/api.js';
-import { el, icon, pill, timeAgo, setCrumbs, spinner, cmdChip, gatedTag } from '/ui.js';
+import { el, icon, pill, timeAgo, setCrumbs, spinner, cmdChip, gatedTag, staleServerCard } from '/ui.js';
 
 const GROUPS = [
   ['core', 'Core steering', 'The registries and rules every session leans on.'],
@@ -16,6 +16,10 @@ export async function render(view) {
   const d = await api.get('/api/steering');
   view.replaceChildren();
   setCrumbs([{ label: 'Steering files' }]);
+  if (!d.featureIndex) {
+    view.append(el('div', { class: 'page' }, el('h1', {}, 'Steering files'), staleServerCard()));
+    return;
+  }
 
   const page = el('div', { class: 'page' });
   view.append(page);

@@ -114,6 +114,18 @@ export function liteLock(node, hint) {
   return node;
 }
 
+// A view that needs a payload shape the running server does not produce yet —
+// the server process predates the frontend on disk (Python loads at start, the
+// browser reads modules fresh). Say so, never render a silently empty page.
+export function staleServerCard() {
+  return el('div', { class: 'card' },
+    el('h3', {}, 'The running console server is older than this page'),
+    el('div', { class: 'hint', style: 'margin-bottom:8px' },
+      'The server process was started before the console\'s last update, so it still serves the old data shapes. Restart it, then reload this page:'),
+    el('pre', { class: 'prompt-box' }, 'python3 os-console/server.py'),
+  );
+}
+
 // ---- Claude Code hand-off popup -------------------------------------------
 // The one way console actions hand work to Claude Code: a popup with the exact
 // prompt, a short instruction, and a Copy button that confirms with "Copied".

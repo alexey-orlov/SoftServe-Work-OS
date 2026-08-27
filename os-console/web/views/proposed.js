@@ -8,13 +8,17 @@
 // the reason; everywhere else the console attempts the action and the git host
 // stays the enforcer.
 import { api } from '/api.js';
-import { el, icon, timeAgo, setCrumbs, spinner, cmdChip, toast, modal, field, promptModal, LITE, liteLock } from '/ui.js';
+import { el, icon, timeAgo, setCrumbs, spinner, cmdChip, toast, modal, field, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
 
 export async function render(view, params) {
   view.append(spinner());
   const d = await api.get('/api/proposed');
   view.replaceChildren();
   setCrumbs([{ label: 'Proposed changes' }]);
+  if (!d.auto) {
+    view.append(el('div', { class: 'page' }, el('h1', {}, 'Proposed changes'), staleServerCard()));
+    return;
+  }
 
   const page = el('div', { class: 'page' });
   view.append(page);

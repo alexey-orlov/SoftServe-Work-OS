@@ -3,7 +3,7 @@
 // derived live from repo state. The Integrations tab is the full table: type,
 // purpose, system used (editable until live), status, comment, actions.
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, mdRender, toast, modal, promptModal, LITE, liteLock } from '/ui.js';
+import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, mdRender, toast, modal, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
 // (icon is used for the lock on live systems and the Auto-sync link)
 
 const fileLink = (path, label) => el('a', {
@@ -24,7 +24,12 @@ export async function render(view, params) {
   view.replaceChildren();
   setCrumbs([{ label: 'Set up this OS' }]);
 
-  const tabs = (o.setup && o.setup.tabs) || {};
+  if (!o.setup || !o.setup.tabs) {
+    setCrumbs([{ label: 'Set up this OS' }]);
+    view.append(el('div', { class: 'page' }, el('h1', {}, 'Set up this OS'), staleServerCard()));
+    return;
+  }
+  const tabs = o.setup.tabs;
   const prog = o.progress || { done: 0, total: 0 };
 
   const page = el('div', { class: 'page' });
