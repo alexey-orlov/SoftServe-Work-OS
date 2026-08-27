@@ -7,44 +7,55 @@ import { el, icon, timeAgo, setCrumbs, spinner, gatedTag } from '/ui.js';
 
 const BC = 'product-development/product/strategy/business-context';
 const P = 'product-development/product';
+const CR = `${P}/competitive-research`;
 
-function it(name, target, desc, kind = 'dir') { return { name, target, desc, kind }; }
+// kind: 'dir' | 'file' → the target is a repo path; 'view' → the target is a console
+// route (href used as-is) and policyPath is the repo path behind it for the gated badge.
+function it(name, target, desc, kind = 'dir', policyPath = null) { return { name, target, desc, kind, policyPath }; }
 
 const QUICK = [
   {
-    title: 'Product',
-    groups: [
-      {
-        name: 'General context',
-        items: [
-          it('Business info', `${BC}/business-info.md`, 'Who we are — company, product, customers, pricing', 'file'),
-          it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
-          it('Segmentation matrix', `${BC}/segmentation-matrix.md`, 'Accounts and revenue by vertical, size and use case', 'file'),
-          it('Competitors', `${P}/competitive-research`, 'The landscape, comparison matrix, competitor teardowns'),
-          it('User research & customers', `${P}/customers`, 'Accounts, calls, interviews and feature requests'),
-        ],
-      },
-      {
-        name: 'Artifacts',
-        items: [
-          it('PRDs', `${P}/PRDs`, 'Feature definitions — what we build and why'),
-          it('JTBD & job specs', `${P}/PRDs`, 'Jobs breakdowns and buildable job specs, filed beside their PRDs'),
-          it('Prototypes', `${P}/prototypes`, 'Clickable prototypes and the feedback on them'),
-        ],
-      },
-      {
-        name: 'Raw data',
-        items: [
-          it('Meetings', `${P}/meetings`, 'Meeting records — transcripts, summaries, retros'),
-          it('Launches', `${P}/launches`, 'Launch checklists and ship / no-ship verdicts'),
-          it('Decisions', `${P}/decisions`, 'Why we chose what we chose, dated'),
-          it('Inbox (drop zone)', 'product-development/inbox', 'Where new transcripts and documents land before filing'),
-        ],
-      },
-    ],
+    title: 'Steering files',
+    groups: [{
+      name: null,
+      items: [
+        it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file'),
+        it('Business info', `${BC}/business-info.md`, 'Who we are — company, product, customers, pricing', 'file'),
+        it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
+        it('Segmentation matrix', `${BC}/segmentation-matrix.md`, 'Accounts and revenue by vertical, size and use case', 'file'),
+        it('Competitive landscape', `${CR}/competitive-landscape.md`, 'The tiered competitor list and how we position against each', 'file'),
+        it('Competitive matrix', `${CR}/competitive-matrix.md`, 'Capability-by-capability comparison across competitors', 'file'),
+        it('Templates', '#/templates', 'The governed document scaffolds — PRD, job spec, interview, retro, …', 'view', `${P}/handbook/templates`),
+      ],
+    }],
   },
   {
-    title: 'Data & build',
+    title: 'Artifacts',
+    groups: [{
+      name: null,
+      items: [
+        it('PRDs', `${P}/PRDs`, 'Feature definitions — what we build and why'),
+        it('JTBD & job specs', `${P}/PRDs`, 'Jobs breakdowns and buildable job specs, filed beside their PRDs'),
+        it('Prototypes', `${P}/prototypes`, 'Clickable prototypes and the feedback on them'),
+      ],
+    }],
+  },
+  {
+    title: 'Source data',
+    groups: [{
+      name: null,
+      items: [
+        it('Competitors', CR, 'Competitor teardowns and dated monitoring intel'),
+        it('Customers and user research', `${P}/customers`, 'Accounts, calls, interviews and feature requests'),
+        it('Meetings', `${P}/meetings`, 'Meeting records — transcripts, summaries, retros'),
+        it('Decisions', `${P}/decisions`, 'Why we chose what we chose, dated'),
+        it('Launches', `${P}/launches`, 'Launch checklists and ship / no-ship verdicts'),
+        it('Inbox (drop zone)', 'product-development/inbox', 'Where new transcripts and documents land before filing'),
+      ],
+    }],
+  },
+  {
+    title: 'Data, tech and the codebase',
     groups: [{
       name: null,
       items: [
@@ -58,7 +69,6 @@ const QUICK = [
     groups: [{
       name: null,
       items: [
-        it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file'),
         it('Skills', '.claude/skills', 'The team\'s guided programs — /prd-draft, /process-meeting, …'),
         it('Agents', '.claude/agents', 'Reviewer personas and subagent definitions'),
         it('Hooks', '.claude/hooks', 'Session automation — write guard, auto-sync, session briefing'),
@@ -98,21 +108,21 @@ export async function render(view, params) {
         if (group.name) page.append(el('div', { class: 'subgroup' }, group.name));
         else page.append(el('div', { style: 'height:10px' }));
         page.append(el('div', { class: 'tiles' }, group.items.map((q) => {
-          const href = q.kind === 'file'
-            ? `#/file?path=${encodeURIComponent(q.target)}`
-            : `#/library?path=${encodeURIComponent(q.target)}`;
+          const href = q.kind === 'view' ? q.target
+            : q.kind === 'file' ? `#/file?path=${encodeURIComponent(q.target)}`
+              : `#/library?path=${encodeURIComponent(q.target)}`;
           const nameRow = el('div', { class: 'row-t' },
-            icon(q.kind === 'file' ? 'file' : 'folder'),
+            icon(q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder'),
             el('span', { class: 'grow' }, q.name));
-          tileRefs.push({ target: q.target, nameRow });
-          return el('a', { class: 'tile', href, title: q.target },
+          tileRefs.push({ target: q.policyPath || (q.kind === 'view' ? null : q.target), nameRow });
+          return el('a', { class: 'tile', href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
             nameRow,
             el('div', { class: 'd' }, q.desc));
         })));
       }
     }
     // gated badges on the tiles, one bulk lookup
-    const targets = [...new Set(tileRefs.map((t) => t.target))];
+    const targets = [...new Set(tileRefs.filter((t) => t.target).map((t) => t.target))];
     api.get(`/api/tiers?paths=${encodeURIComponent(targets.join('|'))}`).then((tiers) => {
       for (const { target, nameRow } of tileRefs) {
         if (tiers[target] === 'gated') nameRow.append(gatedTag('gated'));

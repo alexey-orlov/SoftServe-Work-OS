@@ -79,6 +79,107 @@ def code_repos_configured():
     return {'present': True, 'configured': len(real) > 0, 'remotes': len(remotes)}
 
 
+BC = 'product-development/product/strategy/business-context'
+CR = 'product-development/product/competitive-research'
+
+STEERING_FILES = [
+    ('claude-md', 'Root CLAUDE.md', 'CLAUDE.md'),
+    ('business-info', 'Business info', BC + '/business-info.md'),
+    ('stakeholders', 'Stakeholders', BC + '/stakeholders.md'),
+    ('segmentation', 'Segmentation matrix', BC + '/segmentation-matrix.md'),
+    ('landscape', 'Competitive landscape', CR + '/competitive-landscape.md'),
+    ('matrix', 'Competitive matrix', CR + '/competitive-matrix.md'),
+]
+
+
+def steering_status():
+    """Population status per steering file — placeholders + GAP markers left."""
+    out = []
+    for key, label, path in STEERING_FILES:
+        text = repo.read_text_or_null(path)
+        if text is None:
+            out.append({'key': key, 'label': label, 'path': path, 'exists': False,
+                        'gaps': None, 'state': 'todo', 'detail': 'File is missing.'})
+            continue
+        if key == 'claude-md':
+            scope = (md.section(text, 'Company & Product Fundamentals')
+                     + md.section(text, 'Team') + md.section(text, 'Slack Channels'))
+            gaps = placeholder_count(scope)
+            what = 'fundamentals block, team roster and channels'
+        else:
+            gaps = placeholder_count(text) + len(re.findall(r'\[GAP:', text))
+            what = 'placeholders / GAP markers'
+        state = 'done' if gaps == 0 else 'partial' if gaps <= 10 else 'todo'
+        out.append({'key': key, 'label': label, 'path': path, 'exists': True, 'gaps': gaps,
+                    'state': state,
+                    'detail': 'Populated — no placeholders left.' if gaps == 0
+                    else '%d %s left.' % (gaps, what)})
+    return out
+
+
+def templates_status(customization):
+    """Each template + the customization program's phase for the templates target."""
+    from . import templates as templates_adapter
+    phase = None
+    if customization:
+        m = re.search(r'^\|\s*\d+\s*\|\s*templates\s*\|\s*([^|]+)\|', customization, re.M | re.I)
+        phase = m.group(1).strip() if m else None
+    try:
+        items = templates_adapter.build()['items']
+    except Exception:
+        items = []
+    return {'phase': phase, 'items': [
+        {'name': t['name'], 'title': t['title'], 'path': t['path'], 'desc': t['desc']}
+        for t in items]}
+
+
+def integrations_status(tc, mcps, code):
+    """The six named integration surfaces, resolved from toolchain, MCP logs and code registry."""
+    def logs(pattern):
+        return [m['name'] for m in mcps if re.search(pattern, m['name'], re.I)]
+
+    tc_by = {t['surface']: t for t in tc}
+    out = []
+
+    proto = tc_by.get('prototyping')
+    out.append({'key': 'design-system', 'label': 'Design system MCP',
+                'state': 'done' if (proto and proto['decided']) else 'todo',
+                'detail': ('Prototyping grounding: %s.' % proto['choice']) if (proto and proto['decided'])
+                else 'No standing design-system choice — /prototype will ask every time.',
+                'command': '/customize-os design-system'})
+    out.append({'key': 'codebase', 'label': 'Code base access',
+                'state': 'done' if code['configured'] else 'todo',
+                'detail': 'Real repos registered in code-repos.yaml.' if code['configured']
+                else 'code-repos.yaml still carries example entries — /code-qa has nothing real to ground on.',
+                'command': '/connect-code'})
+    kb = logs(r'notion|confluence|drive|sharepoint|coda|guru|document')
+    out.append({'key': 'knowledge-base', 'label': 'Knowledge base MCP',
+                'state': 'done' if kb else 'todo',
+                'detail': 'Connected: %s.' % ', '.join(kb) if kb else 'No knowledge-base connection logged.',
+                'command': '/connect-mcps'})
+    mt = logs(r'firefl|otter|zoom|teams|granola|fathom|recording|transcript|meet')
+    ur = tc_by.get('user-research')
+    out.append({'key': 'meeting-transcripts', 'label': 'Meeting transcripts MCP',
+                'state': 'done' if mt else 'partial' if (ur and ur['decided']) else 'todo',
+                'detail': 'Connected: %s.' % ', '.join(mt) if mt
+                else ('Research source decided (%s) but no transcript tool connected.' % ur['choice'])
+                if (ur and ur['decided']) else 'No transcript-tool connection logged.',
+                'command': '/connect-mcps'})
+    cal = logs(r'calendar|outlook|gcal')
+    out.append({'key': 'calendar', 'label': 'Calendar MCP',
+                'state': 'done' if cal else 'todo',
+                'detail': 'Connected: %s.' % ', '.join(cal) if cal else 'No calendar connection logged.',
+                'command': '/connect-mcps'})
+    tt = logs(r'linear|jira|asana|monday|clickup|boards|ado|tracker')
+    out.append({'key': 'task-tracker', 'label': 'Task tracker MCP',
+                'state': 'done' if tt else 'todo',
+                'detail': 'Connected: %s.' % ', '.join(tt) if tt else 'No task-tracker connection logged.',
+                'command': '/connect-mcps'})
+    known = set(kb + mt + cal + tt)
+    other = [m['name'] for m in mcps if m['name'] not in known]
+    return {'items': out, 'other': other}
+
+
 def accounts_count():
     try:
         return len([e for e in repo.list_dir('product-development/product/customers/accounts')
@@ -164,6 +265,13 @@ def build():
     return {
         'product': product,
         'steps': steps,
+        'setup': {
+            'steering': steering_status(),
+            'templates': templates_status(customization),
+            'integrations': integrations_status(tc, mcps, code),
+            'steward': {'placeholder': gov['stewardPlaceholder'], 'name': gov.get('steward')},
+            'health': gov['health'][0]['name'] if gov['health'] else None,
+        },
         'toolchain': tc,
         'progress': {'done': done, 'total': len(steps)},
         'customization': {'path': 'os-installation/customization-status.md', 'text': customization[:4000]}

@@ -32,7 +32,6 @@ const NAV = {
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
     ['proposed', 'Proposed changes', 'pr'],
-    ['templates', 'Templates', 'copy'],
     ['governance', 'Gated files', 'shield'],
     ['learnings', 'Learnings', 'bulb'],
   ],
@@ -50,7 +49,7 @@ async function render(preserveScroll = false) {
   document.querySelectorAll('.nav-item').forEach((n) => {
     let active = n.dataset.route === name
       || (name === 'initiative' && n.dataset.route === 'initiatives')
-      || ((name === 'file' || name === 'edit') && n.dataset.route === 'library');
+      || ((name === 'file' || name === 'edit' || name === 'templates') && n.dataset.route === 'library');
     if (n.dataset.section) {
       active = name === 'docs'
         && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));

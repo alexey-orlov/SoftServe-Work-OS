@@ -1,7 +1,12 @@
-// Set up this OS — the full setup checklist, moved out of Home (Home keeps a
-// compact progress widget). Every signal derived live from repo state.
+// Set up this OS — four blocks, every signal derived live from repo state:
+// business-context population per steering file, templates customization,
+// the six integration surfaces, and the auto-sync switch.
 import { api } from '/api.js';
 import { el, pill, cmdChip, meter, setCrumbs, spinner, mdRender } from '/ui.js';
+
+const fileLink = (path, label) => el('a', {
+  class: 'btn small quiet', href: `#/file?path=${encodeURIComponent(path)}`, title: path,
+}, label || 'Open');
 
 export async function render(view) {
   view.append(spinner());
@@ -9,17 +14,25 @@ export async function render(view) {
   view.replaceChildren();
   setCrumbs([{ label: 'Set up this OS' }]);
 
+  const s = o.setup || { steering: [], templates: { items: [] }, integrations: { items: [], other: [] } };
+
+  // page-level progress across the four blocks
+  const rows = [
+    ...s.steering.map((r) => r.state),
+    ...s.integrations.items.map((r) => r.state),
+    o.autoSync.on ? 'done' : 'todo',
+  ];
+  const done = rows.filter((x) => x === 'done').length;
+
   const page = el('div', { class: 'page' });
   view.append(page);
-
-  const doneAll = o.progress.done === o.progress.total;
   page.append(
     el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
-      el('h1', { class: 'grow', style: 'margin:0' }, doneAll ? 'Setup — complete' : 'Set up this OS'),
-      el('div', { style: 'width:220px' }, meter(o.progress.done, o.progress.total)),
+      el('h1', { class: 'grow', style: 'margin:0' }, done === rows.length ? 'Setup — complete' : 'Set up this OS'),
+      el('div', { style: 'width:220px' }, meter(done, rows.length)),
     ),
     el('div', { class: 'sub' },
-      'Derived live from the repo — placeholders left, undecided choices, missing state files. Copy a command and run it in Claude Code; this page updates as the repo changes.'),
+      'Derived live from the repo — placeholders left, missing connections, the sync switch. Copy a command and run it in Claude Code; this page updates as the repo changes.'),
   );
 
   const split = el('div', { class: 'split' });
@@ -28,52 +41,80 @@ export async function render(view) {
   const right = el('div', {});
   split.append(left, right);
 
-  const steps = el('div', { class: 'card' });
-  for (const s of o.steps) {
-    steps.append(el('div', { class: 'step' },
-      pill(s.state),
+  // ---- 1 · business context population, per steering file -------------------
+  const ctx = el('div', { class: 'card' },
+    el('h3', {}, 'Business context — population status'),
+    el('div', { class: 'hint' },
+      'The steering files every strategic skill reads first. A file counts as populated when no bracketed placeholders or [GAP:] markers remain.'),
+  );
+  for (const r of s.steering) {
+    ctx.append(el('div', { class: 'step' },
+      pill(r.state),
       el('div', { class: 'body' },
-        el('div', { class: 'title' }, s.title),
-        el('div', { class: 'detail' }, s.detail)),
-      s.command && s.state !== 'done' ? cmdChip(s.command) : null,
+        el('div', { class: 'title' }, r.label),
+        el('div', { class: 'detail' }, r.detail)),
+      r.exists ? fileLink(r.path) : cmdChip('/customize-os'),
     ));
   }
-  left.append(steps);
+  left.append(ctx);
 
-  // toolchain — the org's standing choices, one per workflow surface
-  const SURFACE_LABELS = {
-    prototyping: ['Prototyping', 'Where prototypes get their design grounding'],
-    'user-research': ['User research', 'Where research and meeting records come from'],
-  };
-  if (o.toolchain && o.toolchain.length) {
-    const tcCard = el('div', { class: 'card' },
-      el('div', { class: 'row' },
-        el('h3', { class: 'grow' }, 'Toolchain — standing choices'),
-        el('a', {
-          class: 'btn small quiet', href: `#/file?path=${encodeURIComponent('product-development/toolchain.yaml')}`,
-          title: 'The registry behind this block (gated)',
-        }, 'toolchain.yaml')),
-      el('div', { class: 'hint' },
-        'One choice per workflow surface — skills route by these instead of re-asking. Re-running the /customize-os target changes a choice the same way it was made.'),
-    );
-    for (const t of o.toolchain) {
-      const [label, sub] = SURFACE_LABELS[t.surface] || [t.surface, ''];
-      tcCard.append(el('div', { class: 'step' },
-        t.decided ? pill('done') : pill('todo'),
-        el('div', { class: 'body' },
-          el('div', { class: 'title' }, label, ' — ',
-            el('span', { style: t.decided ? 'color:var(--accent-ink)' : 'color:var(--muted); font-weight:480' }, t.choice)),
-          el('div', { class: 'detail' },
-            sub,
-            t.decidedDate ? ` · decided ${t.decidedDate}` : '',
-            t.notes ? ` · ${t.notes}` : '',
-            t.params ? ` · ${Object.entries(t.params).map(([k, v]) => `${k}: ${v}`).join(', ')}` : '')),
-        cmdChip(t.command),
-      ));
-    }
-    left.append(tcCard);
+  // ---- 2 · templates customization ------------------------------------------
+  const tpl = el('div', { class: 'card' },
+    el('div', { class: 'row' },
+      el('h3', { class: 'grow' }, 'Templates — customization'),
+      el('a', { class: 'btn small quiet', href: '#/templates' }, 'Open templates')),
+    el('div', { class: 'hint' },
+      s.templates.phase
+        ? `The /customize-os templates target reports: ${s.templates.phase}. House templates are derived from your real documents.`
+        : 'No house templates derived yet — /customize-os templates derives them from 2–4 of your real documents. Until then skills use the SoftServe defaults below.'),
+  );
+  for (const t of s.templates.items) {
+    tpl.append(el('div', { class: 'step' },
+      pill(s.templates.phase && /installed|complete/i.test(s.templates.phase) ? 'done' : 'todo'),
+      el('div', { class: 'body' },
+        el('div', { class: 'title' }, t.title),
+        el('div', { class: 'detail' }, t.desc || t.name)),
+      fileLink(t.path),
+    ));
   }
+  tpl.append(el('div', { class: 'step' },
+    el('div', {}), el('div', { class: 'body' }), cmdChip('/customize-os templates')));
+  left.append(tpl);
 
+  // ---- 3 · integrations ------------------------------------------------------
+  const integ = el('div', { class: 'card' },
+    el('h3', {}, 'Integrations'),
+    el('div', { class: 'hint' },
+      'Live connections skills read instead of exports. Each is optional; connect them one at a time, whenever ready.'),
+  );
+  for (const r of s.integrations.items) {
+    integ.append(el('div', { class: 'step' },
+      pill(r.state),
+      el('div', { class: 'body' },
+        el('div', { class: 'title' }, r.label),
+        el('div', { class: 'detail' }, r.detail)),
+      r.state === 'done' ? null : cmdChip(r.command),
+    ));
+  }
+  if (s.integrations.other && s.integrations.other.length) {
+    integ.append(el('div', { class: 'hint', style: 'margin-top:6px' },
+      `Also connected: ${s.integrations.other.join(', ')}.`));
+  }
+  right.append(integ);
+
+  // ---- 4 · auto-sync ---------------------------------------------------------
+  right.append(el('div', { class: 'card' },
+    el('h3', {}, 'Auto-sync'),
+    el('div', { class: 'step' },
+      pill(o.autoSync.on ? 'done' : 'todo'),
+      el('div', { class: 'body' },
+        el('div', { class: 'title' }, o.autoSync.on ? `On — ${o.autoSync.mode} mode` : 'Off'),
+        el('div', { class: 'detail' }, o.autoSync.label || '')),
+      o.autoSync.on ? null : cmdChip('/auto-sync on direct'),
+    ),
+  ));
+
+  // ---- customization program status (the resume point) ----------------------
   if (o.customization) {
     right.append(el('div', { class: 'card' },
       el('div', { class: 'row' },
