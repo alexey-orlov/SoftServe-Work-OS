@@ -14,12 +14,14 @@ import * as learnings from '/views/learnings.js';
 import * as docsView from '/views/docs.js';
 import * as setup from '/views/setup.js';
 import * as proposedView from '/views/proposed.js';
+import * as steeringView from '/views/steering.js';
+import * as autosyncView from '/views/autosync.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
   edit: editor, templates, governance, activity, learnings,
   docs: docsView, setup, proposed: proposedView,
-  steering: governance, // absorbed into Gated files — old links land there
+  steering: steeringView, autosync: autosyncView,
 };
 
 const NAV = {
@@ -31,8 +33,10 @@ const NAV = {
   ],
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
-    ['proposed', 'Proposed changes', 'pr'],
+    ['steering', 'Steering files', 'compass'],
     ['governance', 'Gated files', 'shield'],
+    ['autosync', 'Auto-sync', 'refresh'],
+    ['proposed', 'Proposed changes', 'pr'],
     ['learnings', 'Learnings', 'bulb'],
   ],
 };

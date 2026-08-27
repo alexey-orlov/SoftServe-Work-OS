@@ -1,7 +1,7 @@
 // Templates & writing guides — the two handbook registries. "Use" copies a
 // template to its canonical home; editing a template is a gated steering change.
 import { api } from '/api.js';
-import { el, icon, toast, modal, field, setCrumbs, spinner, cmdChip, gatedTag } from '/ui.js';
+import { el, icon, toast, modal, field, setCrumbs, spinner, cmdChip, gatedTag, LITE, liteLock } from '/ui.js';
 
 // Business-language descriptions per template (fallback: the repo's own nav line).
 const TEMPLATE_DESCS = {
@@ -46,7 +46,10 @@ export async function render(view) {
       el('div', { class: 'status-line', style: '-webkit-line-clamp:3' }, TEMPLATE_DESCS[t.name] || t.desc || ''),
       el('div', { class: 'path', style: 'font-size:10px; opacity:.55' }, t.suggest),
       el('div', { class: 'row', style: 'margin-top:4px' },
-        el('button', { class: 'btn small primary', onclick: () => useModal(t) }, icon('plus'), 'Use'),
+        (() => {
+          const b = el('button', { class: 'btn small primary', onclick: () => useModal(t) }, icon('plus'), 'Use');
+          return LITE ? liteLock(b) : b;
+        })(),
         el('a', { class: 'btn small', href: `#/file?path=${encodeURIComponent(t.path)}` }, 'Preview'),
         el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(t.path)}`, title: 'Gated — changes every future document made from this template' }, icon('lock'), 'Edit'),
       ),

@@ -1,8 +1,10 @@
 # OS Console
 
-A local web UI over this repo — friendly navigation, initiative grouping, steering-file
-management, setup status, governance state, and the activity log, without touching the
-underlying folder structure. Zero install: it runs on the Python 3.8+ standard library —
+A local web UI over this repo — friendly navigation, initiative grouping (with
+drag-prioritized sources and per-initiative instructions), steering-file management with
+population status and the feature-index map, tabbed setup with the integrations table,
+gated-list management, the auto-sync switch, actionable proposed-changes queues, and the
+activity log, without touching the underlying folder structure. Zero install: it runs on the Python 3.8+ standard library —
 no packages, no package manager, nothing beyond the interpreter — with the frontend's one
 MIT-licensed library vendored in `vendor/`.
 
@@ -36,9 +38,12 @@ load and every 5 seconds, and the moment a full console is running on the machin
 hands off to it, keeping the current view. Until then the banner says what you have:
 a read-only snapshot as of its source commit.
 
-What light mode cannot do: edit anything (saves, initiative status, templates,
-learnings all answer with a pointer to the full console), reflect changes newer than
-its build, or show live pull requests. Per-user pins/recents work via the browser's
+What light mode cannot do: edit or act on anything — every write affordance (saves,
+initiative status/sources/instructions, templates, learnings, gated-list edits, the
+auto-sync switch, PR and proposal actions) renders **locked with an explanatory
+tooltip** (`LITE`/`liteLock` in `web/ui.js`), so nothing dead-ends in a 403. It also
+cannot reflect changes newer than its build or show live pull requests. Copy-prompt
+hand-offs to Claude Code still work. Per-user pins/recents work via the browser's
 localStorage. Files over 300 KB are listed but their text is not embedded.
 
 ## How it relates to the OS
@@ -53,8 +58,23 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
 - **Every save commits immediately** (`console:` prefix, pathspec-limited) so concurrent
   Claude sessions never sweep console edits into their own turn-end commits. Pushing follows
   the auto-sync switchboard; in the `pr` strategy landing stays with the hooks and `/propose`.
-- **Guided programs stay in Claude Code.** Setup steps, `/auto-sync` flips, and drafting
-  skills are handed off as copyable commands, not reimplemented.
+- **Guided programs stay in Claude Code; switches live here.** Drafting skills and
+  connection setup are handed off via the copy-prompt popup (`promptModal` — prompt text,
+  short instruction, Copy button; no URL scheme, by decision). Three writes ARE
+  reimplemented server-side because they are switches, not judgment: the **auto-sync
+  flip** (`pylib/actions.py autosync_set` — the same three settings switches + strategy
+  and the same guards as `/auto-sync`; **if that skill changes, change this module in the
+  same commit**), **gated-list add/remove** (comment-preserving line surgery +
+  CODEOWNERS regen via `gated-paths.sh`, Azure path-filter reminder surfaced), and
+  **toolchain choice/system fields** (`approach:`/`system:` only — `connection:` blocks
+  stay `/connect-mcps` territory, and a live connection locks the system field).
+- **PR actions act as the person, honestly.** Approve/reject shell `gh`/`az` under the
+  user's own CLI login on an explicit click. GitHub push/admin permission is probed
+  cheaply to disable buttons upfront; where the host can't be asked cheaply (Azure,
+  CODEOWNERS satisfaction) the console attempts the action and surfaces the host's
+  verdict verbatim — the platform stays the enforcer. Proposal rejection deletes the
+  file with the comment in the commit message; proposal approval hands the apply job to
+  Claude Code (freeform prose is not machine-applied).
 - **Pull requests & leaderboards** (Proposed changes, Home) shell the platform CLI
   read-only — `gh` for GitHub origins, `az` for Azure Repos, detected from the git
   origin — cached for 5 minutes. A missing or unauthenticated CLI degrades to an

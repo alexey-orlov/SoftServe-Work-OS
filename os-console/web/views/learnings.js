@@ -1,6 +1,6 @@
 // Team learnings — the cross-cutting agent rules injected at every session start.
 import { api } from '/api.js';
-import { el, icon, toast, timeAgo, setCrumbs, spinner, meter, tierPill } from '/ui.js';
+import { el, icon, toast, timeAgo, setCrumbs, spinner, meter, tierPill, LITE, liteLock } from '/ui.js';
 
 export async function render(view) {
   view.append(spinner());
@@ -47,18 +47,21 @@ export async function render(view) {
     el('div', { class: 'field' }, input),
     el('div', { class: 'hint' }, 'Appends a dated entry and commits — the gated save is your approval. Near the cap? Prune the weakest entry first (Edit raw).'),
     el('div', { class: 'row' },
-      el('button', {
-        class: 'btn primary', onclick: async (ev) => {
-          const btn = ev.currentTarget;
-          btn.disabled = true;
-          try {
-            const r = await api.post('/api/learnings', { text: input.value });
-            toast(`Added${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
-            window.dispatchEvent(new Event('console:saved'));
-            location.reload();
-          } catch (e) { toast(e.message, 'err'); btn.disabled = false; }
-        },
-      }, icon('plus'), 'Add entry'),
+      (() => {
+        const b = el('button', {
+          class: 'btn primary', onclick: async (ev) => {
+            const btn = ev.currentTarget;
+            btn.disabled = true;
+            try {
+              const r = await api.post('/api/learnings', { text: input.value });
+              toast(`Added${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+              window.dispatchEvent(new Event('console:saved'));
+              location.reload();
+            } catch (e) { toast(e.message, 'err'); btn.disabled = false; }
+          },
+        }, icon('plus'), 'Add entry');
+        return LITE ? liteLock(b) : b;
+      })(),
       el('a', { class: 'btn', href: `#/edit?path=${encodeURIComponent(d.path)}` }, icon('edit'), 'Edit raw'),
     ),
   ));

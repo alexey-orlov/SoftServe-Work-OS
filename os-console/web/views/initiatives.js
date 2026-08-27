@@ -1,7 +1,7 @@
 // Initiatives — the current-work lens. Cards grouped by status; detail joins the
 // living page with feature-index artifacts. Grouping is derived; pins are prefs.
 import { api, isPinned, togglePin } from '/api.js';
-import { el, icon, statusPill, pill, mdRender, timeAgo, toast, modal, field, filePicker, setCrumbs, spinner, cmdChip } from '/ui.js';
+import { el, icon, statusPill, pill, mdRender, timeAgo, toast, modal, field, filePicker, setCrumbs, spinner, cmdChip, LITE, liteLock } from '/ui.js';
 
 const STATUSES = ['active', 'exploring', 'paused', 'shipped', 'killed'];
 
@@ -28,7 +28,10 @@ function list(view, items) {
       el('h1', {}, 'Initiatives'),
       el('div', { class: 'sub', style: 'margin:0' },
         'One living page per work effort — artifacts stay in their functional folders; this view joins them.')),
-    el('button', { class: 'btn primary', onclick: () => createModal() }, icon('plus'), 'New initiative'),
+    (() => {
+      const b = el('button', { class: 'btn primary', onclick: () => createModal() }, icon('plus'), 'New initiative');
+      return LITE ? liteLock(b) : b;
+    })(),
   ));
 
   const chipsRow = el('div', { class: 'chips', style: 'margin-bottom:16px' });
@@ -143,7 +146,10 @@ function detail(view, items, slug) {
       class: `btn small ${isPinned(pinKey) ? '' : 'quiet'}`,
       onclick: (e) => { const on = togglePin(pinKey); e.currentTarget.classList.toggle('quiet', !on); toast(on ? 'Pinned' : 'Unpinned'); },
     }, icon('pin'), isPinned(pinKey) ? 'Pinned' : 'Pin'),
-    el('button', { class: 'btn small', onclick: () => statusModal(i) }, 'Change status'),
+    (() => {
+      const b = el('button', { class: 'btn small', onclick: () => statusModal(i) }, 'Change status');
+      return LITE ? liteLock(b) : b;
+    })(),
     el('a', { class: 'btn small', href: `#/edit?path=${encodeURIComponent(i.rel)}` }, icon('edit'), 'Edit page'),
   ));
 
@@ -164,6 +170,7 @@ function detail(view, items, slug) {
 
   if (i.snapshot) left.append(el('div', { class: 'card' }, el('h3', {}, 'Snapshot'), mdRender(i.snapshot, i.rel)));
   if (i.scope) left.append(el('div', { class: 'card' }, el('h3', {}, 'Scope & goal'), mdRender(i.scope, i.rel)));
+  left.append(instructionsCard(i), sourcesCard(i));
   if (i.decisions.length) {
     left.append(el('div', { class: 'card' }, el('h3', {}, 'Decisions'),
       ...i.decisions.map((d) => el('div', { style: 'padding:5px 0' }, mdRender(`- ${d.text}`, i.rel)))));
@@ -177,13 +184,16 @@ function detail(view, items, slug) {
   const artCard = el('div', { class: 'card' },
     el('div', { class: 'row' },
       el('h3', { class: 'grow' }, 'Artifacts'),
-      el('button', {
-        class: 'btn small',
-        onclick: () => filePicker({
-          title: 'Attach an existing file to this initiative',
-          onPick: (path) => attachModal(i, path),
-        }),
-      }, icon('plus'), 'Attach')),
+      (() => {
+        const b = el('button', {
+          class: 'btn small',
+          onclick: () => filePicker({
+            title: 'Attach an existing file to this initiative',
+            onPick: (path) => attachModal(i, path),
+          }),
+        }, icon('plus'), 'Attach');
+        return LITE ? liteLock(b) : b;
+      })()),
     el('div', { class: 'hint' }, 'Linked from the living page — files stay in their functional folders.'),
   );
   if (!i.artifacts.length) artCard.append(el('div', { class: 'empty' }, 'Nothing linked yet.'));
@@ -233,6 +243,164 @@ function detail(view, items, slug) {
     el('div', { class: 'chips' },
       cmdChip('/prd-draft'), cmdChip('/assumption-map'), cmdChip('/jobs-breakdown'), cmdChip('/feature-launch-gate')),
   ));
+}
+
+// ---- instructions (≤400 chars of initiative-specific steering) --------------
+
+function instructionsCard(i) {
+  const editBtn = el('button', {
+    class: 'btn small quiet', onclick: () => instructionsModal(i),
+  }, icon('edit'), i.instructions ? 'Edit' : 'Add');
+  return el('div', { class: 'card' },
+    el('div', { class: 'row' },
+      el('h3', { class: 'grow' }, 'Instructions'),
+      LITE ? liteLock(editBtn) : editBtn),
+    el('div', { class: 'hint' },
+      'Standing guidance for this initiative — agents read it before working here. Short by design (max 400 characters).'),
+    i.instructions
+      ? mdRender(i.instructions, i.rel)
+      : el('div', { class: 'hint', style: 'margin:4px 0 2px; color:var(--muted)' }, 'None set.'),
+  );
+}
+
+function instructionsModal(i) {
+  const ta = el('textarea', { rows: 5, maxlength: 400 }, i.instructions || '');
+  const counter = el('div', { class: 'note', style: 'text-align:right; font-size:11.5px; color:var(--muted)' },
+    `${(i.instructions || '').length}/400`);
+  ta.addEventListener('input', () => { counter.textContent = `${ta.value.length}/400`; });
+  modal({
+    title: `Instructions — ${i.slug}`,
+    body: el('div', {},
+      field('Initiative-specific instructions', ta, 'Written to the page\'s ## Instructions section; clear the text to remove.'),
+      counter),
+    actions: [{
+      label: 'Save', kind: 'primary',
+      onclick: async (close) => {
+        const r = await api.post('/api/initiatives/instructions', { slug: i.slug, text: ta.value.trim() });
+        toast(`Instructions ${ta.value.trim() ? 'saved' : 'cleared'}${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        window.dispatchEvent(new Event('console:saved'));
+        close();
+        location.reload();
+      },
+    }],
+  });
+}
+
+// ---- sources of truth (ordered — drag to set priority) ----------------------
+
+function sourcesCard(i) {
+  let items = (i.sources || []).map((s) => ({ ...s }));
+  const listBox = el('div', {});
+  const addBtn = el('button', { class: 'btn small', onclick: () => addSourceModal() }, icon('plus'), 'Add source');
+  const card = el('div', { class: 'card' },
+    el('div', { class: 'row' },
+      el('h3', { class: 'grow' }, 'Sources of truth'),
+      LITE ? liteLock(addBtn) : addBtn),
+    el('div', { class: 'hint' },
+      'Where this initiative\'s source documents live — local folders or SharePoint / Drive / Confluence links (readable when that connection is set up). Highest priority first: on conflicting facts the top source wins.'
+      + (LITE ? '' : ' Drag to reorder.')),
+    listBox,
+  );
+
+  async function save() {
+    const payload = items.map((s) => (s.kind === 'text'
+      ? { text: s.label, note: s.note }
+      : { label: s.label, href: s.href, note: s.note }));
+    const r = await api.post('/api/initiatives/sources', { slug: i.slug, items: payload });
+    items = (r.page.sources || []).map((s) => ({ ...s }));
+    toast(`Sources saved${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+    window.dispatchEvent(new Event('console:saved'));
+    draw();
+  }
+
+  let dragIdx = null;
+
+  function draw() {
+    listBox.replaceChildren();
+    if (!items.length) {
+      listBox.append(el('div', { class: 'hint', style: 'margin:4px 0 2px; color:var(--muted)' }, 'None linked.'));
+      return;
+    }
+    items.forEach((s, idx) => {
+      const removeBtn = el('button', {
+        class: 'btn small quiet', title: 'Remove this source',
+        onclick: async () => {
+          const [removed] = items.splice(idx, 1);
+          draw();
+          try { await save(); } catch (e) {
+            items.splice(idx, 0, removed); // failed — put it back, resync the DOM
+            draw();
+            toast(e.message, 'err');
+          }
+        },
+      }, icon('x'));
+      const row = el('div', { class: 'drag-row', draggable: LITE ? null : 'true' },
+        LITE ? null : el('span', { class: 'grip', title: 'Drag to set priority' }, '⠿'),
+        el('span', { class: 'prio' }, String(idx + 1)),
+        el('span', { class: 'val grow' },
+          s.kind === 'url'
+            ? el('a', { href: s.href, target: '_blank', rel: 'noopener' }, s.label, ' ', icon('external'))
+            : s.kind === 'path'
+              ? el('a', { href: `#/${s.exists === false ? 'library?path=' : 'file?path='}${encodeURIComponent(s.href)}` }, s.label)
+              : el('span', {}, s.label),
+          s.note ? el('span', { class: 'mini' }, s.note) : null,
+          s.kind === 'path' && s.exists === false ? el('span', { class: 'tag', title: 'Path not found in the repo' }, 'missing') : null),
+        LITE ? null : removeBtn,
+      );
+      if (!LITE) {
+        row.addEventListener('dragstart', () => { dragIdx = idx; row.classList.add('dragging'); });
+        row.addEventListener('dragend', () => { dragIdx = null; row.classList.remove('dragging'); draw(); });
+        row.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          row.classList.toggle('drop-above', idx < dragIdx);
+          row.classList.toggle('drop-below', idx > dragIdx);
+        });
+        row.addEventListener('dragleave', () => row.classList.remove('drop-above', 'drop-below'));
+        row.addEventListener('drop', async (e) => {
+          e.preventDefault();
+          row.classList.remove('drop-above', 'drop-below');
+          if (dragIdx === null || dragIdx === idx) return;
+          const [moved] = items.splice(dragIdx, 1);
+          items.splice(idx, 0, moved);
+          draw();
+          try { await save(); } catch (err) { toast(err.message, 'err'); }
+        });
+      }
+      listBox.append(row);
+    });
+  }
+
+  function addSourceModal() {
+    const hrefIn = el('input', { class: 'mono', placeholder: 'https://… or a repo path' });
+    const labelIn = el('input', { placeholder: 'Short name (defaults to the file name)' });
+    const noteIn = el('input', { placeholder: 'optional — what lives there' });
+    modal({
+      title: `Add source — ${i.slug}`,
+      body: el('div', {},
+        field('Link or path', el('div', { class: 'row' },
+          el('div', { class: 'grow' }, hrefIn),
+          el('button', {
+            class: 'btn small quiet',
+            onclick: () => filePicker({ title: 'Pick a file', onPick: (p) => { hrefIn.value = p; } }),
+          }, 'Pick a file')),
+        'A SharePoint / Drive / Confluence URL, or a path inside this repository (folders welcome — type the folder path).'),
+        field('Label', labelIn),
+        field('Note', noteIn),
+      ),
+      actions: [{
+        label: 'Add', kind: 'primary',
+        onclick: async (close) => {
+          const href = hrefIn.value.trim();
+          if (!href) { toast('A link or path is required', 'err'); return false; }
+          items.push({ kind: /^https?:/i.test(href) ? 'url' : 'path', href, label: labelIn.value.trim() || href.split('/').pop(), note: noteIn.value.trim() });
+          try { await save(); close(); } catch (e) { items.pop(); toast(e.message, 'err'); }
+        },
+      }],
+    });
+  }
+
+  draw();
+  return card;
 }
 
 function statusModal(i) {

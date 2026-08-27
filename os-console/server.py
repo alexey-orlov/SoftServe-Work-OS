@@ -27,7 +27,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from pylib import gitlib, policy, repo  # noqa: E402
+from pylib import actions, gitlib, policy, repo  # noqa: E402
 from pylib.adapters import (  # noqa: E402
     activity, docs, governance, home, initiatives, learnings, library,
     proposed, prs, steering, templates,
@@ -110,6 +110,17 @@ def _search(q, body):
     return {'hits': [dict(h, area=activity.area_for(h['path'])) for h in hits]}
 
 
+def _gated_edit(q, body):
+    op = body.get('op')
+    settings = policy.load()['settings']
+    if op == 'add':
+        return actions.gated_add(body.get('pattern'), body.get('note') or '',
+                                 body.get('group') or 'steering', settings)
+    if op == 'remove':
+        return actions.gated_remove(body.get('pattern'), settings)
+    raise repo.http_err(400, 'op must be add or remove')
+
+
 ROUTES = {
     'GET /api/overview': lambda q, body: home.build(),
     'GET /api/initiatives': lambda q, body: {'items': initiatives.list_pages()},
@@ -122,7 +133,19 @@ ROUTES = {
     'GET /api/library': lambda q, body: library.dir_info(q.get('path') or ''),
     'GET /api/file': _file_info,
     'PUT /api/file': _file_save,
-    'GET /api/steering': lambda q, body: steering.build(),
+    'GET /api/steering': lambda q, body: steering.page_data(),
+    'POST /api/toolchain': lambda q, body: actions.toolchain_set(
+        body.get('surface'), body.get('approach'), body.get('system'), policy.load()['settings']),
+    'POST /api/policy/gated': _gated_edit,
+    'POST /api/autosync': lambda q, body: actions.autosync_set(body.get('mode')),
+    'POST /api/pr/action': lambda q, body: prs.pr_action(
+        body.get('number'), body.get('action'), body.get('comment') or ''),
+    'POST /api/proposals/reject': lambda q, body: actions.proposal_reject(
+        body.get('path'), body.get('comment') or '', policy.load()['settings']),
+    'POST /api/initiatives/instructions': lambda q, body: initiatives.set_instructions(
+        body.get('slug'), body.get('text') or '', policy.load()['settings']),
+    'POST /api/initiatives/sources': lambda q, body: initiatives.set_sources(
+        body.get('slug'), body.get('items'), policy.load()['settings']),
     'GET /api/templates': lambda q, body: templates.build(),
     'POST /api/templates/use': lambda q, body: templates.use(
         body.get('template'), body.get('dest'), policy.load()['settings']),

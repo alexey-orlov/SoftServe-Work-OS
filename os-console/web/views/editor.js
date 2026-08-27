@@ -2,7 +2,7 @@
 // (console: prefix). For gated files the save itself is the human approval; the
 // bar says so instead of interrupting with a second dialog.
 import { api } from '/api.js';
-import { el, icon, tierPill, mdRender, toast, setCrumbs, spinner, modal } from '/ui.js';
+import { el, icon, tierPill, mdRender, toast, setCrumbs, spinner, modal, LITE, liteLock } from '/ui.js';
 
 export async function render(view, params) {
   const path = params.get('path') || '';
@@ -33,6 +33,7 @@ export async function render(view, params) {
   const preview = el('div', { class: 'editor-preview' });
   const dirtyDot = el('span', { class: 'dirty-dot', style: 'display:none' });
   const saveBtn = el('button', { class: 'btn primary small', onclick: save }, 'Save', el('span', { class: 'mono', style: 'opacity:.7;font-size:10px' }, '⌘S'));
+  if (LITE) liteLock(saveBtn);
 
   const gatedNote = f.tier === 'gated'
     ? el('span', { class: 'hint', style: 'margin:0' }, 'Gated steering file — saving from the console is your approval.')

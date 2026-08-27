@@ -16,7 +16,8 @@ def proposals():
             if e['type'] != 'file' or not e['name'].endswith('.md') or e['name'] == 'CLAUDE.md':
                 continue
             text = repo.read_text_or_null(e['rel']) or ''
-            out.append({'path': e['rel'], 'title': md.first_heading(text) or e['name'], 'mtimeMs': e['mtimeMs']})
+            out.append({'path': e['rel'], 'title': md.first_heading(text) or e['name'],
+                        'intro': md.intro(text), 'mtimeMs': e['mtimeMs']})
     except Exception:
         pass  # folder may not exist
     out.sort(key=lambda p: p['mtimeMs'], reverse=True)
@@ -80,10 +81,11 @@ def protected_list(steer_rows):
 
 def page_data():
     """Everything the Gated files view needs in one payload."""
+    from . import prs
     steer_rows = steering.build()['rows']
     out = build()
     out['protected'] = protected_list(steer_rows)
-    out['living'] = [{'path': r['path'], 'title': r['title'], 'role': r['role'],
-                      'updatedHeader': r['updatedHeader'], 'lastChange': r['lastChange']}
-                     for r in steer_rows if r['group'] == 'living']
+    out['provider'] = prs.provider()
+    out['groups'] = [{'id': 'steering', 'label': 'Steering files'},
+                     {'id': 'system', 'label': 'System rules'}]
     return out

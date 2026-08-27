@@ -445,3 +445,49 @@ pre.raw {
 .spin { padding: 40px; text-align: center; color: var(--muted); }
 
 svg.ico { width: 16px; height: 16px; vertical-align: -3px; }
+
+/* light-mode locks — write affordances stay visible, honestly disabled */
+.locked { opacity: .5; cursor: not-allowed !important; pointer-events: auto; }
+a.locked { text-decoration: none; }
+
+/* Claude Code hand-off popup */
+.prompt-box {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.55; color: var(--ink);
+  background: var(--surface-2); border: 1px dashed var(--line); border-radius: var(--r-sm);
+  padding: 12px 14px; white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow-y: auto;
+}
+.btn.copied { background: var(--ok-tint, var(--accent-tint)); color: var(--ok-ink, var(--accent-ink)); }
+
+/* tab bar (Setup, Proposed changes) */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 14px 0 18px; }
+.tabs .tab {
+  appearance: none; background: none; border: 0; border-bottom: 2px solid transparent;
+  font: inherit; font-size: 13.5px; font-weight: 550; color: var(--ink-2);
+  padding: 7px 10px 9px; cursor: pointer; display: flex; align-items: center; gap: 7px;
+}
+.tabs .tab:hover { color: var(--ink); }
+.tabs .tab.on { color: var(--accent-ink); border-bottom-color: var(--accent); }
+.tabs .tab .count { font-size: 11px; font-weight: 650; background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 99px; padding: 1px 7px; color: var(--muted); }
+.tabs .tab.on .count { background: var(--accent-tint); color: var(--accent-ink); border-color: transparent; }
+
+/* integrations table */
+table.integrations { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.integrations th { text-align: left; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 6px 10px; border-bottom: 1px solid var(--line); }
+table.integrations td { padding: 9px 10px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.integrations td.purpose, table.integrations td.comment { color: var(--ink-2); font-size: 12.5px; }
+table.integrations input.system {
+  font: inherit; font-size: 12.5px; color: var(--ink); width: 110px;
+  border: 1px solid var(--line); border-radius: 7px; padding: 4px 8px; background: var(--bg);
+}
+table.integrations input.system:focus { outline: 2px solid var(--accent-tint); border-color: var(--accent); }
+table.integrations .sys-locked { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+table.integrations .acts { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.table-scroll { overflow-x: auto; }
+
+/* drag-to-reorder (initiative sources) */
+.drag-row { display: flex; gap: 9px; align-items: flex-start; padding: 7px 4px; border-bottom: 1px solid var(--line-soft); background: var(--surface); }
+.drag-row .grip { cursor: grab; color: var(--muted); padding-top: 1px; user-select: none; }
+.drag-row.dragging { opacity: .45; }
+.drag-row.drop-above { box-shadow: 0 -2px 0 var(--accent); }
+.drag-row.drop-below { box-shadow: 0 2px 0 var(--accent); }
+.drag-row .prio { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 16px; padding-top: 2px; }

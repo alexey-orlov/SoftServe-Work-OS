@@ -3,22 +3,20 @@
 # so the dashboard can never disagree with reality.
 import re
 
+from .. import actions
 from .. import gitlib
 from .. import mdparse as md
-from .. import miniyaml
 from .. import repo
 from . import governance
 from . import initiatives
 from . import learnings
+from . import steering
 
 BI = 'product-development/product/strategy/business-context/business-info.md'
+DEMO_MANIFEST = 'os-installation/demo-data-manifest.md'
+LOGS_DIR = 'os-installation/mcp-integration-logs'
 
-
-def placeholder_count(text):
-    """Bracketed placeholders that are not markdown links: [Your Company], [N], [GAP: ...]"""
-    if not text:
-        return 0
-    return len(re.findall(r'\[[^\][\n]+\](?!\()', text))
+placeholder_count = md.placeholder_count  # shared signal — one definition (mdparse)
 
 
 def product_info(root_md):
@@ -33,41 +31,43 @@ def product_info(root_md):
     }
 
 
-def toolchain_state():
-    out = []
-    try:
-        doc = miniyaml.load(repo.read_text('product-development/toolchain.yaml')) or {}
-        if not isinstance(doc, dict):
-            return out
-        for key, val in doc.items():
-            if not isinstance(val, dict):
-                continue
-            choice = val.get('approach') or val.get('source') or 'undecided'
-            params = val.get('params')
-            command = ('/customize-os design-system' if key == 'prototyping'
-                       else '/customize-os research-source' if key == 'user-research'
-                       else '/customize-os')
-            out.append({
-                'surface': key,
-                'choice': choice,
-                'decided': choice != 'undecided',
-                'decidedDate': val.get('decided') or None,
-                'notes': val.get('notes') or '',
-                'params': params if isinstance(params, dict) and params else None,
-                'command': command,
-            })
-    except Exception:
-        pass  # fine
+def parse_frontmatter(text):
+    """YAML frontmatter of a /connect-mcps log: system, category, status, date."""
+    if not text or not text.startswith('---'):
+        return {}
+    end = text.find('\n---', 3)
+    if end == -1:
+        return {}
+    out = {}
+    for line in text[3:end].split('\n'):
+        m = re.match(r'^([a-z-]+):\s*([^#]*?)\s*(?:#.*)?$', line.strip())
+        if m:
+            out[m.group(1)] = m.group(2).strip().strip('"\'')
     return out
 
 
 def mcp_connections():
+    """Connection records from the integration logs — frontmatter first (the
+    /connect-mcps contract), filename keywords as the legacy fallback."""
+    out = []
     try:
-        return [{'name': re.sub(r'\.md$', '', e['name']), 'path': e['rel'], 'mtimeMs': e['mtimeMs']}
-                for e in repo.list_dir('os-installation/mcp-integration-logs')
-                if e['type'] == 'file' and e['name'] != 'CLAUDE.md']
+        entries = repo.list_dir(LOGS_DIR)
     except Exception:
-        return []
+        return out
+    for e in entries:
+        if e['type'] != 'file' or e['name'] == 'CLAUDE.md' or not e['name'].endswith('.md'):
+            continue
+        fm = parse_frontmatter(repo.read_text_or_null(e['rel']) or '')
+        out.append({
+            'name': re.sub(r'\.md$', '', e['name']),
+            'path': e['rel'],
+            'mtimeMs': e['mtimeMs'],
+            'system': fm.get('system') or '',
+            'category': fm.get('category') or '',
+            'status': fm.get('status') or '',
+            'date': fm.get('date') or '',
+        })
+    return out
 
 
 def code_repos_configured():
@@ -93,26 +93,16 @@ STEERING_FILES = [
 
 
 def steering_status():
-    """Population status per steering file — placeholders + GAP markers left."""
+    """Population status per steering file — same completion lens as the Steering
+    page (steering.completion), over the setup page's curated population set."""
     out = []
     for key, label, path in STEERING_FILES:
         text = repo.read_text_or_null(path)
-        if text is None:
-            out.append({'key': key, 'label': label, 'path': path, 'exists': False,
-                        'gaps': None, 'state': 'todo', 'detail': 'File is missing.'})
-            continue
-        if key == 'claude-md':
-            scope = (md.section(text, 'Company & Product Fundamentals')
-                     + md.section(text, 'Team') + md.section(text, 'Slack Channels'))
-            gaps = placeholder_count(scope)
-            detail = '%d placeholders left in the fundamentals block, team roster and channels.' % gaps
-        else:
-            gaps = placeholder_count(text) + len(re.findall(r'\[GAP:', text))
-            detail = '%d placeholders / GAP markers left.' % gaps
-        state = 'done' if gaps == 0 else 'partial' if gaps <= 10 else 'todo'
-        out.append({'key': key, 'label': label, 'path': path, 'exists': True, 'gaps': gaps,
-                    'state': state,
-                    'detail': 'Populated — no placeholders left.' if gaps == 0 else detail})
+        comp = steering.completion(path, text)
+        state = comp['state'] or ('todo' if text is None else 'done')
+        out.append({'key': key, 'label': label, 'path': path, 'exists': text is not None,
+                    'gaps': comp['gaps'], 'state': state,
+                    'detail': comp['detail'] or ('File is missing.' if text is None else '')})
     return out
 
 
@@ -123,60 +113,155 @@ def templates_status(customization):
     if customization:
         m = re.search(r'^\|\s*\d+\s*\|\s*templates\s*\|\s*([^|]+)\|', customization, re.M | re.I)
         phase = m.group(1).strip() if m else None
+    done = bool(phase and re.search(r'installed|complete', phase, re.I))
     try:
         items = templates_adapter.build()['items']
     except Exception:
         items = []
-    return {'phase': phase, 'items': [
+    return {'phase': phase, 'customized': done, 'items': [
         {'name': t['name'], 'title': t['title'], 'path': t['path'], 'desc': t['desc']}
         for t in items]}
 
 
-def integrations_status(tc, mcps, code):
-    """The six named integration surfaces, resolved from toolchain, MCP logs and code registry."""
-    def logs(pattern):
-        return [m['name'] for m in mcps if re.search(pattern, m['name'], re.I)]
+# ------------------------------------------------------------ integrations table
+# One row per integration surface. Purpose and the "without it" text mirror the
+# documentation's "Which tools are worth connecting" table — same promises, same
+# fallbacks. `fileAction` marks the surfaces where file storage is a first-class
+# choice (recorded in toolchain.yaml as the approach).
 
-    tc_by = {t['surface']: t for t in tc}
-    out = []
+SURFACES = [
+    {'key': 'prototyping', 'type': 'Design system',
+     'purpose': 'Prototypes follow your design system automatically',
+     'without': "Describe or link the design; prototypes can't follow the design system automatically.",
+     'fileAction': {'approach': 'screenshots', 'label': 'Use file storage (screenshots)'},
+     'legacy': r'figma|zeplin|sketch|storybook'},
+    {'key': 'codebase', 'type': 'Code base',
+     'purpose': 'Product questions answered from the code itself (/code-qa), first drafts built in it',
+     'without': 'Claude gives you the exact question to ask an engineer instead.',
+     'fileAction': None, 'legacy': None},
+    {'key': 'ticketing', 'type': 'Task tracker',
+     'purpose': 'Tickets created directly in your tracker',
+     'without': 'Ready-to-paste tickets; you tell Claude the status.',
+     'fileAction': None,
+     'legacy': r'linear|jira|asana|monday|clickup|boards|ado|tracker'},
+    {'key': 'meeting-transcripts', 'type': 'Meeting transcripts',
+     'purpose': 'Transcripts pulled directly after each call',
+     'without': 'Paste the transcript, or drop the file into product-development/inbox/.',
+     'fileAction': {'approach': 'files', 'label': 'Use file storage'},
+     'legacy': r'firefl|otter|zoom|granola|fathom|recording|transcript|grain'},
+    {'key': 'user-research', 'type': 'User research source',
+     'purpose': 'Research interviews and notes read from where they live',
+     'without': 'Drop research files into product-development/inbox/ or paste them; /customize-os research-source records the choice.',
+     'fileAction': None,
+     'legacy': r'dovetail|usertesting|userzoom|maze'},
+    {'key': 'knowledge-base', 'type': 'Knowledge base',
+     'purpose': 'Claude reads your team documents where they live',
+     'without': 'Paste or attach the document.',
+     'fileAction': {'approach': 'files', 'label': 'Use file storage'},
+     'legacy': r'notion|confluence|drive|sharepoint|coda|guru|document'},
+    {'key': 'analytics', 'type': 'Product analytics',
+     'purpose': 'Metrics queried on demand',
+     'without': "Export the numbers or paste a chart's data into analytics/metrics/.",
+     'fileAction': None,
+     'legacy': r'amplitude|mixpanel|posthog|pendo|heap'},
+    {'key': 'feature-requests', 'type': 'Feature requests & customer insights',
+     'purpose': 'The request pile read straight from your support / feedback tool',
+     'without': 'Paste the pile of requests; dated records live in customers/feature-requests/.',
+     'fileAction': {'approach': 'files', 'label': 'Use file storage'},
+     'legacy': r'intercom|zendesk|productboard|canny|uservoice'},
+    {'key': 'team-chat', 'type': 'Team chat',
+     'purpose': 'Drafts and updates posted to your chat',
+     'without': 'Claude drafts, you paste.',
+     'fileAction': None, 'legacy': r'slack|discord'},
+    {'key': 'calendar', 'type': 'Calendar',
+     'purpose': 'Daily and weekly plans read your real calendar',
+     'without': 'You tell Claude your day.',
+     'fileAction': None, 'legacy': r'calendar|outlook|gcal'},
+]
 
-    proto = tc_by.get('prototyping')
-    out.append({'key': 'design-system', 'label': 'Design system MCP',
-                'state': 'done' if (proto and proto['decided']) else 'todo',
-                'detail': ('Prototyping grounding: %s.' % proto['choice']) if (proto and proto['decided'])
-                else 'No standing design-system choice — /prototype will ask every time.',
-                'command': '/customize-os design-system'})
-    out.append({'key': 'codebase', 'label': 'Code base access',
-                'state': 'done' if code['configured'] else 'todo',
-                'detail': 'Real repos registered in code-repos.yaml.' if code['configured']
-                else 'code-repos.yaml still carries example entries — /code-qa has nothing real to ground on.',
-                'command': '/connect-code'})
-    kb = logs(r'notion|confluence|drive|sharepoint|coda|guru|document')
-    out.append({'key': 'knowledge-base', 'label': 'Knowledge base MCP',
-                'state': 'done' if kb else 'todo',
-                'detail': 'Connected: %s.' % ', '.join(kb) if kb else 'No knowledge-base connection logged.',
-                'command': '/connect-mcps'})
-    mt = logs(r'firefl|otter|zoom|teams|granola|fathom|recording|transcript|meet')
-    ur = tc_by.get('user-research')
-    out.append({'key': 'meeting-transcripts', 'label': 'Meeting transcripts MCP',
-                'state': 'done' if mt else 'partial' if (ur and ur['decided']) else 'todo',
-                'detail': 'Connected: %s.' % ', '.join(mt) if mt
-                else ('Research source decided (%s) but no transcript tool connected.' % ur['choice'])
-                if (ur and ur['decided']) else 'No transcript-tool connection logged.',
-                'command': '/connect-mcps'})
-    cal = logs(r'calendar|outlook|gcal')
-    out.append({'key': 'calendar', 'label': 'Calendar MCP',
-                'state': 'done' if cal else 'todo',
-                'detail': 'Connected: %s.' % ', '.join(cal) if cal else 'No calendar connection logged.',
-                'command': '/connect-mcps'})
-    tt = logs(r'linear|jira|asana|monday|clickup|boards|ado|tracker')
-    out.append({'key': 'task-tracker', 'label': 'Task tracker MCP',
-                'state': 'done' if tt else 'todo',
-                'detail': 'Connected: %s.' % ', '.join(tt) if tt else 'No task-tracker connection logged.',
-                'command': '/connect-mcps'})
-    known = set(kb + mt + cal + tt)
-    other = [m['name'] for m in mcps if m['name'] not in known]
-    return {'items': out, 'other': other}
+_FILE_APPROACHES = {'files', 'screenshots', 'inbox-manual', 'manual', 'plain-html', 'external-prompts', 'claude-design'}
+
+LIVE_COMMENT = 'All set — every user who connects can use it.'
+
+
+def integrations_table(tc_surfaces, mcps, code):
+    tc_by = {t['surface']: t for t in tc_surfaces}
+    used = set()
+    rows = []
+    for s in SURFACES:
+        key = s['key']
+        if key == 'codebase':
+            live = code['configured']
+            rows.append({
+                'key': key, 'type': s['type'], 'purpose': s['purpose'],
+                'system': 'registered repos' if live else '',
+                'systemEditable': False,
+                'status': 'live' if live else 'todo',
+                'comment': LIVE_COMMENT if live else s['without'],
+                'actions': [] if live else [{'kind': 'prompt', 'label': 'Connect code base',
+                                             'prompt': '/connect-code'}],
+            })
+            continue
+        tc = tc_by.get(key)
+        conn = tc.get('connection') if tc else None
+        conn_live = bool(conn and (conn.get('status') or 'connected') == 'connected')
+        legacy_hits = [m for m in mcps
+                       if (m['category'] == key and (m['status'] or 'connected') == 'connected')
+                       or (not m['category'] and s['legacy'] and re.search(s['legacy'], m['name'], re.I))]
+        for m in legacy_hits:
+            used.add(m['name'])
+        live = conn_live or bool(legacy_hits)
+        planned_system = (tc.get('system') if tc else '') or ''
+        live_system = (conn.get('system') if conn_live and conn else '') \
+            or (legacy_hits[0]['system'] or legacy_hits[0]['name'] if legacy_hits else '')
+        approach = tc['choice'] if tc else 'undecided'
+        file_based = approach in _FILE_APPROACHES and not live
+        if live:
+            status = 'live'
+            comment = LIVE_COMMENT
+        elif file_based:
+            status = 'files'
+            comment = 'Working file-based by choice — %s' % s['without']
+        elif planned_system or approach == 'mcp':
+            status = 'planned'
+            comment = ('%s is the plan, but nothing is connected yet — %s'
+                       % (planned_system or 'An MCP connection', s['without']))
+        else:
+            status = 'todo'
+            comment = s['without']
+        target = live_system or planned_system or s['type']
+        acts = []
+        if live:
+            acts.append({'kind': 'prompt', 'label': 'Set up new MCP connection',
+                         'prompt': '/connect-mcps connect to %s' % target})
+        else:
+            acts.append({'kind': 'prompt', 'label': 'Set up MCP connection',
+                         'prompt': '/connect-mcps connect to %s' % target})
+            if s['fileAction']:
+                acts.append({'kind': 'files', 'label': s['fileAction']['label'],
+                             'approach': s['fileAction']['approach']})
+        rows.append({
+            'key': key, 'type': s['type'], 'purpose': s['purpose'],
+            'system': live_system if live else planned_system,
+            'systemEditable': not live,
+            'approach': approach,
+            'status': status,
+            'comment': comment,
+            'connectionDate': (conn.get('date') if conn_live and conn else '') or '',
+            'actions': acts,
+        })
+    other = [m['name'] for m in mcps if m['name'] not in used and m['category'] not in {s['key'] for s in SURFACES}]
+    return {'rows': rows, 'other': other}
+
+
+def demo_status():
+    text = repo.read_text_or_null(DEMO_MANIFEST)
+    if text is None:
+        return {'present': False, 'path': DEMO_MANIFEST,
+                'detail': 'No synthetic demo data in this instance.'}
+    files = len(re.findall(r'^\s*-\s+', text, re.M))
+    return {'present': True, 'path': DEMO_MANIFEST,
+            'detail': 'Demo data present — the manifest records ~%d entries; /demo-data remove reverses it exactly.' % files}
 
 
 def accounts_count():
@@ -190,89 +275,50 @@ def accounts_count():
 def build():
     root_md = repo.read_text('CLAUDE.md')
     product = product_info(root_md)
-    team_section = md.section(root_md, 'Team')
-    bi_text = repo.read_text_or_null(BI)
     gov = governance.build()
-    tc = toolchain_state()
+    tc = actions.toolchain_surfaces()
     mcps = mcp_connections()
     code = code_repos_configured()
     customization = repo.read_text_or_null('os-installation/customization-status.md')
     inits = initiatives.list_pages()
     learn = learnings.build()
 
-    bi_gaps = None if bi_text is None else placeholder_count(bi_text) + len(re.findall(r'\[GAP:', bi_text))
+    steer = steering_status()
+    tmpl = templates_status(customization)
+    integ = integrations_table(tc, mcps, code)
+    demo = demo_status()
+    auto_on = gov['autoSync']['on']
 
-    steps = []
+    # Per-tab progress; demo data is deliberately outside the meter (synthetic
+    # data is not a goal state for a real instance).
+    tabs = {
+        'business': {'items': steer,
+                     'done': len([s for s in steer if s['state'] == 'done']), 'total': len(steer)},
+        'templates': {'phase': tmpl['phase'], 'customized': tmpl['customized'], 'items': tmpl['items'],
+                      'done': 1 if tmpl['customized'] else 0, 'total': 1},
+        'integrations': {'rows': integ['rows'], 'other': integ['other'],
+                         'done': len([r for r in integ['rows'] if r['status'] in ('live', 'files')]),
+                         'total': len(integ['rows'])},
+        'autosync': {'on': auto_on, 'summary': gov['autoSync'],
+                     'done': 1 if auto_on else 0, 'total': 1},
+        'demo': demo,
+    }
+    prog_done = sum(tabs[k]['done'] for k in ('business', 'templates', 'integrations', 'autosync'))
+    prog_total = sum(tabs[k]['total'] for k in ('business', 'templates', 'integrations', 'autosync'))
 
-    def step(step_id, title, state, detail, command):
-        steps.append({'id': step_id, 'title': title, 'state': state, 'detail': detail, 'command': command})
-
-    step('customize', 'Guided customization',
-         'partial' if customization else 'todo',
-         'Program started — status file below tracks where it stands.' if customization
-         else 'The one guided sequence: context, initiatives, naming, templates, sync mode.',
-         '/customize-os')
-    step('context', 'Business context populated',
-         'todo' if bi_text is None else 'done' if bi_gaps == 0 else 'partial' if bi_gaps <= 10 else 'todo',
-         'business-info.md is missing.' if bi_text is None
-         else 'No placeholders left in business-info.md.' if bi_gaps == 0
-         else '%d placeholders / GAP markers left in business-info.md.' % bi_gaps,
-         '/customize-os')
-    step('fundamentals', 'Root fundamentals block',
-         'done' if product['placeholders'] == 0 else 'partial' if product['placeholders'] <= 3 else 'todo',
-         'The block every session loads is filled.' if product['placeholders'] == 0
-         else '%d placeholders in the root CLAUDE.md fundamentals block (mirror of business-info.md).' % product['placeholders'],
-         None)
-    step('roster', 'Team roster & channels',
-         'todo' if re.search(r'\[(Your Name|Name|github|slack-id|id|team)\]',
-                             team_section + md.section(root_md, 'Slack Channels')) else 'done',
-         'The Team and Slack tables in the root CLAUDE.md.', '/connect-mcps')
-    for t in tc:
-        step('toolchain-%s' % t['surface'], 'Toolchain: %s' % t['surface'],
-             'done' if t['decided'] else 'todo',
-             'Decided: %s.' % t['choice'] if t['decided'] else 'Standing choice not made — consuming skills will ask every time.',
-             None if t['decided'] else t['command'])
-    step('mcps', 'Tools connected (MCPs)',
-         'done' if mcps else 'todo',
-         '%d connection%s logged: %s.' % (len(mcps), 's' if len(mcps) > 1 else '', ', '.join(m['name'] for m in mcps))
-         if mcps else 'No MCP integrations logged yet.',
-         '/connect-mcps')
-    step('code', 'Product code connected',
-         'done' if code['configured'] else 'todo',
-         'Real repos registered in code-repos.yaml.' if code['configured']
-         else 'code-repos.yaml still carries example entries — /code-qa has nothing real to ground on.',
-         '/connect-code')
-    step('autosync', 'Auto-sync',
-         'done' if gov['autoSync']['on'] else 'todo',
-         gov['autoSync']['label'],
-         None if gov['autoSync']['on'] else '/auto-sync on direct')
-    step('steward', 'Steward & reviewers set',
-         'todo' if gov['stewardPlaceholder'] else 'done',
-         'write-policy.yaml still names "[Your Name]" as steward.' if gov['stewardPlaceholder']
-         else 'Steward: %s.' % gov['steward'],
-         None)
-    step('lint', 'First health check',
-         'done' if gov['health'] else 'todo',
-         'Latest report: %s.' % gov['health'][0]['name'] if gov['health'] else 'No /wiki-lint report yet.',
-         '/wiki-lint')
-
-    done = len([s for s in steps if s['state'] == 'done'])
     st = gitlib.status_info()
     log = gitlib.log(1)
     last = log[0] if log else None
 
     return {
         'product': product,
-        'steps': steps,
         'setup': {
-            'steering': steering_status(),
-            'templates': templates_status(customization),
-            'integrations': integrations_status(tc, mcps, code),
+            'tabs': tabs,
             'steward': {'placeholder': gov['stewardPlaceholder'], 'name': gov.get('steward')},
             'health': gov['health'][0]['name'] if gov['health'] else None,
         },
         'toolchain': tc,
-        'progress': {'done': done, 'total': len(steps)},
+        'progress': {'done': prog_done, 'total': prog_total},
         'customization': {'path': 'os-installation/customization-status.md', 'text': customization[:4000]}
         if customization else None,
         'counts': {

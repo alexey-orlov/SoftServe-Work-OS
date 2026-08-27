@@ -67,6 +67,7 @@ const STATUS_PILL = {
   active: ['ok', 'Active'], exploring: ['info', 'Exploring'], paused: ['warn', 'Paused'],
   shipped: ['plain', 'Shipped'], killed: ['todo', 'Killed'],
   done: ['ok', 'Done'], partial: ['warn', 'In progress'], todo: ['todo', 'To do'],
+  ok: ['ok', 'OK'], err: ['err', 'Error'], // pill('ok','In place') / pill('err','Missing') keep their colors
 };
 
 export function pill(kind, label) {
@@ -93,6 +94,51 @@ export function gatedTag(tier, compact = false) {
     class: `pill gate xs${compact ? ' icon-only' : ''}`,
     title: 'Gated (write-policy) — needs a human\'s approval to change; never lands by automation',
   }, icon('lock'), compact ? null : 'Gated');
+}
+
+// ---- light mode -----------------------------------------------------------
+// The read-only snapshot (console.html) boots with window.__LITE__ set. Every
+// write affordance renders locked there — same layout, honest hint, no 403s.
+
+export const LITE = typeof window !== 'undefined' && !!window.__LITE__;
+export const LITE_HINT = 'Read-only snapshot — run the full console (python3 os-console/server.py) to do this';
+
+export function liteLock(node, hint) {
+  if (!LITE) return node;
+  node.classList.add('locked');
+  if ('disabled' in node) node.disabled = true;
+  node.title = hint || LITE_HINT;
+  if (node.tagName === 'A') { node.removeAttribute('href'); }
+  const stop = (e) => { e.preventDefault(); e.stopPropagation(); toast(hint || LITE_HINT); };
+  node.addEventListener('click', stop, true);
+  return node;
+}
+
+// ---- Claude Code hand-off popup -------------------------------------------
+// The one way console actions hand work to Claude Code: a popup with the exact
+// prompt, a short instruction, and a Copy button that confirms with "Copied".
+
+export function promptModal({ title, prompt, instruction }) {
+  const copyBtn = el('button', {
+    class: 'btn primary',
+    onclick: async () => {
+      try {
+        await navigator.clipboard.writeText(prompt);
+        copyBtn.textContent = 'Copied ✓';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 2200);
+      } catch { toast('Copy failed — select the text manually', 'err'); }
+    },
+  }, 'Copy');
+  return modal({
+    title: title || 'Run this in Claude Code',
+    body: el('div', {},
+      el('div', { class: 'hint', style: 'margin-bottom:8px' },
+        instruction || 'Open Claude Code (the desktop app or `claude` in a terminal), start a session in this repository, paste this prompt and follow up there:'),
+      el('pre', { class: 'prompt-box' }, prompt),
+      el('div', { class: 'row', style: 'margin-top:10px; justify-content:flex-end' }, copyBtn),
+    ),
+  });
 }
 
 export function cmdChip(cmd) {

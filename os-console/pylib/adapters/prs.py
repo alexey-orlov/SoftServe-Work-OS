@@ -130,6 +130,143 @@ def open_prs(force):
             'items': [p for p in d['open'] if not p['isBot']]}
 
 
+def all_open(force):
+    """Every open PR, humans and bots — the Proposed-changes tabs split them."""
+    d = data(force)
+    return {'available': d['available'], 'provider': d['provider'], 'note': d['note'],
+            'items': d['open']}
+
+
+# ------------------------------------------------- permissions + PR actions
+# Where the host lets us check cheaply (GitHub repo permissions), buttons can be
+# disabled upfront; where it does not (Azure, CODEOWNERS satisfaction), the
+# console attempts the action and the git host stays the enforcer — its
+# rejection is surfaced verbatim.
+
+_perm_cache = {'t': 0, 'data': None}
+
+
+def origin_slug():
+    r = sh('git', ['remote', 'get-url', 'origin'])
+    if not r['ok']:
+        return None
+    m = re.search(r'github\.[^/:]+[/:]([^/\s]+)/([^/\s]+?)(?:\.git)?\s*$', r['out'])
+    return '%s/%s' % (m.group(1), m.group(2)) if m else None
+
+
+def permissions(force=False):
+    """canMerge: True/False when the host answers cheaply (GitHub push/admin),
+    None when unknowable (Azure, no CLI) — None means optimistic buttons."""
+    now_ms = time.time() * 1000
+    if not force and _perm_cache['data'] is not None and now_ms - _perm_cache['t'] < TTL_MS:
+        return _perm_cache['data']
+    kind = provider()
+    out = {'provider': kind, 'canMerge': None, 'login': None, 'note': None}
+    if kind == 'github':
+        slug = origin_slug()
+        r = sh('gh', ['api', 'repos/%s' % slug, '--jq', '.permissions']) if slug else {'ok': False, 'err': 'no origin slug'}
+        if r['ok']:
+            try:
+                p = json.loads(r['out'] or '{}') or {}
+                out['canMerge'] = bool(p.get('admin') or p.get('maintain') or p.get('push'))
+            except Exception:
+                pass
+        else:
+            out['note'] = 'permission check unavailable (%s) — actions will be attempted and the host decides' % (r.get('err') or '')[:120]
+        who = sh('gh', ['api', 'user', '--jq', '.login'])
+        if who['ok']:
+            out['login'] = who['out'].strip()
+    elif kind == 'azure':
+        out['note'] = 'Azure does not expose a cheap merge-permission check — actions are attempted and the host decides'
+    _perm_cache['t'] = now_ms
+    _perm_cache['data'] = out
+    return out
+
+
+def _step(steps, name, r, ok_note=None):
+    steps.append({'step': name, 'ok': r['ok'],
+                  'note': (ok_note if r['ok'] else (r.get('err') or 'failed'))})
+    return r['ok']
+
+
+def pr_action(number, action, comment=''):
+    """approve = approve + merge/complete; reject = close/abandon with the comment.
+    Every stage reported honestly — a partial result says exactly what happened."""
+    from .. import repo as _repo
+    try:
+        n = str(int(number))
+    except (TypeError, ValueError):
+        raise _repo.http_err(400, 'PR number required')
+    if action not in ('approve', 'reject'):
+        raise _repo.http_err(400, 'action must be approve or reject')
+    if action == 'reject' and not (comment or '').strip():
+        raise _repo.http_err(400, 'a rejection needs a comment — it is posted to the pull request')
+    kind = provider()
+    steps = []
+    if kind == 'github':
+        if action == 'approve':
+            rev = sh('gh', ['pr', 'review', n, '--approve'])
+            if not rev['ok'] and re.search(r'your own pull request', rev.get('err', ''), re.I):
+                steps.append({'step': 'approve review', 'ok': True,
+                              'note': 'own PR — review not needed, going straight to merge'})
+            else:
+                _step(steps, 'approve review', rev, 'approving review posted')
+            merge = sh('gh', ['pr', 'merge', n, '--merge'])
+            _step(steps, 'merge', merge, 'merged')
+        else:
+            close = sh('gh', ['pr', 'close', n, '--comment', comment.strip()])
+            _step(steps, 'close with comment', close, 'closed — comment posted on the PR')
+    elif kind == 'azure':
+        if action == 'approve':
+            vote = sh('az', ['repos', 'pr', 'set-vote', '--id', n, '--vote', 'approve'])
+            _step(steps, 'approve vote', vote, 'vote recorded')
+            done = sh('az', ['repos', 'pr', 'update', '--id', n, '--status', 'completed'])
+            _step(steps, 'complete', done, 'completed')
+        else:
+            posted = _azure_comment(n, comment.strip())
+            steps.append({'step': 'comment', 'ok': posted['ok'],
+                          'note': posted['note']})
+            ab = sh('az', ['repos', 'pr', 'update', '--id', n, '--status', 'abandoned'])
+            _step(steps, 'abandon', ab, 'abandoned')
+    else:
+        raise _repo.http_err(400, 'PR actions support GitHub and Azure Repos origins')
+    _cache['t'] = 0  # drop the PR-list cache so the next load reflects this
+    return {'ok': all(s['ok'] for s in steps), 'provider': kind, 'steps': steps}
+
+
+def _azure_comment(n, comment):
+    """Best-effort: post the rejection comment as a PR thread via the REST invoke.
+    Failure degrades to an honest note, never blocks the abandon."""
+    import os
+    import tempfile
+    show = sh('az', ['repos', 'pr', 'show', '--id', n, '-o', 'json'])
+    if not show['ok']:
+        return {'ok': False, 'note': 'comment not posted (cannot read the PR) — add it on the PR page'}
+    try:
+        pr = json.loads(show['out'])
+        repo_id = pr['repository']['id']
+        project = pr['repository']['project']['name']
+    except Exception:
+        return {'ok': False, 'note': 'comment not posted (unexpected PR shape) — add it on the PR page'}
+    body = {'comments': [{'parentCommentId': 0, 'content': comment, 'commentType': 1}], 'status': 1}
+    tmp = tempfile.NamedTemporaryFile('w', suffix='.json', delete=False, encoding='utf-8')
+    try:
+        json.dump(body, tmp)
+        tmp.close()
+        r = sh('az', ['devops', 'invoke', '--area', 'git', '--resource', 'pullRequestThreads',
+                      '--route-parameters', 'project=%s' % project, 'repositoryId=%s' % repo_id,
+                      'pullRequestId=%s' % n, '--http-method', 'POST',
+                      '--api-version', '6.0', '--in-file', tmp.name])
+        if r['ok']:
+            return {'ok': True, 'note': 'comment posted on the PR'}
+        return {'ok': False, 'note': 'comment not posted (%s) — add it on the PR page' % (r.get('err') or '')[:120]}
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+
+
 def leaders(force):
     """Merged-PR leaderboards over the last 7 / 30 days — humans only."""
     d = data(force)

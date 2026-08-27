@@ -23,9 +23,16 @@ def weekly_reports():
 
 
 def build(force):
+    """Two symmetric queues: changes proposed by team members (human PRs) and
+    automatically proposed changes (the proposals inbox + bot PRs)."""
+    open_all = prs.all_open(force)
+    human = [p for p in open_all['items'] if not p.get('isBot')]
+    bots = [p for p in open_all['items'] if p.get('isBot')]
     return {
-        'prs': prs.open_prs(force),
-        'proposals': governance.proposals(),
+        'prs': {'available': open_all['available'], 'provider': open_all['provider'],
+                'note': open_all['note'], 'items': human},
+        'auto': {'proposals': governance.proposals(), 'botPrs': bots},
+        'permissions': prs.permissions(),
         'health': governance.health_reports(),
         'weeklyReports': weekly_reports(),
     }

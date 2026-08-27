@@ -1,9 +1,16 @@
-// Proposed changes — everything waiting for a human, in one queue: open pull
-// requests, the gated-change proposals inbox, health reports, weekly reviews.
+// Proposed changes — two symmetric queues with actions:
+//   From team members  = open pull requests by humans (approve+merge / reject
+//                        with a comment posted to the PR / work on it in Claude Code)
+//   Automatic          = the governance/proposals/ inbox + bot PRs (approve and
+//                        work-on-it hand off to Claude Code; reject deletes the
+//                        proposal with your comment in the commit message)
+// GitHub tells us cheaply when the person cannot merge — buttons disable with
+// the reason; everywhere else the console attempts the action and the git host
+// stays the enforcer.
 import { api } from '/api.js';
-import { el, icon, timeAgo, setCrumbs, spinner, cmdChip, toast } from '/ui.js';
+import { el, icon, timeAgo, setCrumbs, spinner, cmdChip, toast, modal, field, promptModal, LITE, liteLock } from '/ui.js';
 
-export async function render(view) {
+export async function render(view, params) {
   view.append(spinner());
   const d = await api.get('/api/proposed');
   view.replaceChildren();
@@ -11,85 +18,277 @@ export async function render(view) {
 
   const page = el('div', { class: 'page' });
   view.append(page);
+
+  const teamCount = d.prs.available ? d.prs.items.length : 0;
+  const autoCount = d.auto.proposals.length + d.auto.botPrs.length;
+
   page.append(
-    el('h1', {}, 'Proposed changes'),
-    el('div', { class: 'sub' },
-      'What is waiting for a person: pull requests to review (gated files reach main only through an admin\'s approval), proposals filed by runs that could not ask, and the periodic reports worth reading.'),
-  );
-
-  const split = el('div', { class: 'split' });
-  page.append(split);
-  const left = el('div', {});
-  const right = el('div', {});
-  split.append(left, right);
-
-  // pull requests
-  const p = d.prs;
-  const prCard = el('div', { class: 'card' },
-    el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, `Pull requests waiting (${p.available ? p.items.length : '—'})`),
-      p.provider !== 'none' ? el('span', { class: 'tag' }, p.provider) : null,
+    el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
+      el('h1', { class: 'grow', style: 'margin:0' }, 'Proposed changes'),
       el('button', {
-        class: 'btn small quiet', title: 'Re-check now (list is cached for 5 minutes)',
+        class: 'btn small quiet', title: 'Re-check now (PR list is cached for 5 minutes)',
         onclick: async (e) => {
-          e.currentTarget.disabled = true;
+          const btn = e.currentTarget; // null after the first await — capture now
+          btn.disabled = true;
           try { await api.get('/api/proposed?refresh=1'); location.reload(); }
-          catch (err) { toast(err.message, 'err'); e.currentTarget.disabled = false; }
+          catch (err) { toast(err.message, 'err'); btn.disabled = false; }
         },
-      }, icon('refresh'), 'Re-check'),
-    ),
-    el('div', { class: 'hint' },
-      'Open PRs on the shared repository — with a pull-request-only main, gated changes sit here until an OS-admin approves.'),
+      }, icon('refresh'), 'Re-check')),
+    el('div', { class: 'sub' },
+      'What is waiting for a person. Approving or rejecting acts on the git host as you, with your own account — the host still enforces who may land what.'),
   );
-  if (!p.available) {
-    prCard.append(el('div', { class: 'empty' }, p.note || 'PR listing unavailable.'));
-  } else if (!p.items.length) {
-    prCard.append(el('div', { class: 'empty' }, 'Nothing waiting — everyday work self-merges; gated changes arrive via /propose.'));
-  } else {
-    for (const pr of p.items) {
-      prCard.append(el('div', { class: 'art-row' },
-        el('span', { class: 'val grow' },
-          pr.url
-            ? el('a', { href: pr.url, target: '_blank', rel: 'noopener' }, `#${pr.number} ${pr.title} `, icon('external'))
-            : el('span', {}, `#${pr.number} ${pr.title}`),
-          pr.draft ? el('span', { class: 'tag', style: 'margin-left:6px' }, 'draft') : null),
-        el('span', { class: 'tag', title: 'author' }, pr.author),
-        el('span', { style: 'color:var(--muted); font-size:12px; white-space:nowrap' }, timeAgo(pr.createdAt)),
-      ));
-    }
+
+  const tabBar = el('div', { class: 'tabs' });
+  const content = el('div', {});
+  page.append(tabBar, content);
+
+  let active = params.get('tab') === 'auto' ? 'auto' : 'team';
+  const tabDefs = [
+    ['team', 'From team members', teamCount],
+    ['auto', 'Automatic', autoCount],
+  ];
+  for (const [id, label, count] of tabDefs) {
+    const btn = el('button', {
+      class: `tab ${id === active ? 'on' : ''}`,
+      onclick: () => {
+        active = id;
+        history.replaceState(null, '', `#/proposed?tab=${id}`);
+        tabBar.querySelectorAll('.tab').forEach((b) => b.classList.remove('on'));
+        btn.classList.add('on');
+        draw();
+      },
+    }, label, el('span', { class: 'count' }, String(count)));
+    tabBar.append(btn);
   }
-  left.append(prCard);
 
-  // proposals inbox
-  left.append(el('div', { class: 'card' },
-    el('h3', {}, `Proposals inbox (${d.proposals.length})`),
-    el('div', { class: 'hint' }, 'Gated changes filed by runs that could not ask (headless, scheduled). Apply or reject, then delete.'),
-    d.proposals.length
-      ? el('div', {}, d.proposals.map((pr) => el('div', { class: 'art-row' },
-        el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(pr.path)}` }, pr.title),
-        el('span', { class: 'tag' }, timeAgo(pr.mtimeMs)))))
-      : el('div', { class: 'empty' }, 'Nothing waiting.'),
-  ));
+  function draw() {
+    content.replaceChildren();
+    if (active === 'team') drawTeam(content, d);
+    else drawAuto(content, d);
+    drawReports(content, d);
+  }
+  draw();
+}
 
-  // health reports
-  right.append(el('div', { class: 'card' },
-    el('h3', {}, `Health reports (${d.health.length})`),
-    el('div', { class: 'hint' }, 'Dated /wiki-lint results — what drifted and what was fixed.'),
-    d.health.length
-      ? el('div', {}, d.health.slice(0, 8).map((h) => el('div', { class: 'art-row' },
-        el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(h.path)}` }, h.name),
-        el('span', { class: 'tag' }, timeAgo(h.mtimeMs)))))
-      : el('div', { class: 'hint', style: 'margin:0' }, 'No report yet — ', cmdChip('/wiki-lint')),
-  ));
+// ---- shared: PR row with actions -------------------------------------------
 
-  // weekly reviews
-  right.append(el('div', { class: 'card' },
-    el('h3', {}, `Weekly reviews (${d.weeklyReports.length})`),
-    el('div', { class: 'hint' }, 'Plan-vs-actual rollups written by /weekly-review.'),
-    d.weeklyReports.length
-      ? el('div', {}, d.weeklyReports.map((w) => el('div', { class: 'art-row' },
-        el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(w.path)}` }, w.name),
-        el('span', { class: 'tag' }, timeAgo(w.mtimeMs)))))
-      : el('div', { class: 'hint', style: 'margin:0' }, 'None yet — ', cmdChip('/weekly-review')),
-  ));
+function cannotAct(perms) {
+  if (LITE) return 'Read-only snapshot — run the full console to act on pull requests';
+  if (perms && perms.canMerge === false) {
+    return `Your ${perms.provider === 'azure' ? 'Azure' : 'git host'} account${perms.login ? ` (${perms.login})` : ''} cannot merge into this repository — ask your OS admin`;
+  }
+  return null;
+}
+
+function prRow(pr, perms) {
+  const blocked = cannotAct(perms);
+  const mk = (label, cls, onclick, title) => {
+    const b = el('button', { class: `btn small ${cls}`, onclick, title: title || '' }, label);
+    if (blocked) { b.disabled = true; b.classList.add('locked'); b.title = blocked; }
+    return b;
+  };
+  const isGated = /^gated:/i.test(pr.title || '');
+  return el('div', { class: 'art-row' },
+    el('span', { class: 'val grow' },
+      pr.url
+        ? el('a', { href: pr.url, target: '_blank', rel: 'noopener' }, `#${pr.number} ${pr.title} `, icon('external'))
+        : el('span', {}, `#${pr.number} ${pr.title}`),
+      pr.draft ? el('span', { class: 'tag', style: 'margin-left:6px' }, 'draft') : null,
+      isGated ? el('span', { class: 'pill gate xs', style: 'margin-left:6px' }, icon('lock'), 'gated') : null),
+    el('span', { class: 'tag', title: 'author' }, pr.author),
+    el('span', { style: 'color:var(--muted); font-size:12px; white-space:nowrap' }, timeAgo(pr.createdAt)),
+    mk('Approve', 'primary', () => approvePrModal(pr, isGated),
+      'Approve and merge, as you, via the platform CLI'),
+    mk('Reject', '', () => rejectPrModal(pr), 'Close with a comment posted to the PR'),
+    el('button', {
+      class: 'btn small quiet', title: 'Hand this PR to Claude Code to adjust it with you',
+      onclick: () => workOnPrModal(pr),
+    }, 'Work on it'),
+  );
+}
+
+function approvePrModal(pr, isGated) {
+  modal({
+    title: `Approve & merge #${pr.number}`,
+    body: el('div', {},
+      el('div', { style: 'font-size:13.5px; margin-bottom:6px' }, pr.title),
+      el('div', { class: 'hint' },
+        'Posts your approving review and merges, using your own CLI login. '
+        + (isGated ? 'This is a gated change — your approval must satisfy the admin rule; if it does not, the host refuses and the message is shown here as-is.'
+          : 'If the host refuses (checks, reviews, permissions), the message is shown here as-is.')),
+    ),
+    actions: [{
+      label: 'Approve & merge', kind: 'primary',
+      onclick: async (close) => {
+        const r = await api.post('/api/pr/action', { number: pr.number, action: 'approve' });
+        close();
+        stepsModal(`#${pr.number} — approve & merge`, r);
+      },
+    }],
+  });
+}
+
+function rejectPrModal(pr) {
+  const comment = el('textarea', { rows: 3, placeholder: 'Why this is rejected — posted on the pull request' });
+  modal({
+    title: `Reject #${pr.number}`,
+    body: el('div', {},
+      el('div', { style: 'font-size:13.5px; margin-bottom:6px' }, pr.title),
+      field('Comment (required)', comment, 'Closes the PR and posts this comment on it, as you.'),
+    ),
+    actions: [{
+      label: 'Reject & close', kind: '',
+      onclick: async (close) => {
+        if (!comment.value.trim()) { toast('A rejection needs a comment — it goes on the PR', 'err'); return false; }
+        const r = await api.post('/api/pr/action', { number: pr.number, action: 'reject', comment: comment.value.trim() });
+        close();
+        stepsModal(`#${pr.number} — reject`, r);
+      },
+    }],
+  });
+}
+
+function workOnPrModal(pr) {
+  promptModal({
+    title: `Work on #${pr.number} in Claude Code`,
+    prompt: `Check out pull request #${pr.number} ("${pr.title}") in this repository and work on it with me — I want to review and adjust the proposed change before it lands. Start by summarizing what it changes and why.`,
+  });
+}
+
+function stepsModal(title, r) {
+  modal({
+    title,
+    body: el('div', {},
+      ...r.steps.map((s) => el('div', { class: 'step' },
+        el('span', { class: `pill ${s.ok ? 'ok' : 'err'}` }, s.ok ? '✓' : '✗'),
+        el('div', { class: 'body' },
+          el('div', { class: 'title' }, s.step),
+          el('div', { class: 'detail' }, s.note || '')))),
+      el('div', { class: 'hint', style: 'margin-top:8px' },
+        r.ok ? 'Done.' : 'Partial — the failing step\'s message comes from the git host, verbatim.'),
+    ),
+  });
+  if (r.ok) setTimeout(() => location.reload(), 900);
+}
+
+// ---- team tab ---------------------------------------------------------------
+
+function drawTeam(box, d) {
+  const p = d.prs;
+  const card = el('div', { class: 'card' },
+    el('div', { class: 'row' },
+      el('h3', { class: 'grow' }, `Changes proposed by team members (${p.available ? p.items.length : '—'})`),
+      p.provider !== 'none' ? el('span', { class: 'tag' }, p.provider) : null),
+    el('div', { class: 'hint' },
+      'Open pull requests by people. Gated ones reach main only through an approval that satisfies the admin rule.'),
+  );
+  if (d.permissions && d.permissions.canMerge === false) {
+    card.append(el('div', { class: 'hint', style: 'margin-top:2px' },
+      `Actions are disabled: ${cannotAct(d.permissions)}.`));
+  }
+  if (!p.available) {
+    card.append(el('div', { class: 'empty' }, p.note || 'PR listing unavailable.'));
+  } else if (!p.items.length) {
+    card.append(el('div', { class: 'empty' }, 'Nothing waiting — everyday work self-merges; gated changes arrive via /propose.'));
+  } else {
+    for (const pr of p.items) card.append(prRow(pr, d.permissions));
+  }
+  box.append(card);
+}
+
+// ---- automatic tab ----------------------------------------------------------
+
+function drawAuto(box, d) {
+  const props = d.auto.proposals;
+  const card = el('div', { class: 'card' },
+    el('h3', {}, `Automatically proposed changes (${props.length})`),
+    el('div', { class: 'hint' },
+      'Filed in governance/proposals/ by runs that could not ask (headless, scheduled). Approve hands the exact apply job to Claude Code; reject deletes the proposal with your comment in the commit message.'),
+  );
+  if (!props.length) {
+    card.append(el('div', { class: 'empty' }, 'Nothing filed.'));
+  }
+  for (const pr of props) {
+    const rejectBtn = el('button', { class: 'btn small', onclick: () => rejectProposalModal(pr) }, 'Reject');
+    card.append(el('div', { class: 'art-row' },
+      el('span', { class: 'val grow' },
+        el('a', { href: `#/file?path=${encodeURIComponent(pr.path)}`, style: 'font-weight:600' }, pr.title),
+        el('span', { class: 'mini' }, pr.intro || '')),
+      el('span', { class: 'tag' }, timeAgo(pr.mtimeMs)),
+      el('button', {
+        class: 'btn small primary', title: 'Hand the apply job to Claude Code',
+        onclick: () => promptModal({
+          title: 'Apply this proposal in Claude Code',
+          prompt: `Apply the proposal ${pr.path} exactly as it describes: read it, make the change it specifies (gated files will raise the approval prompt — that is expected), then delete the proposal file and confirm what changed.`,
+        }),
+      }, 'Approve'),
+      LITE ? liteLock(rejectBtn) : rejectBtn,
+      el('button', {
+        class: 'btn small quiet', title: 'Discuss and adjust it in Claude Code first',
+        onclick: () => promptModal({
+          title: 'Work on this proposal in Claude Code',
+          prompt: `Read the proposal ${pr.path} and work on it with me — I want to adjust the proposed change before applying it. Start by summarizing what it proposes and why.`,
+        }),
+      }, 'Work on it'),
+    ));
+  }
+  box.append(card);
+
+  if (d.auto.botPrs.length) {
+    const botCard = el('div', { class: 'card' },
+      el('h3', {}, `Pull requests by automation (${d.auto.botPrs.length})`),
+      el('div', { class: 'hint' }, 'Bot-authored PRs (sync drains, CI). They normally merge themselves — one lingering here may need a look.'),
+    );
+    for (const pr of d.auto.botPrs) botCard.append(prRow(pr, d.permissions));
+    box.append(botCard);
+  }
+}
+
+function rejectProposalModal(pr) {
+  const comment = el('textarea', { rows: 3, placeholder: 'Why this is rejected — recorded in the commit message' });
+  modal({
+    title: `Reject proposal`,
+    body: el('div', {},
+      el('div', { class: 'path', style: 'margin-bottom:8px' }, pr.path),
+      field('Comment (required)', comment, 'Deletes the proposal file; the comment goes into the commit message for the record.'),
+    ),
+    actions: [{
+      label: 'Reject & delete', kind: '',
+      onclick: async (close) => {
+        if (!comment.value.trim()) { toast('A rejection needs a comment for the record', 'err'); return false; }
+        const r = await api.post('/api/proposals/reject', { path: pr.path, comment: comment.value.trim() });
+        toast(`Rejected${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        window.dispatchEvent(new Event('console:saved'));
+        close();
+        location.reload();
+      },
+    }],
+  });
+}
+
+// ---- reports footer (both tabs) --------------------------------------------
+
+function drawReports(box, d) {
+  const split = el('div', { class: 'split', style: 'margin-top:4px' });
+  box.append(split);
+  split.append(
+    el('div', { class: 'card' },
+      el('h3', {}, `Health reports (${d.health.length})`),
+      el('div', { class: 'hint' }, 'Dated /wiki-lint results — what drifted and what was fixed.'),
+      d.health.length
+        ? el('div', {}, d.health.slice(0, 8).map((h) => el('div', { class: 'art-row' },
+          el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(h.path)}` }, h.name),
+          el('span', { class: 'tag' }, timeAgo(h.mtimeMs)))))
+        : el('div', { class: 'hint', style: 'margin:0' }, 'No report yet — ', cmdChip('/wiki-lint')),
+    ),
+    el('div', { class: 'card' },
+      el('h3', {}, `Weekly reviews (${d.weeklyReports.length})`),
+      el('div', { class: 'hint' }, 'Plan-vs-actual rollups written by /weekly-review.'),
+      d.weeklyReports.length
+        ? el('div', {}, d.weeklyReports.map((w) => el('div', { class: 'art-row' },
+          el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(w.path)}` }, w.name),
+          el('span', { class: 'tag' }, timeAgo(w.mtimeMs)))))
+        : el('div', { class: 'hint', style: 'margin:0' }, 'None yet — ', cmdChip('/weekly-review')),
+    ),
+  );
 }

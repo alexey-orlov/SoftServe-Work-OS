@@ -51,6 +51,56 @@ def parse_artifact_bullets(page_rel, body):
     return out
 
 
+def _is_template_placeholder(b):
+    """A template's bracketed guidance bullet, not real content: [Optional, ...]"""
+    return b.startswith('[') and '](' not in b
+
+
+def parse_instructions(body):
+    """The ## Instructions section as plain text ('' when empty or still template)."""
+    text = (body or '').strip()
+    if not text or text == '-':
+        return ''
+    bullets_ = md.bullets(body)
+    if bullets_ and all(_is_template_placeholder(b) or b == '-' for b in bullets_):
+        return ''
+    return text[:600]
+
+
+def parse_sources(rel, body):
+    """Ordered source-of-truth entries — order IS priority (first wins on conflict)."""
+    out = []
+    for b in md.bullets(body):
+        if b in ('-', '—') or _is_template_placeholder(b):
+            continue
+        note = ''
+        links = md.md_links(b)
+        if links:
+            l = links[0]
+            after = b.split(')', 1)[1] if ')' in b else ''
+            m = re.search(r'—\s*(.+)$', after)
+            note = m.group(1).strip() if m else ''
+            if re.match(r'^https?:', l['href'], re.I):
+                out.append({'kind': 'url', 'label': l['label'] or l['href'], 'href': l['href'], 'note': note})
+            else:
+                target = md.resolve_href(rel, l['href'])
+                out.append({'kind': 'path', 'label': l['label'] or posixpath.basename(target or l['href']),
+                            'href': target or l['href'], 'note': note,
+                            'exists': repo.exists(target) if target else False})
+        else:
+            m = re.match(r'^(.*?)(?:\s+—\s*(.+))?$', b)
+            token = (m.group(1) if m else b).strip()
+            note = (m.group(2) or '').strip() if m else ''
+            if re.match(r'^https?:', token, re.I):
+                out.append({'kind': 'url', 'label': token, 'href': token, 'note': note})
+            elif repo.exists(token):
+                out.append({'kind': 'path', 'label': posixpath.basename(token), 'href': token,
+                            'note': note, 'exists': True})
+            else:
+                out.append({'kind': 'text', 'label': token, 'href': '', 'note': note})
+    return out
+
+
 def feature_index_join():
     index = {}  # slug -> [{area, feature, artifacts: []}]
     try:
@@ -126,6 +176,8 @@ def parse_page(rel):
         'targets': targets,
         'snapshot': md.section(text, 'Snapshot').strip(),
         'scope': md.section(text, 'Scope & goal').strip(),
+        'instructions': parse_instructions(md.section(text, 'Instructions')),
+        'sources': parse_sources(rel, md.section(text, 'Sources')),
         'artifacts': artifacts,
         'decisions': decisions,
         'openLoops': [b for b in md.bullets(md.section(text, 'Open loops')) if b != '-'],
@@ -223,6 +275,84 @@ def attach(slug, target_rel, label, settings):
     text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
     repo.write_text(rel, text)
     commit = gitlib.commit_paths([rel], 'console: attach %s to %s' % (posixpath.basename(target), slug))
+    push = gitlib.maybe_push(settings)
+    return {'page': parse_page(rel), 'commit': commit, 'push': push}
+
+
+def _replace_section(text, name, body_lines):
+    """Replace a ## section's body (creating the section before ## Artifacts, or at
+    the end, when the page predates it). Returns the new text."""
+    lines = text.split('\n')
+    start = next((i for i, l in enumerate(lines) if re.match(r'^##\s+%s\s*$' % re.escape(name), l)), -1)
+    if start == -1:
+        anchor = next((i for i, l in enumerate(lines) if re.match(r'^##\s+Artifacts\s*$', l)), len(lines))
+        block = ['## %s' % name, ''] + body_lines + ['']
+        return '\n'.join(lines[:anchor] + block + lines[anchor:])
+    end = len(lines)
+    for i in range(start + 1, len(lines)):
+        if re.match(r'^##\s+', lines[i]):
+            end = i
+            break
+    return '\n'.join(lines[:start + 1] + [''] + body_lines + [''] + lines[end:])
+
+
+INSTRUCTIONS_MAX = 400  # hard cap — steering, not documentation (template rule)
+
+
+def set_instructions(slug, instr, settings):
+    rel = '%s/%s.md' % (DIR, slug)
+    if not repo.exists(rel):
+        raise repo.http_err(404, 'no initiative page %s' % slug)
+    instr = (instr or '').strip()
+    if len(instr) > INSTRUCTIONS_MAX:
+        raise repo.http_err(400, 'instructions are capped at %d characters (%d given) — this is steering, not documentation'
+                            % (INSTRUCTIONS_MAX, len(instr)))
+    body = instr.split('\n') if instr else ['-']
+    text = _replace_section(repo.read_text(rel), 'Instructions', body)
+    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    repo.write_text(rel, text)
+    commit = gitlib.commit_paths([rel], 'console: %s instructions %s' % (slug, 'updated' if instr else 'cleared'))
+    push = gitlib.maybe_push(settings)
+    return {'page': parse_page(rel), 'commit': commit, 'push': push}
+
+
+def set_sources(slug, items, settings):
+    """Rewrite ## Sources from an ordered list — order IS priority, so the same
+    endpoint covers add, remove, and drag-reorder."""
+    rel = '%s/%s.md' % (DIR, slug)
+    if not repo.exists(rel):
+        raise repo.http_err(404, 'no initiative page %s' % slug)
+    if not isinstance(items, list) or len(items) > 30:
+        raise repo.http_err(400, 'items must be a list (max 30)')
+    bullets_ = []
+    for it in items:
+        if not isinstance(it, dict):
+            raise repo.http_err(400, 'each source is {href, label?, note?} or {text}')
+        href = (it.get('href') or '').strip()
+        label = (it.get('label') or '').strip()
+        note = (it.get('note') or '').strip()
+        text_only = (it.get('text') or '').strip()
+        if not href and text_only:
+            bullet = '- %s' % text_only
+            if note:
+                bullet += ' — %s' % note
+            bullets_.append(bullet)
+            continue
+        if not href:
+            raise repo.http_err(400, 'a source needs a link or path')
+        if re.match(r'^https?://', href, re.I):
+            bullet = '- [%s](%s)' % (label or href, href)
+        else:
+            target = repo.resolve_safe(href)['rel']
+            rel_link = posixpath.relpath(target, DIR)
+            bullet = '- [%s](%s)' % (label or posixpath.basename(target), rel_link)
+        if note:
+            bullet += ' — %s' % note
+        bullets_.append(bullet)
+    text = _replace_section(repo.read_text(rel), 'Sources', bullets_ or ['-'])
+    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    repo.write_text(rel, text)
+    commit = gitlib.commit_paths([rel], 'console: %s sources — %d entr%s' % (slug, len(bullets_), 'y' if len(bullets_) == 1 else 'ies'))
     push = gitlib.maybe_push(settings)
     return {'page': parse_page(rel), 'commit': commit, 'push': push}
 

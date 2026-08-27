@@ -121,5 +121,13 @@ def intro(text):
     return joined[:300]
 
 
+def placeholder_count(text):
+    """Bracketed placeholders that are not markdown links: [Your Company], [N],
+    [GAP: ...] — the shared population signal (setup page, steering page)."""
+    if not text:
+        return 0
+    return len(re.findall(r'\[[^\][\n]+\](?!\()', text))
+
+
 def today():
     return datetime.now(timezone.utc).strftime('%Y-%m-%d')
