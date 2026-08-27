@@ -6,6 +6,7 @@ const fs = require("fs"), path = require("path");
 const doc = require("./content.js");
 const OUT = process.argv[2] || path.join(__dirname, "..");
 const CO_LABEL = { expected: "Expected", check: "Check in {gh:GitHub|az:Azure Repos}", note: "Note", why: "Why this matters", dont: "Don't", pass: "You're done when", tip: "Tip" };
+const KIND_NAME = { steering: "Steering file", registry: "Registry", living: "Living page", raw: "Raw material", deliverable: "Deliverable", template: "Template & guide" };
 const LOGO_PATHS = fs.readFileSync(path.join(__dirname, "logo-inner.svg.txt"), "utf8");
 
 // ---------------------------------------------------------------- inline parser (shared)
@@ -103,6 +104,10 @@ function html(blocks, ctx = { inStep: false, route: "", flow: false }) {
       case "details": o.push(`<details class="more"><summary>${esc(b.summary)}</summary>${html(b.blocks, { ...ctx, flow: false })}</details>`); break;
       case "image": { const data = fs.readFileSync(path.join(__dirname, b.file)).toString("base64"); o.push(`<figure class="ill"><img src="data:image/jpeg;base64,${data}" alt="${esc(b.alt)}" loading="lazy">${b.caption ? `<figcaption>${hinl(b.caption)}</figcaption>` : ""}</figure>`); break; }
       case "seq": o.push(`<ol class="seq">${b.items.map((i, n) => `<li><div class="seq-n">${n + 1}</div><div class="seq-body"><div class="seq-who">${esc(i.who)}</div><p>${hinl(i.what)}</p><div class="seq-foot"><span class="seq-time">${esc(i.time)}</span><a href="${esc(i.link)}">${esc(i.label)} →</a></div></div></li>`).join("")}</ol>`); break;
+      case "legend": o.push(`<div class="legend">${b.items.map((i) => `<div class="lg-item"><span class="chip chip-${i.kind}">${esc(i.name)}</span><p class="lg-what">${hinl(i.what)}</p><p class="lg-treat">${hinl(i.treat)}</p></div>`).join("")}</div>`); break;
+      case "catalog": o.push(`<div class="tbl cat"><table><colgroup><col style="width:24%"><col style="width:14%"><col style="width:34%"><col style="width:28%"></colgroup><thead><tr><th>Item</th><th>Kind</th><th>What's in it</th><th>How it's used</th></tr></thead><tbody>${b.rows.map((r) => `<tr><td>${hinl(r.name)}</td><td><span class="chip chip-${r.kind}">${esc(KIND_NAME[r.kind] || r.kind)}</span></td><td>${hinl(r.what)}</td><td>${hinl(r.use)}</td></tr>`).join("")}</tbody></table></div>`); break;
+      case "flowmap": o.push(`<div class="fmap">${b.stages.map((st) => `<div class="fm-col"><div class="fm-name">${esc(st.name)}</div><p class="fm-desc">${hinl(st.desc)}</p><div class="fm-skills">${st.skills.map((s) => `<span class="fm-skill${s.main ? " main" : ""}"><code>${esc(s.s)}</code></span>`).join("")}</div></div>`).join("")}</div><p class="fm-key"><span class="fm-skill main demo"><code>filled</code></span> the main path — each one reads what the previous one wrote · <span class="fm-skill demo"><code>outlined</code></span> supporting research and critique, called by the main path or by you</p>`); break;
+      case "loop": { const parts = []; b.nodes.forEach((n, i) => { if (i) { const lk = b.links[i - 1] || {}; parts.push(`<div class="loop-link"><span class="lk-arrow" aria-hidden="true">⇄</span>${lk.label ? `<span class="lk-label">${hinl(lk.label)}</span>` : ""}</div>`); } parts.push(`<div class="loop-node"><b>${hinl(n.title)}</b><span>${hinl(n.sub)}</span></div>`); }); o.push(`<div class="loop">${parts.join("")}</div>`); break; }
     }
     // Carry step-flow to the next sibling: steps open it; callout/say/code keep it; platform
     // continues it only if its own tail is still in flow; a method card's border closes the
@@ -134,13 +139,17 @@ const MTHTABS = `<div class="mth-tabs" role="group" aria-label="Setup method"><b
 const articlesHtml = flat.map(({ s, a, route }, idx) => {
   const rail = navTree(a.blocks);
   const prev = flat[idx - 1], next = flat[idx + 1];
+  const body = html(a.blocks, { route });
+  // The platform switch appears only on articles that actually contain platform-scoped
+  // content — a {gh:|az:} token, a platform() block, or a platform-labelled callout.
+  const pfbar = /data-platform=/.test(body) ? PFBAR : "";
   return `<article data-route="${route}" hidden>
   <div class="art-main">
     <p class="crumb"><a href="#/${s.id}/${s.articles[0].id}">${esc(s.title)}</a> <span>›</span> ${esc(a.title)}</p>
     <h1>${esc(a.title)}</h1>
     <p class="meta"><span class="meta-k">For</span> ${esc(a.audience)}${a.time ? ` <span class="meta-dot">·</span> <span class="meta-k">Time</span> ${esc(a.time)}` : ""}</p>
-    ${PFBAR}
-    ${html(a.blocks, { route })}
+    ${pfbar}
+    ${body}
     <nav class="pager">${prev ? `<a class="pager-prev" href="#/${prev.route}"><span>Previous</span><b>${esc(prev.a.title)}</b></a>` : "<span></span>"}${next ? `<a class="pager-next" href="#/${next.route}"><span>Next</span><b>${esc(next.a.title)}</b></a>` : ""}</nav>
   </div>
   <nav class="rail" aria-label="On this page"><p class="rail-title">On this page</p><ol>${rail.map((h) => `<li class="l${h.level}"${h.pf ? ` data-platform="${h.pf}"` : ""}${h.mth ? ` data-method="${h.mth}"` : ""}><a href="#/${route}/${h.id}" data-target="${h.id}">${hnav(h.text)}</a></li>`).join("")}</ol></nav>
@@ -152,7 +161,8 @@ const firstRoute = (s) => s.articles.length ? `${s.id}/${s.articles[0].id}` : `$
 const tabs = doc.sections.map((s) => `<a class="tab" data-section="${s.id}" href="#/${firstRoute(s)}">${esc(s.title)}</a>`).join("");
 const mobileNav = `<details class="side-mobile"><summary>In this section</summary><div class="side-mobile-in"></div></details>`;
 
-const page = `<meta charset="utf-8">
+const page = `<!doctype html>
+<meta charset="utf-8">
 <title>${esc(doc.name)}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>(function(){var p=null,m=null;try{var q=new URLSearchParams(location.search);p=q.get("platform")||localStorage.getItem("wos-platform");m=q.get("method")||localStorage.getItem("wos-method")}catch(e){}var r=document.documentElement;r.setAttribute("data-platform",p==="azure"?"azure":"github");r.setAttribute("data-method",m==="chat"?"chat":"app")})()</script>
@@ -165,6 +175,12 @@ const page = `<meta charset="utf-8">
   --code-bg:#F1F5F9; --code-fg:#0A2540; --say-bg:#F3F9FD; --say-line:#BFDDF1;
   --ok:#0F8A5F; --danger:#CD3D64;
   --seg-on:#0E5E8B; --seg-on-fg:#FFFFFF;
+  --k-steering:#0E5E8B;  --k-steering-bg:#E8F3FB;  --k-steering-dot:#1485C4;
+  --k-registry:#5B3FA8;  --k-registry-bg:#F0EBFB;  --k-registry-dot:#7C5CD6;
+  --k-living:#0C6E4C;    --k-living-bg:#E6F6EF;    --k-living-dot:#0F8A5F;
+  --k-raw:#8A5A17;       --k-raw-bg:#FBF3E4;       --k-raw-dot:#B7791F;
+  --k-deliverable:#0B5E70; --k-deliverable-bg:#E3F5F8; --k-deliverable-dot:#0E7490;
+  --k-template:#4A5568;  --k-template-bg:#EEF1F5;  --k-template-dot:#64748B;
   --shadow:0 1px 2px rgba(10,37,64,.05),0 6px 20px -12px rgba(10,37,64,.15);
   --radius:8px;
   --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
@@ -176,6 +192,12 @@ const page = `<meta charset="utf-8">
   --ink:#F1F5F9; --text:#CBD5DF; --muted:#94A3B3; --faint:#6E7C8B;
   --code-bg:#1C252E; --code-fg:#9CD0F5; --say-bg:#152331; --say-line:#2C4E69; --danger:#F27C9B;
   --seg-on:#4FA9F1; --seg-on-fg:#0A1B28;
+  --k-steering:#9CCFF3;  --k-steering-bg:#16293A;  --k-steering-dot:#4FA9F1;
+  --k-registry:#C9B8F2;  --k-registry-bg:#261F3B;  --k-registry-dot:#9F85E8;
+  --k-living:#9BDDC0;    --k-living-bg:#132B22;    --k-living-dot:#2EA97C;
+  --k-raw:#E8C88F;       --k-raw-bg:#2E2416;       --k-raw-dot:#CD9440;
+  --k-deliverable:#95D6E4; --k-deliverable-bg:#12262C; --k-deliverable-dot:#2E9AB2;
+  --k-template:#B8C4D4;  --k-template-bg:#222A34;  --k-template-dot:#8494A8;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px -12px rgba(0,0,0,.6);
 }}
 :root[data-theme="dark"]{
@@ -184,6 +206,12 @@ const page = `<meta charset="utf-8">
   --ink:#F1F5F9; --text:#CBD5DF; --muted:#94A3B3; --faint:#6E7C8B;
   --code-bg:#1C252E; --code-fg:#9CD0F5; --say-bg:#152331; --say-line:#2C4E69; --danger:#F27C9B;
   --seg-on:#4FA9F1; --seg-on-fg:#0A1B28;
+  --k-steering:#9CCFF3;  --k-steering-bg:#16293A;  --k-steering-dot:#4FA9F1;
+  --k-registry:#C9B8F2;  --k-registry-bg:#261F3B;  --k-registry-dot:#9F85E8;
+  --k-living:#9BDDC0;    --k-living-bg:#132B22;    --k-living-dot:#2EA97C;
+  --k-raw:#E8C88F;       --k-raw-bg:#2E2416;       --k-raw-dot:#CD9440;
+  --k-deliverable:#95D6E4; --k-deliverable-bg:#12262C; --k-deliverable-dot:#2E9AB2;
+  --k-template:#B8C4D4;  --k-template-bg:#222A34;  --k-template-dot:#8494A8;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px -12px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box}
@@ -327,6 +355,45 @@ ol.seq li{display:grid; grid-template-columns:40px 1fr; gap:14px; padding:14px 1
 .seq-body p{margin:0 0 8px; color:var(--text)}
 .seq-foot{display:flex; justify-content:space-between; gap:12px; font-size:13px; flex-wrap:wrap}
 .seq-time{color:var(--muted)}
+/* ---------- kind chips + legend (Context system) */
+.chip{display:inline-flex; align-items:center; gap:6px; font:600 11.5px/1 var(--font); letter-spacing:.02em; padding:4px 10px 4px 8px; border-radius:999px; white-space:nowrap; border:1px solid transparent}
+.chip::before{content:""; width:7px; height:7px; border-radius:50%; flex:0 0 auto}
+.chip-steering{color:var(--k-steering); background:var(--k-steering-bg)} .chip-steering::before{background:var(--k-steering-dot)}
+.chip-registry{color:var(--k-registry); background:var(--k-registry-bg)} .chip-registry::before{background:var(--k-registry-dot)}
+.chip-living{color:var(--k-living); background:var(--k-living-bg)} .chip-living::before{background:var(--k-living-dot)}
+.chip-raw{color:var(--k-raw); background:var(--k-raw-bg)} .chip-raw::before{background:var(--k-raw-dot)}
+.chip-deliverable{color:var(--k-deliverable); background:var(--k-deliverable-bg)} .chip-deliverable::before{background:var(--k-deliverable-dot)}
+.chip-template{color:var(--k-template); background:var(--k-template-bg)} .chip-template::before{background:var(--k-template-dot)}
+.legend{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:6px 0 20px}
+@media (max-width:640px){.legend{grid-template-columns:1fr}}
+.lg-item{padding:12px 14px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
+.lg-item .chip{margin-bottom:7px}
+.lg-what{margin:0 0 4px; font-size:13.5px; color:var(--text)}
+.lg-treat{margin:0; font-size:12.5px; color:var(--muted)}
+.cat td .chip{margin-top:1px}
+.cat td:first-child{color:var(--ink)}
+/* ---------- lifecycle flow map (Skills and agents) */
+.fmap{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:6px 0 8px}
+@media (max-width:760px){.fmap{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.fmap{grid-template-columns:1fr}}
+.fm-col{border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:12px 13px; min-width:0}
+.fm-name{font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--accent-deep); margin:0 0 6px}
+.fm-col:not(:last-child) .fm-name::after{content:" →"; color:var(--faint)}
+.fm-desc{margin:0 0 10px; font-size:12.5px; line-height:1.5; color:var(--muted)}
+.fm-skills{display:flex; flex-direction:column; gap:5px; align-items:flex-start}
+.fm-skill code{background:var(--surface); border:1px solid var(--line); color:var(--text); font-size:12px; padding:.2em .5em}
+.fm-skill.main code{background:var(--accent-tint); border-color:var(--accent-soft); color:var(--accent-deep); font-weight:600}
+.fm-key{font-size:12.5px; color:var(--muted); margin:0 0 18px}
+.fm-key .fm-skill.demo code{font-size:11px}
+/* ---------- sync loop (Team collaboration) */
+.loop{display:flex; align-items:stretch; margin:6px 0 18px}
+.loop-node{flex:1 1 0; min-width:0; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); padding:14px 12px; text-align:center; box-shadow:var(--shadow); display:flex; flex-direction:column; justify-content:center}
+.loop-node b{display:block; color:var(--ink); font-size:14.5px; margin-bottom:3px}
+.loop-node span{font-size:12.5px; color:var(--muted); line-height:1.4}
+.loop-link{flex:0 0 auto; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:2px; padding:0 8px}
+.lk-arrow{font-size:20px; color:var(--accent); line-height:1}
+.lk-label{font-size:11px; color:var(--muted); text-align:center; line-height:1.35}
+@media (max-width:560px){.loop{flex-direction:column} .loop-link{padding:6px 0} .lk-arrow{transform:rotate(90deg)}}
 .empty{margin:8px 0 0; padding:28px 24px; border:1px dashed var(--line); border-radius:var(--radius); background:var(--panel); color:var(--muted); font-size:15px}
 .empty p{margin:0}
 .side-empty{font-size:13px; color:var(--faint); padding:6px 10px; margin:0}

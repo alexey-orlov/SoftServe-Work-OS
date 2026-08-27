@@ -15,7 +15,7 @@ every write shows the 🔒 prompt and lands through the normal review flow — t
 commits, merges or publishes anywhere by itself.
 
 **Never edit the built file.** `work-os-docs.html` is an output of
-`node build.js`; a hand edit is lost at the next build. If someone did edit them, say so and
+`node build.js`; a hand edit is lost at the next build. If someone did edit it, say so and
 re-express the change in `content.js`.
 
 ## Two modes — decide first, say which
@@ -72,7 +72,7 @@ Read the source, then the doc statement; change the doc, never the source, from 
 
 ## Self-check (before finishing)
 
-- Every change is in `content.js`; the three built files are fresh (build ran after the last edit) and no hand edit was made to them.
+- Every change is in `content.js`; the built file is fresh (build ran after the last edit) and no hand edit was made to it.
 - No text shows both platforms; every new heading has an id; every internal link resolves; the version was bumped.
 - Everything added was re-read as a first-time reader: new headings match the grammar of the siblings doing the same job, no sentence explains the document itself or leans on this session's context, nothing reads like a slide title.
 - Sync mode added no article or section; everything applied has a named source; everything not applied is listed with a reason.
