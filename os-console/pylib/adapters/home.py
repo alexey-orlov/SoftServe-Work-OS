@@ -105,15 +105,14 @@ def steering_status():
             scope = (md.section(text, 'Company & Product Fundamentals')
                      + md.section(text, 'Team') + md.section(text, 'Slack Channels'))
             gaps = placeholder_count(scope)
-            what = 'fundamentals block, team roster and channels'
+            detail = '%d placeholders left in the fundamentals block, team roster and channels.' % gaps
         else:
             gaps = placeholder_count(text) + len(re.findall(r'\[GAP:', text))
-            what = 'placeholders / GAP markers'
+            detail = '%d placeholders / GAP markers left.' % gaps
         state = 'done' if gaps == 0 else 'partial' if gaps <= 10 else 'todo'
         out.append({'key': key, 'label': label, 'path': path, 'exists': True, 'gaps': gaps,
                     'state': state,
-                    'detail': 'Populated — no placeholders left.' if gaps == 0
-                    else '%d %s left.' % (gaps, what)})
+                    'detail': 'Populated — no placeholders left.' if gaps == 0 else detail})
     return out
 
 

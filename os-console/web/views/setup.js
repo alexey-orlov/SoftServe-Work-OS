@@ -88,12 +88,13 @@ export async function render(view) {
       'Live connections skills read instead of exports. Each is optional; connect them one at a time, whenever ready.'),
   );
   for (const r of s.integrations.items) {
+    // command chip goes under the text — a third column would crush the narrow card
     integ.append(el('div', { class: 'step' },
       pill(r.state),
       el('div', { class: 'body' },
         el('div', { class: 'title' }, r.label),
-        el('div', { class: 'detail' }, r.detail)),
-      r.state === 'done' ? null : cmdChip(r.command),
+        el('div', { class: 'detail' }, r.detail),
+        r.state === 'done' ? null : el('div', { style: 'margin-top:4px' }, cmdChip(r.command))),
     ));
   }
   if (s.integrations.other && s.integrations.other.length) {
