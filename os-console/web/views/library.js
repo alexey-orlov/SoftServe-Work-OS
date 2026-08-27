@@ -77,13 +77,22 @@ const QUICK = [
   },
 ];
 
+// Two views over the same files: the curated Library (default) and the raw
+// Folder tree — switched at the top, never shown together.
+function viewSwitch(mode) {
+  return el('div', { class: 'view-switch', role: 'group', 'aria-label': 'Library view' },
+    el('a', { class: mode === 'lib' ? 'on' : '', href: '#/library' }, 'Library'),
+    el('a', { class: mode === 'tree' ? 'on' : '', href: '#/library?view=tree' }, 'Folder tree'));
+}
+
 export async function render(view, params) {
   const path = params.get('path') || '';
+  const mode = (path || params.get('view') === 'tree') ? 'tree' : 'lib';
   view.append(spinner());
-  const d = await api.get(`/api/library?path=${encodeURIComponent(path)}`);
+  const d = mode === 'tree' ? await api.get(`/api/library?path=${encodeURIComponent(path)}`) : null;
   view.replaceChildren();
 
-  const parts = d.path ? d.path.split('/') : [];
+  const parts = path ? path.split('/') : [];
   setCrumbs([
     { label: 'Library', href: '#/library' },
     ...parts.map((seg, idx) => ({
@@ -95,11 +104,13 @@ export async function render(view, params) {
   const page = el('div', { class: 'page' });
   view.append(page);
 
-  if (!d.path) {
+  if (mode === 'lib') {
     page.append(
-      el('h1', {}, 'Library'),
+      el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
+        el('h1', { class: 'grow', style: 'margin:0' }, 'Library'),
+        viewSwitch(mode)),
       el('div', { class: 'sub' },
-        'Two ways to the same files: quick access by what things mean, or the raw folder tree by where they live.'),
+        'Quick access by what things mean. The same files by location: Folder tree.'),
     );
     const tileRefs = [];
     for (const section of QUICK) {
@@ -111,34 +122,45 @@ export async function render(view, params) {
           const href = q.kind === 'view' ? q.target
             : q.kind === 'file' ? `#/file?path=${encodeURIComponent(q.target)}`
               : `#/library?path=${encodeURIComponent(q.target)}`;
-          const nameRow = el('div', { class: 'row-t' },
-            icon(q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder'),
-            el('span', { class: 'grow' }, q.name));
-          tileRefs.push({ target: q.policyPath || (q.kind === 'view' ? null : q.target), nameRow });
-          return el('a', { class: 'tile', href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
-            nameRow,
+          const tile = el('a', { class: 'tile', href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
+            el('div', { class: 'row-t' },
+              icon(q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder'),
+              el('span', { class: 'grow' }, q.name)),
             el('div', { class: 'd' }, q.desc));
+          tileRefs.push({ target: q.policyPath || (q.kind === 'view' ? null : q.target), tile });
+          return tile;
         })));
       }
     }
-    // gated badges on the tiles, one bulk lookup
+    // gated badges pinned to the tile corner, one bulk lookup
     const targets = [...new Set(tileRefs.filter((t) => t.target).map((t) => t.target))];
     api.get(`/api/tiers?paths=${encodeURIComponent(targets.join('|'))}`).then((tiers) => {
-      for (const { target, nameRow } of tileRefs) {
-        if (tiers[target] === 'gated') nameRow.append(gatedTag('gated', true));
+      for (const { target, tile } of tileRefs) {
+        if (tiers[target] === 'gated') {
+          const tag = gatedTag('gated', true);
+          tag.classList.add('gate-corner');
+          tile.append(tag);
+        }
       }
     }).catch(() => { /* badges are decoration */ });
+    return;
+  }
 
-    // the hard split before the raw tree
-    page.append(el('div', { class: 'zone-split' },
-      el('h2', { class: 'group-head', style: 'margin:0 0 2px' }, 'Raw folder tree'),
-      el('div', { class: 'hint', style: 'margin:0 0 12px' },
-        'The same files by actual location — for when you know where things live. 🔒 Gated = needs a human\'s approval to change.'),
-    ));
+  // ---- folder tree ----------------------------------------------------------
+  if (!path) {
+    page.append(
+      el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
+        el('h1', { class: 'grow', style: 'margin:0' }, 'Library'),
+        viewSwitch(mode)),
+      el('div', { class: 'sub' },
+        'The raw folder tree — the same files by actual location. 🔒 Gated = needs a human\'s approval to change.'),
+    );
   } else {
     page.append(el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
       el('h1', { style: 'margin:0' }, parts[parts.length - 1]),
-      gatedTag(d.tier)));
+      gatedTag(d.tier),
+      el('span', { class: 'grow' }),
+      viewSwitch(mode)));
     if (d.blurb) page.append(el('div', { class: 'sub' }, d.blurb));
     if (d.readWhen) page.append(el('div', { class: 'hint', style: 'margin:-12px 0 16px' }, `Read this when: ${d.readWhen}`));
   }
