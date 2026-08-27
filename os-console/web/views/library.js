@@ -125,7 +125,7 @@ export async function render(view, params) {
     const targets = [...new Set(tileRefs.filter((t) => t.target).map((t) => t.target))];
     api.get(`/api/tiers?paths=${encodeURIComponent(targets.join('|'))}`).then((tiers) => {
       for (const { target, nameRow } of tileRefs) {
-        if (tiers[target] === 'gated') nameRow.append(gatedTag('gated'));
+        if (tiers[target] === 'gated') nameRow.append(gatedTag('gated', true));
       }
     }).catch(() => { /* badges are decoration */ });
 

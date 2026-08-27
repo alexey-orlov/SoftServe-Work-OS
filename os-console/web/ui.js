@@ -86,12 +86,13 @@ export function tierPill(tier) {
 }
 
 // Small badge for file listings: present only on gated paths (absence = auto tier).
-export function gatedTag(tier) {
+// compact = icon only (tight spots like Library tiles); the tooltip carries the meaning.
+export function gatedTag(tier, compact = false) {
   if (tier !== 'gated') return null;
   return el('span', {
-    class: 'pill gate xs',
+    class: `pill gate xs${compact ? ' icon-only' : ''}`,
     title: 'Gated (write-policy) — needs a human\'s approval to change; never lands by automation',
-  }, icon('lock'), 'Gated');
+  }, icon('lock'), compact ? null : 'Gated');
 }
 
 export function cmdChip(cmd) {
