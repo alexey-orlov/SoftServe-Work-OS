@@ -28,6 +28,8 @@ bullet notes, voice-memo dictation, Slack threads, email chains, or "let me tell
 happened." With a meeting-transcription MCP connected (see `/connect-mcps`), pull the
 transcript directly. Files dropped by an integration land in `product-development/inbox/`
 (arrival contract in its CLAUDE.md) — `/context-update` sweeps hand them here.
+`product-development/toolchain.yaml → meeting-transcripts:` records the team's route:
+`approach: files` means paste/inbox IS the chosen way — don't suggest connecting an MCP.
 
 **Nothing written down at all?** Ask 5 questions and generate from the answers:
 1. Who was in the meeting? (customer side: roles only)

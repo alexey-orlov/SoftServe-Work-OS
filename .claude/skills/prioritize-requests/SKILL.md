@@ -17,6 +17,8 @@ group: delivery
 
 **What you get:** Every request clustered into themes named for the *job behind the ask*, demand counted by distinct accounts, and a verdict per theme — act now, collect signal, decline, or park — each with the exact repo destination its rows belong in.
 
+**Where requests come from:** `product-development/toolchain.yaml → feature-requests:` records the team's route. `approach: files` means the dated records in `customers/feature-requests/` plus pasted exports ARE the chosen intake — don't suggest connecting a feedback MCP; `approach: mcp` with a live `connection:` means that tool can be queried for the pile directly.
+
 **Time:** 10–20 minutes depending on pile size.
 
 ---

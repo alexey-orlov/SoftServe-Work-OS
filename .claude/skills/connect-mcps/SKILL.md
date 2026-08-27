@@ -1,6 +1,6 @@
 ---
 name: connect-mcps
-description: Connect MCP tool servers so skills read live tools instead of manual exports — guided setup one tool at a time (/connect-mcps connect to linear) or batch to walk several in one run. Detects an already-live connection first (a connector added in the Claude app's Settings › Connectors counts — those reach Claude Code too) and skips straight to testing, skill wiring, and logging; otherwise suggests the app's Connectors screen for tools in Claude's directory, then falls back to the chat route — an official hosted server via claude mcp add + /mcp authentication, then a local NPM/Docker server, then manual OAuth/API tokens. Then tests the connection, discovers the tool catalog, categorizes the MCP, adds an integration section with an offline fallback to every skill that benefits, proposes the root CLAUDE.md registry and query-routing updates (gated — confirm before applying), logs the run to os-installation/mcp-integration-logs/, and suggests the matching /customize-os target when the wired tool's toolchain.yaml surface is still undecided. Credentials go to the MCP system, never into repo files. Use on /connect-mcps, "connect Figma / Linear / Notion", "connect our tools", "set up MCPs", "batch connect", "reconnect — my token expired", or when a skill reports no live data source. NOT for choosing a team's standing approach per surface (/customize-os writes those to product-development/toolchain.yaml), connecting the product code repo (/connect-code), or answering code questions (/code-qa).
+description: Connect MCP tool servers so skills read live tools instead of manual exports — guided setup one tool at a time (/connect-mcps connect to linear) or batch to walk several in one run. Detects an already-live connection first (a connector added in the Claude app's Settings › Connectors counts — those reach Claude Code too) and skips straight to testing, skill wiring, and logging; otherwise suggests the app's Connectors screen for tools in Claude's directory, then falls back to the chat route — an official hosted server via claude mcp add + /mcp authentication, then a local NPM/Docker server, then manual OAuth/API tokens. Then tests the connection, discovers the tool catalog, categorizes the MCP, adds an integration section with an offline fallback to every skill that benefits, proposes the root CLAUDE.md registry and query-routing updates (gated — confirm before applying), logs the run to os-installation/mcp-integration-logs/ (with frontmatter the OS Console reads), records the live `connection:` block on the tool's toolchain.yaml surface, and suggests the matching /customize-os target when the surface's choice is still undecided. Credentials go to the MCP system, never into repo files. Use on /connect-mcps, "connect Figma / Linear / Notion", "connect our tools", "set up MCPs", "batch connect", "reconnect — my token expired", or when a skill reports no live data source. NOT for choosing a team's standing approach per surface (/customize-os writes those to product-development/toolchain.yaml), connecting the product code repo (/connect-code), or answering code questions (/code-qa).
 argument-hint: "[tool name | batch]"
 group: os-admin
 ---
@@ -184,7 +184,7 @@ Based on the MCP category, the skill automatically maps it to relevant skills:
 
 **Multi-category MCPs** are mapped to multiple skill groups.
 
-**Toolchain cross-check (after wiring):** read `product-development/toolchain.yaml`. If the tool just wired maps to a surface whose key is still `undecided` — e.g., a design MCP while `prototyping.approach: undecided` — add one line to the final report suggesting the matching `/customize-os` target (`/customize-os design-system`). Never set the choice from this skill: connections are this skill's job; standing choices belong to `/customize-os` and toolchain.yaml.
+**Toolchain write-back (after wiring):** read `product-development/toolchain.yaml` and record the live connection on the surface this tool serves — set or update its `connection:` block (`system:` = the tool actually connected, `status: connected`, `date:`, `log:` = this run's log path), and correct the surface's top-level `system:` when the tool actually connected differs from the planned one (e.g. the plan said Linear but Jira was wired). This is a gated write — propose it and apply only after the in-session confirm, together with the Step 8 CLAUDE.md edits. The `connection:` block is this skill's ONLY toolchain surface: never set `approach:`/`source:` — standing choices belong to `/customize-os`, the OS Console, and the team. If the surface's choice is still `undecided`, also add one line to the final report suggesting the matching `/customize-os` target (`/customize-os design-system`) or the console's Integrations tab.
 
 ### Step 7: Update Skill Files
 
@@ -244,6 +244,19 @@ This enables the skill to automatically understand queries like:
 
 After successful integration, the skill:
 - Save a detailed log to `os-installation/mcp-integration-logs/[timestamp]-[tool-name].md`
+- **Every log file starts with YAML frontmatter** — the OS Console reads it to show live connection status (filename keywords are only its legacy fallback):
+
+```yaml
+---
+system: Jira              # the tool actually connected — human name, as the team says it
+category: ticketing       # the toolchain.yaml surface this serves: prototyping | user-research |
+                          # ticketing | meeting-transcripts | knowledge-base | analytics |
+                          # feature-requests | team-chat | calendar | other
+status: connected         # connected | failed — a failed run is still logged, honestly
+date: YYYY-MM-DD
+---
+```
+
 - Display a summary showing:
   - Tools discovered
   - Skills updated
@@ -1287,7 +1300,8 @@ Before confirming an MCP connection is complete, verify:
 - [ ] **Relevant skills updated** -- All skills that benefit from this MCP have integration sections added
 - [ ] **CLAUDE.md registry updated** -- MCP appears in the registry table with purpose, category, used-in skills, and key tools
 - [ ] **Routing logic updated** -- Natural language query patterns are mapped to this MCP in CLAUDE.md
-- [ ] **Integration log saved** -- Detailed log written to `os-installation/mcp-integration-logs/[timestamp]-[tool].md`
+- [ ] **Integration log saved** -- Detailed log written to `os-installation/mcp-integration-logs/[timestamp]-[tool].md`, starting with the YAML frontmatter block (system, category, status, date)
+- [ ] **Connection recorded in toolchain.yaml** -- The surface's `connection:` block is set (and `system:` corrected if the wired tool differs from the planned one); `approach:`/`source:` untouched
 - [ ] **Fallback documented** -- Skills note what to do when this MCP is unavailable
 - [ ] **No duplicate entries** -- MCP is not listed twice in registry or skill files
 - [ ] **PM knows how to use it** -- Example natural language queries provided so the PM can start using the MCP immediately

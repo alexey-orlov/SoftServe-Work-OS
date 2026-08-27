@@ -15,6 +15,17 @@ _owner: [Name from team roster]_
 - **In scope:** [bullets]
 - **Out of scope:** [bullets]
 
+## Instructions
+
+- [Optional, ≤400 characters total: standing initiative-specific guidance every agent
+  working this initiative follows — constraints, tone, must-check context. "-" if none.]
+
+## Sources
+
+- [Source-of-truth folders or documents for this initiative, highest priority first —
+  local repo paths or SharePoint / Drive / Confluence links (usable when that
+  connection is set up). "-" if none.]
+
 ## Artifacts
 
 - PRD: [PENDING: product/PRDs/[area]/[slug]-prd.md]
@@ -51,6 +62,9 @@ Template rules (delete this comment when filling):
   flip to `active` in place when the team commits.
 - Link artifacts and decisions; never restate their content here. "-" for empty sections.
 - Use [PENDING: path] for artifacts that are planned but not written yet.
+- ## Instructions is steering, not documentation: hard cap 400 characters; agents read it
+  before working the initiative. ## Sources is ordered by priority — first entry wins on
+  conflicting facts; reorder by editing the list (or drag in the OS Console).
 - Budget ≤120 lines. On ship/kill: set _status accordingly, link the gate verdict, keep lessons.
 - After creating: add a line to initiatives/CLAUDE.md (append to the end) and propose the
   feature's `initiatives:` list addition in feature-index.yaml (Tier 2 — user confirms).

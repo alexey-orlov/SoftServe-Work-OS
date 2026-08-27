@@ -26,9 +26,17 @@ multiplied. For each genuinely new initiative:
 1. Page from `handbook/templates/initiative-page-template.md`, following the slug and
    size rules in `initiatives/CLAUDE.md`; fill only what the user stated — everything
    else stays the template's placeholders (the page grows through normal work, not
-   through padding).
+   through padding). If the user named source-of-truth folders or documents for an
+   initiative, list them under `## Sources` in priority order; initiative-specific
+   guidance (≤400 chars) goes under `## Instructions`.
 2. Append the page's line to `initiatives/CLAUDE.md` (end of list).
 3. Propose the `feature-index.yaml` entries (gated) — one batch for all new initiatives.
+   **Seed the product-area skeleton in the same batch:** ask for the org's 3–6 product
+   areas in their own words (or derive them from the initiatives just named), replace the
+   file's commented starter areas with those, and file each new initiative's feature under
+   its area. The index stays organically grown after this — `/prd-draft` and
+   `/context-update` propose entries as work starts; this seeding is the only bulk shaping
+   it gets.
 4. Offer to list the active ones under **In Flight** in `current-quarter.md` when that
    section was populated.
 

@@ -16,4 +16,4 @@ Root of all product, engineering, and analytics artifacts.
 ### Files
 
 - [feature-index.yaml](feature-index.yaml) — Master lookup mapping every feature to its artifacts and current initiatives (gated — changes need your in-session yes)
-- [toolchain.yaml](toolchain.yaml) — The team's standing tool/approach choices, one key per surface (prototyping design grounding and the user-research source today) — written by `/customize-os`, read by consuming skills before they ask (gated)
+- [toolchain.yaml](toolchain.yaml) — The team's standing tool/approach choices plus live-connection records, one key per surface (nine surfaces: prototyping, user research, ticketing, meeting transcripts, knowledge base, analytics, feature requests, team chat, calendar) — choices written by `/customize-os` and the OS Console, `connection:` blocks only by `/connect-mcps`, read by consuming skills before they ask (gated)

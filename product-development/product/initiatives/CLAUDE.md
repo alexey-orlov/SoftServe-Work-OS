@@ -16,10 +16,15 @@ decisions, and open loops — in one page, without grepping six folders.
   (feature-index `initiatives:` lists, current-quarter links, gate verdicts).
 - **Edit in place** — the page always describes current truth (`_status:`, `_updated:`).
   Artifacts and decisions are LINKED, never restated. Budget ≤120 lines.
+- **`## Instructions`** (optional, ≤400 chars) is initiative-specific steering — read it
+  before working the initiative and follow it. **`## Sources`** lists the initiative's
+  source-of-truth folders/documents in priority order (first wins on conflict); consult
+  them when drafting or folding material for this initiative.
 - **Close, don't delete**: on ship/kill set `_status: shipped YYYY-MM-DD — <outcome>` (or
   `killed …`), link the launch-gate verdict, keep the lessons. Closed pages stay — they
   hold the record.
-- Statuses: `active` · `paused` · `shipped` · `killed`.
+- Statuses: `exploring` · `active` · `paused` · `shipped` · `killed` (`exploring` = filed
+  but not yet committed work; flip to `active` in place when the team commits).
 
 ## Contents
 

@@ -134,3 +134,8 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `strategy/business-context/` initial population — `business-info.md`, `stakeholders.md`, `segmentation-matrix.md` | `/customize-os` (guided setup, gated per file); afterwards the living-page and mirror rules above govern ongoing edits |
 | `os-installation/customization-status.md` + `customization-facts.yaml` | `/customize-os` — program state and the resolved-facts annex, updated once per run at the close |
 | `os-installation/demo-data-manifest.md` | `/demo-data` — created by generate, cleared by remove |
+| `product-development/toolchain.yaml` | choices (`approach:`/`source:` + `system:`): `/customize-os` guided targets for the two rich surfaces, the OS Console Integrations tab for any surface (each save gated) — `connection:` blocks: `/connect-mcps` only, after a tested connect; the console locks a surface's system field once its `connection:` exists |
+| `os-installation/mcp-integration-logs/` | `/connect-mcps` — one frontmattered log per run; the console reads frontmatter for live status, writes nothing here |
+| `governance/write-policy.yaml` `tiers:` list | steward via editor, or the OS Console Gated-files page (add/remove rule — the console regenerates `.github/CODEOWNERS` in the same commit and reminds about the Azure path filter) |
+| initiative pages `## Instructions` + `## Sources` (incl. order) | the PM — directly or via the OS Console (instructions editor, source drag-reorder); skills read, never edit |
+| `governance/proposals/` clearing from UI | the OS Console reject action (deletes the file, comment in the commit message) — same "humans clear" rule as above, one more surface for it |

@@ -41,6 +41,9 @@ summary).
 **Push mode** — `/create-tickets push` or "push pending feature requests":
 
 1. Scan `customers/feature-requests/*.md` (excluding CLAUDE.md) for `tracker_ref: "-"`.
+   First check `product-development/toolchain.yaml → ticketing:` — `approach: files` means
+   the team deliberately works without a tracker connection: report the pending count and
+   stop without probing for MCPs (the records are the backlog).
 2. **No tracker MCP connected** (Linear, Jira, Asana — any): report the pending count and
    stop. Explicit no-op — records untouched, nothing lost; point to `/connect-mcps`.
 3. **Tracker MCP connected:** confirm the target project/team once for the batch
@@ -150,6 +153,12 @@ Examples:
 ```
 
 ### Step 4: Create or Output Tickets
+
+**Route by the recorded choice first:** read `product-development/toolchain.yaml → ticketing:`.
+`approach: files` → go straight to the text-output fallback, no MCP probing and no question —
+that IS the team's chosen route, not a degradation. `approach: mcp` with a `system:` named →
+prefer that tracker's MCP; if it is unreachable, say so and offer `/connect-mcps` or a one-off
+text fallback — never silently switch trackers. `undecided` → probe as below.
 
 **If Linear MCP available:**
 ```
@@ -494,6 +503,8 @@ When the PM uses `/create-tickets`, the skill automatically:
 
 ### 5. Route to Task/Ticket System
 **Routing logic:**
+- **`toolchain.yaml → ticketing.approach: files`:** Generate formatted ticket text — the team's chosen route, skip MCP probing
+- **`ticketing.approach: mcp` + `system:` named:** Use that tracker's MCP; unreachable → say so, never switch trackers silently
 - **Linear connected:** Create tickets directly in Linear
 - **Jira connected:** Create tickets directly in Jira
 - **Neither connected:** Generate formatted ticket text for manual entry

@@ -1,27 +1,37 @@
 # Toolchain — which tool or approach each workflow surface of this team's OS uses.
 #
-# The org's standing CHOICES, one key per surface — distinct from connection state:
-# /connect-mcps makes tool servers reachable and records the wiring; THIS file records
-# what the team decided to work with, so skills route by it instead of re-asking.
+# Two different facts live here, per surface — don't confuse them:
+#   1. The CHOICE — `approach:` (or `source:`) plus `system:`: what the team decided
+#      or plans to work with. A filled `system:` alone means "this is the plan" —
+#      it does NOT mean anything is connected yet.
+#   2. The CONNECTION — the `connection:` block: written ONLY by /connect-mcps after
+#      a live, tested connection. Its presence means the integration is actually set
+#      up; its `system:` names the tool really wired, and it stays correct even when
+#      that differs from the planned one. No `connection:` block = not connected,
+#      whatever `system:` says.
 #
-#   Written by /customize-os — one guided choice target per key (e.g.
-#   `/customize-os design-system` for `prototyping:`). Re-running a target re-asks
-#   the full question, so a choice can be changed later the same way it was made.
+# Who writes what:
+#   /customize-os — the guided targets for the two rich surfaces (`prototyping:` via
+#     `/customize-os design-system`, `user-research:` via `/customize-os research-source`).
+#     Re-running a target re-asks the full question.
+#   The OS Console (Set up this OS → Integrations) — `approach:` and `system:` on any
+#     surface; each save is a gated write the person approves in the console.
+#   /connect-mcps — `connection:` blocks only, plus correcting `system:` when the tool
+#     actually connected differs from the planned one. It never sets choices.
 #   Read by the skills named in each key's comment.
-#   /connect-mcps reads it only to suggest the matching /customize-os target after
-#   wiring a tool whose surface is still `undecided` — it never sets choices.
 #
 # Gated (governance/write-policy.yaml): every change goes through the 🔒 write prompt.
 # The master ships every key `undecided` — a fresh instance decides via /customize-os,
-# or skips and lets the consuming skills ask at run time.
+# from the OS Console, or skips and lets the consuming skills ask at run time.
 
-version: 1
+version: 2
 
 # How prototypes get their design grounding. Read by /prototype (Step 0 routing);
 # /prototype-challenge and /prototype-feedback inherit the token cache it produces.
-# Set or change with: /customize-os design-system
+# Set or change with: /customize-os design-system (or the console for approach/system).
 prototyping:
   approach: undecided   # figma-mcp | design-mcp | claude-design | screenshots | external-prompts | plain-html | undecided
+  system: ""            # the design tool this centers on (e.g. Figma) — plan, not connection state
   # Parameters by approach — fill only what the chosen approach needs:
   #   figma-mcp:        library-url — the design-system file/library tokens are extracted from
   #   design-mcp:       mcp-name (as registered) + source-url or equivalent
@@ -30,24 +40,113 @@ prototyping:
   #   external-prompts: preferred-tool — v0 | lovable | bolt
   #   plain-html:       (none)
   params: {}
-  decided:              # YYYY-MM-DD, set by /customize-os; empty while undecided
+  decided:              # YYYY-MM-DD, stamped when the choice is made; empty while undecided
   notes: ""             # one line of rationale, if any
 
-# Where user-research and meeting records come from. Consulted when loading or locating
-# research material; /connect-mcps suggests the matching target after wiring a
-# transcripts/notes tool while this is undecided.
+# Where user-research material (interviews, research notes) comes from. Consulted when
+# loading or locating research material. Distinct from `meeting-transcripts:` below —
+# this is the research corpus, that is the transcription tool for meetings generally.
 # Set or change with: /customize-os research-source
 user-research:
   source: undecided     # inbox-manual | mcp | undecided
+  system: ""            # the research/notes tool, if any (e.g. Dovetail, Notion)
   # Parameters by source:
   #   inbox-manual: (none) — people drop files into product-development/inbox/ per its CLAUDE.md
   #   mcp:          mcp-name (as registered) — the connected tool records are pulled from
   params: {}
-  decided:              # YYYY-MM-DD, set by /customize-os; empty while undecided
-  notes: ""             # one line of rationale, if any
+  decided:
+  notes: ""
 
-# Future surfaces follow the same shape — add a key here plus a /customize-os target row.
-# Candidates (not yet implemented as targets):
-#   ticketing:      tracker + route (mcp | text-fallback) — read by /create-tickets
+# The dev ticketing / task tracker. Read by /create-tickets (both spec mode and
+# feature-request push mode) before it probes for tracker MCPs.
+ticketing:
+  approach: undecided   # mcp | files | undecided
+  system: ""            # e.g. Linear, Jira, Azure Boards
+  # files = /create-tickets writes ready-to-paste ticket text to
+  #         engineering/plans/{area}/ and you paste it into the tracker yourself;
+  #         feature-request push mode stays a no-op and says so.
+  params: {}
+  decided:
+  notes: ""
+
+# The transcription tool meeting recordings arrive from. Read by /process-meeting
+# before it suggests pulling a transcript via MCP.
+meeting-transcripts:
+  approach: undecided   # mcp | files | undecided
+  system: ""            # e.g. Fireflies, Otter, Zoom
+  # files = transcripts are pasted into the session or dropped into
+  #         product-development/inbox/ (integrations like n8n can drop them too).
+  params: {}
+  decided:
+  notes: ""
+
+# Where the team's documents live (wiki / drive outside this repo). Consulted when
+# locating source documents; connected via /connect-mcps.
+knowledge-base:
+  approach: undecided   # mcp | files | undecided
+  system: ""            # e.g. Notion, Confluence, SharePoint, Google Drive
+  # files = documents are pasted or attached in the session, or dropped into
+  #         product-development/inbox/ for folding in.
+  params: {}
+  decided:
+  notes: ""
+
+# Product analytics. Analytics skills read repo files first and query the MCP as a
+# second source when connected.
+analytics:
+  approach: undecided   # mcp | files | undecided
+  system: ""            # e.g. Amplitude, Mixpanel, PostHog
+  # files = export the numbers (CSV or pasted chart data) to
+  #         product-development/analytics/metrics/{area}/.
+  params: {}
+  decided:
+  notes: ""
+
+# Where customer feature requests and support insights come from. Read by
+# /prioritize-requests (paste/export mode works without any connection).
+feature-requests:
+  approach: undecided   # mcp | files | undecided
+  system: ""            # e.g. Intercom, Zendesk, Productboard
+  # files = dated records in product/customers/feature-requests/ plus pasted
+  #         exports (CSV, spreadsheet, Slack thread).
+  params: {}
+  decided:
+  notes: ""
+
+# Team chat. Used by /slack-message and status/update skills to post directly
+# when connected; otherwise Claude drafts and you paste.
+team-chat:
+  approach: undecided   # mcp | manual | undecided
+  system: ""            # e.g. Slack, Teams
+  # manual = Claude drafts the message, you paste it into the chat yourself.
+  params: {}
+  decided:
+  notes: ""
+
+# Calendar access. Used by planning skills (/daily-plan, /weekly-plan) when present.
+calendar:
+  approach: undecided   # mcp | manual | undecided
+  system: ""            # e.g. Google Calendar, Outlook
+  # manual = you tell Claude your day; no connection involved.
+  params: {}
+  decided:
+  notes: ""
+
+# A live connection is recorded per surface as a `connection:` block, e.g.:
+#   ticketing:
+#     approach: mcp
+#     system: Jira
+#     connection:
+#       system: Jira            # the tool actually wired (authoritative over system: above)
+#       status: connected
+#       date: 2026-08-27
+#       log: os-installation/mcp-integration-logs/2026-08-27-jira.md
+# Written only by /connect-mcps after testing the connection. The OS Console shows a
+# surface as live and locks its system field only when this block is present.
+# Note: the code base is not a surface here — it is registered in
+# product-development/engineering/code-repos.yaml by /connect-code.
+
+# Future surfaces follow the same shape — add a key here plus a consuming-skill note.
+# Candidates (not yet implemented):
 #   product-truth:  where "what does the product do" questions ground first
 #                   (code | documentation | other) — read by /code-qa

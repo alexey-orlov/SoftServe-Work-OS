@@ -42,7 +42,7 @@ Stay in the conversation. Sharpen the problem, walk options and risks, name the 
 6. Close with the readiness readout (Step 6).
 
 **Every later run** (initiative page exists):
-1. Re-read the initiative page, the PRD, and every artifact linked since the last run (new call summaries, research syntheses, investigations, competitive updates, code answers).
+1. Re-read the initiative page, the PRD, and every artifact linked since the last run (new call summaries, research syntheses, investigations, competitive updates, code answers). The page's `## Instructions` section is standing steering — follow it; `## Sources` lists the initiative's source-of-truth documents in priority order (first wins on conflict) — consult them before outside material.
 2. Fold new evidence into the PRD: close `[GAP:]` markers the evidence resolves, update numbers, bump the stage when the content supports it.
 3. Run the auto-research pass on the gaps that remain (Step 5).
 4. Update the initiative page (`_updated:`, Activity line, new artifact links).

@@ -53,6 +53,12 @@ readout.
 target is a new row here plus a playbook file — the lifecycle, state format, interaction
 contract, and readout are shared and don't change.
 
+**Simple toolchain surfaces have no target here by design.** `toolchain.yaml`'s
+binary-choice surfaces (ticketing, meeting-transcripts, knowledge-base, analytics,
+feature-requests, calendar — `mcp | files`) are set from the OS Console's Integrations tab
+or fall out of a `/connect-mcps` run; only the two rich surfaces (`prototyping:`,
+`user-research:`) need the guided targets above. Don't invent targets for the simple ones.
+
 ## Order discipline
 
 The sequence is the default path, and the skill leans on it firmly — but order is
