@@ -1,7 +1,7 @@
 # EXAMPLE — Credit Usage Dashboard v1
 
 _status: shipped 2026-03-20 — v1 live for all tiers_
-_updated: 2026-03-20_
+_updated: 2026-08-27_
 _target-feature(s): `feature-index.yaml#billing.credit-usage-dashboard`_
 _owner: [PM] (roster placeholder)_
 
@@ -18,6 +18,10 @@ _owner: [PM] (roster placeholder)_
 - **Goal:** cut `credit_depletion_rate` from 11.4% to ≤ 8.0% of paid orgs/month within a quarter of GA; hold churn guardrails.
 - **In scope:** dashboard page, hourly rollup pipeline, low-balance banner + email, purchase shortcuts.
 - **Out of scope:** auto-top-up, per-seat attribution, >30-day forecasts (PRD non-goals).
+
+## Instructions
+
+-
 
 ## Artifacts
 
