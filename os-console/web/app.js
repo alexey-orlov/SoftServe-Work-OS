@@ -14,26 +14,27 @@ import * as learnings from '/views/learnings.js';
 import * as docsView from '/views/docs.js';
 import * as setup from '/views/setup.js';
 import * as proposedView from '/views/proposed.js';
-import * as steeringView from '/views/steering.js';
+import * as featuresView from '/views/features.js';
 import * as autosyncView from '/views/autosync.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
   edit: editor, templates, governance, activity, learnings,
   docs: docsView, setup, proposed: proposedView,
-  steering: steeringView, autosync: autosyncView,
+  features: featuresView, autosync: autosyncView,
+  steering: featuresView, // the old Steering page is gone — its one unique block lives on
 };
 
 const NAV = {
   primary: [
     ['home', 'Home', 'home'],
     ['initiatives', 'Initiatives', 'flag'],
+    ['features', 'Features', 'compass'],
     ['library', 'Library', 'book'],
     ['activity', 'Activity', 'clock'],
   ],
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
-    ['steering', 'Steering files', 'compass'],
     ['governance', 'Gated files', 'shield'],
     ['autosync', 'Auto-sync', 'refresh'],
     ['proposed', 'Proposed changes', 'pr'],

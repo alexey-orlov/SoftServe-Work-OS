@@ -47,7 +47,7 @@ MODULES = ['api.js', 'ui.js', 'app.js',
            'views/home.js', 'views/initiatives.js', 'views/library.js', 'views/file.js',
            'views/editor.js', 'views/templates.js', 'views/governance.js', 'views/activity.js',
            'views/learnings.js', 'views/docs.js', 'views/setup.js', 'views/proposed.js',
-           'views/steering.js', 'views/autosync.js']
+           'views/features.js', 'views/autosync.js']
 
 
 def walk_repo():
@@ -161,7 +161,7 @@ def collect():
         'routes': {
             '/api/overview': overview,
             '/api/initiatives': {'items': initiatives.list_pages()},
-            '/api/steering': steering.page_data(),
+            '/api/features': steering.feature_index(),
             '/api/templates': templates.build(),
             '/api/governance': governance.page_data(),
             '/api/learnings': learnings.build(),

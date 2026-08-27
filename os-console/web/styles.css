@@ -484,6 +484,43 @@ table.integrations .sys-locked { display: inline-flex; align-items: center; gap:
 table.integrations .acts { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .table-scroll { overflow-x: auto; }
 
+/* guided-way strip on the Setup page */
+.setup-banner {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--accent-tint); border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+  padding: 9px 14px; margin: 2px 0 4px; font-size: 13px; color: var(--ink-2);
+}
+.setup-banner b { color: var(--accent-ink); }
+
+/* single-line truncated paths (gated rules, rows) */
+.trunc {
+  display: inline-block; max-width: 100%; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;
+}
+
+/* integrations table — keep the prose columns in check */
+table.integrations th:nth-child(2), table.integrations td.purpose { max-width: 180px; }
+table.integrations th:nth-child(5), table.integrations td.comment { max-width: 230px; }
+table.integrations td:first-child { white-space: normal; min-width: 110px; }
+
+/* library group color coding — a quiet accent per group, never color alone */
+.group-head .group-dot {
+  display: inline-block; width: 9px; height: 9px; border-radius: 3px;
+  margin-right: 8px; vertical-align: 1px; background: var(--muted);
+}
+.g-steering  { --group-color: var(--gate-ink); }
+.g-artifacts { --group-color: var(--accent); }
+.g-source    { --group-color: var(--warm); }
+.g-data      { --group-color: var(--ok-ink, #2e7d4f); }
+.g-system    { --group-color: var(--muted); }
+.group-head .group-dot { background: var(--group-color, var(--muted)); }
+.tile.g-steering, .tile.g-artifacts, .tile.g-source, .tile.g-data, .tile.g-system {
+  border-left: 3px solid var(--group-color, var(--line));
+}
+
+/* destructive icon buttons reveal intent on hover */
+.btn.danger-hover:hover { color: #a63023; border-color: #a63023; }
+
 /* drag-to-reorder (initiative sources) */
 .drag-row { display: flex; gap: 9px; align-items: flex-start; padding: 7px 4px; border-bottom: 1px solid var(--line-soft); background: var(--surface); }
 .drag-row .grip { cursor: grab; color: var(--muted); padding-top: 1px; user-select: none; }

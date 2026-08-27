@@ -69,7 +69,6 @@ export async function render(view, params) {
     content.replaceChildren();
     if (active === 'team') drawTeam(content, d);
     else drawAuto(content, d);
-    drawReports(content, d);
   }
   draw();
 }
@@ -181,7 +180,7 @@ function drawTeam(box, d) {
   const p = d.prs;
   const card = el('div', { class: 'card' },
     el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, `Changes proposed by team members (${p.available ? p.items.length : '—'})`),
+      el('h3', { class: 'grow' }, 'Waiting for a decision'),
       p.provider !== 'none' ? el('span', { class: 'tag' }, p.provider) : null),
     el('div', { class: 'hint' },
       'Open pull requests by people. Gated ones reach main only through an approval that satisfies the admin rule.'),
@@ -205,9 +204,9 @@ function drawTeam(box, d) {
 function drawAuto(box, d) {
   const props = d.auto.proposals;
   const card = el('div', { class: 'card' },
-    el('h3', {}, `Automatically proposed changes (${props.length})`),
+    el('h3', {}, 'Filed by automation'),
     el('div', { class: 'hint' },
-      'Filed in governance/proposals/ by runs that could not ask (headless, scheduled). Approve hands the exact apply job to Claude Code; reject deletes the proposal with your comment in the commit message.'),
+      'Proposals from runs that could not ask (scheduled, background). Approve hands the exact apply job to Claude Code; reject deletes the proposal with your comment on record.'),
   );
   if (!props.length) {
     card.append(el('div', { class: 'empty' }, 'Nothing filed.'));
@@ -268,31 +267,4 @@ function rejectProposalModal(pr) {
       },
     }],
   });
-}
-
-// ---- reports footer (both tabs) --------------------------------------------
-
-function drawReports(box, d) {
-  const split = el('div', { class: 'split', style: 'margin-top:4px' });
-  box.append(split);
-  split.append(
-    el('div', { class: 'card' },
-      el('h3', {}, `Health reports (${d.health.length})`),
-      el('div', { class: 'hint' }, 'Dated /wiki-lint results — what drifted and what was fixed.'),
-      d.health.length
-        ? el('div', {}, d.health.slice(0, 8).map((h) => el('div', { class: 'art-row' },
-          el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(h.path)}` }, h.name),
-          el('span', { class: 'tag' }, timeAgo(h.mtimeMs)))))
-        : el('div', { class: 'hint', style: 'margin:0' }, 'No report yet — ', cmdChip('/wiki-lint')),
-    ),
-    el('div', { class: 'card' },
-      el('h3', {}, `Weekly reviews (${d.weeklyReports.length})`),
-      el('div', { class: 'hint' }, 'Plan-vs-actual rollups written by /weekly-review.'),
-      d.weeklyReports.length
-        ? el('div', {}, d.weeklyReports.map((w) => el('div', { class: 'art-row' },
-          el('a', { class: 'val grow', href: `#/file?path=${encodeURIComponent(w.path)}` }, w.name),
-          el('span', { class: 'tag' }, timeAgo(w.mtimeMs)))))
-        : el('div', { class: 'hint', style: 'margin:0' }, 'None yet — ', cmdChip('/weekly-review')),
-    ),
-  );
 }

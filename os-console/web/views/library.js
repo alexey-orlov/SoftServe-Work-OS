@@ -16,10 +16,13 @@ function it(name, target, desc, kind = 'dir', policyPath = null) { return { name
 const QUICK = [
   {
     title: 'Steering files',
+    key: 'steering',
     groups: [{
       name: null,
       items: [
         it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file'),
+        it('Feature index', '#/features', 'The product map — every feature and its artifacts, browsable', 'view', 'product-development/feature-index.yaml'),
+        it('Toolchain', 'product-development/toolchain.yaml', 'Tool choices and live connections, one per surface', 'file'),
         it('Business info', `${BC}/business-info.md`, 'Who we are — company, product, customers, pricing', 'file'),
         it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
         it('Segmentation matrix', `${BC}/segmentation-matrix.md`, 'Accounts and revenue by vertical, size and use case', 'file'),
@@ -31,6 +34,7 @@ const QUICK = [
   },
   {
     title: 'Artifacts',
+    key: 'artifacts',
     groups: [{
       name: null,
       items: [
@@ -42,6 +46,7 @@ const QUICK = [
   },
   {
     title: 'Source data',
+    key: 'source',
     groups: [{
       name: null,
       items: [
@@ -56,6 +61,7 @@ const QUICK = [
   },
   {
     title: 'Data, tech and the codebase',
+    key: 'data',
     groups: [{
       name: null,
       items: [
@@ -65,7 +71,9 @@ const QUICK = [
     }],
   },
   {
-    title: 'System',
+    // Same name as the Gated files page's group — one vocabulary everywhere.
+    title: 'System rules',
+    key: 'system',
     groups: [{
       name: null,
       items: [
@@ -114,7 +122,8 @@ export async function render(view, params) {
     );
     const tileRefs = [];
     for (const section of QUICK) {
-      page.append(el('h2', { class: 'group-head' }, section.title));
+      page.append(el('h2', { class: `group-head g-${section.key}` },
+        el('span', { class: 'group-dot' }), section.title));
       for (const group of section.groups) {
         if (group.name) page.append(el('div', { class: 'subgroup' }, group.name));
         else page.append(el('div', { style: 'height:10px' }));
@@ -122,7 +131,7 @@ export async function render(view, params) {
           const href = q.kind === 'view' ? q.target
             : q.kind === 'file' ? `#/file?path=${encodeURIComponent(q.target)}`
               : `#/library?path=${encodeURIComponent(q.target)}`;
-          const tile = el('a', { class: 'tile', href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
+          const tile = el('a', { class: `tile g-${section.key}`, href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
             el('div', { class: 'row-t' },
               icon(q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder'),
               el('span', { class: 'grow' }, q.name)),

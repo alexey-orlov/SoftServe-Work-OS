@@ -1,14 +1,13 @@
 // Set up this OS — five tabs (Business context / Templates / Integrations /
 // Auto-sync / Demo data), overall progress + per-tab counters, every signal
-// derived live from repo state. The Integrations tab is the full table: type,
-// purpose, system used (editable until live), status, comment, actions.
+// read live from the team's files. The guided-way strip spans the page (it
+// concerns the whole setup, not one tab); the Integrations tab is the full
+// table: type, purpose, system used (editable until live), status, comment,
+// actions. The Auto-sync tab renders the same modes component as the
+// Auto-sync page, so the two never drift.
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, mdRender, toast, modal, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
-// (icon is used for the lock on live systems and the Auto-sync link)
-
-const fileLink = (path, label) => el('a', {
-  class: 'btn small quiet', href: `#/file?path=${encodeURIComponent(path)}`, title: path,
-}, label || 'Open');
+import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
+import { buildModesCard, currentModeLabel } from '/views/autosync.js';
 
 const TABS = [
   ['business', 'Business context'],
@@ -25,7 +24,6 @@ export async function render(view, params) {
   setCrumbs([{ label: 'Set up this OS' }]);
 
   if (!o.setup || !o.setup.tabs) {
-    setCrumbs([{ label: 'Set up this OS' }]);
     view.append(el('div', { class: 'page' }, el('h1', {}, 'Set up this OS'), staleServerCard()));
     return;
   }
@@ -40,7 +38,8 @@ export async function render(view, params) {
       el('div', { style: 'width:220px' }, meter(prog.done, prog.total)),
     ),
     el('div', { class: 'sub' },
-      'Derived live from the repo — placeholders left, missing connections, the sync switch. This page updates as the repo changes.'),
+      'Everything here is read live from your team\'s files — it updates as things change.'),
+    guidedStrip(o),
   );
 
   const tabBar = el('div', { class: 'tabs' });
@@ -52,7 +51,7 @@ export async function render(view, params) {
 
   function tabButton(id, label) {
     const t = tabs[id] || {};
-    const counter = 'total' in t ? `${t.done}/${t.total}` : (id === 'demo' ? (t.present ? '1' : '–') : '');
+    const counter = 'total' in t ? `${t.done}/${t.total}` : (id === 'demo' ? (t.present ? '1' : '0') : '');
     const btn = el('button', {
       class: `tab ${id === active ? 'on' : ''}`,
       onclick: () => {
@@ -69,7 +68,7 @@ export async function render(view, params) {
 
   function draw() {
     content.replaceChildren();
-    if (active === 'business') drawBusiness(content, tabs.business, o);
+    if (active === 'business') drawBusiness(content, tabs.business);
     else if (active === 'templates') drawTemplates(content, tabs.templates);
     else if (active === 'integrations') drawIntegrations(content, tabs.integrations);
     else if (active === 'autosync') drawAutosync(content, tabs.autosync);
@@ -78,72 +77,83 @@ export async function render(view, params) {
   draw();
 }
 
+// ---- the guided-way strip — one line, spans the page -------------------------
+
+function guidedStrip(o) {
+  if (o.customization) {
+    return el('div', { class: 'setup-banner' },
+      icon('compass'),
+      el('span', { class: 'grow' },
+        el('b', {}, 'Guided setup in progress'), ' — pick up where you left off, or check what\'s already done.'),
+      el('a', { class: 'btn small quiet', href: `#/file?path=${encodeURIComponent(o.customization.path)}` }, 'Open status'),
+      cmdChip('/customize-os continue'),
+    );
+  }
+  return el('div', { class: 'setup-banner' },
+    icon('compass'),
+    el('span', { class: 'grow' },
+      el('b', {}, 'New here?'), ' One guided conversation in Claude Code walks through all of this in order and keeps its own progress.'),
+    cmdChip('/customize-os'),
+  );
+}
+
 // ---- business context -------------------------------------------------------
 
-function drawBusiness(box, tab, o) {
-  const split = el('div', { class: 'split' });
-  box.append(split);
-  const left = el('div', {});
-  const right = el('div', {});
-  split.append(left, right);
+function tidyDetail(s) {
+  return (s || '')
+    .replace(' / GAP markers', '')
+    .replace('Populated — no placeholders left.', 'Complete — nothing left to fill in.');
+}
 
-  const ctx = el('div', { class: 'card' },
-    el('h3', {}, 'Population status'),
+function drawBusiness(box, tab) {
+  const card = el('div', { class: 'card' },
+    el('h3', {}, 'How filled-in your context is'),
     el('div', { class: 'hint' },
-      'The steering files every strategic skill reads first. A file counts as populated when no bracketed placeholders or [GAP:] markers remain.'),
+      'The files every strategic skill reads first. A file is complete when nothing is left as a placeholder.'),
   );
   for (const r of (tab && tab.items) || []) {
-    ctx.append(el('div', { class: 'step' },
+    card.append(el('div', { class: 'step' },
       pill(r.state),
       el('div', { class: 'body' },
         el('div', { class: 'title' }, r.label),
-        el('div', { class: 'detail' }, r.detail)),
-      r.exists ? fileLink(r.path) : cmdChip('/customize-os'),
+        el('div', { class: 'detail' }, tidyDetail(r.detail))),
+      r.exists
+        ? el('a', { class: 'btn small quiet', href: `#/file?path=${encodeURIComponent(r.path)}`, title: r.path }, 'Open')
+        : cmdChip('/customize-os'),
     ));
   }
-  left.append(ctx);
-
-  if (o.customization) {
-    right.append(el('div', { class: 'card' },
-      el('div', { class: 'row' },
-        el('h3', { class: 'grow' }, 'Customization program'),
-        el('a', { class: 'btn small', href: `#/file?path=${encodeURIComponent(o.customization.path)}` }, 'Open full status')),
-      el('div', { class: 'hint' }, 'Where /customize-os left off.'),
-      mdRender(o.customization.text, o.customization.path),
-    ));
-  } else {
-    right.append(el('div', { class: 'card' },
-      el('h3', {}, 'The guided way'),
-      el('div', { class: 'hint', style: 'margin-bottom:8px' },
-        'One program walks all of this in order — context, initiatives, naming, templates, sync mode — and keeps its own resumable status:'),
-      cmdChip('/customize-os'),
-    ));
-  }
+  box.append(card);
 }
 
 // ---- templates --------------------------------------------------------------
 
+function tidyTemplateTitle(s) {
+  return (s || '').replace(/\[|\]/g, '');
+}
+function tidyTemplateDesc(s) {
+  // one plain sentence — the routing detail ("copies go to …") is for agents
+  return (s || '').split(';')[0].replace(/scaffold$/i, 'scaffold.');
+}
+
 function drawTemplates(box, tab) {
+  const done = tab && tab.customized;
   const card = el('div', { class: 'card' },
     el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, 'Templates — customization'),
+      el('h3', { class: 'grow' }, 'Document templates'),
+      done ? pill('done', 'Customized') : pill('todo', 'Defaults'),
       el('a', { class: 'btn small quiet', href: '#/templates' }, 'Open templates')),
     el('div', { class: 'hint' },
-      tab && tab.phase
-        ? `The /customize-os templates target reports: ${tab.phase}. House templates are derived from your real documents.`
-        : 'No house templates derived yet — /customize-os templates derives them from 2–4 of your real documents. Until then skills use the defaults below.'),
+      done
+        ? `Your house formats are in — derived from your own documents (program reports: ${tab.phase}).`
+        : el('span', {}, 'The blank documents skills start from. They work as shipped; deriving your house formats from 2–4 of your real documents makes every future document look like yours: ', cmdChip('/customize-os templates'))),
   );
+  const grid = el('div', { class: 'tiles', style: 'margin-top:10px' });
   for (const t of (tab && tab.items) || []) {
-    card.append(el('div', { class: 'step' },
-      pill(tab.customized ? 'done' : 'todo'),
-      el('div', { class: 'body' },
-        el('div', { class: 'title' }, t.title),
-        el('div', { class: 'detail' }, t.desc || t.name)),
-      fileLink(t.path),
-    ));
+    grid.append(el('a', { class: 'tile', href: `#/file?path=${encodeURIComponent(t.path)}`, title: t.path },
+      el('div', { class: 'row-t' }, icon('file'), el('span', { class: 'grow' }, tidyTemplateTitle(t.title))),
+      el('div', { class: 'd' }, tidyTemplateDesc(t.desc || t.name))));
   }
-  card.append(el('div', { class: 'step' },
-    el('div', {}), el('div', { class: 'body' }), cmdChip('/customize-os templates')));
+  card.append(grid);
   box.append(card);
 }
 
@@ -161,9 +171,7 @@ function drawIntegrations(box, tab) {
   const card = el('div', { class: 'card' },
     el('h3', {}, 'Integrations'),
     el('div', { class: 'hint' },
-      'Each connection is optional — every surface has a file route that works out of the box. '
-      + '"System used" is the plan until a real connection exists; once one is live the field locks to the connected tool. '
-      + 'Connections are set up in Claude Code (the action buttons hand you the prompt); file storage is recorded right here.'),
+      'Every connection is optional — each row has a route that works with plain files out of the box. Type the tool you plan to use under "System used"; once a real connection is live, the field locks to the connected tool.'),
   );
   const table = el('table', { class: 'integrations' },
     el('thead', {}, el('tr', {},
@@ -186,19 +194,20 @@ function integrationRow(r) {
 
   let sysCell;
   if (!r.systemEditable) {
-    sysCell = el('span', { class: 'sys-locked', title: 'Locked — a live connection names the real system' },
-      icon('lock'), r.system || '—');
+    sysCell = r.status === 'live'
+      ? el('span', { class: 'sys-locked', title: 'Locked — a live connection names the real system' }, icon('lock'), r.system || '—')
+      : el('span', { style: 'color:var(--muted)' }, '—');
   } else {
     const input = el('input', {
-      class: 'system', value: r.system || '', placeholder: 'e.g. Jira',
-      title: 'The tool you plan to use here — saved to toolchain.yaml (gated; saving is your approval)',
+      class: 'system', value: r.system || '', placeholder: r.example || 'tool name',
+      title: 'The tool you plan to use here — becomes the team\'s recorded plan when you save (this is your approval)',
     });
     const save = async () => {
       const v = input.value.trim();
       if (v === (r.system || '')) return;
       try {
         const res = await api.post('/api/toolchain', { surface: r.key, system: v });
-        toast(`Saved — ${r.type}: ${v || 'cleared'}${res.commit.committed ? ` · committed ${res.commit.sha}` : ''}`);
+        toast(`Saved — ${r.type}: ${v || 'cleared'}${res.commit.committed ? ' ✓' : ''}`);
         window.dispatchEvent(new Event('console:saved'));
       } catch (e) { toast(e.message, 'err'); input.value = r.system || ''; }
     };
@@ -216,7 +225,7 @@ function integrationRow(r) {
         onclick: () => promptModal({
           title: `${a.label} — ${r.type}`,
           prompt: a.prompt,
-          instruction: 'Open Claude Code (the desktop app or `claude` in a terminal), start a session in this repository, paste this prompt and follow the guided setup there:',
+          instruction: 'Open Claude Code, start a session in this repository, paste this prompt and follow the guided setup there:',
         }),
       }, a.label);
     } else {
@@ -230,7 +239,7 @@ function integrationRow(r) {
   }
 
   return el('tr', {},
-    el('td', { style: 'font-weight:600; white-space:nowrap' }, r.type),
+    el('td', { style: 'font-weight:600' }, r.type),
     el('td', { class: 'purpose' }, r.purpose),
     el('td', {}, sysCell),
     el('td', {}, el('span', { class: `pill ${cls}` }, label)),
@@ -244,16 +253,16 @@ function filesModal(r, a) {
     title: `Use file storage — ${r.type}`,
     body: el('div', {},
       el('div', { style: 'font-size:13.5px; margin-bottom:8px' },
-        'Records the file route as this team\'s standing choice, so skills use it without asking — a deliberate way of working, not a downgrade.'),
+        'Records working with plain files as this team\'s standing choice, so skills use that route without asking — a deliberate way of working, not a downgrade.'),
       el('div', { class: 'hint' }, r.comment),
       el('div', { class: 'hint', style: 'margin-top:6px' },
-        'Written to product-development/toolchain.yaml (gated — this click is your approval). Change it any time by connecting the real tool.'),
+        'This click is your approval; connect the real tool any time to change it.'),
     ),
     actions: [{
       label: 'Use file storage', kind: 'primary',
       onclick: async (close) => {
         const res = await api.post('/api/toolchain', { surface: r.key, approach: a.approach });
-        toast(`${r.type}: file-based${res.commit.committed ? ` · committed ${res.commit.sha}` : ''}`);
+        toast(`${r.type}: file-based${res.commit.committed ? ' ✓' : ''}`);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
@@ -262,19 +271,23 @@ function filesModal(r, a) {
   });
 }
 
-// ---- auto-sync --------------------------------------------------------------
+// ---- auto-sync — the same modes component as the Auto-sync page -------------
 
-function drawAutosync(box, tab) {
-  const a = (tab && tab.summary) || {};
-  box.append(el('div', { class: 'card' },
-    el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, 'Auto-sync'),
-      el('span', { class: `pill ${a.on ? 'ok' : 'todo'}` }, a.on ? `On — ${a.mode}` : 'Off')),
-    el('div', { class: 'hint' }, a.label || ''),
-    el('div', { class: 'hint', style: 'margin-top:10px' },
-      'The full explanation and the mode switch live on their own page:'),
-    el('a', { class: 'btn small', href: '#/autosync' }, icon('refresh'), 'Open Auto-sync'),
-  ));
+async function drawAutosync(box, tab) {
+  const holder = el('div', {}, spinner());
+  box.append(holder);
+  try {
+    const d = await api.get('/api/governance');
+    holder.replaceChildren(
+      el('div', { class: 'row', style: 'margin:2px 0 12px' },
+        el('span', { class: `pill ${d.autoSync.on ? 'ok' : 'todo'}` }, currentModeLabel(d.autoSync)),
+        el('span', { class: 'grow' }),
+        el('a', { class: 'btn small quiet', href: '#/autosync' }, 'Open the full page')),
+      buildModesCard(d),
+    );
+  } catch (e) {
+    holder.replaceChildren(el('div', { class: 'card' }, el('div', { class: 'hint' }, e.message)));
+  }
 }
 
 // ---- demo data --------------------------------------------------------------
@@ -288,8 +301,8 @@ function drawDemo(box, tab) {
     el('div', { class: 'hint' }, t.detail || ''),
     el('div', { class: 'hint', style: 'margin:10px 0 6px' },
       t.present
-        ? 'Everything synthetic is recorded in the manifest; removal reverses it exactly:'
-        : 'Synthetic, internally consistent demo content — an approved scenario run through the real pipeline. Optional; not counted in setup progress:'),
+        ? 'Everything synthetic is recorded in a manifest; removal reverses it exactly:'
+        : 'Optional: a small, clearly marked set of realistic example content for demos — generated through the same pipeline real work uses, removable in one step. Not counted in setup progress:'),
     el('div', { class: 'chips' },
       t.present ? cmdChip('/demo-data status') : null,
       t.present ? cmdChip('/demo-data remove') : cmdChip('/demo-data'),

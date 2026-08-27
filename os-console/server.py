@@ -133,7 +133,7 @@ ROUTES = {
     'GET /api/library': lambda q, body: library.dir_info(q.get('path') or ''),
     'GET /api/file': _file_info,
     'PUT /api/file': _file_save,
-    'GET /api/steering': lambda q, body: steering.page_data(),
+    'GET /api/features': lambda q, body: steering.feature_index(),
     'POST /api/toolchain': lambda q, body: actions.toolchain_set(
         body.get('surface'), body.get('approach'), body.get('system'), policy.load()['settings']),
     'POST /api/policy/gated': _gated_edit,
