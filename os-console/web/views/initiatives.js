@@ -102,14 +102,14 @@ function list(view, items) {
       title: 'New initiative',
       body: el('div', {},
         field('Title', titleIn),
-        field('Slug (immutable — becomes the page name and the id everywhere)', slugIn),
-        el('div', { class: 'hint' }, 'Creates the living page from the house template and registers it in the folder navigation — one commit. Link it to a feature in feature-index.yaml when the feature exists (gated edit).'),
+        field('Short name (permanent — becomes the page\'s address everywhere)', slugIn),
+        el('div', { class: 'hint' }, 'Creates the living page from the house template and registers it in the folder navigation — saved and shared in one step. Link it to a feature on the Features page when the feature exists.'),
       ),
       actions: [{
         label: 'Create', kind: 'primary',
         onclick: async (close) => {
           const r = await api.post('/api/initiatives/create', { slug: slugIn.value.trim(), title: titleIn.value.trim() });
-          toast(`Created ${r.page.slug}${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+          toast(`Created ${r.page.slug}${r.commit.committed ? ' ✓' : ''}`);
           window.dispatchEvent(new Event('console:saved'));
           close();
           location.hash = `#/initiative?slug=${encodeURIComponent(r.page.slug)}`;
@@ -271,13 +271,13 @@ function instructionsModal(i) {
   modal({
     title: `Instructions — ${i.slug}`,
     body: el('div', {},
-      field('Initiative-specific instructions', ta, 'Written to the page\'s ## Instructions section; clear the text to remove.'),
+      field('Initiative-specific instructions', ta, 'Written to the page\'s Instructions section; clear the text to remove.'),
       counter),
     actions: [{
       label: 'Save', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/instructions', { slug: i.slug, text: ta.value.trim() });
-        toast(`Instructions ${ta.value.trim() ? 'saved' : 'cleared'}${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        toast(`Instructions ${ta.value.trim() ? 'saved' : 'cleared'}${r.commit.committed ? ' ✓' : ''}`);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
@@ -308,7 +308,7 @@ function sourcesCard(i) {
       : { label: s.label, href: s.href, note: s.note }));
     const r = await api.post('/api/initiatives/sources', { slug: i.slug, items: payload });
     items = (r.page.sources || []).map((s) => ({ ...s }));
-    toast(`Sources saved${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+    toast(`Sources saved${r.commit.committed ? ' ✓' : ''}`);
     window.dispatchEvent(new Event('console:saved'));
     draw();
   }
@@ -371,7 +371,7 @@ function sourcesCard(i) {
   }
 
   function addSourceModal() {
-    const hrefIn = el('input', { class: 'mono', placeholder: 'https://… or a repo path' });
+    const hrefIn = el('input', { class: 'mono', placeholder: 'https://… or a path in the Work OS' });
     const labelIn = el('input', { placeholder: 'Short name (defaults to the file name)' });
     const noteIn = el('input', { placeholder: 'optional — what lives there' });
     modal({
@@ -383,7 +383,7 @@ function sourcesCard(i) {
             class: 'btn small quiet',
             onclick: () => filePicker({ title: 'Pick a file', onPick: (p) => { hrefIn.value = p; } }),
           }, 'Pick a file')),
-        'A SharePoint / Drive / Confluence URL, or a path inside this repository (folders welcome — type the folder path).'),
+        'A SharePoint / Drive / Confluence link, or a path inside the Work OS (folders welcome — type the folder path).'),
         field('Label', labelIn),
         field('Note', noteIn),
       ),
@@ -410,12 +410,12 @@ function statusModal(i) {
     title: `Status — ${i.slug}`,
     body: el('div', {},
       field('New status', sel),
-      field('Status note', note, 'Written into the page\'s _status line; _updated is set to today.')),
+      field('Status note', note, 'Written into the page\'s status line; the updated date is set to today.')),
     actions: [{
       label: 'Update', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/status', { slug: i.slug, status: sel.value, note: note.value.trim() });
-        toast(`Status → ${sel.value}${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        toast(`Status → ${sel.value}${r.commit.committed ? ' ✓' : ''}`);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
@@ -435,7 +435,7 @@ function attachModal(i, path) {
       label: 'Attach', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/attach', { slug: i.slug, path, label: label.value.trim() });
-        toast(`Attached${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        toast(`Attached${r.commit.committed ? ' ✓' : ''}`);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();

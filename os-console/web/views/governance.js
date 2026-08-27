@@ -46,7 +46,7 @@ export async function render(view) {
   const addBtn = el('button', { class: 'btn small primary', onclick: () => addModal(d) }, icon('plus'), 'Add rule');
   const card = el('div', { class: 'card' },
     el('div', { class: 'row' },
-      el('h3', { class: 'grow' }, `Protected today — ${d.protected.length} rules`),
+      el('h3', { class: 'grow' }, `Gated today — ${d.protected.length} rules`),
       LITE ? liteLock(addBtn) : addBtn),
   );
   let lastHeading = null;
@@ -98,7 +98,7 @@ export async function render(view) {
       el('span', { class: 'val grow' }, d.steward || '—'),
       d.stewardPlaceholder ? pill('todo', 'Placeholder') : pill('done', 'Set')),
     d.provider === 'azure' ? el('div', { class: 'hint', style: 'margin-top:8px' },
-      'Azure DevOps keeps its own copy of this list in the branch policy — refresh the path filter after changing it here.') : null,
+      'Azure DevOps keeps its own copy of this list in its approval settings — an admin refreshes it there after changing it here.') : null,
   ));
 
   // ---- audit — the weekly health check on the same rules ----
@@ -121,7 +121,7 @@ function addModal(d) {
   const groupSel = el('select', {}, (d.groups || []).map((g, i) =>
     el('option', { value: g.id, selected: i === 0 }, g.label)));
   modal({
-    title: 'Add a protected rule',
+    title: 'Add a gated rule',
     body: el('div', {},
       field('Path or folder', el('div', { class: 'row' },
         el('div', { class: 'grow' }, patternIn),
@@ -129,7 +129,7 @@ function addModal(d) {
           class: 'btn small quiet',
           onclick: () => filePicker({ title: 'Pick the file to protect', onPick: (p) => { patternIn.value = p; } }),
         }, 'Pick a file')),
-      'A folder path protects the whole folder.'),
+      'A folder path gates the whole folder.'),
       field('Why', noteIn, 'One line — people see it every time the approval prompt fires.'),
       field('Group', groupSel, 'Steering files = team context; System rules = the OS itself.'),
     ),
@@ -139,7 +139,7 @@ function addModal(d) {
         const r = await api.post('/api/policy/gated', {
           op: 'add', pattern: patternIn.value.trim(), note: noteIn.value.trim(), group: groupSel.value,
         });
-        toast(`Protected ${r.pattern}${r.codeowners && !r.codeowners.ok ? ` · ${r.codeowners.note}` : ''}`);
+        toast(`Gated ${r.pattern}${r.codeowners && !r.codeowners.ok ? ` · ${r.codeowners.note}` : ''}`);
         if (r.azureReminder) toast(r.azureReminder);
         window.dispatchEvent(new Event('console:saved'));
         close();
@@ -151,17 +151,17 @@ function addModal(d) {
 
 function removeModal(p) {
   modal({
-    title: 'Remove protected rule',
+    title: 'Remove the gate',
     body: el('div', {},
       el('div', { class: 'path', style: 'margin-bottom:8px' }, p.pattern),
       el('div', { class: 'hint' },
         'From now on this path changes freely — agents stop asking, and changes reach the team without review.'),
     ),
     actions: [{
-      label: 'Remove protection', kind: '',
+      label: 'Remove the gate', kind: '',
       onclick: async (close) => {
         const r = await api.post('/api/policy/gated', { op: 'remove', pattern: p.pattern });
-        toast(`No longer protected: ${r.pattern}`);
+        toast(`No longer gated: ${r.pattern}`);
         if (r.azureReminder) toast(r.azureReminder);
         window.dispatchEvent(new Event('console:saved'));
         close();

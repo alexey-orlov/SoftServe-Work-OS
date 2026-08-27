@@ -27,7 +27,7 @@ export async function render(view) {
   }
   if (!fi.exists) {
     page.append(el('div', { class: 'card' },
-      el('div', { class: 'empty' }, 'No feature-index.yaml in this instance.')));
+      el('div', { class: 'empty' }, 'The feature index has not been created in this instance yet.')));
     return;
   }
   if (!fi.areas.length) {

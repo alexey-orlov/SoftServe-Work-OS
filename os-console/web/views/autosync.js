@@ -15,12 +15,12 @@ const MODES = [
   },
   {
     id: 'direct', title: 'On — shared right away', tag: 'direct',
-    what: 'Every time Claude finishes a piece of work, the everyday files reach the whole team automatically — usually within a minute. Protected files are the exception: they wait for you to release them on purpose, so nothing important changes without a person behind it.',
+    what: 'Every time Claude finishes a piece of work, the everyday files reach the whole team automatically — usually within a minute. Gated files are the exception: they wait for you to release them on purpose, so nothing important changes without a person behind it.',
     fit: 'Best for small teams that want zero ceremony — everyone always sees the latest.',
   },
   {
     id: 'pr', title: 'On — through approvals', tag: 'pr',
-    what: 'Everyday work still reaches the team by itself, in small recorded batches. Protected files travel only through an approval request that a Work OS admin signs off — the platform enforces it, not good intentions.',
+    what: 'Everyday work still reaches the team by itself, in small recorded batches. Gated files travel only through an approval request that a Work OS admin signs off — the platform enforces it, not good intentions.',
     fit: 'Best when your shared workspace is set to require approvals — the usual choice for larger teams.',
   },
 ];
@@ -39,7 +39,7 @@ export function buildModesCard(d) {
     el('h3', {}, 'Modes'),
     el('div', { class: 'hint' },
       LITE ? 'Switching needs the full console — or ask Claude in Claude Code.'
-        : 'One click switches — the console saves and shares the change for you.'));
+        : 'One click switches — the console saves the change and shares it when it can; if a step needs an admin, it hands you the exact next step.'));
   for (const m of MODES) {
     const isCurrent = m.id === current;
     const btn = el('button', {
@@ -78,7 +78,7 @@ export async function render(view) {
       el('h1', { class: 'grow', style: 'margin:0' }, 'Auto-sync'),
       el('span', { class: `pill ${a.on ? 'ok' : 'todo'}` }, currentModeLabel(a))),
     el('div', { class: 'sub' },
-      'Auto-sync decides whether the work you and Claude produce reaches the team by itself, and how. Protected files always wait for a person — auto-sync never shares those on its own.'),
+      'Auto-sync decides whether the work you and Claude produce reaches the team by itself, and how. Gated files — the protected ones — always wait for a person; auto-sync never shares those on its own.'),
   );
 
   const split = el('div', { class: 'split' });
@@ -92,7 +92,7 @@ export async function render(view) {
   right.append(el('div', { class: 'card' },
     el('h3', {}, 'What stays protected'),
     el('div', { class: 'hint' },
-      `Whatever the mode, the ${d.gated.length} protected rules hold: those files change only with a person's yes, and are never shared without one. `,
+      `Whatever the mode, the ${d.gated.length} gated rules hold: those files change only with a person's yes, and are never shared without one. `,
       el('a', { href: '#/governance' }, 'Manage the list'), '.'),
   ));
 
@@ -126,8 +126,8 @@ function switchModal(m, d) {
   const a = d.autoSync;
   const consequences = {
     off: 'From the next piece of work on, nothing is shared automatically — work stays on your computer until you ask Claude to share it.',
-    direct: 'From the next piece of work on, everyday files reach the team by themselves; protected files wait for you.',
-    pr: 'From the next piece of work on, everyday files reach the team in small recorded batches; protected files wait for an admin\'s approval. Fully enforced when your shared workspace requires approvals.',
+    direct: 'From the next piece of work on, everyday files reach the team by themselves; gated files wait for you.',
+    pr: 'From the next piece of work on, everyday files reach the team in small recorded batches; gated files wait for an admin\'s approval. Fully enforced when your shared workspace requires approvals.',
   };
   modal({
     title: `Switch auto-sync — ${m.title}`,
@@ -135,7 +135,7 @@ function switchModal(m, d) {
       el('div', { style: 'font-size:13.5px; margin-bottom:8px' }, m.what),
       el('div', { class: 'hint' }, consequences[m.id]),
       el('div', { class: 'hint', style: 'margin-top:6px' },
-        'This changes one protected settings file — this click is your approval. The console saves and shares the change for you.'),
+        'This changes one gated settings file — this click is your approval. The console saves it and shares it when it can.'),
     ),
     actions: [{
       label: 'Switch', kind: 'primary',

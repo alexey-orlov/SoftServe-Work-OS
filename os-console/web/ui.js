@@ -146,7 +146,7 @@ export function promptModal({ title, prompt, instruction }) {
     title: title || 'Run this in Claude Code',
     body: el('div', {},
       el('div', { class: 'hint', style: 'margin-bottom:8px' },
-        instruction || 'Open Claude Code (the desktop app or `claude` in a terminal), start a session in this repository, paste this prompt and follow up there:'),
+        instruction || 'Open Claude Code (the desktop app or `claude` in a terminal), start a session in this Work OS folder, paste this prompt and follow up there:'),
       el('pre', { class: 'prompt-box' }, prompt),
       el('div', { class: 'row', style: 'margin-top:10px; justify-content:flex-end' }, copyBtn),
     ),

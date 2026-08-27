@@ -171,7 +171,7 @@ function drawIntegrations(box, tab) {
   const card = el('div', { class: 'card' },
     el('h3', {}, 'Integrations'),
     el('div', { class: 'hint' },
-      'Every connection is optional — each row has a route that works with plain files out of the box. Type the tool you plan to use under "System used"; once a real connection is live, the field locks to the connected tool.'),
+      'Every connection is optional — each row has a way of working with plain files out of the box. Type the tool you plan to use under "System used"; once a real connection is live, the field locks to the connected tool.'),
   );
   const table = el('table', { class: 'integrations' },
     el('thead', {}, el('tr', {},
@@ -184,7 +184,7 @@ function drawIntegrations(box, tab) {
   card.append(el('div', { class: 'table-scroll' }, table));
   if (tab && tab.other && tab.other.length) {
     card.append(el('div', { class: 'hint', style: 'margin-top:8px' },
-      `Also connected (no standing surface): ${tab.other.join(', ')}.`));
+      `Also connected (not tied to a row above): ${tab.other.join(', ')}.`));
   }
   box.append(card);
 }
@@ -225,7 +225,7 @@ function integrationRow(r) {
         onclick: () => promptModal({
           title: `${a.label} — ${r.type}`,
           prompt: a.prompt,
-          instruction: 'Open Claude Code, start a session in this repository, paste this prompt and follow the guided setup there:',
+          instruction: 'Open Claude Code, start a session in this Work OS folder, paste this prompt and follow the guided setup there:',
         }),
       }, a.label);
     } else {
@@ -253,7 +253,7 @@ function filesModal(r, a) {
     title: `Use file storage — ${r.type}`,
     body: el('div', {},
       el('div', { style: 'font-size:13.5px; margin-bottom:8px' },
-        'Records working with plain files as this team\'s standing choice, so skills use that route without asking — a deliberate way of working, not a downgrade.'),
+        'Records working with plain files as this team\'s standing choice, so skills work that way without asking — deliberate, not a downgrade.'),
       el('div', { class: 'hint' }, r.comment),
       el('div', { class: 'hint', style: 'margin-top:6px' },
         'This click is your approval; connect the real tool any time to change it.'),

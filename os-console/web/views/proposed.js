@@ -39,7 +39,7 @@ export async function render(view, params) {
         },
       }, icon('refresh'), 'Re-check')),
     el('div', { class: 'sub' },
-      'What is waiting for a person. Approving or rejecting acts on the git host as you, with your own account — the host still enforces who may land what.'),
+      'What is waiting for a person. Approving or rejecting acts on GitHub or Azure DevOps as you, with your own account — the platform still enforces who may approve what.'),
   );
 
   const tabBar = el('div', { class: 'tabs' });
@@ -78,7 +78,7 @@ export async function render(view, params) {
 function cannotAct(perms) {
   if (LITE) return 'Read-only snapshot — run the full console to act on pull requests';
   if (perms && perms.canMerge === false) {
-    return `Your ${perms.provider === 'azure' ? 'Azure' : 'git host'} account${perms.login ? ` (${perms.login})` : ''} cannot merge into this repository — ask your OS admin`;
+    return `Your ${perms.provider === 'azure' ? 'Azure' : 'git host'} account${perms.login ? ` (${perms.login})` : ''} cannot approve changes into this workspace — ask your OS admin`;
   }
   return null;
 }
@@ -101,7 +101,7 @@ function prRow(pr, perms) {
     el('span', { class: 'tag', title: 'author' }, pr.author),
     el('span', { style: 'color:var(--muted); font-size:12px; white-space:nowrap' }, timeAgo(pr.createdAt)),
     mk('Approve', 'primary', () => approvePrModal(pr, isGated),
-      'Approve and merge, as you, via the platform CLI'),
+      'Approve and accept the change, as you, with your own sign-in'),
     mk('Reject', '', () => rejectPrModal(pr), 'Close with a comment posted to the PR'),
     el('button', {
       class: 'btn small quiet', title: 'Hand this PR to Claude Code to adjust it with you',
@@ -112,20 +112,20 @@ function prRow(pr, perms) {
 
 function approvePrModal(pr, isGated) {
   modal({
-    title: `Approve & merge #${pr.number}`,
+    title: `Approve #${pr.number}`,
     body: el('div', {},
       el('div', { style: 'font-size:13.5px; margin-bottom:6px' }, pr.title),
       el('div', { class: 'hint' },
-        'Posts your approving review and merges, using your own CLI login. '
-        + (isGated ? 'This is a gated change — your approval must satisfy the admin rule; if it does not, the host refuses and the message is shown here as-is.'
-          : 'If the host refuses (checks, reviews, permissions), the message is shown here as-is.')),
+        'Posts your approval and brings the change in, using your own GitHub / Azure DevOps sign-in. '
+        + (isGated ? 'This is a gated change — your approval must satisfy the admin rule; if it does not, the platform refuses and its message is shown here word for word.'
+          : 'If the platform refuses (checks, reviews, permissions), its message is shown here word for word.')),
     ),
     actions: [{
-      label: 'Approve & merge', kind: 'primary',
+      label: 'Approve', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/pr/action', { number: pr.number, action: 'approve' });
         close();
-        stepsModal(`#${pr.number} — approve & merge`, r);
+        stepsModal(`#${pr.number} — approve`, r);
       },
     }],
   });
@@ -168,7 +168,7 @@ function stepsModal(title, r) {
           el('div', { class: 'title' }, s.step),
           el('div', { class: 'detail' }, s.note || '')))),
       el('div', { class: 'hint', style: 'margin-top:8px' },
-        r.ok ? 'Done.' : 'Partial — the failing step\'s message comes from the git host, verbatim.'),
+        r.ok ? 'Done.' : 'Partial — the failing step\'s message comes from GitHub / Azure DevOps, word for word.'),
     ),
   });
   if (r.ok) setTimeout(() => location.reload(), 900);
@@ -183,7 +183,7 @@ function drawTeam(box, d) {
       el('h3', { class: 'grow' }, 'Waiting for a decision'),
       p.provider !== 'none' ? el('span', { class: 'tag' }, p.provider) : null),
     el('div', { class: 'hint' },
-      'Open pull requests by people. Gated ones reach main only through an approval that satisfies the admin rule.'),
+      'Open pull requests by people. Gated ones reach the team\'s shared version only through an approval that satisfies the admin rule.'),
   );
   if (d.permissions && d.permissions.canMerge === false) {
     card.append(el('div', { class: 'hint', style: 'margin-top:2px' },
@@ -192,7 +192,7 @@ function drawTeam(box, d) {
   if (!p.available) {
     card.append(el('div', { class: 'empty' }, p.note || 'PR listing unavailable.'));
   } else if (!p.items.length) {
-    card.append(el('div', { class: 'empty' }, 'Nothing waiting — everyday work self-merges; gated changes arrive via /propose.'));
+    card.append(el('div', { class: 'empty' }, 'Nothing waiting for a decision.'));
   } else {
     for (const pr of p.items) card.append(prRow(pr, d.permissions));
   }
@@ -240,7 +240,7 @@ function drawAuto(box, d) {
   if (d.auto.botPrs.length) {
     const botCard = el('div', { class: 'card' },
       el('h3', {}, `Pull requests by automation (${d.auto.botPrs.length})`),
-      el('div', { class: 'hint' }, 'Bot-authored PRs (sync drains, CI). They normally merge themselves — one lingering here may need a look.'),
+      el('div', { class: 'hint' }, 'Opened by the system itself (automatic syncing, checks). They normally complete on their own — one lingering here may need a look.'),
     );
     for (const pr of d.auto.botPrs) botCard.append(prRow(pr, d.permissions));
     box.append(botCard);
@@ -248,19 +248,19 @@ function drawAuto(box, d) {
 }
 
 function rejectProposalModal(pr) {
-  const comment = el('textarea', { rows: 3, placeholder: 'Why this is rejected — recorded in the commit message' });
+  const comment = el('textarea', { rows: 3, placeholder: 'Why this is rejected — kept on record with the change' });
   modal({
     title: `Reject proposal`,
     body: el('div', {},
       el('div', { class: 'path', style: 'margin-bottom:8px' }, pr.path),
-      field('Comment (required)', comment, 'Deletes the proposal file; the comment goes into the commit message for the record.'),
+      field('Comment (required)', comment, 'Deletes the proposal; your comment stays on record with the change.'),
     ),
     actions: [{
       label: 'Reject & delete', kind: '',
       onclick: async (close) => {
         if (!comment.value.trim()) { toast('A rejection needs a comment for the record', 'err'); return false; }
         const r = await api.post('/api/proposals/reject', { path: pr.path, comment: comment.value.trim() });
-        toast(`Rejected${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        toast('Rejected — recorded ✓');
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
