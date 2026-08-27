@@ -1,15 +1,16 @@
-# Pull requests adapter — open PRs waiting for review and merged-PR leaderboards.
-# Shells the platform CLI read-only (gh for GitHub origins, az for Azure Repos),
-# detected from the git origin like the pr-flow hook does. Results are cached
-# (TTL below); missing/unauthenticated CLIs degrade to an honest note, never an error.
+# Pull requests adapter — open PRs waiting for review, plus the Home most-active
+# leaderboard. PR lists shell the platform CLI read-only (gh for GitHub origins,
+# az for Azure Repos), detected from the git origin like the pr-flow hook does;
+# results are cached (TTL below); missing/unauthenticated CLIs degrade to an honest
+# note, never an error. The leaderboard reads local git history instead — it must
+# work the same whether work lands as direct pushes or through pull requests.
 import json
 import re
 import shutil
 import subprocess
 import time
-from datetime import datetime
 
-from .. import repo
+from .. import gitlib, repo
 
 TTL_MS = 5 * 60 * 1000
 _cache = {'t': 0, 'data': None}
@@ -45,13 +46,21 @@ def is_bot_login(login):
     return bool(re.search(r'\[bot\]$|-bot$|^bot-', login or '', re.I))
 
 
+def is_bot_author(name, email):
+    """CI and agent identities — the leaderboard is people-only. A change a person
+    makes through an agent session still carries the person as commit author and
+    counts; only commits authored AS the agent/CI identity itself are filtered."""
+    e = (email or '').lower()
+    return (is_bot_login(name) or e == 'noreply@anthropic.com'
+            or e.startswith('actions@') or '[bot]@' in e)
+
+
 def fetch_github():
     open_r = sh('gh', ['pr', 'list', '--state', 'open', '--limit', '50',
                        '--json', 'number,title,author,createdAt,url,isDraft'])
     if not open_r['ok']:
-        return {'available': False, 'provider': 'github', 'open': [], 'merged': [],
+        return {'available': False, 'provider': 'github', 'open': [],
                 'note': 'gh CLI unavailable or not authenticated — run `gh auth login` to see pull requests here'}
-    merged_r = sh('gh', ['pr', 'list', '--state', 'merged', '--limit', '100', '--json', 'author,mergedAt'])
     open_prs = []
     for p in json.loads(open_r['out']):
         author = p.get('author') or {}
@@ -61,23 +70,14 @@ def fetch_github():
             'author': author.get('login') or '?',
             'isBot': bool(author and (author.get('is_bot') or is_bot_login(author.get('login')))),
         })
-    merged = []
-    if merged_r['ok']:
-        for p in json.loads(merged_r['out']):
-            author = p.get('author') or {}
-            merged.append({
-                'author': author.get('login') or None, 'mergedAt': p.get('mergedAt'),
-                'isBot': bool(author and (author.get('is_bot') or is_bot_login(author.get('login')))),
-            })
-    return {'available': True, 'provider': 'github', 'note': None, 'open': open_prs, 'merged': merged}
+    return {'available': True, 'provider': 'github', 'note': None, 'open': open_prs}
 
 
 def fetch_azure():
     open_r = sh('az', ['repos', 'pr', 'list', '--status', 'active', '-o', 'json'])
     if not open_r['ok']:
-        return {'available': False, 'provider': 'azure', 'open': [], 'merged': [],
+        return {'available': False, 'provider': 'azure', 'open': [],
                 'note': 'az CLI unavailable — `az login` + `az extension add --name azure-devops` to see pull requests here'}
-    merged_r = sh('az', ['repos', 'pr', 'list', '--status', 'completed', '--top', '100', '-o', 'json'])
 
     def map_pr(p):
         created_by = p.get('createdBy') or {}
@@ -92,7 +92,6 @@ def fetch_azure():
     return {
         'available': True, 'provider': 'azure', 'note': None,
         'open': [map_pr(p) for p in json.loads(open_r['out'])],
-        'merged': [map_pr(p) for p in json.loads(merged_r['out'])] if merged_r['ok'] else [],
     }
 
 
@@ -106,21 +105,11 @@ def data(force):
     elif kind == 'azure':
         d = fetch_azure()
     else:
-        d = {'available': False, 'provider': kind, 'open': [], 'merged': [],
+        d = {'available': False, 'provider': kind, 'open': [],
              'note': 'no git origin configured' if kind == 'none' else 'PR listing supports GitHub and Azure Repos origins'}
     _cache['t'] = now_ms
     _cache['data'] = d
     return d
-
-
-def _parse_iso_ms(s):
-    if not s:
-        return None
-    try:
-        cleaned = re.sub(r'\.(\d{6})\d+', r'.\1', s.replace('Z', '+00:00'))
-        return datetime.fromisoformat(cleaned).timestamp() * 1000
-    except Exception:
-        return None
 
 
 def open_prs(force):
@@ -268,22 +257,39 @@ def _azure_comment(n, comment):
 
 
 def leaders(force):
-    """Merged-PR leaderboards over the last 7 / 30 days — humans only."""
-    d = data(force)
-    out = {'available': d['available'], 'provider': d['provider'], 'note': d['note'], 'week': [], 'month': []}
-    if not d['available']:
-        return out
-    now_ms = time.time() * 1000
-    for key, span in (('week', 7 * 864e5), ('month', 30 * 864e5)):
-        counts = {}
-        for m in d['merged']:
-            if not m['author'] or m['isBot'] or not m['mergedAt']:
-                continue
-            merged_ms = _parse_iso_ms(m['mergedAt'])
-            if merged_ms is None or now_ms - merged_ms > span:
-                continue
-            counts[m['author']] = counts.get(m['author'], 0) + 1
+    """Most-active leaderboards over the last 7 / 30 days — humans only, counted
+    from the commits in local history. Credit goes to the commit AUTHOR (whoever
+    produced the change); merge commits are skipped so approving or landing someone
+    else's work never counts. Author-based counting works the same whether the team
+    lands work as direct pushes or through pull requests, and needs no platform CLI.
+    `force` is kept for route compatibility — history is read fresh on every call."""
+    r = gitlib.git(['log', '--since=30 days ago', '--no-merges',
+                    '--pretty=format:%ct%x1f%an%x1f%ae'])
+    if not r['ok']:
+        return {'available': False, 'provider': 'git', 'week': [], 'month': [],
+                'note': 'git history unavailable (%s)' % (r.get('err') or '')[:120]}
+    now_s = time.time()
+    week = {}
+    month = {}
+    for line in r['out'].split('\n'):
+        parts = line.split('\x1f')
+        if len(parts) != 3:
+            continue
+        ts, name, email = parts
+        try:
+            age_s = now_s - int(ts)
+        except ValueError:
+            continue
+        if is_bot_author(name, email) or age_s > 30 * 86400:
+            continue
+        month[name] = month.get(name, 0) + 1
+        if age_s <= 7 * 86400:
+            week[name] = week.get(name, 0) + 1
+
+    def top(counts):
         rows = [{'login': login, 'count': count} for login, count in counts.items()]
-        rows.sort(key=lambda r: r['count'], reverse=True)
-        out[key] = rows[:5]
-    return out
+        rows.sort(key=lambda row: row['count'], reverse=True)
+        return rows[:5]
+
+    return {'available': True, 'provider': 'git', 'note': None,
+            'week': top(week), 'month': top(month)}

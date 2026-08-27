@@ -4,8 +4,9 @@ A local web UI over this repo — friendly navigation, initiative grouping (with
 drag-prioritized sources and per-initiative instructions), the Features page (the
 feature-index as a navigable product map, primary nav next to Initiatives), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
-auto-sync switch (PM-language, no git jargon on that page), actionable proposed-changes
-queues, and the activity log, without touching the underlying folder structure. Library
+auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
+actionable proposed-changes queues, and the activity log, without touching the
+underlying folder structure. Library
 tile groups and the Gated-files group headings share one vocabulary (Steering files /
 System rules), with a quiet color code per Library group. Zero install: it runs on the Python 3.8+ standard library —
 no packages, no package manager, nothing beyond the interpreter — with the frontend's one
@@ -78,10 +79,14 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
   verdict verbatim — the platform stays the enforcer. Proposal rejection deletes the
   file with the comment in the commit message; proposal approval hands the apply job to
   Claude Code (freeform prose is not machine-applied).
-- **Pull requests & leaderboards** (Proposed changes, Home) shell the platform CLI
-  read-only — `gh` for GitHub origins, `az` for Azure Repos, detected from the git
-  origin — cached for 5 minutes. A missing or unauthenticated CLI degrades to an
-  honest note, never an error.
+- **Pull requests** (Proposed changes) shell the platform CLI read-only — `gh` for
+  GitHub origins, `az` for Azure Repos, detected from the git origin — cached for
+  5 minutes. A missing or unauthenticated CLI degrades to an honest note, never an
+  error. The Home **most-active leaderboard** reads local git history instead:
+  changes are credited to the commit author (whoever produced the change — never
+  who approved or merged it), merge commits are skipped, bot/CI/agent identities
+  filtered — so it counts the same whether work lands as direct pushes or through
+  pull requests, and needs no platform CLI.
 - **Live refresh.** The server watches the repo (a polling scanner, `.git` noise
   filtered to ref/HEAD moves) and streams change events over SSE (`/api/events`);
   open views re-render automatically, within ~2s of a change. Auto-refresh holds back while the person is typing or has a

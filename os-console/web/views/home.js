@@ -56,11 +56,11 @@ export async function render(view) {
     ),
   ));
 
-  // PR leaders — humans, by merged PRs; loads async
+  // Activity leaders — humans, by changes each person authored; loads async
   const leadersCard = el('div', { class: 'card' },
-    el('h3', {}, 'Most active — merged PRs'),
-    el('div', { class: 'hint' }, 'People only (bots filtered), by pull requests merged on the shared repo.'),
-    el('div', { class: 'spin', style: 'padding:14px' }, 'Checking the repo host…'),
+    el('h3', {}, 'Most active'),
+    el('div', { class: 'hint' }, 'People only (bots filtered), by changes landed on the shared repo — credited to whoever made the change, not who approved it.'),
+    el('div', { class: 'spin', style: 'padding:14px' }, 'Reading the history…'),
   );
   left.append(leadersCard);
 
@@ -102,17 +102,17 @@ export async function render(view) {
   api.get('/api/leaders').then((L) => {
     const body = [];
     if (!L.available) {
-      body.push(el('div', { class: 'hint', style: 'margin:0' }, L.note || 'Repo host CLI not available.'));
+      body.push(el('div', { class: 'hint', style: 'margin:0' }, L.note || 'History not available.'));
     } else if (!L.week.length && !L.month.length) {
-      body.push(el('div', { class: 'hint', style: 'margin:0' }, 'No merged PRs in the last 30 days.'));
+      body.push(el('div', { class: 'hint', style: 'margin:0' }, 'No changes landed in the last 30 days.'));
     } else {
       body.push(el('div', { class: 'grid cols-2' },
         leaderCol('This week', L.week),
         leaderCol('This month', L.month)));
     }
     leadersCard.replaceChildren(
-      el('h3', {}, 'Most active — merged PRs'),
-      el('div', { class: 'hint' }, 'People only (bots filtered), by pull requests merged on the shared repo.'),
+      el('h3', {}, 'Most active'),
+      el('div', { class: 'hint' }, 'People only (bots filtered), by changes landed on the shared repo — credited to whoever made the change, not who approved it.'),
       ...body);
   }).catch(() => {
     leadersCard.querySelector('.spin').textContent = 'Leaderboard unavailable.';
@@ -127,7 +127,7 @@ function leaderCol(title, rows) {
         el('span', { style: 'color:var(--muted); width:16px' }, `${i + 1}.`),
         el('span', {}, r.login),
         el('span', { class: 'n' }, String(r.count)))))
-      : el('div', { class: 'hint', style: 'margin:0' }, 'No merged PRs.'));
+      : el('div', { class: 'hint', style: 'margin:0' }, 'No changes.'));
 }
 
 function tile(n, label, href) {
