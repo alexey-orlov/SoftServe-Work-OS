@@ -7,7 +7,7 @@
 // Auto-sync page, so the two never drift.
 import { api } from '/api.js';
 import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
-import { buildModesCard, currentModeLabel } from '/views/autosync.js';
+import { renderAutosync } from '/views/autosync.js';
 
 const TABS = [
   ['business', 'Business context'],
@@ -278,13 +278,8 @@ async function drawAutosync(box, tab) {
   box.append(holder);
   try {
     const d = await api.get('/api/governance');
-    holder.replaceChildren(
-      el('div', { class: 'row', style: 'margin:2px 0 12px' },
-        el('span', { class: `pill ${d.autoSync.on ? 'ok' : 'todo'}` }, currentModeLabel(d.autoSync)),
-        el('span', { class: 'grow' }),
-        el('a', { class: 'btn small quiet', href: '#/autosync' }, 'Open the full page')),
-      buildModesCard(d),
-    );
+    holder.replaceChildren();
+    renderAutosync(holder, d);
   } catch (e) {
     holder.replaceChildren(el('div', { class: 'card' }, el('div', { class: 'hint' }, e.message)));
   }

@@ -16,13 +16,14 @@ import * as setup from '/views/setup.js';
 import * as proposedView from '/views/proposed.js';
 import * as featuresView from '/views/features.js';
 import * as autosyncView from '/views/autosync.js';
+import { currentModeLabel } from '/views/autosync.js';
 
 const ROUTES = {
   home, initiatives, initiative: initiatives, library, file: fileView,
   edit: editor, templates, governance, activity, learnings,
   docs: docsView, setup, proposed: proposedView,
   features: featuresView, autosync: autosyncView,
-  steering: featuresView, // the old Steering page is gone — its one unique block lives on
+  steering: { render: () => location.replace('#/features') }, // old links self-correct
 };
 
 const NAV = {
@@ -36,7 +37,6 @@ const NAV = {
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
     ['governance', 'Gated files', 'shield'],
-    ['autosync', 'Auto-sync', 'refresh'],
     ['proposed', 'Proposed changes', 'pr'],
     ['learnings', 'Learnings', 'bulb'],
   ],
@@ -115,7 +115,7 @@ async function refreshChrome() {
         g.ahead ? ` ↑${g.ahead}` : '', g.behind ? ` ↓${g.behind}` : '',
         g.dirty ? ` · ${g.dirty} uncommitted` : ' · clean'),
       g.lastCommit ? el('div', { title: g.lastCommit.subject }, `${g.lastCommit.sha} ${g.lastCommit.subject.slice(0, 26)}…`) : null,
-      el('div', {}, o.autoSync.on ? `auto-sync: ${o.autoSync.mode}` : 'auto-sync: off'),
+      el('div', {}, `auto-sync: ${currentModeLabel(o.autoSync).toLowerCase()}`),
     );
   } catch { /* chrome is decorative */ }
 }
@@ -149,7 +149,7 @@ function wireSearch() {
               el('a', { class: 'search-hit', href: `#/file?path=${encodeURIComponent(h.path)}`, onclick: hide },
                 el('div', { class: 'p' }, `${h.area} · ${h.path}:${h.line}`),
                 el('div', { class: 't' }, h.text))))
-            : el('div', { class: 'search-empty' }, 'No matches in the wiki.'),
+            : el('div', { class: 'search-empty' }, 'No matches.'),
         );
         box.hidden = false;
       } catch (e) { toast(e.message, 'err'); }

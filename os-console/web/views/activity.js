@@ -18,15 +18,14 @@ export async function render(view) {
   view.append(page);
   page.append(
     el('h1', {}, 'Activity'),
-    el('div', { class: 'sub' }, 'Everything that changed in the wiki, newest first. Filter by area to follow one part of the OS.'),
+    el('div', { class: 'sub' }, 'Everything that changed in the Work OS, newest first. Filter by area to follow one part of it.'),
   );
 
   // uncommitted
   if (d.status.uncommitted.length) {
     page.append(el('div', { class: 'card', style: 'border-color:var(--warn-ink)' },
       el('div', { class: 'row' },
-        el('h3', { class: 'grow' }, `Uncommitted right now (${d.status.uncommitted.length})`),
-        el('span', { class: 'tag' }, `branch ${d.status.branch}`)),
+        el('h3', { class: 'grow' }, `Not yet shared (${d.status.uncommitted.length})`)),
       el('div', { class: 'hint' }, 'Work in flight — possibly a Claude session mid-turn. The console commits its own saves immediately, so these are someone else\'s.'),
       el('div', {}, d.status.uncommitted.slice(0, 20).map((u) => el('div', { class: 'art-row' },
         el('span', { class: 'fstat' }, u.xy),
@@ -88,7 +87,7 @@ export async function render(view) {
         el('span', { class: 'tag', title: c.author }, c.sha),
       ));
     }
-    if (!commits.length) timeline.append(el('div', { class: 'empty' }, 'No commits match.'));
+    if (!commits.length) timeline.append(el('div', { class: 'empty' }, 'No changes match.'));
   }
 
   page.append(el('div', { class: 'card', style: 'margin-top:18px' },

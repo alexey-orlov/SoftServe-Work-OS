@@ -82,7 +82,7 @@ export function statusPill(status) {
 
 export function tierPill(tier) {
   return tier === 'gated'
-    ? el('span', { class: 'pill gate', title: 'Gated steering file (write-policy) — saving from the console is your approval' }, icon('lock'), 'Gated')
+    ? el('span', { class: 'pill gate', title: 'Gated file — saving from the console is your approval' }, icon('lock'), 'Gated')
     : el('span', { class: 'pill plain', title: 'Auto tier — agents write this freely' }, 'Auto');
 }
 
@@ -92,7 +92,7 @@ export function gatedTag(tier, compact = false) {
   if (tier !== 'gated') return null;
   return el('span', {
     class: `pill gate xs${compact ? ' icon-only' : ''}`,
-    title: 'Gated (write-policy) — needs a human\'s approval to change; never lands by automation',
+    title: 'Gated — changes only with a person\'s approval; never lands by automation',
   }, icon('lock'), compact ? null : 'Gated');
 }
 
@@ -225,8 +225,10 @@ export function mdRender(text, fromRel) {
     const href = a.getAttribute('href') || '';
     if (/^https?:/i.test(href)) { a.target = '_blank'; a.rel = 'noopener'; continue; }
     if (href.startsWith('#') || /^[a-z][a-z0-9+.-]*:/i.test(href)) { a.removeAttribute('href'); continue; }
-    const target = joinRel(fromDir, href.split('#')[0]);
-    a.setAttribute('href', `#/file?path=${encodeURIComponent(target)}`);
+    const clean = href.split('#')[0];
+    const target = joinRel(fromDir, clean);
+    // CLAUDE.md nav files link folders as `dir/` — those open in the Library
+    a.setAttribute('href', `#/${clean.endsWith('/') ? 'library' : 'file'}?path=${encodeURIComponent(target)}`);
   }
   for (const img of div.querySelectorAll('img')) {
     const src = img.getAttribute('src') || '';
@@ -243,8 +245,8 @@ export function modal({ title, body, actions = [], wide }) {
   const root = document.getElementById('modal-root');
   const close = () => back.remove();
   const back = el('div', { class: 'modal-back', onclick: (e) => { if (e.target === back) close(); } },
-    el('div', { class: 'modal', style: wide ? 'width:min(860px,94vw)' : '' },
-      el('header', {}, title, el('button', { class: 'btn quiet x', onclick: close }, icon('x'))),
+    el('div', { class: 'modal', tabindex: '-1', style: wide ? 'width:min(860px,94vw)' : '' },
+      el('header', {}, title, el('button', { class: 'btn quiet x', title: 'Close', onclick: close }, icon('x'))),
       el('div', { class: 'm-body' }, body),
       actions.length ? el('footer', {},
         actions.map((a) => el('button', {
@@ -261,7 +263,7 @@ export function modal({ title, body, actions = [], wide }) {
     ),
   );
   root.append(back);
-  const focusable = back.querySelector('input, textarea, select');
+  const focusable = back.querySelector('input, textarea, select') || back.querySelector('.modal');
   if (focusable) setTimeout(() => focusable.focus(), 40);
   back.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
   return { close };
@@ -303,7 +305,7 @@ export function filePicker({ title = 'Pick a file', onPick, startPath = 'product
         el('span', { class: 'd grow' }, entry.desc || ''),
         ),
       ));
-      if (!d.entries.length) listBox.replaceChildren(el('div', { class: 'empty' }, 'Empty folder'));
+      if (!d.entries.length) listBox.replaceChildren(el('div', { class: 'empty' }, 'This folder is empty.'));
     } catch (e) { listBox.replaceChildren(el('div', { class: 'empty' }, e.message)); }
   }
 
@@ -328,4 +330,4 @@ export function setCrumbs(parts) {
 }
 
 export function spinner(msg) { return el('div', { class: 'spin' }, msg || 'Loading…'); }
-export function errorBox(e) { return el('div', { class: 'card' }, el('h3', {}, 'Something broke'), el('div', { class: 'hint' }, e.message)); }
+export function errorBox(e) { return el('div', { class: 'card' }, el('h3', {}, 'This view failed to load'), el('div', { class: 'hint' }, e.message)); }

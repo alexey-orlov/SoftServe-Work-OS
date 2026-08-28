@@ -139,7 +139,7 @@ function addModal(d) {
         const r = await api.post('/api/policy/gated', {
           op: 'add', pattern: patternIn.value.trim(), note: noteIn.value.trim(), group: groupSel.value,
         });
-        toast(`Gated ${r.pattern}${r.codeowners && !r.codeowners.ok ? ` · ${r.codeowners.note}` : ''}`);
+        toast(`Gated ${r.pattern} ✓${r.codeowners && !r.codeowners.ok ? ` · ${r.codeowners.note}` : ''}`);
         if (r.azureReminder) toast(r.azureReminder);
         window.dispatchEvent(new Event('console:saved'));
         close();
@@ -161,7 +161,7 @@ function removeModal(p) {
       label: 'Remove the gate', kind: '',
       onclick: async (close) => {
         const r = await api.post('/api/policy/gated', { op: 'remove', pattern: p.pattern });
-        toast(`No longer gated: ${r.pattern}`);
+        toast(`No longer gated — ${r.pattern} ✓`);
         if (r.azureReminder) toast(r.azureReminder);
         window.dispatchEvent(new Event('console:saved'));
         close();

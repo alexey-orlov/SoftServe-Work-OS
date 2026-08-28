@@ -1,7 +1,8 @@
-// Home — the OS at a glance: live counts, setup progress widget, PR leaders,
-// pins and recents. The full setup checklist lives in #/setup.
+// Home — the OS at a glance: live counts, setup progress widget, activity
+// leaders, pins and recents. The full setup checklist lives in #/setup.
 import { api, getState } from '/api.js';
 import { el, meter, timeAgo, setCrumbs, spinner, icon } from '/ui.js';
+import { currentModeLabel } from '/views/autosync.js';
 
 export async function render(view) {
   view.append(spinner());
@@ -20,20 +21,20 @@ export async function render(view) {
         o.product.name ? o.product.line : 'The shared knowledge base, seen from above.'),
     ),
     el('div', { class: 'row' },
-      el('span', { class: `pill ${o.autoSync.on ? 'ok' : 'todo'}`, title: o.autoSync.label },
-        o.autoSync.on ? `Auto-sync: ${o.autoSync.mode}` : 'Auto-sync off'),
-      el('span', { class: 'tag' }, `${o.git.branch}${o.git.dirty ? ` · ${o.git.dirty} uncommitted` : ''}`),
+      el('span', { class: `pill ${o.autoSync.on ? 'ok' : 'todo'}` },
+        `Auto-sync: ${currentModeLabel(o.autoSync).toLowerCase()}`),
+      o.git.dirty ? el('span', { class: 'tag' }, `${o.git.dirty} change${o.git.dirty > 1 ? 's' : ''} not yet shared`) : null,
     ),
   ));
 
-  // stat tiles — the PR count arrives async (it may shell the platform CLI)
+  // stat tiles — the proposed count arrives async (it may shell the platform CLI)
   const prTileN = el('div', { class: 'n' }, '…');
   page.append(el('div', { class: 'tiles', style: 'margin-bottom:14px' },
     tile(o.counts.initiatives, 'Active initiatives', '#/initiatives'),
     tile(o.counts.accounts, 'Customer accounts', '#/library?path=product-development%2Fproduct%2Fcustomers%2Faccounts'),
-    tile(o.counts.mcps, 'Tools connected', '#/setup'),
+    tile(o.counts.mcps, 'Tools connected', '#/setup?tab=integrations'),
     tile(o.counts.learnings, 'Team learnings', '#/learnings'),
-    el('a', { class: 'tile', href: '#/proposed' }, prTileN, el('div', { class: 't' }, 'PRs waiting')),
+    el('a', { class: 'tile', href: '#/proposed' }, prTileN, el('div', { class: 't' }, 'Proposed changes')),
   ));
 
   const split = el('div', { class: 'split' });
@@ -51,20 +52,21 @@ export async function render(view) {
     meter(o.progress.done, o.progress.total, `${o.progress.done} of ${o.progress.total} steps completed`),
     el('div', { class: 'row', style: 'margin-top:12px' },
       el('div', { class: 'hint grow', style: 'margin:0' },
-        doneAll ? 'Everything derived from the repo checks out.' : 'Each remaining step is a guided program you run in Claude Code.'),
+        doneAll ? 'Everything checks out.' : 'Every remaining step is guided — most run in Claude Code, and the switches can be flipped right on the Setup page.'),
       el('a', { class: 'btn small', href: '#/setup' }, doneAll ? 'Review' : 'Continue setup'),
     ),
   ));
 
   // Activity leaders — humans, by changes each person authored; loads async
+  const leadersHint = 'People only (bots filtered), by changes landed on the shared workspace — credited to whoever made the change, not who approved it.';
   const leadersCard = el('div', { class: 'card' },
     el('h3', {}, 'Most active'),
-    el('div', { class: 'hint' }, 'People only (bots filtered), by changes landed on the shared repo — credited to whoever made the change, not who approved it.'),
+    el('div', { class: 'hint' }, leadersHint),
     el('div', { class: 'spin', style: 'padding:14px' }, 'Reading the history…'),
   );
   left.append(leadersCard);
 
-  // pinned + recents + last commit
+  // pinned + recents + latest change
   const st = getState();
   if (st.pins.length) {
     right.append(el('div', { class: 'card' },
@@ -78,19 +80,19 @@ export async function render(view) {
       ...st.recents.slice(0, 9).map((r) =>
         el('div', { class: 'row', style: 'padding:4px 0; min-width:0' },
           icon('file'),
-          el('a', { class: 'grow', href: `#/file?path=${encodeURIComponent(r.path)}`, style: 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap' },
+          el('a', { class: 'grow trunc', href: `#/file?path=${encodeURIComponent(r.path)}` },
             r.title || r.path.split('/').pop()),
         )),
     ));
   }
   right.append(el('div', { class: 'card' },
-    el('h3', {}, 'Last commit'),
+    el('h3', {}, 'Latest change'),
     o.git.lastCommit
       ? el('div', {},
         el('div', { style: 'font-weight:550' }, o.git.lastCommit.subject),
-        el('div', { class: 'hint', style: 'margin:4px 0 0' }, `${o.git.lastCommit.sha} · ${timeAgo(o.git.lastCommit.date)}`),
+        el('div', { class: 'hint', style: 'margin:4px 0 0' }, timeAgo(o.git.lastCommit.date)),
         el('a', { class: 'btn small', href: '#/activity', style: 'margin-top:10px' }, 'All activity'))
-      : el('div', { class: 'hint' }, 'No history.'),
+      : el('div', { class: 'hint' }, 'No changes yet.'),
   ));
 
   // async fills (never block first paint; ignore failures — tiles stay honest)
@@ -112,7 +114,7 @@ export async function render(view) {
     }
     leadersCard.replaceChildren(
       el('h3', {}, 'Most active'),
-      el('div', { class: 'hint' }, 'People only (bots filtered), by changes landed on the shared repo — credited to whoever made the change, not who approved it.'),
+      el('div', { class: 'hint' }, leadersHint),
       ...body);
   }).catch(() => {
     leadersCard.querySelector('.spin').textContent = 'Leaderboard unavailable.';
@@ -142,5 +144,5 @@ function pinRow(p) {
   const label = isInit ? p.slice(11) : p.split('/').pop();
   return el('div', { class: 'row', style: 'padding:4px 0' },
     icon(isInit ? 'flag' : 'file'),
-    el('a', { class: 'grow', href: target, style: 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap' }, label));
+    el('a', { class: 'grow trunc', href: target }, label));
 }

@@ -20,6 +20,7 @@ export async function render(view, params) {
 
   const sId = params.get('s');
   const sec = d.sections.find((x) => x.id === sId) || d.sections[0];
+  if (sId && sec.id !== sId) history.replaceState(null, '', `#/docs?s=${encodeURIComponent(sec.id)}`);
   setCrumbs([{ label: 'Documentation' }, { label: sec.title }]);
 
   // No bar of our own either — the crumb slot carries the few actions, the

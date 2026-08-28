@@ -54,7 +54,7 @@ export async function render(view) {
             btn.disabled = true;
             try {
               const r = await api.post('/api/learnings', { text: input.value });
-              toast(`Added${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+              toast('Added ✓');
               window.dispatchEvent(new Event('console:saved'));
               location.reload();
             } catch (e) { toast(e.message, 'err'); btn.disabled = false; }

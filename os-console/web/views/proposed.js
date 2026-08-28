@@ -8,7 +8,7 @@
 // the reason; everywhere else the console attempts the action and the git host
 // stays the enforcer.
 import { api } from '/api.js';
-import { el, icon, timeAgo, setCrumbs, spinner, cmdChip, toast, modal, field, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
+import { el, icon, timeAgo, setCrumbs, spinner, toast, modal, field, promptModal, gatedTag, LITE, liteLock, staleServerCard } from '/ui.js';
 
 export async function render(view, params) {
   view.append(spinner());
@@ -29,15 +29,18 @@ export async function render(view, params) {
   page.append(
     el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
       el('h1', { class: 'grow', style: 'margin:0' }, 'Proposed changes'),
-      el('button', {
-        class: 'btn small quiet', title: 'Re-check now (PR list is cached for 5 minutes)',
-        onclick: async (e) => {
-          const btn = e.currentTarget; // null after the first await — capture now
-          btn.disabled = true;
-          try { await api.get('/api/proposed?refresh=1'); location.reload(); }
-          catch (err) { toast(err.message, 'err'); btn.disabled = false; }
-        },
-      }, icon('refresh'), 'Re-check')),
+      (() => {
+        const b = el('button', {
+          class: 'btn small quiet', title: 'Re-check now (the list is cached for 5 minutes)',
+          onclick: async (e) => {
+            const btn = e.currentTarget; // null after the first await — capture now
+            btn.disabled = true;
+            try { await api.get('/api/proposed?refresh=1'); location.reload(); }
+            catch (err) { toast(err.message, 'err'); btn.disabled = false; }
+          },
+        }, icon('refresh'), 'Re-check');
+        return LITE ? liteLock(b, 'Snapshot — this data is as of the file\'s build') : b;
+      })()),
     el('div', { class: 'sub' },
       'What is waiting for a person. Approving or rejecting acts on GitHub or Azure DevOps as you, with your own account — the platform still enforces who may approve what.'),
   );
@@ -97,7 +100,7 @@ function prRow(pr, perms) {
         ? el('a', { href: pr.url, target: '_blank', rel: 'noopener' }, `#${pr.number} ${pr.title} `, icon('external'))
         : el('span', {}, `#${pr.number} ${pr.title}`),
       pr.draft ? el('span', { class: 'tag', style: 'margin-left:6px' }, 'draft') : null,
-      isGated ? el('span', { class: 'pill gate xs', style: 'margin-left:6px' }, icon('lock'), 'gated') : null),
+      isGated ? el('span', { style: 'margin-left:6px' }, gatedTag('gated')) : null),
     el('span', { class: 'tag', title: 'author' }, pr.author),
     el('span', { style: 'color:var(--muted); font-size:12px; white-space:nowrap' }, timeAgo(pr.createdAt)),
     mk('Approve', 'primary', () => approvePrModal(pr, isGated),
@@ -168,10 +171,10 @@ function stepsModal(title, r) {
           el('div', { class: 'title' }, s.step),
           el('div', { class: 'detail' }, s.note || '')))),
       el('div', { class: 'hint', style: 'margin-top:8px' },
-        r.ok ? 'Done.' : 'Partial — the failing step\'s message comes from GitHub / Azure DevOps, word for word.'),
+        r.ok ? '' : 'Partial — the failing step\'s message comes from GitHub / Azure DevOps, word for word.'),
     ),
+    actions: [{ label: 'Done', kind: 'primary', onclick: (close) => { close(); location.reload(); } }],
   });
-  if (r.ok) setTimeout(() => location.reload(), 900);
 }
 
 // ---- team tab ---------------------------------------------------------------

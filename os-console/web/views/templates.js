@@ -38,6 +38,7 @@ export async function render(view) {
   // templates
   page.append(el('h2', { class: 'group-head', style: 'margin-top:12px' }, 'Templates'),
     el('div', { style: 'height:10px' }));
+  if (!d.items.length) page.append(el('div', { class: 'empty' }, 'No templates in the handbook yet.'));
   page.append(el('div', { class: 'init-grid' }, d.items.map((t) => {
     return el('div', { class: 'init-card', style: 'cursor:default' },
       el('div', { class: 'row', style: 'align-items:flex-start' },
@@ -71,7 +72,7 @@ export async function render(view) {
               g.name.replace(/\.md$/, '').replace(/^./, (c) => c.toUpperCase())),
             ' ', gatedTag(g.tier),
             el('span', { class: 'mini' }, g.desc || '')),
-          el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(g.rel)}` }, icon('edit')),
+          el('a', { class: 'btn small quiet', href: `#/edit?path=${encodeURIComponent(g.rel)}`, title: 'Edit' }, icon('edit'), 'Edit'),
         ));
       }
       page.append(card);
@@ -81,7 +82,7 @@ export async function render(view) {
   page.append(el('div', { class: 'card', style: 'margin-top:18px' },
     el('h3', {}, 'Filling one out with help'),
     el('div', { class: 'hint', style: 'margin-bottom:8px' },
-      'For substantial documents, the guided programs in Claude Code draft on top of these templates with the wiki\'s context loaded:'),
+      'For substantial documents, the guided programs in Claude Code draft on top of these templates with the Work OS\'s context loaded:'),
     el('div', { class: 'chips' }, cmdChip('/prd-draft'), cmdChip('/job-spec-draft'), cmdChip('/launch-checklist'), cmdChip('/interview-guide')),
   ));
 }
@@ -96,7 +97,7 @@ function useModal(t) {
       label: 'Create', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/templates/use', { template: t.path, dest: dest.value.trim() });
-        toast(`Created ${r.dest}${r.commit.committed ? ` · committed ${r.commit.sha}` : ''}`);
+        toast(`Created ${r.dest} ✓`);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.hash = `#/edit?path=${encodeURIComponent(r.dest)}`;

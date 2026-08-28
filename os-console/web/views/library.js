@@ -189,6 +189,6 @@ export async function render(view, params) {
       el('td', { style: 'white-space:nowrap; color:var(--muted); font-size:12px' }, timeAgo(e.mtimeMs)),
     ));
   }
-  if (!d.entries.length) tbody.append(el('tr', {}, el('td', { colspan: 4 }, el('div', { class: 'empty' }, 'Empty folder'))));
+  if (!d.entries.length) tbody.append(el('tr', {}, el('td', { colspan: 4 }, el('div', { class: 'empty' }, 'This folder is empty.'))));
   page.append(el('div', { class: 'card scroll-x', style: 'padding:6px 10px' }, table));
 }

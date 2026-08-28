@@ -103,7 +103,7 @@ function list(view, items) {
       body: el('div', {},
         field('Title', titleIn),
         field('Short name (permanent — becomes the page\'s address everywhere)', slugIn),
-        el('div', { class: 'hint' }, 'Creates the living page from the house template and registers it in the folder navigation — saved and shared in one step. Link it to a feature on the Features page when the feature exists.'),
+        el('div', { class: 'hint' }, 'Creates the living page from the house template and registers it in the folder navigation — saved in one step; it reaches the team per your auto-sync mode. Link it to a feature on the Features page when the feature exists.'),
       ),
       actions: [{
         label: 'Create', kind: 'primary',
@@ -159,7 +159,7 @@ function detail(view, items, slug) {
     el('span', {}, i.statusText.replace(/^\w+\s*[—-]?\s*/, '')),
     el('span', {}, `· updated ${i.updated || '—'}`),
     i.owner ? el('span', {}, `· ${i.owner}`) : null,
-    ...i.targets.map((t) => el('a', { class: 'tag', href: `#/file?path=${encodeURIComponent('product-development/feature-index.yaml')}` }, `${t.area}.${t.feature}`)),
+    ...i.targets.map((t) => el('a', { class: 'tag', href: '#/features', title: 'open the product map' }, `${t.area}.${t.feature}`)),
   ));
 
   const split = el('div', { class: 'split' });
@@ -217,7 +217,7 @@ function detail(view, items, slug) {
   // feature-index join
   for (const f of i.features || []) {
     const c = el('div', { class: 'card' },
-      el('h3', {}, `From feature-index — ${f.area}.${f.feature}`),
+      el('h3', {}, `From the product map — ${f.area}.${f.feature}`),
       el('div', { class: 'hint' }, 'What the product map registers for this feature.'));
     if (!f.artifacts.length) c.append(el('div', { class: 'empty' }, 'No artifacts registered yet.'));
     for (const a of f.artifacts) {
@@ -323,17 +323,36 @@ function sourcesCard(i) {
     }
     items.forEach((s, idx) => {
       const removeBtn = el('button', {
-        class: 'btn small quiet', title: 'Remove this source',
-        onclick: async () => {
-          const [removed] = items.splice(idx, 1);
-          draw();
-          try { await save(); } catch (e) {
-            items.splice(idx, 0, removed); // failed — put it back, resync the DOM
-            draw();
-            toast(e.message, 'err');
-          }
-        },
+        class: 'btn small quiet danger-hover', title: 'Remove this source',
+        onclick: () => modal({
+          title: 'Remove source',
+          body: el('div', {},
+            el('div', { class: 'path', style: 'margin-bottom:8px' }, s.label),
+            el('div', { class: 'hint' }, 'Removes it from this initiative\'s sources — the linked folder or document itself is untouched.')),
+          actions: [{
+            label: 'Remove', kind: '',
+            onclick: async (close) => {
+              const [removed] = items.splice(idx, 1);
+              draw();
+              try { await save(); close(); } catch (e) {
+                items.splice(idx, 0, removed); // failed — put it back, resync the DOM
+                draw();
+                toast(e.message, 'err');
+              }
+            },
+          }],
+        }),
       }, icon('x'));
+      const move = (delta) => async () => {
+        const j = idx + delta;
+        if (j < 0 || j >= items.length) return;
+        const [m] = items.splice(idx, 1);
+        items.splice(j, 0, m);
+        draw();
+        try { await save(); } catch (e) { toast(e.message, 'err'); }
+      };
+      const upBtn = el('button', { class: 'btn small quiet', title: 'Move up (higher priority)', disabled: idx === 0, onclick: move(-1) }, '↑');
+      const downBtn = el('button', { class: 'btn small quiet', title: 'Move down', disabled: idx === items.length - 1, onclick: move(1) }, '↓');
       const row = el('div', { class: 'drag-row', draggable: LITE ? null : 'true' },
         LITE ? null : el('span', { class: 'grip', title: 'Drag to set priority' }, '⠿'),
         el('span', { class: 'prio' }, String(idx + 1)),
@@ -345,6 +364,8 @@ function sourcesCard(i) {
               : el('span', {}, s.label),
           s.note ? el('span', { class: 'mini' }, s.note) : null,
           s.kind === 'path' && s.exists === false ? el('span', { class: 'tag', title: 'Path not found in the repo' }, 'missing') : null),
+        LITE ? null : upBtn,
+        LITE ? null : downBtn,
         LITE ? null : removeBtn,
       );
       if (!LITE) {

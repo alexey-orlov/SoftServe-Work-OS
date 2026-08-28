@@ -10,6 +10,14 @@ export async function render(view, params) {
   let f;
   try { f = await api.get(`/api/file?path=${encodeURIComponent(path)}`); }
   catch (e) {
+    const parts = path.split('/');
+    setCrumbs([
+      { label: 'Library', href: '#/library' },
+      ...parts.slice(0, -1).map((seg, idx) => ({
+        label: seg, href: `#/library?path=${encodeURIComponent(parts.slice(0, idx + 1).join('/'))}`,
+      })),
+      { label: parts[parts.length - 1] || '?' },
+    ]);
     view.replaceChildren(el('div', { class: 'page' },
       el('div', { class: 'card' }, el('h3', {}, 'Not found'), el('div', { class: 'hint' }, e.message))));
     return;
@@ -35,7 +43,7 @@ export async function render(view, params) {
   page.append(el('div', { class: 'row wrap', style: 'margin-bottom:14px' },
     el('h1', { class: 'grow', style: 'margin:0; font-size:18px' }, title),
     tierPill(f.tier),
-    el('span', { class: 'tag', title: 'last committed change' }, timeAgo(f.lastChange || f.mtimeMs)),
+    el('span', { class: 'tag', title: 'last change' }, timeAgo(f.lastChange || f.mtimeMs)),
     el('button', {
       class: 'btn small quiet', onclick: (e) => {
         const on = togglePin(f.path);

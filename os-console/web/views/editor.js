@@ -36,7 +36,7 @@ export async function render(view, params) {
   if (LITE) liteLock(saveBtn);
 
   const gatedNote = f.tier === 'gated'
-    ? el('span', { class: 'hint', style: 'margin:0' }, 'Gated steering file — saving from the console is your approval.')
+    ? el('span', { class: 'hint', style: 'margin:0' }, 'Gated file — saving from the console is your approval.')
     : null;
 
   const bar = el('div', { class: 'editor-bar' },
@@ -76,6 +76,7 @@ export async function render(view, params) {
   });
 
   async function save() {
+    if (LITE) { toast(LITE_HINT); return; }
     try {
       const r = await api.put('/api/file', { path, content: ta.value, baseMtimeMs });
       baseMtimeMs = r.mtimeMs;
@@ -83,7 +84,7 @@ export async function render(view, params) {
       dirtyDot.style.display = 'none';
       const bits = [r.commit.committed ? `committed ${r.commit.sha}` : r.commit.note,
         r.push.pushed ? r.push.note : null].filter(Boolean);
-      toast(`Saved${r.tier === 'gated' ? ' (gated — your approval)' : ''} · ${bits.join(' · ')}`);
+      toast(`Saved${r.tier === 'gated' ? ' (gated — your approval)' : ''}${r.commit.committed ? ' ✓' : ` · ${r.commit.note || ''}`}`);
       window.dispatchEvent(new Event('console:saved'));
     } catch (e) {
       if (e.status === 409) return conflictModal();
