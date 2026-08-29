@@ -527,6 +527,69 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 .tile.g-steering, .tile.g-artifacts, .tile.g-source, .tile.g-data, .tile.g-system {
   border-left: 3px solid var(--group-color, var(--line));
 }
+/* tile titles stay neutral ink — the group speaks through the frame and the icon,
+   never through title color (blue titles read as "Artifacts" everywhere) */
+a.tile { color: var(--ink); }
+.tile .row-t { color: var(--ink); }
+.tile .row-t svg { color: var(--group-color, var(--ink-2)); opacity: .95; }
+a.tile:hover { text-decoration: none; }
+a.tile:hover .row-t { color: var(--accent-ink); }
+
+/* second-level group pages (Templates, Competition, Skills) share one skeleton:
+   crumbs back to Library, h1 + sub, then tile grids / cards */
+.subpage-foot { margin-top: 18px; }
+
+/* ---------- skills page ---------- */
+
+/* view switch is .view-switch (shared with Library) */
+
+/* workflow view — stages left to right, the spine solid, support outlined */
+.wf-wrap { overflow-x: auto; padding: 2px 2px 8px; }
+.wf-grid { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(164px, 1fr); gap: 16px; min-width: 1064px; }
+.wf-col { position: relative; min-width: 0; }
+.wf-col + .wf-col::before {
+  content: '→'; position: absolute; left: -15px; top: 30px;
+  color: var(--muted); font-size: 12px; opacity: .8;
+}
+.wf-stage {
+  font-size: 10.5px; font-weight: 680; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-2); padding-bottom: 6px; margin-bottom: 9px;
+  border-bottom: 2px solid var(--stage-color, var(--line));
+  display: flex; align-items: baseline; gap: 6px; white-space: nowrap;
+}
+.wf-stage .n { margin-left: auto; color: var(--muted); font-weight: 600; }
+.wf-hint { font-size: 11px; color: var(--muted); line-height: 1.45; margin: -4px 0 9px; min-height: 30px; }
+.wf-skill {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: -.01em;
+  border: 1px solid var(--line); border-radius: 7px; background: var(--surface);
+  color: var(--ink-2); padding: 5px 8px; margin: 0 0 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.wf-skill:hover { border-color: var(--accent); color: var(--accent-ink); }
+.wf-skill.main {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--accent-contrast); font-weight: 650;
+}
+.wf-skill.main:hover { filter: brightness(1.08); color: var(--accent-contrast); }
+.wf-band { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); }
+.wf-band .wf-skill { display: inline-block; width: auto; margin: 0 6px 6px 0; }
+.wf-band-head { font-size: 10.5px; font-weight: 680; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 2px; }
+.wf-band-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 9px; }
+.wf-legend { font-size: 11.5px; color: var(--muted); display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 2px 0 14px; }
+.wf-legend .sw { display: inline-block; width: 22px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 5px; }
+.wf-legend .sw.main { background: var(--accent); }
+.wf-legend .sw.supp { background: var(--surface); border: 1px solid var(--line); }
+
+/* skills — grouped tiles reuse .tiles/.tile; the A–Z table reuses table.data */
+.skill-cmd { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.skill-group-tag { font-size: 10.5px; }
+
+/* features page — clearer rows */
+.fi-feature summary { border-radius: var(--r-sm); padding-left: 6px !important; }
+.fi-feature summary:hover { background: var(--line-soft); }
+.fi-feature .art-rows { padding: 2px 0 8px; }
+.area-count { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
 
 /* mode selector (auto-sync) — plan-card pattern: current highlighted, action in one slot */
 .mode-card {

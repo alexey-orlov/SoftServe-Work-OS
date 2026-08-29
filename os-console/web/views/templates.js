@@ -25,7 +25,7 @@ export async function render(view) {
     api.get(`/api/library?path=${encodeURIComponent(GUIDES_DIR)}`).catch(() => null),
   ]);
   view.replaceChildren();
-  setCrumbs([{ label: 'Templates' }]);
+  setCrumbs([{ label: 'Library', href: '#/library' }, { label: 'Templates' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);

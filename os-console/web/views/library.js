@@ -11,24 +11,25 @@ const CR = `${P}/competitive-research`;
 
 // kind: 'dir' | 'file' → the target is a repo path; 'view' → the target is a console
 // route (href used as-is) and policyPath is the repo path behind it for the gated badge.
-function it(name, target, desc, kind = 'dir', policyPath = null) { return { name, target, desc, kind, policyPath }; }
+// ico overrides the kind-derived tile icon.
+function it(name, target, desc, kind = 'dir', policyPath = null, ico = null) { return { name, target, desc, kind, policyPath, ico }; }
 
 const QUICK = [
   {
+    // Order is deliberate: identity first (CLAUDE.md → business → segments),
+    // then the governed instruments (templates, competition), people last.
+    // Feature index lives in the Features nav entry; Toolchain in Setup → Integrations.
     title: 'Steering files',
     key: 'steering',
     groups: [{
       name: null,
       items: [
         it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file'),
-        it('Feature index', '#/features', 'The product map — every feature and its artifacts, browsable', 'view', 'product-development/feature-index.yaml'),
-        it('Toolchain', 'product-development/toolchain.yaml', 'Tool choices and live connections, one per surface', 'file'),
         it('Business info', `${BC}/business-info.md`, 'Who we are — company, product, customers, pricing', 'file'),
-        it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
         it('Segmentation matrix', `${BC}/segmentation-matrix.md`, 'Accounts and revenue by vertical, size and use case', 'file'),
-        it('Competitive landscape', `${CR}/competitive-landscape.md`, 'The tiered competitor list and how we position against each', 'file'),
-        it('Competitive matrix', `${CR}/competitive-matrix.md`, 'Capability-by-capability comparison across competitors', 'file'),
-        it('Templates', '#/templates', 'The governed document scaffolds — PRD, job spec, interview, retro, …', 'view', `${P}/handbook/templates`),
+        it('Templates', '#/templates', 'The governed document scaffolds — PRD, job spec, interview, retro, …', 'view', `${P}/handbook/templates`, 'copy'),
+        it('Competition', '#/competition', 'How we position and compare — the landscape and the capability matrix', 'view', CR, 'target'),
+        it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
       ],
     }],
   },
@@ -51,7 +52,8 @@ const QUICK = [
       name: null,
       items: [
         it('Competitors', CR, 'Competitor teardowns and dated monitoring intel'),
-        it('Customers and user research', `${P}/customers`, 'Accounts, calls, interviews and feature requests'),
+        it('Customers', `${P}/customers`, 'Accounts — context, call records and feature requests'),
+        it('User research', `${P}/user-research`, 'Interview syntheses, guides and journey maps'),
         it('Meetings', `${P}/meetings`, 'Meeting records — transcripts, summaries, retros'),
         it('Decisions', `${P}/decisions`, 'Why we chose what we chose, dated'),
         it('Launches', `${P}/launches`, 'Launch checklists and ship / no-ship verdicts'),
@@ -77,7 +79,7 @@ const QUICK = [
     groups: [{
       name: null,
       items: [
-        it('Skills', '.claude/skills', 'The team\'s guided programs — /prd-draft, /process-meeting, …'),
+        it('Skills', '#/skills', 'The team\'s guided programs, mapped to the product workflow', 'view', '.claude/skills', 'zap'),
         it('Agents', '.claude/agents', 'Reviewer personas and subagent definitions'),
         it('Hooks', '.claude/hooks', 'Session automation — write guard, auto-sync, session briefing'),
       ],
@@ -133,7 +135,7 @@ export async function render(view, params) {
               : `#/library?path=${encodeURIComponent(q.target)}`;
           const tile = el('a', { class: `tile g-${section.key}`, href, title: q.policyPath || (q.kind === 'view' ? q.name : q.target) },
             el('div', { class: 'row-t' },
-              icon(q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder'),
+              icon(q.ico || (q.kind === 'view' ? 'copy' : q.kind === 'file' ? 'file' : 'folder')),
               el('span', { class: 'grow' }, q.name)),
             el('div', { class: 'd' }, q.desc));
           tileRefs.push({ target: q.policyPath || (q.kind === 'view' ? null : q.target), tile });

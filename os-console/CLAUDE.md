@@ -2,13 +2,20 @@
 
 A local web UI over this repo — friendly navigation, initiative grouping (with
 drag-prioritized sources and per-initiative instructions), the Features page (the
-feature-index as a navigable product map, primary nav next to Initiatives), tabbed setup
+feature-index as a navigable product map, primary nav next to Initiatives — with
+stat tiles, per-feature health pills and expand-all), the Skills page (every
+`.claude/skills` program in three projections: mapped against the product workflow
+with the definition chain as the solid spine, by use-case group, and A–Z — every
+projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
 underlying folder structure. Library
 tile groups and the Gated-files group headings share one vocabulary (Steering files /
-System rules), with a quiet color code per Library group. Zero install: it runs on the Python 3.8+ standard library —
+System rules), with a quiet color code per Library group: the group speaks through the
+tile frame and icon tint while titles stay neutral ink. Second-level group pages
+(Templates, Competition, Skills) share one skeleton — crumbs back to Library, title +
+one-line purpose, tile grid. Zero install: it runs on the Python 3.8+ standard library —
 no packages, no package manager, nothing beyond the interpreter — with the frontend's one
 MIT-licensed library vendored in `vendor/`.
 

@@ -53,6 +53,8 @@ const ICONS = {
   doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/>',
   pr: '<circle cx="6" cy="5.5" r="2.3"/><circle cx="6" cy="18.5" r="2.3"/><circle cx="18" cy="18.5" r="2.3"/><path d="M6 8v8"/><path d="M12.5 5.5H16a2 2 0 0 1 2 2v8.5"/><path d="M14.5 3.5l-2 2 2 2"/>',
   sliders: '<path d="M4 8h9M17.5 8H20M4 16h2.5M11 16h9"/><circle cx="15.2" cy="8" r="2.2"/><circle cx="8.2" cy="16" r="2.2"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>',
+  zap: '<path d="M13 3 5 13.5h5.5L11 21l8-10.5h-5.5z"/>',
 };
 
 export function icon(name) {

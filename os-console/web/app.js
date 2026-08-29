@@ -16,6 +16,8 @@ import * as setup from '/views/setup.js';
 import * as proposedView from '/views/proposed.js';
 import * as featuresView from '/views/features.js';
 import * as autosyncView from '/views/autosync.js';
+import * as skillsView from '/views/skills.js';
+import * as competitionView from '/views/competition.js';
 import { currentModeLabel } from '/views/autosync.js';
 
 const ROUTES = {
@@ -23,6 +25,7 @@ const ROUTES = {
   edit: editor, templates, governance, activity, learnings,
   docs: docsView, setup, proposed: proposedView,
   features: featuresView, autosync: autosyncView,
+  skills: skillsView, competition: competitionView,
   steering: { render: () => location.replace('#/features') }, // old links self-correct
 };
 
@@ -54,7 +57,8 @@ async function render(preserveScroll = false) {
   document.querySelectorAll('.nav-item').forEach((n) => {
     let active = n.dataset.route === name
       || (name === 'initiative' && n.dataset.route === 'initiatives')
-      || ((name === 'file' || name === 'edit' || name === 'templates') && n.dataset.route === 'library');
+      || ((name === 'file' || name === 'edit' || name === 'templates'
+        || name === 'skills' || name === 'competition') && n.dataset.route === 'library');
     if (n.dataset.section) {
       active = name === 'docs'
         && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));

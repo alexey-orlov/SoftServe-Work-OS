@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pylib import actions, gitlib, policy, repo  # noqa: E402
 from pylib.adapters import (  # noqa: E402
     activity, docs, governance, home, initiatives, learnings, library,
-    proposed, prs, steering, templates,
+    proposed, prs, skills, steering, templates,
 )
 
 PORT = int(os.environ.get('OS_CONSOLE_PORT') or 4820)
@@ -160,6 +160,7 @@ ROUTES = {
     'GET /api/state': lambda q, body: load_state(),
     'PUT /api/state': lambda q, body: save_state(body),
     'GET /api/docs': lambda q, body: docs.build(),
+    'GET /api/skills': lambda q, body: skills.build(),
 }
 
 # ---------------------------------------------------------------- live events

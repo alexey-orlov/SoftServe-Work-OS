@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 from pylib import gitlib, mdparse, policy, repo  # noqa: E402
 from pylib.adapters import (  # noqa: E402
     activity, docs, governance, home, initiatives, learnings, library,
-    proposed, prs, steering, templates,
+    proposed, prs, skills, steering, templates,
 )
 
 OUT = os.path.join(BASE, 'console.html')
@@ -47,7 +47,7 @@ MODULES = ['api.js', 'ui.js', 'app.js',
            'views/home.js', 'views/initiatives.js', 'views/library.js', 'views/file.js',
            'views/editor.js', 'views/templates.js', 'views/governance.js', 'views/activity.js',
            'views/learnings.js', 'views/docs.js', 'views/setup.js', 'views/proposed.js',
-           'views/features.js', 'views/autosync.js']
+           'views/features.js', 'views/autosync.js', 'views/skills.js', 'views/competition.js']
 
 
 def walk_repo():
@@ -169,6 +169,7 @@ def collect():
             '/api/proposed': proposed.build(False),
             '/api/leaders': prs.leaders(False),
             '/api/activity': activity_payload,
+            '/api/skills': skills.build(),
         },
         'library': lib_payloads,
         'fileMeta': file_meta,
