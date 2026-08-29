@@ -52,7 +52,7 @@ duplicate crons, nothing tied to one person's laptop):
 you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
 suggest `/weekly-plan` Monday), `planning/` daily plans (what actually
 happened), PRDs modified this week (for work no initiative tracks),
-`launches/`, `customers/research-synthesis/` (research conducted). MCPs when
+`launches/`, `user-research/` (research conducted). MCPs when
 connected: Linear/Jira for completed tasks, analytics for launched-feature metrics.
 
 ## Part A — Team Digest (Slack-ready)

@@ -16,11 +16,11 @@ When this skill is invoked, immediately check:
 
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
-| Existing Research | `product-development/product/customers/*.md` | topic from chat, user segments | Previous findings to avoid duplication |
+| Existing Research | `product-development/product/user-research/*.md` | topic from chat, user segments | Previous findings to avoid duplication |
 | Related PRDs | `product-development/product/PRDs/{area}/*.md` | problem related to interviews | Problem framing and hypothesis |
 | Strategy Context | `product-development/product/strategy/*.md` | user segment, strategic fit | How findings ladder to strategy |
-| Previous Synthesis | `product-development/product/customers/research-synthesis/` | topic name | Past research to build on |
-| Interview Guides | `product-development/product/customers/interview-guides/` | topic | What questions were asked |
+| Previous Synthesis | `product-development/product/user-research/` | topic name | Past research to build on |
+| Interview Guides | `product-development/product/user-research/interview-guides/` | topic | What questions were asked |
 
 **Context Priority:**
 1. Raw interview data FIRST (always use verbatim quotes)
@@ -41,7 +41,7 @@ When this skill is invoked, immediately check:
 Before we synthesize, first establish what you've learned...
 
 **Checking:**
-- `product-development/product/customers/` for previous findings on this topic
+- `product-development/product/user-research/` for previous findings on this topic
 - `product-development/product/PRDs/{area}/` for the problem statement
 - Interview guides used: what were you trying to validate?
 - Previous synthesis on related topics
@@ -538,7 +538,7 @@ The skill will remind you:
 ### Where Files Go
 
 **Research synthesis:**
-- `product-development/product/customers/research-synthesis/[topic]-[date].md` — records stay where they land; no archive move
+- `product-development/product/user-research/[topic]-[date].md` — records stay where they land; no archive move
 - Executive summary: Can be shared directly with stakeholders
 - Per-interview inputs typically come from `/process-meeting`'s interview category (insight cards + transcripts already filed and ledgered)
 
@@ -559,7 +559,7 @@ After synthesis:
 - `/competitor-analysis` - If competitors mentioned, extract those mentions
 
 **Pulls from:**
-- `product-development/product/customers/` - What questions were asked?
+- `product-development/product/user-research/interview-guides/` - What questions were asked?
 - `product-development/product/PRDs/{area}/` - What was the original problem hypothesis?
 - `/interview-guide` - Questions asked in the interview
 - `product-development/product/meetings/` - Past conversations about this problem
@@ -625,7 +625,7 @@ When synthesis is complete, the skill creates:
 4. **Research Archive** (Appendix) - Raw observations for future reference
 
 All files will be saved to:
-- `product-development/product/customers/research-synthesis/[topic]-[date].md`
+- `product-development/product/user-research/[topic]-[date].md`
 
 **If the synthesis changes persona or ICP facts:** propose the exact edit to
 `product-development/product/strategy/business-context/business-info.md` (show the before/after)
@@ -676,8 +676,8 @@ Remember: User research isn't about validation. It's about discovery. The goal i
 
 Before presenting output to the PM, verify:
 
-- [ ] **File saved to correct location:** Output saved to `product-development/product/customers/research-synthesis/[topic]-[date].md`
-- [ ] **Context routing table was checked:** Reviewed `product-development/product/customers/` for past findings, `product-development/product/PRDs/{area}/` for related problem statements, and `product-development/product/strategy/` for strategic fit
+- [ ] **File saved to correct location:** Output saved to `product-development/product/user-research/[topic]-[date].md`
+- [ ] **Context routing table was checked:** Reviewed `product-development/product/user-research/` for past findings, `product-development/product/PRDs/{area}/` for related problem statements, and `product-development/product/strategy/` for strategic fit
 - [ ] **Themes backed by 2+ sources:** Every theme in the synthesis is supported by observations from at least 2 different interview participants (not a single anecdote)
 - [ ] **Direct user quotes included:** Each key finding includes at least one verbatim user quote with attribution (participant name or identifier)
 - [ ] **Insight severity/frequency rated:** Every theme has a frequency count (e.g., "6 out of 8 users") and a severity rating (High/Medium/Low)

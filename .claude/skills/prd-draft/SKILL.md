@@ -70,7 +70,7 @@ Check, in this priority order:
 | 1 | `product-development/product/initiatives/{slug}.md` (if it exists) | Current status, attached artifacts, open loops — the diff base for this run |
 | 2 | `product-development/product/strategy/*.md`, `strategy/current-quarter.md` | Strategic pillar this supports; quarter fit |
 | 3 | Related PRDs in `product-development/product/PRDs/{area}/` | Dependencies, prior art, cross-functional impact |
-| 4 | `product-development/product/customers/` (research-synthesis, call summaries, feature-requests) | Problem validation: quotes, frequency, severity, current workaround |
+| 4 | `product-development/product/user-research/` (synthesis reports) + `product-development/product/customers/` (call summaries, feature-requests) | Problem validation: quotes, frequency, severity, current workaround |
 | 5 | `strategy/business-context/business-info.md` | Business model, pricing, North Star |
 | 6 | `strategy/business-context/segmentation-matrix.md` | Account count and ARR of the target segment — customer-value denominators |
 | 7 | `product-development/analytics/investigations/{area}/` | Impact sizing, retention/activation baselines already computed |
@@ -178,7 +178,7 @@ What moved this run
                   → analytics/investigations/billing/impact-sizing-low-balance-2026-08-09.md
 
 Backed
-  ✓ Problem       4 interviews · customers/research-synthesis/2026-07-30-…md
+  ✓ Problem       4 interviews · user-research/2026-07-30-…md
   ✓ Segment       mid-market + enterprise · 47 accounts · $2.1M ARR
 
 Still assumed — I couldn't close these

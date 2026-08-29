@@ -93,7 +93,8 @@ const doc = {
           "│   ├── inbox/                       transcript drop zone",
           "│   ├── product/",
           "│   │   ├── strategy/                business context · current quarter · roadmaps",
-          "│   │   ├── customers/               accounts · feature requests · research syntheses",
+          "│   │   ├── customers/               accounts · feature requests",
+          "│   │   ├── user-research/           syntheses · interview guides · journey maps",
           "│   │   ├── competitive-research/    landscape · matrix · teardowns",
           "│   │   ├── initiatives/  decisions/  meetings/",
           "│   │   ├── PRDs/{area}/             + examples/",
@@ -158,7 +159,7 @@ const doc = {
           { name: "Accounts (`customers/accounts/{account}/`)", kind: "living", what: "One folder per customer: the account context on top, call summaries next, raw transcripts underneath", use: "`/process-meeting` files calls here; \"what did customer Y say\" reads the summary first" },
           { name: "Portfolio (`portfolio.yaml`)", kind: "registry", what: "Cross-account registry: segment, health, ARR per customer", use: "Read by `/portfolio-pulse`" },
           { name: "Feature requests", kind: "raw", what: "One dated record per customer request: evidence, draft ticket, tracker state", use: "Clustered by `/prioritize-requests`; pushed by `/create-tickets`" },
-          { name: "Research syntheses", kind: "deliverable", what: "Cross-interview synthesis reports and journey maps", use: "Written by `/user-research-synthesis`, `/journey-map`; the evidence base for PRDs" },
+          { name: "User research (`user-research/`)", kind: "deliverable", what: "The research corpus, its own folder beside `customers/`: cross-interview synthesis reports, interview guides, journey maps", use: "Written by `/user-research-synthesis`, `/interview-guide`, `/journey-map`; the evidence base for PRDs" },
         ]),
         h3("Competitive picture", "competitive"),
         catalog([
@@ -318,7 +319,7 @@ const doc = {
         h3("Discovery: customers", "g-cust"),
         table(["Skill", "What it does", "You give it", "You get"], [
           ["`/interview-guide`", "JTBD-based interview guides", "Topic and who you'll interview", "A ready interview guide"],
-          ["`/user-research-synthesis`", "Turns interviews into actionable insights", "Interview notes or transcripts", "A synthesis report in `customers/research-synthesis/`"],
+          ["`/user-research-synthesis`", "Turns interviews into actionable insights", "Interview notes or transcripts", "A synthesis report in `user-research/`"],
         ], [1800, 3400, 2200, 2400]),
         h3("Discovery: product analytics", "g-analytics"),
         table(["Skill", "What it does", "You give it", "You get"], [
@@ -331,7 +332,7 @@ const doc = {
           ["`/prototype-challenge`", "Claude critiques a built prototype before you share it — design-system compliance, coverage of the spec, usability, and engineering / design / user lenses", "The prototype", "A prioritized must-fix / should-fix / nice-to-have report, saved next to the prototype"],
           ["`/prototype-feedback`", "Applies a round of review feedback to a prototype — sorts every comment, asks you the open decisions in one batch, edits carefully, and logs what was applied, deferred or declined", "The feedback (a thread, notes, an annotated screenshot) and which prototype", "The updated prototype and a per-item log entry"],
           ["`/napkin-sketch`", "ASCII wireframes or a capture of an existing screen", "The screen or feature", "A wireframe to react to"],
-          ["`/journey-map`", "User and customer journey maps", "The journey and persona", "A journey map in `customers/research-synthesis/`"],
+          ["`/journey-map`", "User and customer journey maps", "The journey and persona", "A journey map in `user-research/journey-maps/`"],
         ], [1800, 3400, 2200, 2400]),
         h3("OS admin & governance", "g-admin"),
         p("Setting the Work OS up, and keeping the repository honest before and after a feature ships. Mostly the Work OS admin's — described in the Setup section."),

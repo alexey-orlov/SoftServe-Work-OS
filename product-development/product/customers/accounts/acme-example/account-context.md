@@ -19,8 +19,8 @@ _updated: 2026-08-05_
 - Open asks: [scheduled CSV export with saved presets](../../feature-requests/2026-07-30-acme-example-scheduled-csv-export.md)
   (must-have) · [configurable low-balance alert](../../feature-requests/2026-07-30-acme-example-low-balance-alert.md).
 - Expansion: their EU ops team wants a regional workspace next quarter
-  ([interview](../../research-synthesis/2026-07-30-interview-insights.md)).
+  ([interview](../../../user-research/2026-07-30-interview-insights.md)).
 
 ## History
 
-- 2026-07-30 — discovery interview → [interview insights](../../research-synthesis/2026-07-30-interview-insights.md)
+- 2026-07-30 — discovery interview → [interview insights](../../../user-research/2026-07-30-interview-insights.md)

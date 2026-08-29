@@ -5,7 +5,7 @@ area: billing
 type: feature
 priority_signal: must-have
 tracker_ref: "-"
-source: ../research-synthesis/2026-07-30-interview-insights.md
+source: ../../user-research/2026-07-30-interview-insights.md
 _updated: 2026-08-05
 ---
 
@@ -33,4 +33,4 @@ user-configured threshold, deliverable to an external messenger channel.
 - Extends the shipped credit-usage dashboard (`billing.credit-usage-dashboard`) rather
   than replacing it.
 
-**Provenance:** [interview insights](../research-synthesis/2026-07-30-interview-insights.md) · [transcript](../accounts/acme-example/calls/transcripts/2026-07-30.md)
+**Provenance:** [interview insights](../../user-research/2026-07-30-interview-insights.md) · [transcript](../accounts/acme-example/calls/transcripts/2026-07-30.md)

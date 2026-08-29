@@ -29,7 +29,7 @@ quarter: "-"
   rebuilt by hand weekly — *"if Beacon just exported it on a schedule I'd get half a day
   back." — Their Head of Ops*; June credit depletion was discovered only from job
   failures. Expansion signal: EU ops team wants a regional workspace next quarter.
-  ([interview insights](../customers/research-synthesis/2026-07-30-interview-insights.md))
+  ([interview insights](../user-research/2026-07-30-interview-insights.md))
 - **Feature requests:** Scheduled CSV export with saved presets — acme-example
   (data-export) — pending push
   ([record](../customers/feature-requests/2026-07-30-acme-example-scheduled-csv-export.md))

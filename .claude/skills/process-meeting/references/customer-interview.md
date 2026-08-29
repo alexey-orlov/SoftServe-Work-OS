@@ -11,7 +11,7 @@ report — cross-interview patterns, personas, Mom Test validation, affinity map
 
 ## Step 0 — Connect to existing research (before processing)
 
-Search `product-development/product/customers/research-synthesis/` for previous syntheses;
+Search `product-development/product/user-research/` for previous syntheses;
 note validated themes and which PRDs or initiatives these interviews relate to. Then label
 every theme that emerges:
 
@@ -58,7 +58,7 @@ When [situation], I want to [motivation], so I can [outcome].
 ## Session report
 
 Cards roll up into one report at
-`product-development/product/customers/research-synthesis/{date}-interview-insights.md`:
+`product-development/product/user-research/{date}-interview-insights.md`:
 
 ```markdown
 # Customer Interview Insights — {date}
@@ -89,7 +89,7 @@ Cards roll up into one report at
 
 ## Save + write-backs (this category's Step 4)
 
-- **Report** → `customers/research-synthesis/{date}-interview-insights.md` (+ nav line in
+- **Report** → `user-research/{date}-interview-insights.md` (+ nav line in
   that folder's CLAUDE.md).
 - **Transcripts** → the participant's account folder,
   `accounts/{account}/calls/transcripts/{date}.md` (scaffold the account per

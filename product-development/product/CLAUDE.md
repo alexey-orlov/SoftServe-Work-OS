@@ -20,3 +20,4 @@ Product context, PRDs, customers, strategy, decisions, and the team handbook.
 - [planning/](planning/) — Daily plans and weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review`
 - [launches/](launches/) — Filled launch checklists and gate records, one per feature; `/launch-checklist` writes here
 - [prototypes/](prototypes/) — Clickable prototypes and prototype artifacts by feature slug: HTML previews, feedback logs, challenge reports, external-tool prompts, plus the shared design-system cache
+- [user-research/](user-research/) — The research corpus: cross-interview synthesis reports, interview guides, journey maps — split out of `customers/` (which keeps per-account context, calls, and feature requests)

@@ -82,7 +82,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences; `segmentation-matrix.md` — account counts + ARR by vertical × size band × use-case category. Living masters: edit in place, keep current |
 | Product | `product-development/product/CLAUDE.md` | Product context, PRDs, customers, decisions |
 | PRDs | `product-development/product/PRDs/` | PRDs by product area, plus worked examples in `examples/` |
-| Customers | `product-development/product/customers/CLAUDE.md` | Account folders — context, calls, transcripts |
+| Customers | `product-development/product/customers/CLAUDE.md` | Account folders — context, calls, transcripts, feature requests |
+| User research | `product-development/product/user-research/CLAUDE.md` | The research corpus — cross-interview syntheses, interview guides, journey maps |
 | Competitive research | `product-development/product/competitive-research/CLAUDE.md` | Competitor matrix and per-competitor teardowns |
 | Strategy | `product-development/product/strategy/` | `current-quarter.md` (this quarter's OKRs), `roadmaps/`, `business-context/`, `frameworks/` |
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |

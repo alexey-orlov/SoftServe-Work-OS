@@ -1,6 +1,6 @@
 ---
 name: process-meeting
-description: Process any meeting record into the wiki — customer calls, user interviews, internal meetings (recurring series like standup / sprint-planning / team-bi-weekly, plus kickoffs, stakeholder reviews, workshops), retros, or a whole day's batch — from a transcript, notes, or dictation. Files the raw transcript, writes the summary to the right home (accounts/{c}/calls/, meetings/{type}/, or research-synthesis/), routes decisions to /decision-log-entry and lessons to lessons-learned.md, updates account-context.md and portfolio.yaml, declares initiative joins, appends the ledger. PII-safe — customer-side speakers by role only; refuses 1:1s per the privacy contract. Use on /process-meeting, "process this transcript/call", "summarize my sprint planning", "here are today's meetings", "process these 3 interviews". NOT for creating agendas (/meeting-agenda), rating meeting effectiveness (/meeting-feedback), synthesizing 4+ interviews (/user-research-synthesis), folding non-meeting artifacts (/context-update), or weekly/exec rollups (/weekly-review, /portfolio-pulse).
+description: Process any meeting record into the wiki — customer calls, user interviews, internal meetings (recurring series like standup / sprint-planning / team-bi-weekly, plus kickoffs, stakeholder reviews, workshops), retros, or a whole day's batch — from a transcript, notes, or dictation. Files the raw transcript, writes the summary to the right home (accounts/{c}/calls/, meetings/{type}/, or user-research/), routes decisions to /decision-log-entry and lessons to lessons-learned.md, updates account-context.md and portfolio.yaml, declares initiative joins, appends the ledger. PII-safe — customer-side speakers by role only; refuses 1:1s per the privacy contract. Use on /process-meeting, "process this transcript/call", "summarize my sprint planning", "here are today's meetings", "process these 3 interviews". NOT for creating agendas (/meeting-agenda), rating meeting effectiveness (/meeting-feedback), synthesizing 4+ interviews (/user-research-synthesis), folding non-meeting artifacts (/context-update), or weekly/exec rollups (/weekly-review, /portfolio-pulse).
 argument-hint: "[transcript path or paste]"
 group: communication-ops
 ---
@@ -117,7 +117,7 @@ use customer-call and give the discovery findings their own summary section.
 | Category | Transcript (immutable) | Summary |
 |---|---|---|
 | customer-call | `product-development/product/customers/accounts/{customer}/calls/transcripts/{date}.md` | `…/accounts/{customer}/calls/summaries/{date}.md` |
-| customer-interview | participant's account folder, same as above | report: `product-development/product/customers/research-synthesis/{date}-interview-insights.md` |
+| customer-interview | participant's account folder, same as above | report: `product-development/product/user-research/{date}-interview-insights.md` |
 | internal (`{type}` ∈ enum) | `product-development/product/meetings/{type}/transcripts/{date}-{topic}.md` | `…/meetings/{type}/summaries/{date}-{topic}.md` |
 | retro | `product-development/product/meetings/retros/transcripts/{date}-retro.md` | writeup: `…/meetings/retros/{date}-retro.md` |
 | batch-day | per member, as its category above | per member, plus digest: `…/reports/{date}-daily-batch.md` |

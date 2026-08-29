@@ -85,7 +85,7 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 | `product-development/product/strategy/current-quarter.md` | Objectives, Strategic Themes, and `## Explicitly Not Doing` — **one of two sources for the Fit axis** (the other is `product-development/product/strategy/roadmaps/`) | Not filled → fall through to the Step 4 gate. Fit reads `unknown` only if the roadmap is *also* unfilled |
 | `product-development/product/strategy/roadmaps/*.md` | What is already NOW / NEXT / Under Consideration — do not re-triage committed work | "No roadmap yet" — note it, continue |
 | `product-development/product/decisions/` | Already decided? Do not re-litigate a settled call | — |
-| `product-development/product/customers/research-synthesis/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
+| `product-development/product/user-research/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
 | `product-development/feature-index.yaml` | Does it already ship? **A request for a shipped feature is a discoverability problem, not a demand signal** — exclude from counts, list separately | Only the starter `billing:` template entries → print "feature-index not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
 | `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list | First run — create it |
 
@@ -139,7 +139,7 @@ Once the gate passes:
 - **Low** — no mapping in the *filled* source, or it appears on `## Explicitly Not Doing`, or `product-development/product/decisions/` already declined it
 
 **Demand evidence**
-- **Strong** — 3+ distinct accounts, **or** ≥50% of accounts in the pile when the pile has 3–5 accounts **and the theme has at least 2 distinct accounts** (state the denominator), **or** 2+ accounts where one is in a priority segment, **or** corroborated by a `product-development/product/customers/research-synthesis/` theme with a frequency and severity rating, **or** appears as a `**Key Product Gaps**` entry in 2+ accounts
+- **Strong** — 3+ distinct accounts, **or** ≥50% of accounts in the pile when the pile has 3–5 accounts **and the theme has at least 2 distinct accounts** (state the denominator), **or** 2+ accounts where one is in a priority segment, **or** corroborated by a `product-development/product/user-research/` theme with a frequency and severity rating, **or** appears as a `**Key Product Gaps**` entry in 2+ accounts
 - **Weak** — everything else. **A one-account theme is always Weak regardless of pile size** — one loud customer is not demand.
 
 If `business-info.md` names no ICP and `business-context/segmentation-matrix.md` is unfilled, the priority-segment clause is unavailable — say so rather than inferring segment from an account name. When the matrix is filled, weight demand by the ARR the requesting accounts' segments carry there (their `vertical` / `size_band` / `use_cases` come from `portfolio.yaml`).
