@@ -23,15 +23,15 @@ group: communication-ops
 
 ## Same-Day Plan Detection
 
-Before generating a new plan, check `product-development/` for an existing plan from today.
+Before generating a new plan, check `product-development/product/planning/` for an existing plan from today.
 
 **If a same-day plan exists:**
 ```
-I see you already have a plan for today (`product-development/[filename]`).
+I see you already have a plan for today (`product-development/product/planning/[filename]`).
 
 Options:
 1. **Update it** - I'll refresh with new context (meetings changed, priorities shifted)
-2. **Replace it** - Start fresh (I'll archive the old one as `[filename]-v1.md`)
+2. **Replace it** - Start fresh (the old one is archived as `{YYYY-MM-DD}-daily-plan-superseded-{HHMM}.md`)
 3. **Keep it** - No changes needed
 
 Which would you prefer?

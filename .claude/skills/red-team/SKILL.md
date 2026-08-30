@@ -121,7 +121,7 @@ Default to "this risk is real" unless the plan already cites evidence against it
 
 ## Output Format
 
-Save to: `product-development/product/PRDs/{area}/reviews/{doc-slug}-red-team.md`
+Save to: `product-development/product/PRDs/{area}/reviews/{initiative-slug}-red-team.md` (PRD targets; a strategy/decision doc outside `PRDs/` keeps its own doc-slug in a `reviews/` folder beside it)
 For docs living outside `PRDs/` (strategy, decisions), save to a `reviews/` subfolder beside the doc.
 
 ```markdown

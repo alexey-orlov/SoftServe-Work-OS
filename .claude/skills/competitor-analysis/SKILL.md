@@ -414,7 +414,7 @@ This skill can help you set up:
 ### Where Files Go
 
 **Deep Analysis:**
-- `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/handbook/templates/competitor-teardown-template.md`); stamp `_last-deep-analysis:` and bump `_updated:`
+- `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/handbook/templates/competitor-teardown-template.md`); stamp the frontmatter keys `last-deep-analysis:` and `updated:`
 - Fold through: the competitor's column and cells in `competitive-matrix.md` + the affected `competitive-landscape.md` sections
 
 **Ongoing Monitoring:**

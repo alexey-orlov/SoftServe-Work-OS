@@ -21,7 +21,7 @@ The skill reads:
 - `product-development/product/strategy/business-context/segmentation-matrix.md` — segment axes and ARR mix; lets the rollup say where risk and expansion concentrate (vertical / size band / use case), not just which accounts
 - Recent summaries in `accounts/{customer}/calls/summaries/` (last 14 days)
 - `product/decisions/` (recent)
-- `feature-index.yaml` — for cross-referencing in-flight work
+- `feature-index.yaml` — for feature names and catalog status (live | planned | retired); in-flight work comes from the initiative pages above
 - Optional MCP feeds: Calendar (today's meetings), CRM (deal stages), Granola (recent transcripts), Slack (mentions of customer names), LinkedIn (champion job changes)
 
 If MCPs aren't connected, the skill still works on the YAML + markdown alone — just without the live signals.

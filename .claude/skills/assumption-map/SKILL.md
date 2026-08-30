@@ -96,7 +96,8 @@ Before surfacing assumptions, silently read what the repo already knows:
 | `product-development/product/customers/` | Call summaries, research — evidence for or against Value/Usability beliefs |
 | `product-development/product/competitive-research/` | Competitor moves — grounds differentiation and GTM beliefs |
 | `product-development/product/decisions/` | Has this been tried or explicitly rejected before? |
-| `product-development/feature-index.yaml` + `product/initiatives/` | Does a related feature already exist in the catalog, and which initiatives (with artifacts) target it? |
+| `product-development/feature-index.yaml` | Does a related feature already exist, at what status? |
+| `product/initiatives/*.md` (`features:` frontmatter) | Which initiatives target it, and what artifacts they hold |
 | `product-development/engineering/code-repos.yaml` → `/code-qa` | What the code does today — grounds Feasibility with repo@sha evidence instead of engineering folklore |
 
 **Graceful degradation:** if a source is an unfilled template (bracketed placeholders), don't invent evidence — the Evidence column reads "none — business context unfilled" (for code claims: "none — no grounded code access (/connect-code)"). A map with honest "none" entries is still useful; a map with fabricated evidence is worse than no map.
@@ -161,7 +162,7 @@ For the top 1–3 (never more), give a one-line suggested probe — the cheapest
 
 ## Output Format
 
-Save to: `product-development/product/PRDs/{area}/reviews/{feature-slug}-assumption-map.md`
+Save to: `product-development/product/PRDs/{area}/reviews/{initiative-slug}-assumption-map.md`
 No product area yet? Use `product-development/product/PRDs/general/reviews/{initiative-slug}-assumption-map.md` and retag when an area emerges.
 
 ```markdown
@@ -228,7 +229,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 2. **Every assumption must be falsifiable.** A specific observation could confirm or break it. Rewrite vague beliefs until they are testable.
 3. **Evidence cites a repo path or says "none".** Never "research suggests" without a source. Unfilled business context → "none — business context unfilled".
 4. **Verdicts are per-assumption, never idea-level.** The skill never recommends killing or approving the idea.
-5. **Update in place.** If `{feature-slug}-assumption-map.md` already exists, re-rate Confidence and Evidence, move assumptions between quadrants, and log the change under Revision History. Never regenerate from scratch — the history is the value.
+5. **Update in place.** If `{initiative-slug}-assumption-map.md` already exists, re-rate Confidence and Evidence, move assumptions between quadrants, and log the change under Revision History. Never regenerate from scratch — the history is the value.
 6. **Team & Org stays at team level.** Capability, capacity, tooling. No named individuals, no performance commentary (Privacy Contract).
 7. **Hand off test design.** Suggested probes are one line. Experiment design belongs to `/experiment-decision` and `/experiment-metrics`.
 8. **Cap the inventory at ~25.** Beyond that, merge duplicates — an unreadable map ranks nothing.

@@ -891,7 +891,7 @@ Shared conventions (from `/decision-log-entry`):
 After saving, close the loop — full contract: `governance/write-back-contract.md`:
 
 1. Append the decision to the END of "Recent Decisions" in `decisions/CLAUDE.md` (rule above).
-2. Link the decision from the relevant initiative page in `product-development/product/initiatives/` when one exists, and from the feature's index entry `decisions:` list (gated — confirm with the user).
+2. The record declares its links in frontmatter (`initiatives:`, optional `areas:`/`features:`/`customers:`/`competitors:` — `governance/link-schema.yaml`) and is linked from each named initiative page's Decisions section in the same change (rule 8). No catalog write.
 3. In the entry's Related section, link the source material (meeting summary, call, PRD) that prompted it.
 4. End your reply by listing every repo path you wrote or updated.
 

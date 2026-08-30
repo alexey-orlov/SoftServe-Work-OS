@@ -237,7 +237,6 @@ Feature: [Name]
 **Impact sizing analysis:**
 - Active work: `product-development/analytics/investigations/{area}/impact-sizing-[initiative-slug]-[date].md` (frontmatter `initiatives:`)
 - When finalized: Reference in PRD in `Strategic Fit` section
-- Archive: Move to `product-development/product/PRDs/{area}/` as historical reference when feature ships
 
 ### Link to Other Work
 

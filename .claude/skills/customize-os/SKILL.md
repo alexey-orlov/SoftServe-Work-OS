@@ -99,7 +99,12 @@ interrupted ones.** Two files, living where the outputs land (customer instance 
 
 ```markdown
 # Customization Status — {Org}
-_updated: YYYY-MM-DD · mode: instance | staging ({path}) · naming: canonical (confirmed YYYY-MM-DD) | house — {OS term → house term, …} (mapped YYYY-MM-DD) · auto-sync: direct | pr (chosen YYYY-MM-DD, on | not yet on) | undecided_
+---
+updated: YYYY-MM-DD
+mode: "instance | staging ({path})"
+naming: "canonical (confirmed YYYY-MM-DD) | house — {OS term → house term, …} (mapped YYYY-MM-DD)"
+auto-sync: "direct | pr (chosen YYYY-MM-DD, on | not yet on) | undecided"
+---
 
 ## Sequence
 | # | Target | Phase | One line |

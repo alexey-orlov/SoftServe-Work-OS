@@ -22,10 +22,10 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
 ## Full Gate Checklist
 
 ### Product Context
-- [ ] PRD exists in `product-development/product/PRDs/{area}/` for this feature
+- [ ] PRD exists at `product-development/product/PRDs/{area}/{initiative-slug}-prd.md` and its `initiatives:` frontmatter names this initiative
   - PRD passes content checks: covers all 6 sections (Hypothesis / Problem / Strategic fit / Solution / Success metrics / Non-goals), no `[FILL IN]` / `[NEED:]` / `[Your X]` / `[GAP:` placeholder tokens remain, ≥ 400 words. *File-existence alone is not enough — placeholder PRDs fail this check, and a `[GAP:]` marker means the evidence behind a section is still missing.*
 - [ ] Decisions made during development are logged in `product-development/product/decisions/`
-- [ ] Pre-mortem exists at `product-development/product/PRDs/{area}/reviews/{feature-name}-premortem.md` and no Launch-Blocking Tiger row is missing Mitigation / Owner / Due (NOT APPLICABLE in lightweight mode or when no launch checklist exists for the feature)
+- [ ] Pre-mortem exists at `product-development/product/PRDs/{area}/reviews/{initiative-slug}-premortem.md` and no Launch-Blocking Tiger row is missing Mitigation / Owner / Due (NOT APPLICABLE in lightweight mode or when no launch checklist exists for the feature)
 - [ ] Every feature the initiative targets is registered in the catalog (`product-development/feature-index.yaml` — `status: planned` before this launch), and the initiative's frontmatter names ≥1 resolvable target
 
 ### Design (if applicable)

@@ -12,14 +12,14 @@ in plain language — each item with a suggested change and a number to say yes 
 audiences: this file speaks to the agent in repo terms; **everything the agent shows the
 user (chat readout, report, prompt text) follows the plain-language contract below.**
 
-One engine, eleven checks. The GitHub Action (`.github/workflows/wiki-lint.yml`) runs the
+One engine, twelve checks. The GitHub Action (`.github/workflows/wiki-lint.yml`) runs the
 mechanical subset on PRs and weekly via `.github/scripts/wiki-lint.sh` — it reports only,
 never repairs. This skill is the full pass: run the script first, do the judgment checks the
 script can't, then repair and suggest.
 
 ## Modes
 
-- **Default — fix the mechanical, suggest the rest.** Runs all eleven checks; applies the
+- **Default — fix the mechanical, suggest the rest.** Runs all twelve checks; applies the
   MECHANICAL repairs (defined below) on the spot; every other finding goes to a "Needs your
   decision" list with a concrete suggested change per item — none applied until the user
   says yes. Writes the dated report.
@@ -234,7 +234,7 @@ each, re-run).
 
 **3. Acting on a yes.** "apply N" → show the exact before / after in chat, write it through
 the normal path (the guard prompts on gated files), mark the item `applied {date}` in the
-report. "confirm N" (untouched page) → stamp its `_updated:` / `Last verified:` line with
+report. "confirm N" (untouched page) → stamp its `updated:` frontmatter / `Last verified:` line with today (converting a legacy `_updated:` line to frontmatter in the same edit) — i.e. with
 today's date when the page has one; otherwise say plainly that it will show up again until
 it is edited or archived. "skip N" → leave it, note `skipped {date}` in the report so the
 next run says "skipped last time". Never act on an item without one of these.

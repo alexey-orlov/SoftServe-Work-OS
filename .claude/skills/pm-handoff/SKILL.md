@@ -117,9 +117,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    CLAUDE.md (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   (a `reviews:` row) and apply it only after the user confirms (gated in
-   `governance/write-policy.yaml`).
+2. The record carries `initiatives: [{initiative-slug}]` frontmatter and is linked from
+   the initiative page (dated Activity line) — no catalog write; the catalog holds no
+   artifact rows (`governance/link-schema.yaml`).
    Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`
    (one dated Activity line).
 3. In the artifact's header, link the source material it was derived from (the checked docs).

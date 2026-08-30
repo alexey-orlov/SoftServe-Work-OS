@@ -444,4 +444,4 @@ Before presenting output to the PM, verify:
 - [ ] **Metric sensitivity analysis included:** The output states whether the expected change is detectable given current traffic, variance, and experiment duration
 - [ ] **Guardrail metrics identified:** At least 3 guardrail metrics are defined with acceptable ranges to prevent unintended harm
 - [ ] **No vanity metrics without justification:** If any metric could be considered a vanity metric (e.g., page views, total signups), the output explains why it is valid for this specific experiment
-- [ ] **Saved and registered:** definitions written to `analytics/metrics/{area}/`, folder CLAUDE.md row appended, feature-index addition proposed
+- [ ] **Saved and registered:** definitions written to `analytics/metrics/{area}/` with `initiatives:`/`features:` frontmatter, folder CLAUDE.md row appended, initiative page row + Activity line updated (a catalog entry is proposed ONLY when the run introduced a brand-new feature/area)

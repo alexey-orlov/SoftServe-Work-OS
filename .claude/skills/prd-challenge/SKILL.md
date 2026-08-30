@@ -106,10 +106,11 @@ Wait for all lenses. Then:
 
 ### Step 5: Write the report
 
-`product-development/product/PRDs/{area}/reviews/{slug}-challenge-{YYYY-MM-DD}.md` — dated, one per run, never overwritten: successive reports side by side show the bet getting stronger.
+`product-development/product/PRDs/{area}/reviews/{initiative-slug}-challenge-{YYYY-MM-DD}.md` — dated, one per run, never overwritten: successive reports side by side show the bet getting stronger.
 
 ```markdown
 ---
+initiatives: [[initiative-slug]]
 prd: [path]
 date: YYYY-MM-DD
 stage: [stage]
@@ -146,7 +147,7 @@ sub-artifacts: [paths written by the skill lenses this run]
 
 1. **PRD Open Questions** — replace/update with the ranked table's rows, each with its owner. (The next `/prd-draft` run reads these and reports what moved.)
 2. **Initiative page** — fill the Artifacts rows this run produced (Assumption map, Challenge report, Pre-mortem), add one dated Activity line, and put the top next-steps into Open loops with owners.
-3. **Feature index** — propose adding the report (and new sub-artifacts) to the feature's `reviews:` list — gated, confirm first.
+3. **Frontmatter** — the report and each sub-artifact carry `initiatives: [{initiative-slug}]`; the initiative-page update above is the whole registration (the catalog holds no artifact rows).
 
 ---
 

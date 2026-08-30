@@ -33,7 +33,7 @@ stakeholder communication guidance, and concrete next steps.
 Before generating a results analysis, verify the feature has actually shipped.
 
 **Check for launch signals:**
-- Does the PRD in `product-development/product/PRDs/{area}/` show status "Shipped" or "Launched"?
+- Does the initiative page show `status: shipped` (and the catalog `status: live` + `shipped:` date) — both written by `/feature-launch-gate` on PASS?
 - Does the PM mention actual results data (not projections)?
 - When `engineering/code-repos.yaml` has a reachable repo with a `deployed_ref:` — confirm what actually shipped via `/code-qa`'s is-it-in-production playbook; results attributed to code that isn't deployed are noise.
 
@@ -111,6 +111,11 @@ I'll help you create a results doc that captures outcomes and learnings.
 ## Output Template
 
 ```markdown
+---
+initiatives: [[initiative-slug]]
+date: [YYYY-MM-DD]
+---
+
 # Feature Results: [Feature Name]
 
 **Ship Date:** [Date]

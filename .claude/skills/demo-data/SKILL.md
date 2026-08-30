@@ -112,9 +112,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    CLAUDE.md (append-only — never re-sort existing lines). The pipeline engines handle
    their own outputs; this skill lists what it wrote directly (raw drops before the
    sweep, the manifest, `[DEMO]` pages).
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml`
-   addition and apply it only after the user confirms (gated). Initiative-scoped → link
-   from the `[DEMO]` initiative page.
+2. Declare links in frontmatter per `governance/link-schema.yaml` and link every artifact
+   from the `[DEMO]` initiative page (row + dated Activity line). Catalog entries only for
+   the `[DEMO]`-slugged features (gated), recorded in the manifest for exact removal.
 3. In the artifact's header, link the source material it was derived from (for synthetic
    raw files: the banner IS the provenance).
 4. End your reply by listing every repo path you wrote or updated.

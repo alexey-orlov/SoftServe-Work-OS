@@ -13,4 +13,4 @@ lead-enrichment use case.
 
 ### Subfolders
 
-- [calls/](calls/) — Call transcripts and summaries, by date
+- [calls/](calls/) — Call summaries by date; raw transcripts live in `user-insights/transcripts/` (filtered by `customers:` tag)

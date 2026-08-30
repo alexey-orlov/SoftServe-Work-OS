@@ -163,6 +163,7 @@ Wait for all lenses. Then:
 
 ```markdown
 ---
+initiatives: [[initiative-slug]]
 job-spec: [path]
 breakdown: [path#J-N | none — ad-hoc spec]
 date: YYYY-MM-DD
@@ -213,7 +214,7 @@ feasibility: [/code-qa verdict | TODO: feasibility unverified — needs /connect
 ### Step 7: Flow the results back
 
 1. **Initiative page** — one dated Activity line.
-2. **Feature index** — propose the report on the feature's `reviews:` list (gated — show the exact addition, apply on confirm, batched once per run).
+2. **Frontmatter** — the report carries `initiatives: [{initiative-slug}]`; the initiative-page Activity line is the whole registration (the catalog holds no artifact rows).
 3. **Different-job flags** from §5 verdicts → offer `/jobs-breakdown`.
 4. **Bet-level escalations** → point at `/prd-challenge`.
 5. **Offer the rewrite** — on the PM's yes, `/job-spec-draft` folds the accepted verdicts into the spec. One writer per surface: the spec file stays `/job-spec-draft`'s; this skill never edits it.
@@ -255,7 +256,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 - [ ] Relocation table: no flagged line vanished silently
 - [ ] Contradictions stated as both positions + the decision needed — never averaged
 - [ ] The job spec file untouched; the rewrite offered, not applied
-- [ ] Report saved dated; initiative page updated and the gated index proposal made in the same run
+- [ ] Report saved dated with its `initiatives:` frontmatter; initiative page updated in the same run
 
 ## Chain Position
 

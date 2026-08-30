@@ -7,7 +7,7 @@ group: delivery
 
 ## Quick Start
 
-1. Provide what you are launching (feature name, PRD link, or description)
+1. Provide the initiative you are launching (an initiative slug; a feature name resolves to its latest active initiative — no initiative yet means the chain hasn't run: `/prd-draft` first)
 2. The skill checks the PRD, past launches, and stakeholder profiles for context
 3. The skill asks about launch type: **Small feature**, **Major launch**, or **Regulatory product**
 4. The skill generates a prioritized checklist with owners, dependencies, and due dates
@@ -69,12 +69,12 @@ Create file: `product-development/product/launches/[initiative-slug]-launch-chec
 
 ```markdown
 ---
-feature: [Feature name]
-prd: [Link to PRD]
-launch_date: YYYY-MM-DD
-launch_type: [A/B test / Staged rollout / Full launch]
-risk_level: [Low / Medium / High]
+initiatives: [[initiative-slug]]
+date: YYYY-MM-DD
+features: []
 ---
+
+**PRD:** [link] · **Launch date:** YYYY-MM-DD · **Launch type:** [A/B test / Staged rollout / Full launch] · **Risk:** [Low / Medium / High]
 
 # Launch Checklist: [Feature Name]
 

@@ -65,7 +65,7 @@ Save to: `product-development/product/decisions/{YYYY-MM-DD}-{topic-slug}.md`
 
 ## Related
 
-- [Link to relevant PRD, RFC, metric file, or feature-index entry]
+- [Link to relevant PRD, RFC, metric file, or initiative page]
 ```
 
 ## Quick Entry Format
@@ -122,6 +122,7 @@ If your decision cites a file that hasn't been written yet (a customer-call summ
 ## Rules
 
 1. Full entries: under 200 words. Quick entries: under 75 words. This is a log, not a doc.
+1b. **Kill decisions carry their writes** (one-writer table): the killed initiative's page flips `status: killed` with a dated Activity line in the same change, and a `planned`-only catalog feature it targeted gets its removal proposed (gated).
 2. Always include at least 2 options in full entries. If the team didn't consider alternatives, note: "No alternatives formally considered — fast decision based on [reason]." Or use the quick entry format.
 3. After saving, **append** to the bottom of the "Recent Decisions" list in `product-development/product/decisions/CLAUDE.md` (one bullet per line, one decision per bullet). Don't insert in the middle — that creates merge conflicts when two PMs file decisions the same day. If you hit a merge conflict on the index, keep both bullets and re-sort by date+sequence. Also: set the frontmatter `initiatives:` to the slug(s) this was decided under (or leave empty), and link the entry from each named page's Decisions section **in the same change** — a slug in the header without the backlink is drift `/wiki-lint` flags. (One-way rule: initiative pages may link older decisions that don't name them.) End your reply by listing every repo path you wrote or updated. Full contract: `governance/write-back-contract.md`.
 4. The "Reasoning" section must answer WHY, not WHAT. "We chose X" is not reasoning. "We chose X because our cost ratio is 22x" is reasoning.

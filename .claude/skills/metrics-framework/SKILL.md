@@ -662,7 +662,7 @@ For products with multiple value streams (e.g., separate features for creation, 
 
 **Metric framework documentation:**
 - Active work: `product-development/analytics/metrics/{area}/metrics-framework-[date].md` (living document for your team)
-- When finalized: Move to `product-development/analytics/metrics/{area}/metric-hierarchy-[quarter].md` for historical reference
+- When finalized: write the quarterly snapshot as a NEW file `metric-hierarchy-[quarter].md` with its own nav line — never rename the framework doc (registered links would break)
 - Dashboard spec: Share with analytics team for instrumentation
 
 ### Link to Other Work

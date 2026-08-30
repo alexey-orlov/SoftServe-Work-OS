@@ -19,7 +19,7 @@ Create quick wireframes as ASCII art OR capture existing UI from browser to matc
 
 **Example:** "Sketch a settings page with tabs for Profile, Security, and Billing"
 
-**Output:** Wireframe delivered inline, also saved to `product-development/product/prototypes/[feature]-napkin-sketch.md`
+**Output:** Wireframe delivered inline, also saved to `product-development/product/prototypes/[initiative-slug]-napkin-sketch.md` (frontmatter `initiatives:`)
 
 **Time:** 5-10 minutes per screen
 

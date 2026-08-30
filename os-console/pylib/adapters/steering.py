@@ -17,7 +17,7 @@ FEATURE_INDEX = 'product-development/feature-index.yaml'
 
 CORE = [
     {'path': 'CLAUDE.md', 'role': 'Root steering — loads every session: fundamentals, doc index, the four rules'},
-    {'path': FEATURE_INDEX, 'role': 'The product map — every feature → its artifacts'},
+    {'path': FEATURE_INDEX, 'role': 'The product map — areas → features (status, shipped)'},
     {'path': 'product-development/toolchain.yaml', 'role': 'Tool/approach choices + live connections, one key per surface'},
     {'path': '.claude/team-learnings.md', 'role': 'Cross-cutting agent rules — injected at every session start'},
     {'path': 'governance/write-policy.yaml', 'role': 'The write policy itself — tiers list + auto-sync switchboard'},

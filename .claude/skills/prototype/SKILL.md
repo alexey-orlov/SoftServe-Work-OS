@@ -39,7 +39,7 @@ Resolve the path FIRST, so a blocked run stops in seconds, not after minutes of 
 
 ## Step 1 — Ground in the spec (all paths)
 
-- Resolve the requirements source: explicit path if given, else `product-development/feature-index.yaml` by feature name. Priority: **job spec** (`PRDs/{area}/*-job-spec.md` — the buildable contract) → **PRD** → previous prototypes, napkin sketches, and feedback logs in `product/prototypes/` → user research for the pain being solved.
+- Resolve the requirements source: explicit path if given, else the initiative page's Artifacts rows (`product/initiatives/{slug}.md` — a feature name resolves to its latest initiative; the catalog only says which feature is meant). Priority: **job spec** (`PRDs/{area}/*-job-spec.md` — the buildable contract) → **PRD** → previous prototypes, napkin sketches, and feedback logs in `product/prototypes/` → user research for the pain being solved.
 - No spec at all → offer `/prd-draft` first ("prototype without requirements = guessing"), or take a verbal brief and say the prototype is brief-grounded only.
 - Mine the spec for: capabilities, rules/ACs, variations, **states** (the spec's states, not just the generic UI set), and out-of-scope lines. These decide what the prototype must demonstrate.
 - **Guardrail:** the prototype is one hypothesis against the spec. Never edit spec files from this skill, and never present a UI choice as if it were a requirement.

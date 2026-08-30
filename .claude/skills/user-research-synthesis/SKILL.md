@@ -17,6 +17,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Existing Research | `product-development/product/user-insights/*.md` | topic from chat, user segments | Previous findings to avoid duplication |
+| Transcript archive | `product-development/product/user-insights/transcripts/` | tag frontmatter filters — `type:`, `customers:`, `areas:`, `features:`, `initiatives:`, `themes:` (never by folder) | The raw corpus: every interview and customer call in one tagged home |
 | Related PRDs | `product-development/product/PRDs/{area}/*.md` | problem related to interviews | Problem framing and hypothesis |
 | Strategy Context | `product-development/product/strategy/*.md` | user segment, strategic fit | How findings ladder to strategy |
 | Previous Synthesis | `product-development/product/user-insights/` | topic name | Past research to build on |

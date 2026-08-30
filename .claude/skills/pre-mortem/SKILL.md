@@ -79,8 +79,8 @@ Read what exists before imagining what fails:
 | Source | What to Extract |
 |--------|-----------------|
 | The PRD (`product-development/product/PRDs/{area}/`) | Scope, success metrics, kill criteria, §7 Risks and Recovery, rollout plan |
-| `product-development/product/launches/{feature-name}-launch-checklist.md` (if it exists) | Planned tasks, owners, timeline |
-| `product-development/feature-index.yaml` | What artifacts exist; what's conspicuously missing |
+| `product-development/product/launches/{initiative-slug}-launch-checklist.md` (if it exists) | Planned tasks, owners, timeline |
+| the initiative page (`product/initiatives/{slug}.md`) | What artifacts exist (its Artifacts rows + Activity); what's conspicuously missing — the catalog only carries feature status |
 | Past pre-mortems in `product-development/product/PRDs/*/reviews/` | Risks that recur across this team's launches |
 | `product-development/product/decisions/` | Post-launch learnings from earlier features — what actually went wrong last time |
 

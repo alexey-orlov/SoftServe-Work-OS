@@ -17,9 +17,9 @@ Generate engineering tickets from PRDs, feature specs, or task lists. Supports d
 4. If Linear/Jira MCP is connected, the skill creates tickets directly; otherwise, the skill generates copy-paste text
 5. The skill provides a dependency summary and sprint assignment suggestion
 
-**Example:** "Create tickets from product-development/product/PRDs/{area}/checkout-redesign.md targeting a March 15 launch"
+**Example:** "Create tickets from product-development/product/PRDs/billing/checkout-redesign-v1-prd.md targeting a March 15 launch"
 
-**Output:** Tickets created in Linear/Jira, or saved to `product-development/engineering/plans/{area}/[feature]-tickets.md`
+**Output:** Tickets created in Linear/Jira, or saved to `product-development/engineering/plans/{area}/[initiative-slug]-tickets.md` (frontmatter `initiatives:`)
 
 **Time:** 15-30 minutes depending on PRD complexity
 
@@ -89,8 +89,8 @@ module paths and entry points via `/code-qa` so Technical Notes reference actual
 not guessed ones.
 
 When agreed job specs exist for the work (`product-development/product/PRDs/{area}/
-{initiative-slug}-{job-slug}-job-spec.md` — check the feature's `job-specs:` list in
-the initiative page's Artifacts rows, or the breakdown's table), prefer them over the PRD as the
+{initiative-slug}-{job-slug}-job-spec.md` — check the initiative page's "Job specs:"
+Artifacts row, or the breakdown's table), prefer them over the PRD as the
 decomposition source: one job spec ≈ one epic or story cluster; its Rules & acceptance
 criteria become ticket ACs near-verbatim; its Engineering-confirmations list becomes
 blocking spike/confirmation tickets ("do not re-implement" checks first); its deferred
@@ -443,7 +443,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 4. End your reply by listing every repo path you wrote or updated.
 
 This applies to the text-fallback output saved to
-`product-development/engineering/plans/{area}/[feature]-tickets.md`. When tickets were
+`product-development/engineering/plans/{area}/[initiative-slug]-tickets.md`. When tickets were
 created directly in Linear/Jira via MCP, steps 1-3 don't apply — but step 4 still does:
 end your reply listing what was created and where (ticket IDs, epic, project).
 

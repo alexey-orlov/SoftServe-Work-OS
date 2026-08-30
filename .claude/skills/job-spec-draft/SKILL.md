@@ -155,7 +155,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
-Specifics for this skill: the job spec lands in the feature's `job-specs:` list (gated, batched once per run); the breakdown's J-row gets its status bumped and the job spec linked; the initiative page's "Job specs:" row and a dated Activity line are updated. New feature keys belong to `/prd-draft` and `/context-update`; entry missing entirely → propose the minimal entry (prd + job-specs + initiatives) in the same gated change, marked as the registration `/prd-draft` would have made.
+Specifics for this skill: no catalog write — the spec carries `initiatives: [{initiative-slug}]` frontmatter; the breakdown's J-row gets its status bumped and the job spec linked; the initiative page's "Job specs:" row and a dated Activity line are updated in the same change. A missing initiative page means the chain was skipped → route to `/prd-draft` (its Step 4 creates page + catalog entry).
 
 ---
 
