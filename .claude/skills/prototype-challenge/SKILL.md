@@ -17,13 +17,13 @@ A prototype review by people costs a meeting; a flawed prototype in that meeting
 
 | Source | Where | What to extract |
 |---|---|---|
-| Job spec (preferred) / PRD | build record link in `product/prototypes/{slug}-feedback-log.md`, else `feature-index.yaml` → `PRDs/{area}/` | requirements, rules/ACs, states, out-of-scope — the alignment baseline |
+| Job spec (preferred) / PRD | build record link in `product/prototypes/{slug}-feedback-log.md`, else the initiative page's Artifacts rows → `PRDs/{area}/` | requirements, rules/ACs, states, out-of-scope — the alignment baseline |
 | Build record + prior rounds | `product/prototypes/{slug}-feedback-log.md` | declared coverage gaps, declined items — don't re-raise what round 1 already settled |
 | Design system + gaps | `product/prototypes/design-system/design-system.md` | recorded gaps aren't findings; unrecorded drift is |
 | Prior challenge rounds | `product/prototypes/{slug}-challenge-round-*.md` | verify earlier must-fixes landed |
 | User research | `product/user-insights/` | pain points and workflows the user lens judges against |
 
-Resolve the slug via `feature-index.yaml` when only a feature name is given. No spec at all → run the pass anyway, mark the alignment section "no spec to verify against — brief-grounded" and say the sharpest findings need `/prd-draft` first.
+Resolve the slug via the initiative pages when only a feature or initiative name is given ({slug} = the initiative slug throughout). No spec at all → run the pass anyway, mark the alignment section "no spec to verify against — brief-grounded" and say the sharpest findings need `/prd-draft` first.
 
 ## Step 0 — Fit the lens to the artifact
 

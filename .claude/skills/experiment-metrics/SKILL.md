@@ -378,7 +378,7 @@ Before you launch an experiment, verify:
 
 ## Save Location
 
-The selected metric set is a launch-gate input, not a chat ephemeral: `/feature-launch-gate` blocks launches on metric definitions existing in the repo. Save the STEDII evaluation + final metric definitions (each with numerator, denominator, window, and a "Canonical query" link) to `product-development/analytics/metrics/{area}/{feature}-experiment-metrics.md`.
+The selected metric set is a launch-gate input, not a chat ephemeral: `/feature-launch-gate` blocks launches on metric definitions existing in the repo. Save the STEDII evaluation + final metric definitions (each with numerator, denominator, window, and a "Canonical query" link) to `product-development/analytics/metrics/{area}/{initiative-slug}-{job-slug}-experiment-metrics.md` (frontmatter `initiatives:` + `features:`).
 
 ## Write-back (mandatory)
 
@@ -388,9 +388,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 

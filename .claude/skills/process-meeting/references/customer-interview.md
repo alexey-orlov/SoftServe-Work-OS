@@ -63,7 +63,7 @@ Cards roll up into one report at
 ```markdown
 # Customer Interview Insights — {date}
 
-**Initiatives touched:** {slug(s) or "-"}
+(links live in the report's frontmatter: `date:`, `customers:`, `initiatives:`, optional `areas:`/`features:`)
 
 ## Executive Summary
 [3-4 bullets: biggest insights]
@@ -91,7 +91,7 @@ Cards roll up into one report at
 
 - **Report** → `user-insights/{date}-interview-insights.md` (+ nav line in
   that folder's CLAUDE.md). The report is the summary layer for the transcripts below.
-- **Transcripts** → `user-insights/interviews/{date}-{participant-slug}.md`, one file
+- **Transcripts** → `user-insights/transcripts/{date}-{account}-interview.md` with tag frontmatter, one file
   per interview (+ nav line in that folder's CLAUDE.md).
 - **Account mapping + cross-link** — every interview is also logged on the customer it
   belongs to: resolve each participant against the account list
@@ -108,7 +108,7 @@ Cards roll up into one report at
   Feature Requests entries link their records.
 - **Ledger** every transcript filed.
 - Insights that clearly feed an active PRD → one line in that PRD's open questions
-  (Tier 2 → confirm), per SKILL.md Step 3.
+  (gated → confirm), per SKILL.md Step 3.
 
 ## Quality check
 

@@ -82,7 +82,7 @@ function list(view, items) {
     return el('a', { class: 'init-card', href: `#/initiative?slug=${encodeURIComponent(i.slug)}` },
       pinBtn,
       el('div', { class: 'name' }, cleanTitle(i)),
-      el('div', { class: 'row' }, statusPill(i.status), i.isExample ? el('span', { class: 'tag' }, 'example') : null),
+      el('div', { class: 'row' }, statusPill(i.status), i.statusKnown === false ? el('span', { class: 'pill err', title: 'status not in the vocabulary — fix the page frontmatter' }, `⚠ ${i.statusRaw || i.parseError ? (i.statusRaw || 'unreadable') : 'unknown'}`) : null, i.isExample ? el('span', { class: 'tag' }, 'example') : null),
       el('div', { class: 'status-line' }, i.statusText.replace(/^\w+\s*[—-]?\s*/, '') || '—'),
       el('div', { class: 'foot' },
         total ? el('span', {}, `${i.artifactStats.present}/${total} artifacts in place`) : null,
@@ -95,20 +95,25 @@ function list(view, items) {
   function createModal() {
     const titleIn = el('input', { placeholder: 'e.g. Tier Discount Promo v2' });
     const slugIn = el('input', { placeholder: 'tier-discount-promo-v2', class: 'mono' });
+    const featIn = el('input', { placeholder: 'existing catalog feature slug(s), comma-separated', class: 'mono' });
+    const areaIn = el('input', { placeholder: 'and/or area slug(s), comma-separated', class: 'mono' });
     titleIn.addEventListener('input', () => {
       slugIn.value = titleIn.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     });
+    const split = (v) => v.split(',').map((s) => s.trim()).filter(Boolean);
     modal({
       title: 'New initiative',
       body: el('div', {},
         field('Title', titleIn),
         field('Short name (permanent — becomes the page\'s address everywhere)', slugIn),
-        el('div', { class: 'hint' }, 'Creates the living page from the house template and registers it in the folder navigation — saved in one step; it reaches the team per your auto-sync mode. Link it to a feature on the Features page when the feature exists.'),
+        field('Target feature(s)', featIn),
+        field('Target area(s)', areaIn, 'At least one target is required — an unmapped initiative cannot exist. Slugs must exist in the catalog (Features page); a brand-new feature is registered through /prd-draft, which proposes its planned catalog entry.'),
+        el('div', { class: 'hint' }, 'Creates the living page from the house template — frontmatter targets filled — and registers it in the folder navigation; it reaches the team per your auto-sync mode.'),
       ),
       actions: [{
         label: 'Create', kind: 'primary',
         onclick: async (close) => {
-          const r = await api.post('/api/initiatives/create', { slug: slugIn.value.trim(), title: titleIn.value.trim() });
+          const r = await api.post('/api/initiatives/create', { slug: slugIn.value.trim(), title: titleIn.value.trim(), features: split(featIn.value), areas: split(areaIn.value) });
           toast(`Created ${r.page.slug}${r.commit.committed ? ' ✓' : ''}`);
           window.dispatchEvent(new Event('console:saved'));
           close();
@@ -159,7 +164,7 @@ function detail(view, items, slug) {
     el('span', {}, i.statusText.replace(/^\w+\s*[—-]?\s*/, '')),
     el('span', {}, `· updated ${i.updated || '—'}`),
     i.owner ? el('span', {}, `· ${i.owner}`) : null,
-    ...i.targets.map((t) => el('a', { class: 'tag', href: '#/features', title: 'open the product map' }, `${t.area}.${t.feature}`)),
+    ...i.targets.map((t) => el('a', { class: 'tag', href: '#/features', title: 'open the product map' }, t.feature ? (t.area ? `${t.area} · ${t.feature}` : t.feature) : `area: ${t.area}`)),
   ));
 
   const split = el('div', { class: 'split' });
@@ -214,12 +219,20 @@ function detail(view, items, slug) {
   }
   right.append(artCard);
 
-  // feature-index join
+  // product-map join: catalog facts (v2) or legacy artifact rows
   for (const f of i.features || []) {
     const c = el('div', { class: 'card' },
-      el('h3', {}, `From the product map — ${f.area}.${f.feature}`),
-      el('div', { class: 'hint' }, 'What the product map registers for this feature.'));
-    if (!f.artifacts.length) c.append(el('div', { class: 'empty' }, 'No artifacts registered yet.'));
+      el('h3', {}, f.feature ? `From the product map — ${f.area ? f.area + ' · ' : ''}${f.feature}` : `From the product map — area: ${f.area}`),
+      el('div', { class: 'hint' }, 'What the catalog registers for this target.'));
+    if (f.unknownSlug) c.append(el('div', { class: 'pill err' }, '⚠ not in the catalog — register it (gated) or fix the page frontmatter'));
+    if (f.catalog && f.catalog.status) {
+      c.append(el('div', { class: 'art-row' },
+        el('span', { class: 'lbl' }, 'status'),
+        el('span', { class: 'val grow' }, f.catalog.status + (f.catalog.shipped ? ` · shipped ${f.catalog.shipped}` : '')),
+        f.catalog.status === 'live' ? pill('ok', 'live') : pill('warn', f.catalog.status)));
+      if (f.catalog.description) c.append(el('div', { class: 'hint' }, f.catalog.description));
+    }
+    if (!f.artifacts.length && !(f.catalog && f.catalog.status)) c.append(el('div', { class: 'empty' }, 'Nothing registered yet.'));
     for (const a of f.artifacts) {
       c.append(el('div', { class: 'art-row' },
         el('span', { class: 'lbl' }, a.key),
@@ -431,7 +444,7 @@ function statusModal(i) {
     title: `Status — ${i.slug}`,
     body: el('div', {},
       field('New status', sel),
-      field('Status note', note, 'Written into the page\'s status line; the updated date is set to today.')),
+      field('Status note', note, 'Written into the page\'s note field; the updated date is set to today, and a dated Activity line records the change. Closing as shipped requires the gate verdict linked on the page first (attach it, or the save is refused).')),
     actions: [{
       label: 'Update', kind: 'primary',
       onclick: async (close) => {

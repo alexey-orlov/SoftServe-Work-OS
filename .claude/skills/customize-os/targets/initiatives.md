@@ -30,8 +30,13 @@ multiplied. For each genuinely new initiative:
    initiative, list them under `## Sources` in priority order; initiative-specific
    guidance (≤400 chars) goes under `## Instructions`.
 2. Append the page's line to `initiatives/CLAUDE.md` (end of list).
-3. Propose the `feature-index.yaml` entries (gated) — one batch for all new initiatives.
-   **Seed the product-area skeleton in the same batch:** ask for the org's 3–6 product
+3. Propose the `feature-index.yaml` CATALOG seeding (gated) — one batch: the org's areas
+   with their features (`status:` per what the org says is live vs planned; `shipped:`
+   dates where known). Derive the area/feature list from the org's documents AND its
+   public website/documentation — confirm the root URLs with the user before reading them,
+   quote where each entry came from, and let the user correct before applying. Every new
+   initiative's frontmatter targets must resolve against this seeded catalog.
+   **Ask for the org's 3–6 product
    areas in their own words (or derive them from the initiatives just named), replace the
    file's commented starter areas with those, and file each new initiative's feature under
    its area. The index stays organically grown after this — `/prd-draft` and
@@ -46,7 +51,7 @@ Route every attached artifact through the engines that own ingestion — never i
 
 - **Transcripts / meeting or call records** → `/process-meeting`, one per record, with
   the initiative join declared ("this belongs to {slug}") so summaries land with the
-  right `Initiatives touched:` header and Activity backlinks.
+  right `initiatives:` frontmatter and Activity backlinks.
 - **Docs, briefs, threads, exports** → `/context-update` (single-artifact mode), join
   declared the same way.
 - **Web pages** → fetch the content, then fold it via `/context-update` as pasted
@@ -60,4 +65,4 @@ initiative page links what arrived for it. Report processed / folded / skipped c
 the contract.
 
 Phase → `installed` when pages exist and all attached material is folded; `complete` once
-feature-index entries are approved (or explicitly declined → Open — Other).
+catalog seeding is approved (or explicitly declined → Open — Other).

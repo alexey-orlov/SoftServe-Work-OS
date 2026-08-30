@@ -70,7 +70,7 @@ fictional but the domain, segments, and vocabulary come from the instance's real
 context. Never reuse a real customer's name.
 
 **Step 4 — run the real pipeline.** The `[DEMO]` initiative page from the initiative
-template (status `active`, its navigation line, feature-index entry proposed — gated);
+template (status `active`, targets pointing at `[DEMO]`-slugged catalog entries proposed in the same gated change — never at real features, so derived views stay clean; demo initiatives never reach `shipped`; its navigation line);
 then `/process-meeting` per transcript with the initiative join declared, and the
 `/context-update` sweep for the rest. The engines write summaries, decisions, page
 updates, and the ledger exactly as they would for real material.
@@ -90,7 +90,8 @@ end to end.
 
 Read the manifest, show what will be deleted/reverted, get one yes, then reverse it
 exactly: delete generated files and `[DEMO]` pages with their navigation lines and
-feature-index entries (gated where the path is gated), strip the recorded ledger lines
+`[DEMO]` catalog entries (gated where the path is gated) — the manifest records catalog
+entries and any register/backlink lines it created, so removal reverses them too — strip the recorded ledger lines
 (keep the file sorted), revert recorded page-section edits and steering before/afters.
 Anything the manifest doesn't record is NOT touched. Files the manifest lists but reality
 has since changed (a demo summary someone edited) are listed for the user instead of

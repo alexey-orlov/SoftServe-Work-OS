@@ -30,16 +30,15 @@ duplicate crons, nothing tied to one person's laptop):
 
 ## One data pass (read in this order)
 
-1. `product-development/product/initiatives/` — every page with `_status: active`, plus any
-   page whose `_status:` changed during the week. Pull each page's Activity lines dated in
+1. `product-development/product/initiatives/` — every page with `status: active` (frontmatter; legacy `_status:` reads the same), plus any page whose status changed during the week. Quiet actives get a `paused?` proposal in the digest (this skill is the named proposer of `paused`). Pull each page's Activity lines dated in
    the window and its Open loops with due dates.
 2. Git commits from the last 7 days across `product-development/` — catches changes no
    Activity line records.
 3. `product-development/product/decisions/` — entries dated this week. Each entry's
-   `Initiative:` header routes it: a named slug → that initiative's bullet; `-` → "Also
+   `initiatives:` frontmatter (legacy `Initiative:` header) routes it: a named slug → that initiative's bullet; empty → "Also
    this week".
 4. The week's meeting and call summaries (`meetings/*/summaries/`,
-   `customers/accounts/*/calls/summaries/`) — their `Initiatives touched:` headers route
+   `customers/accounts/*/calls/summaries/`) — their `initiatives:` frontmatter (legacy `Initiatives touched:`) routes
    the same way.
 5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
 6. The latest report in `governance/health/` — staleness count.
@@ -62,7 +61,7 @@ connected: Linear/Jira for completed tasks, analytics for launched-feature metri
 
 ### Initiatives
 
-- **[{slug}]({link to page})** ({_status}) — {1-2 lines: what moved, from this week's Activity}
+- **[{slug}]({link to page})** ({status}) — {1-2 lines: what moved, from this week's Activity}
   - ⚠️ {overdue open loop — owner — days overdue} (only when true)
 - **{slug}** (active) — no movement this week. {One line: what it's waiting on, from Open loops.}
 
@@ -107,7 +106,7 @@ The gentle nudge prevents the repo from going silent without being preachy.
 1. Keep Part A under 500 words. Scan, not report.
 2. One bullet per active initiative, **including the silent ones** — "no movement" on an
    active initiative is information, not noise.
-3. Route by declared headers first (`Initiative:` on decisions, `Initiatives touched:` on
+3. Route by declared links first (`initiatives:` frontmatter on decisions and summaries; legacy headers on
    summaries); use the git diff only for changes that carry no header.
 4. "Top 3 Things to Know" is the most-read section. Prioritize: decisions affecting the
    whole team > customer insights > metric movements.
@@ -192,8 +191,10 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.

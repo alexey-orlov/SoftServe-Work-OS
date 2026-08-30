@@ -19,7 +19,7 @@ Then provide:
 The skill will analyze your retention curve shape, identify the biggest drop-off,
 compare retained vs churned user behavior, and recommend interventions.
 
-**Output:** Saved to `product-development/analytics/investigations/{area}/retention-analysis-[date].md`
+**Output:** Saved to `product-development/analytics/investigations/{area}/retention-analysis-[date].md` (frontmatter `initiatives:` when scoped to a project, else `areas:`/`features:` — link contract: `governance/link-schema.yaml`)
 **Time:** ~15 min with data, ~25 min with cohort deep-dive
 
 **When to use:** When diagnosing churn problems, measuring product-market fit, or optimizing for stickiness
@@ -522,8 +522,7 @@ Use this with your data:
 ### Where to Save Your Retention Analysis
 
 **Research & Findings:**
-- Save to: `product-development/analytics/investigations/{area}/retention-analysis-[date].md`
-- When finalized, move to: `product-development/analytics/investigations/{area}/retention-[product].md`
+- Save to: `product-development/analytics/investigations/{area}/retention-analysis-[date].md` — one dated record per run, never renamed (registered links would break; investigations are records, not living pages)
 
 **Retention Metrics & Dashboards:**
 - Update `product-development/analytics/metrics/{area}/` with your retention dashboard
@@ -570,9 +569,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 

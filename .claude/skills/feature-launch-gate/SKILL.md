@@ -1,6 +1,6 @@
 ---
 name: feature-launch-gate
-description: Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships. Two modes — full gate for major launches, lightweight for small changes.
+description: Pre-launch repo completeness check, run per INITIATIVE. Derives its artifact checklist from the initiative page's rows and verifies PRD, metrics, queries, schemas, decisions, and catalog registration exist before the launch. On PASS it is the catalog's sole status writer — the initiative flips to shipped and every targeted feature flips planned → live with its shipped date, in one gated change. Two modes — full gate for major launches, lightweight for small changes.
 argument-hint: "[feature] [--lightweight] [--no-experiment]"
 group: os-admin
 ---
@@ -17,7 +17,7 @@ Before any feature launch: `/feature-launch-gate {feature-or-initiative-name}`
 
 For small changes (bug fixes, copy updates): `/feature-launch-gate {feature-or-initiative-name} --lightweight`
 
-The gate runs per **initiative** (the shipping work effort — see `product-development/product/initiatives/`); its checks resolve against the target feature's entry in `feature-index.yaml`. Worked demo: the shipped example initiative passes the full gate; `tier-discount-promo` (PRD and eng plan deliberately missing) shows the BLOCKED state.
+The gate runs per **initiative** (the shipping work effort — see `product-development/product/initiatives/`); its checks resolve against the initiative page's Artifacts rows and frontmatter targets — the page is the artifact manifest (the catalog holds no artifact rows). Worked demo: `credit-usage-dashboard-v1` passes the full gate; `tier-discount-promo-v1` (PRD and eng plan deliberately missing) shows the BLOCKED state.
 
 ## Full Gate Checklist
 
@@ -26,12 +26,12 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
   - PRD passes content checks: covers all 6 sections (Hypothesis / Problem / Strategic fit / Solution / Success metrics / Non-goals), no `[FILL IN]` / `[NEED:]` / `[Your X]` / `[GAP:` placeholder tokens remain, ≥ 400 words. *File-existence alone is not enough — placeholder PRDs fail this check, and a `[GAP:]` marker means the evidence behind a section is still missing.*
 - [ ] Decisions made during development are logged in `product-development/product/decisions/`
 - [ ] Pre-mortem exists at `product-development/product/PRDs/{area}/reviews/{feature-name}-premortem.md` and no Launch-Blocking Tiger row is missing Mitigation / Owner / Due (NOT APPLICABLE in lightweight mode or when no launch checklist exists for the feature)
-- [ ] Feature is registered in `product-development/feature-index.yaml` with all related artifacts
+- [ ] Every feature the initiative targets is registered in the catalog (`product-development/feature-index.yaml` — `status: planned` before this launch), and the initiative's frontmatter names ≥1 resolvable target
 
 ### Design (if applicable)
 - [ ] UX research findings checked in (if user research was conducted)
 - [ ] Design rationale documented in the PRD or a decision log entry
-- [ ] Figma URL referenced in the feature-index.yaml entry
+- [ ] Figma URL linked from the initiative page (or the catalog entry's optional stable `figma:` pointer)
 
 ### Analytics
 - [ ] Metric definitions for this feature checked into `analytics/metrics/{area}/`
@@ -57,15 +57,14 @@ The gate runs per **initiative** (the shipping work effort — see `product-deve
 ### Navigation
 - [ ] All new files have entries in their folder's CLAUDE.md
 - [ ] `product-development/CLAUDE.md` updated if new folders were created
-- [ ] `feature-index.yaml` updated for the feature (including its `initiatives:` list)
-- [ ] The initiative's page in `product/initiatives/` reflects current truth — artifacts linked, `_updated:` fresh
+- [ ] The initiative's page in `product/initiatives/` reflects current truth — every Artifacts row filled or explicitly `-`, `updated:` fresh, targets resolving in the catalog
 
 ## Lightweight Gate Checklist
 
 For small changes that don't add new metrics, tables, or features:
 
 - [ ] If a decision was made, it's logged
-- [ ] If a new metric was added, it's defined and registered in feature-index
+- [ ] If a new metric was added, it's defined in `analytics/metrics/{area}/` and carries its `features:`/`areas:` frontmatter
 - [ ] Relevant CLAUDE.md files are updated
 
 ## Output Format
@@ -77,12 +76,12 @@ For small changes that don't add new metrics, tables, or features:
 ### PASSED (X/Y)
 - ✅ PRD exists: product-development/product/PRDs/billing/credit-usage-dashboard-prd.md
 - ✅ Metric definitions updated: analytics/metrics/billing/credit-usage-metrics.md
-- ✅ Feature-index entry: feature-index.yaml#billing.credit-usage-dashboard
+- ✅ Catalog: `credit-usage-dashboard` (billing) registered; initiative targets resolve
 - ...
 
 ### FAILED (X/Y)
 - ❌ No SQL queries found for new metrics. Expected in: analytics/queries/billing/
-- ❌ Dashboard link not added to feature-index.yaml
+- ❌ Dashboard doc missing its `features:`/`areas:` frontmatter
 - ...
 
 ### NOT APPLICABLE (X/Y)
@@ -100,9 +99,9 @@ Verdict saved to: product-development/product/launches/{initiative-slug}-gate-{Y
 
 The gate run is a record, not just a chat message. After every run (PASS or BLOCKED):
 
-1. Save the filled checklist + verdict to `product-development/product/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md`.
+1. Save the filled checklist + verdict to `product-development/product/launches/{initiative-slug}-gate-{YYYY-MM-DD}.md` (frontmatter: `initiatives: [{initiative-slug}]`).
 2. Append its row to the END of the file list in `launches/CLAUDE.md`.
-3. Link the verdict from the initiative's page (`Artifacts → Launch checklist / gate verdict`); on PASS for a shipping initiative, that page's `_status:` moves to `shipped YYYY-MM-DD — …`.
+3. Link the verdict from the initiative's page (`Artifacts → Launch checklist / gate verdict`); on PASS for a shipping initiative, in ONE change set: the page's `status:` flips to `shipped` (outcome + GA date in `note:`, dated Activity line appended) AND — this skill is the catalog's SOLE status writer — every targeted feature in `feature-index.yaml` flips `planned → live` with `shipped: YYYY-MM-DD` (gated; re-read the catalog immediately before writing — concurrent sessions may hold edits).
 4. End your reply listing every repo path written or updated.
 
 Without this, there is no way to audit whether the gate was actually run before a launch.

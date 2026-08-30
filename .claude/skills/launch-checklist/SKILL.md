@@ -1,6 +1,6 @@
 ---
 name: launch-checklist
-description: Plan a launch end to end — generate a prioritized (P0/P1/P2), dependency-mapped checklist sized to the launch (small / major / regulatory), importing the pre-mortem's launch-blocking risks into its mitigation section. Writes product/launches/{slug}-launch-checklist.md. Stage 7 of the de-risk chain. NOT for the ship verdict (/feature-launch-gate) or generating risks (/pre-mortem — run it first).
+description: Plan a launch end to end — generate a prioritized (P0/P1/P2), dependency-mapped checklist sized to the launch (small / major / regulatory), importing the pre-mortem's launch-blocking risks into its mitigation section. Writes product/launches/{initiative-slug}-launch-checklist.md — launches are launches of initiatives. Stage 7 of the de-risk chain. NOT for the ship verdict (/feature-launch-gate) or generating risks (/pre-mortem — run it first).
 argument-hint: "[feature or PRD] [--template small|major|regulatory]"
 group: delivery
 ---
@@ -15,7 +15,7 @@ group: delivery
 
 **Example:** "Create a launch checklist for the checkout redesign, targeting March 15"
 
-**Output:** Saved to `product-development/product/launches/[feature-name]-launch-checklist.md`
+**Output:** Saved to `product-development/product/launches/[initiative-slug]-launch-checklist.md` (frontmatter `initiatives:` — it sorts next to the gate verdict of the same launch)
 
 **Time:** 15-20 minutes to generate, then ongoing tracking
 
@@ -63,7 +63,7 @@ Generate comprehensive launch checklist ensuring nothing falls through the crack
 
 ### Step 2: Generate Checklist
 
-Create file: `product-development/product/launches/[feature-name]-launch-checklist.md`
+Create file: `product-development/product/launches/[initiative-slug]-launch-checklist.md`
 
 **Template Structure:**
 
@@ -245,7 +245,7 @@ risk_level: [Low / Medium / High]
 ## Risk Mitigation
 
 **High-risk items flagged:**
-[Import from `product-development/product/PRDs/{area}/reviews/[feature-name]-premortem.md` if it exists: Launch-Blocking and Fast-Follow Tigers become the risk list below; Track trigger conditions feed the rollback criteria. No pre-mortem yet? Suggest running `/pre-mortem` first. Otherwise flag from PRD complexity and regulatory requirements.]
+[Import from `product-development/product/PRDs/{area}/reviews/[initiative-slug]-premortem.md` if it exists: Launch-Blocking and Fast-Follow Tigers become the risk list below; Track trigger conditions feed the rollback criteria. No pre-mortem yet? Suggest running `/pre-mortem` first. Otherwise flag from PRD complexity and regulatory requirements.]
 
 ⚠️ **Risks:**
 - [Risk 1] - Mitigation: [Action]
@@ -360,9 +360,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 

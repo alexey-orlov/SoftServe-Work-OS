@@ -23,7 +23,7 @@ Summary prose, which triage rates as weak evidence.
 
 **Attendees:** {Our names. Customer side: roles only}
 **Call type:** {Discovery / Check-in / Escalation / Renewal / Demo}
-**Initiatives touched:** {slug(s) from product/initiatives/, or "-"}
+(links live in the summary's frontmatter: `date:`, `customers: [{account}]`, `initiatives: [{slug(s) or empty}]`, optional `areas:`/`features:`)
 
 ## Executive Summary
 
@@ -207,7 +207,7 @@ move completed items (add date) → add new items:
 ## Account write-backs (this category's Step 4)
 
 1. **New account?** Scaffold first: `accounts/{customer}/CLAUDE.md`,
-   `accounts/{customer}/account-context.md`, `calls/summaries/` + `calls/transcripts/`
+   `accounts/{customer}/account-context.md` (from `handbook/templates/account-context-template.md`), `calls/summaries/`
    (see `accounts/CLAUDE.md` for the template) → add the customer's row to
    `accounts/CLAUDE.md` → add the `portfolio.yaml` entry (status, arr if known,
    vertical + size_band + use_cases using the canonical labels in
@@ -221,7 +221,7 @@ move completed items (add date) → add new items:
    `expansion_signals` when the call moved them; bump `last_updated`. Segment change
    revealed (use case adopted, size band or vertical corrected) → update `vertical` /
    `size_band` / `use_cases` too and flag `segmentation-matrix.md` cells for
-   `/context-update` (Tier 2 → confirm).
+   `/context-update` (gated → confirm).
 5. **Feature-request records:** one dated record per request in
    `user-insights/feature-requests/` (per SKILL.md Step 3), each linked from its Feature
    Requests table row (Full variant) or noted alongside the implied gap in the Executive

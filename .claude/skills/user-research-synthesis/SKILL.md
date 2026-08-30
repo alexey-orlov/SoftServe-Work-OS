@@ -629,7 +629,7 @@ All files will be saved to:
 
 **If the synthesis changes persona or ICP facts:** propose the exact edit to
 `product-development/product/strategy/business-context/business-info.md` (show the before/after)
-and apply it only after the user confirms — that file is Tier 2 in `governance/write-policy.yaml`.
+and apply it only after the user confirms — that file is gated in `governance/write-policy.yaml`.
 Keep the root CLAUDE.md fundamentals block consistent with `business-info.md` in the same change.
 
 ## Write-back (mandatory)
@@ -640,15 +640,17 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (Tier 2 in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
 **Ledger (ingest clause):** when handed raw transcripts directly (not already processed by
 `/process-meeting`), file each one to
-`product-development/product/user-insights/interviews/{date}-{participant-slug}.md`
+`product-development/product/user-insights/transcripts/{date}-{account}-interview.md` (tag frontmatter per `governance/link-schema.yaml` — filter the archive by `type:`, `customers:`, `areas:`, `features:`, `initiatives:` instead of by folder)
 (+ nav line in that folder's CLAUDE.md, + the dated History cross-link in each
 participating account's `account-context.md` — the same filing contract as
 `/process-meeting`'s interview category) and append its repo path to

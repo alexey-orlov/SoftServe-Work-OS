@@ -17,7 +17,7 @@ The skill reads:
 
 - `product-development/product/strategy/business-context/business-info.md` — ICP, pricing tiers, headline metrics. Needed to judge whether an account is on-profile, whether an expansion signal is real, and what "healthy" means for this business
 - `product-development/product/customers/accounts/portfolio.yaml` — primary input
-- `product-development/product/initiatives/` — active initiative pages (`_status:`, open loops, latest activity): the workstream side of the portfolio
+- `product-development/product/initiatives/` — active initiative pages (`status:` frontmatter, open loops, latest activity): the workstream side of the portfolio
 - `product-development/product/strategy/business-context/segmentation-matrix.md` — segment axes and ARR mix; lets the rollup say where risk and expansion concentrate (vertical / size band / use case), not just which accounts
 - Recent summaries in `accounts/{customer}/calls/summaries/` (last 14 days)
 - `product/decisions/` (recent)
@@ -98,7 +98,7 @@ If MCPs aren't connected, the skill still works on the YAML + markdown alone —
 | Team B | 4 | 1 | 3 | 1 |
 | Team C | 7 | 3 | 4 | 0 |
 
-(Active workstreams = initiative pages with `_status: active`.)
+(Active workstreams = initiative pages with `status: active` — frontmatter; legacy `_status:` reads the same.)
 
 ### Drafted Slack Messages (review before posting)
 

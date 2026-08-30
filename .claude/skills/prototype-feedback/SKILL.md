@@ -19,7 +19,7 @@ So: triage first, edits second, and an explicit disposition for every item.
 
 **The prototype and its context** (all under `product-development/product/prototypes/`):
 
-- The artifact — `{slug}.html`, or for an external build, `{slug}-{tool}-prompt.md`. Resolve the slug via `feature-index.yaml` if only a feature name was given.
+- The artifact — `{slug}.html`, or for an external build, `{slug}-{tool}-prompt.md`. Resolve the slug via the initiative pages if only a feature or initiative name was given ({slug} = the initiative slug).
 - `design-system/tokens.css` + `design-system.md` — the token set this preview is bound to, plus recorded gaps. (A plain-HTML prototype is bound to its own `:root` block instead.)
 - `{slug}-feedback-log.md` — the build record (source spec, coverage, gaps) and earlier rounds. **Read it before anything else.** Reviewers re-raise points already declined; "we decided against that in round 1 because X" is worth far more than quietly doing it this time.
 - The spec the build record links — the job spec or PRD. Needed to tell "the preview is wrong" from "the reviewer wants the spec changed".
@@ -105,7 +105,7 @@ Then report in the conversation with the same dispositions, briefly: lead with w
 
 ## Write-back (mandatory)
 
-Full contract: `governance/write-back-contract.md`. The log file is already in `product/prototypes/CLAUDE.md` from the build (append it if somehow missing); history snapshots are exempt by that folder's convention. If a round materially changed what the prototype demonstrates, refresh the `prototype:` note in `feature-index.yaml` only with the user's confirm (gated). End the reply listing every repo path written or updated.
+Full contract: `governance/write-back-contract.md`. The log file is already in `product/prototypes/CLAUDE.md` from the build (append it if somehow missing); history snapshots are exempt by that folder's convention. If a round materially changed what the prototype demonstrates, refresh the initiative page's Prototype row note (auto-tier) in the same change. End the reply listing every repo path written or updated.
 
 ## Traps
 

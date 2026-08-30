@@ -13,7 +13,7 @@ never the folder.
 **Date:** [YYYY-MM-DD]
 **Attendees:** [Names]
 **Meeting Type:** [Standup / Sprint Planning / Bi-weekly / Kickoff / Stakeholder Review / Workshop / …]
-**Initiatives touched:** [slug(s) from product/initiatives/, or "-"]
+(links live in the summary's frontmatter: `date:`, `initiatives: [slug(s) or empty]`, optional `areas:`/`features:`)
 
 ## Summary
 [2-3 sentence overview: what was discussed, the main outcome]

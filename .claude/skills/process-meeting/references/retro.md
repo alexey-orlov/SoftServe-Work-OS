@@ -9,7 +9,7 @@ deliberately flat, with raw recordings one level down in `retros/transcripts/`.
   from `product-development/product/handbook/templates/retrospective-template.md` (copy the
   template's sections — What Went Well / What Could Have Gone Better / What Will We Do
   Differently (action table) / Key Metrics / Shoutouts — don't restate them here). Add
-  `**Initiatives touched:** {slug(s) or "-"}` to the header.
+  frontmatter `initiatives: [slug(s) or empty]` to the writeup.
 - **Transcript** (when the retro was recorded) →
   `product-development/product/meetings/retros/transcripts/{YYYY-MM-DD}-retro.md` + ledger line.
 - Nav: writeup line at the END of `retros/CLAUDE.md`; transcript line in

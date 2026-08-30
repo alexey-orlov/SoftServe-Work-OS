@@ -8,13 +8,13 @@ The canonical sequence for stress-testing a bet from first idea to shipped featu
 
 | Stage | Skill | Moment | Question | Artifact |
 |-------|-------|--------|----------|----------|
-| 1. Map | `/assumption-map` | Idea stage, pre-PRD | What are we betting on; what to test first? | `PRDs/{area}/reviews/{slug}-assumption-map.md` |
-| 2. Draft | `/prd-draft` | Assumptions mapped | What exactly are we building? | `PRDs/{area}/{slug}-prd.md` |
-| 3. Attack | `/red-team` | Draft ~80% done, before committing resources | Would this survive a fair adversary? | `PRDs/{area}/reviews/{slug}-red-team.md` |
-| 4. Challenge | `/prd-challenge` | Stage milestones, or when the PRD's gap count drops materially | What do all lenses see that I don't? (runs stages 1 and 3 as parallel lenses, plus the 7 personas and — once a solution exists — stage 6) | `PRDs/{area}/reviews/{slug}-challenge-{YYYY-MM-DD}.md` |
-| 5. Break down | `/jobs-breakdown` → `/job-spec-draft` (each spec challenged via `/job-spec-challenge` before it's agreed) | PRD agreed or challenged, before tickets | What exactly do we build, in what order? | `PRDs/{area}/{slug}-jobs-breakdown.md` + `PRDs/{area}/{slug}-{job}-job-spec.md` (+ per-job challenge reports in `reviews/`) |
-| 6. Rehearse | `/pre-mortem` | Committed, ship moment in sight | If the launch fails, why? | `PRDs/{area}/reviews/{slug}-premortem.md` |
-| 7. Plan | `/launch-checklist` | 4–6 weeks out | Who does what, when? | `launches/{slug}-launch-checklist.md` |
+| 1. Map | `/assumption-map` | Idea stage, pre-PRD | What are we betting on; what to test first? | `PRDs/{area}/reviews/{initiative-slug}-assumption-map.md` |
+| 2. Draft | `/prd-draft` | Assumptions mapped | What exactly are we building? | `PRDs/{area}/{initiative-slug}-prd.md` |
+| 3. Attack | `/red-team` | Draft ~80% done, before committing resources | Would this survive a fair adversary? | `PRDs/{area}/reviews/{initiative-slug}-red-team.md` |
+| 4. Challenge | `/prd-challenge` | Stage milestones, or when the PRD's gap count drops materially | What do all lenses see that I don't? (runs stages 1 and 3 as parallel lenses, plus the 7 personas and — once a solution exists — stage 6) | `PRDs/{area}/reviews/{initiative-slug}-challenge-{YYYY-MM-DD}.md` |
+| 5. Break down | `/jobs-breakdown` → `/job-spec-draft` (each spec challenged via `/job-spec-challenge` before it's agreed) | PRD agreed or challenged, before tickets | What exactly do we build, in what order? | `PRDs/{area}/{initiative-slug}-jobs-breakdown.md` + `PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (+ per-job challenge reports in `reviews/`) |
+| 6. Rehearse | `/pre-mortem` | Committed, ship moment in sight | If the launch fails, why? | `PRDs/{area}/reviews/{initiative-slug}-premortem.md` |
+| 7. Plan | `/launch-checklist` | 4–6 weeks out | Who does what, when? | `launches/{initiative-slug}-launch-checklist.md` |
 | 8. Gate | `/feature-launch-gate` | Ship moment | Is the repo updated? (the only verdict) | Gate report, posted to the launch channel |
 
 Paths are relative to `product-development/product/`.

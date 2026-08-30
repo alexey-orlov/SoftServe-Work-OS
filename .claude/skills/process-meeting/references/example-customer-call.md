@@ -1,6 +1,12 @@
+---
+date: 2026-01-27
+customers: [acme-corp]
+initiatives: []
+---
+
 # Acme Corp — Call Summary 2026-01-27
 
-> Synthetic example showing the level of detail expected — no real persons or companies. Customer-side speakers are referred to by role only (PII rule).
+> Synthetic example showing the level of detail expected — no real persons or companies. Customer-side speakers are referred to by role only (PII rule). The frontmatter above is the summary's link block (`initiatives:` filled when the call touches current work — the writer resolves it).
 
 **Attendees:** Morgan Lee (PM, our side), Alex Rivera (EM, our side), Their VP of Engineering, Their Head of Product
 **Duration:** 50 minutes

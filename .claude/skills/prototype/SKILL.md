@@ -139,7 +139,7 @@ Present the file (render inline if a tool for that is available), then keep the 
 Full contract: `governance/write-back-contract.md`:
 
 1. Append one line per new file at the END of the list in `product/prototypes/CLAUDE.md` (append-only; history snapshots are exempt by that folder's convention).
-2. Propose the `feature-index.yaml` addition — a `prototype:` key pointing at the artifact — and apply only after the user confirms (gated). Initiative-scoped → link from the initiative page.
+2. Link the prototype from its initiative page (a "Prototype:" Artifacts row + dated Activity line); the `.md` companions carry `initiatives:` frontmatter. The catalog holds no artifact rows — nothing to write in `feature-index.yaml`.
 3. Source links live in the feedback log's build record (HTML) or the prompt file's header.
 4. End the reply listing every repo path written or updated.
 

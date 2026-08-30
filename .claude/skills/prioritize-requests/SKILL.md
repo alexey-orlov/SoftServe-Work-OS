@@ -86,7 +86,7 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 | `product-development/product/strategy/roadmaps/*.md` | What is already NOW / NEXT / Under Consideration — do not re-triage committed work | "No roadmap yet" — note it, continue |
 | `product-development/product/decisions/` | Already decided? Do not re-litigate a settled call | — |
 | `product-development/product/user-insights/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
-| `product-development/feature-index.yaml` | Does it already ship? **A request for a shipped feature is a discoverability problem, not a demand signal** — exclude from counts, list separately | Only the starter `billing:` template entries → print "feature-index not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
+| `product-development/feature-index.yaml` | Does it already ship? — TRUE only when the catalog entry says `status: live`. **A request for a live feature is a discoverability problem, not a demand signal** — exclude from counts, list separately. `planned` entries are demand FOR in-flight work — count them and link the targeting initiative | Only the starter example areas → print "catalog not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
 | `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list | First run — create it |
 
 ---
@@ -180,7 +180,7 @@ Effort is not an axis. It sets sequence, not whether — and estimating effort a
 
 ## Output Format
 
-Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place** (rewrite to current truth, bump its `_updated:` line; never stack "UPDATE:" sections). After the first save, append it to the END of `product-development/product/strategy/CLAUDE.md`'s `### Files` list. Themes routed "act now" that map to a feature: propose the feature-index addition (Tier 2 — user confirms) and link from the initiative page when one exists. End your reply listing every repo path written — full contract: `governance/write-back-contract.md`.
+Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place** (rewrite to current truth, bump its `_updated:` line; never stack "UPDATE:" sections). After the first save, append it to the END of `product-development/product/strategy/CLAUDE.md`'s `### Files` list. Themes routed "act now": link the initiative page that picks the theme up (the initiative flow — usually `/prd-draft` — owns the catalog proposal; this skill never writes the catalog, per its own rule 11). End your reply listing every repo path written — full contract: `governance/write-back-contract.md`.
 
 ````markdown
 # Feature Requests
@@ -238,7 +238,7 @@ Destination for these rows: `current-quarter.md` → `## Explicitly Not Doing` (
 
 ## Already Ships
 
-- [Ask] — `feature-index.yaml#{area}.{feature}` — a discoverability problem, not a demand signal
+- [Ask] — `{feature-slug}` ({area}, live in the catalog) — a discoverability problem, not a demand signal
 
 ## Revision History
 

@@ -1,6 +1,6 @@
 ---
 name: jobs-breakdown
-description: Cut an agreed initiative into independently shippable jobs — the sequenced plan between the PRD (why this bet) and the per-job job specs (/job-spec-draft). First creation of a breakdown stops at an intake checkpoint — the bet being cut confirmed, the write plan stated; one yes covers the run. Rebuilds the initiative's backbone from evidence, cuts walking-skeleton-first and widens by actor/capability/depth, gates every candidate against the four pressure tests + INVEST (a variation whose backbone differs end-to-end becomes its own job), sequences riskiest-assumption-first with dependency rationale, and writes the living breakdown to PRDs/{area}/{initiative-slug}-jobs-breakdown.md (template-driven, re-runnable — the job table is the live status board). Appends the jobs-breakdown: key to the feature-index entry (gated confirm; a missing entry gets the minimal registration proposed in the same gated change). Use on /jobs-breakdown, "break down the PRD/initiative", "cut this into jobs", "slice this initiative", "what do we build first?". NOT for writing the per-job contract (/job-spec-draft — runs next, one job at a time), drafting or updating the PRD itself (/prd-draft), or cutting dev-backlog tickets (/create-tickets — runs later, from an agreed job spec or PRD).
+description: Cut an agreed initiative into independently shippable jobs — the sequenced plan between the PRD (why this bet) and the per-job job specs (/job-spec-draft). First creation of a breakdown stops at an intake checkpoint — the bet being cut confirmed, the write plan stated; one yes covers the run. Rebuilds the initiative's backbone from evidence, cuts walking-skeleton-first and widens by actor/capability/depth, gates every candidate against the four pressure tests + INVEST (a variation whose backbone differs end-to-end becomes its own job), sequences riskiest-assumption-first with dependency rationale, and writes the living breakdown to PRDs/{area}/{initiative-slug}-jobs-breakdown.md (template-driven, re-runnable — the job table is the live status board). Registers on the initiative page — the "Jobs breakdown:" Artifacts row filled + a dated Activity line (the catalog holds no artifact rows; frontmatter names the initiative). Use on /jobs-breakdown, "break down the PRD/initiative", "cut this into jobs", "slice this initiative", "what do we build first?". NOT for writing the per-job contract (/job-spec-draft — runs next, one job at a time), drafting or updating the PRD itself (/prd-draft), or cutting dev-backlog tickets (/create-tickets — runs later, from an agreed job spec or PRD).
 argument-hint: "[initiative-slug | PRD path]"
 group: definition
 ---
@@ -66,7 +66,7 @@ Riskiest-assumption-first: the job that tests the bet's most dangerous unknown s
 ## Step 6: Write, register, read out
 
 1. **Write** the breakdown per the template — including the coverage check (every PRD scope item lands in a job or is explicitly out) and the template's Quality gate, emitted as document content with its boxes checked before presenting. The single checklist lives in the template.
-2. **Register:** propose the `jobs-breakdown:` key on the feature's **existing** `feature-index.yaml` entry (gated — show the exact addition, apply on confirm, batched once per run). New feature keys belong to `/prd-draft` and `/context-update` (one-writer table); entry missing entirely (the PRD was never registered) → propose the minimal entry (prd + breakdown + initiatives) in the same gated change, marked as the registration `/prd-draft` would have made. Fill the initiative page's "Jobs breakdown:" Artifacts row and add a dated Activity line.
+2. **Register:** fill the initiative page's "Jobs breakdown:" Artifacts row and add a dated Activity line; the breakdown carries `initiatives: [{initiative-slug}]` frontmatter (link contract: `governance/link-schema.yaml`). No catalog write — it holds no artifact rows; a missing initiative page means the PRD step was skipped → route to `/prd-draft` (its Step 4 creates page + catalog entry) rather than registering here.
 3. **Read out**, compact:
 
 ```
@@ -95,9 +95,11 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    `CLAUDE.md` (append-only — never re-sort existing lines; re-sorting causes merge
    conflicts). If you created a new folder, add it to the parent's CLAUDE.md and create a
    5-line CLAUDE.md stub inside it.
-2. Feature-scoped artifact → propose the `product-development/feature-index.yaml` addition
-   and apply it only after the user confirms (gated in `governance/write-policy.yaml`).
-   Initiative-scoped → link the artifact from `product-development/product/initiatives/{slug}.md`.
+2. Declare the artifact's links in its frontmatter per `governance/link-schema.yaml` —
+   resolve them YOURSELF from context before filing (initiative-scoped work names its
+   one initiative; the initiative page gets the artifact row filled + a dated Activity
+   line in the same change). A brand-new feature/area → propose the catalog entry
+   (`feature-index.yaml`, gated) in the same confirmed change that registers the work.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
