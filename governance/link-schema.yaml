@@ -1,0 +1,178 @@
+# Link Schema — the one registry of entities and the links every artifact type carries.
+#
+# This file is to LINKS what write-policy.yaml is to WRITES: the single authoritative
+# registry, read by everything that enforces or resolves them:
+#   - .github/scripts/wiki-lint.sh   (validation: required keys present, every ref resolves)
+#   - writing skills                 (resolve-before-write: the agent resolves required
+#                                     links from context BEFORE filing — creating the
+#                                     initiative when none exists — and never asks the
+#                                     user to supply a link by hand)
+#   - os-console/                    (derived views: per-feature/per-area rollups,
+#                                     reverse indexes, create-modal validation)
+#
+# The prose rules (backlink policy, catalog lifecycle, one writer per surface) live in
+# governance/write-back-contract.md — this file is the machine-readable half.
+#
+# Ref grammar: ENTITY links are bare kebab-case slugs under typed keys
+# (areas: [billing]); DOCUMENT links are repo-root-relative paths under docs:.
+# A slug never embeds its parent (no more feature-index.yaml#area.feature anchors) —
+# the catalog resolves a feature's area.
+#
+# Dual-read tolerance: legacy formats (italic `_status:` meta lines, bold
+# `**Initiative:**` headers) remain READABLE forever — parsers accept both, and
+# /wiki-lint offers the conversion as an auto-fix. New writes use fenced YAML
+# frontmatter only.
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# Entity registries — where a bare slug of each type resolves.
+# ---------------------------------------------------------------------------
+entities:
+  area:
+    registry: product-development/feature-index.yaml        # top-level keys under areas:
+  feature:
+    registry: product-development/feature-index.yaml        # nested under areas.{area}.features: — slugs globally unique
+  initiative:
+    registry: product-development/product/initiatives/*.md  # the filename (minus .md) IS the slug
+  customer:
+    registry: product-development/product/customers/accounts/*/       # the folder name
+  competitor:
+    registry: product-development/product/competitive-research/competitors/*/  # the folder name
+
+# ---------------------------------------------------------------------------
+# Slug rules
+# ---------------------------------------------------------------------------
+slugs:
+  format: kebab-case            # immutable once created
+  uniqueness: union             # a NEW slug must be unique across areas + features + initiatives
+                                # (typed keys disambiguate machine refs; uniqueness keeps
+                                # commands like "/prd-draft {slug}" resolvable)
+  rename: sweep                 # a rename = one sweep commit touching every ref;
+                                # /wiki-lint verifies zero stale refs afterward. No aliases.
+
+# ---------------------------------------------------------------------------
+# Frontmatter keys. Entity links = bare slugs. docs: = repo-root-relative paths.
+# `date:` = the record's event date. `updated:` = last-modified (ONE spelling on
+# .md pages — replaces _updated / **Last updated** / Last Updated).
+# ---------------------------------------------------------------------------
+keys:
+  common: [status, note, updated, owner, date, type]
+  links:  [areas, features, initiatives, customers, competitors, docs, themes]
+
+# ---------------------------------------------------------------------------
+# Per-type link contract.
+#   home:          glob(s) locating the type (repo-root-relative)
+#   required:      keys that must be present — write-time resolution + lint error
+#   required-any:  at least ONE of these keys must be present and non-empty
+#   optional:      validated only when present
+# Chain artifacts (prd → gate) carry exactly ONE initiative — enforced by their
+# writer skills; the filename carries the same slug, so lint can derive/repair
+# the frontmatter from it (this requirement can never block a write).
+# ---------------------------------------------------------------------------
+types:
+  initiative-page:
+    home: product-development/product/initiatives/*.md
+    required-any: [areas, features]         # an unmapped initiative cannot exist
+    optional: [customers, competitors]
+
+  prd:
+    home: product-development/product/PRDs/*/*-prd.md
+    required: [initiatives]
+    optional: [features, customers, competitors]
+
+  jobs-breakdown:
+    home: product-development/product/PRDs/*/*-jobs-breakdown.md
+    required: [initiatives]
+    optional: [features]
+
+  job-spec:
+    home: product-development/product/PRDs/*/*-job-spec.md
+    required: [initiatives]
+    optional: [features]
+
+  review:
+    home: product-development/product/PRDs/*/reviews/*.md
+    required: [initiatives]                 # derivable from the filename prefix — lint auto-repairs
+    optional: [features]
+
+  prototype-doc:
+    home: product-development/product/prototypes/*.md
+    required: [initiatives]
+    optional: [features]
+
+  eng-plan:
+    home: product-development/engineering/plans/**/*.md
+    required: [initiatives]
+    optional: [features, areas]
+
+  launch:
+    home: product-development/product/launches/*.md          # {initiative-slug}-launch-checklist.md · {initiative-slug}-gate-{date}.md
+    required: [initiatives]
+    optional: [features]
+
+  experiment:
+    home: product-development/analytics/experiments/**/*.md
+    required: [initiatives]
+    optional: [features, areas]
+
+  investigation:
+    home: product-development/analytics/investigations/**/*.md
+    required: [initiatives]
+    optional: [features, areas]
+
+  metric-doc:
+    home: product-development/analytics/metrics/**/*.md
+    required-any: [features, areas]
+    optional: []
+
+  dashboard-doc:
+    home: product-development/analytics/dashboards/**/*.md
+    required-any: [features, areas]
+    optional: []
+
+  transcript:
+    home: product-development/product/user-insights/transcripts/*.md   # {date}-{account}[-{type}].md
+    required: [date, type]                  # type: interview | call
+    required-any: [customers, areas, features, initiatives]
+    optional: [themes]                      # themes: free vocabulary, deliberately unregistered
+    # Body is immutable raw material. Tags are filing metadata — edited ONLY by
+    # /retag-transcript, which appends every change to tag-amendments:.
+
+  summary:
+    home:
+      - product-development/product/customers/accounts/*/calls/summaries/*.md
+      - product-development/product/meetings/*/summaries/*.md
+      - product-development/product/user-insights/*-interview-insights.md
+    optional: [initiatives, areas, features, customers]
+
+  decision:
+    home: product-development/product/decisions/*.md
+    optional: [initiatives, features, areas, customers, competitors, docs]
+
+  feature-request:
+    home: product-development/product/user-insights/feature-requests/*.md
+    required: [account, area]               # pre-existing record fields
+    optional: [features, initiatives]
+
+  account-context:
+    home: product-development/product/customers/accounts/*/account-context.md
+    optional: [areas, features, initiatives]
+
+  teardown:
+    home: product-development/product/competitive-research/competitors/*/teardown.md
+    optional: [competes-areas, competes-areas-except, competes-features, competes-features-except, initiatives]
+    # competes-areas: all | [slugs] — "all" plus -except keys expresses
+    # "we compete everywhere except X".
+
+# ---------------------------------------------------------------------------
+# Catalog lifecycle (machine-relevant bits; prose in write-back-contract.md)
+# ---------------------------------------------------------------------------
+catalog:
+  feature-statuses: [planned, live, retired]   # "building" is DERIVED (an active initiative targets it)
+  status-writer: /feature-launch-gate          # sole writer of live + shipped: (re-reads before writing)
+  new-entries: proposed in the same gated prompt as the initiative that introduces them (status: planned)
+
+# Backlink policy: only initiative pages accumulate backlinks (Activity/Decisions
+# lines — write-back-contract rule 8). The catalog, account pages, and teardowns
+# never grow mention lists; reverse views are derived by the console and lint.

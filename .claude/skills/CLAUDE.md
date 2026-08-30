@@ -56,6 +56,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [weekly-plan/](weekly-plan/) — Set next week's priorities
 - [weekly-review/](weekly-review/) — Close out the week: the initiative-spine team digest (absorbs weekly-synthesis; `--digest` = cron-safe Part A) + your execution review
 - [process-meeting/](process-meeting/) — One entry point for every meeting record: customer calls, interviews, internal meetings, retros, batch days — transcript filed, summary written, records routed, ledger updated
+- [retag-transcript/](retag-transcript/) — Correct a filed transcript's tag frontmatter (customers, areas, features, initiatives, themes) — the only sanctioned edit path for raw-material filing metadata; every change logged in tag-amendments, body untouched
 
 ### Definition
 

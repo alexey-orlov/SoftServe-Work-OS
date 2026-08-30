@@ -57,6 +57,7 @@ GitHub push ruleset (`--format ruleset`).
 - [write-policy.yaml](write-policy.yaml) — Which paths agents change freely (auto) and which are gated (write prompt + held from auto-sync). Its `settings:` block also holds the auto-commit / auto-push switches (off on a fresh install; flipped by `/auto-sync`), so the automation and the tier it respects live in one file.
 - [write-back-contract.md](write-back-contract.md) — The rules every repo-writing skill follows when it saves work: the four content classes, the mandatory closing steps, the one-writer-per-surface table, and the ledger rules.
 - [processed.txt](processed.txt) — The ingestion ledger: one repo-root-relative path per line, kept sorted. A path here = already folded by `/context-update` (junk and duplicates are ledgered too). Merge conflicts: keep both sides, then `sort -u`. Written only by ingest skills.
+- [link-schema.yaml](link-schema.yaml) — The link registry: entity types (areas, features, initiatives, customers, competitors), the slug rules, and the required/optional frontmatter links per artifact type. To links what write-policy.yaml is to writes — read by wiki-lint, writing skills, and the OS Console.
 
 ### Subfolders
 
