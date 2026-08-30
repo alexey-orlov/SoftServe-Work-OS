@@ -474,6 +474,6 @@ function guessLabel(path) {
   if (n.includes('quer') || n.endsWith('.sql')) return 'Query';
   if (n.includes('decision')) return 'Decision';
   if (n.includes('plan')) return 'Eng plan';
-  if (n.includes('research') || n.includes('interview')) return 'User research';
+  if (n.includes('research') || n.includes('interview') || n.includes('insight')) return 'User insights';
   return 'Artifact';
 }

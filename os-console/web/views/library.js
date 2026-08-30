@@ -52,8 +52,8 @@ const QUICK = [
       name: null,
       items: [
         it('Competitors', CR, 'Competitor teardowns and dated monitoring intel'),
-        it('Customers', `${P}/customers`, 'Accounts — context, call records and feature requests'),
-        it('User research', `${P}/user-research`, 'Interview syntheses, guides and journey maps'),
+        it('Customers', `${P}/customers`, 'The tracked accounts — context and call records'),
+        it('User insights', `${P}/user-insights`, 'Syntheses, interviews, feature requests, guides, journey maps'),
         it('Meetings', `${P}/meetings`, 'Meeting records — transcripts, summaries, retros'),
         it('Decisions', `${P}/decisions`, 'Why we chose what we chose, dated'),
         it('Launches', `${P}/launches`, 'Launch checklists and ship / no-ship verdicts'),

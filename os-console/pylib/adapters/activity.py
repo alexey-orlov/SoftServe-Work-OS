@@ -9,6 +9,7 @@ AREA_MAP = [
     ('product-development/product/PRDs', 'PRDs'),
     ('product-development/product/initiatives', 'Initiatives'),
     ('product-development/product/customers', 'Customers'),
+    ('product-development/product/user-insights', 'User insights'),
     ('product-development/product/decisions', 'Decisions'),
     ('product-development/product/strategy', 'Strategy'),
     ('product-development/product/competitive-research', 'Competitive'),

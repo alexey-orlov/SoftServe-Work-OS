@@ -119,7 +119,7 @@ def toolchain_set(surface, approach=None, system=None, settings=None):
             raise repo.http_err(400, 'invalid approach value')
         key = 'approach'
         if not any(re.match(r'^\s+approach:', lines[i]) for i in range(start + 1, end)):
-            key = 'source'  # user-research names its choice key `source`
+            key = 'source'  # user-insights names its choice key `source`
         if not _set_block_field(lines, start, end, key, approach):
             raise repo.http_err(500, 'could not set %s on %s' % (key, surface))
         from . import mdparse as md
