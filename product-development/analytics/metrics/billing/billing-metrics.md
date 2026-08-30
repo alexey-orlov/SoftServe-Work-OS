@@ -1,3 +1,7 @@
+---
+areas: [billing]
+---
+
 # EXAMPLE — Billing Metrics
 
 > Synthetic worked example for the fictional product Beacon — and **the convention reference** for every metric doc in `analytics/metrics/`. A metric is not defined until it has an explicit numerator, denominator, window, owner, and a canonical query link that resolves to a real file.
@@ -43,5 +47,5 @@ Every metric entry MUST carry, in this order: **Definition** (one sentence), **N
 ## Related
 
 - Schema: [billing_events.md](../../schemas/billing/billing_events.md) · Catalog: `analytics/data-catalog.yaml`
-- Consumers: [credit-usage-dashboards.md](../../dashboards/billing/credit-usage-dashboards.md), [credit-usage-dashboard-prd.md](../../../product/PRDs/billing/credit-usage-dashboard-prd.md)
+- Consumers: [credit-usage-dashboards.md](../../dashboards/billing/credit-usage-dashboards.md), [credit-usage-dashboard-v1-prd.md](../../../product/PRDs/billing/credit-usage-dashboard-v1-prd.md)
 - Sibling doc following this convention: [tier-discount-promo-metrics.md](tier-discount-promo-metrics.md)

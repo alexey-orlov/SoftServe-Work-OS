@@ -16,3 +16,4 @@ Roadmaps, business context, and the strategy frameworks the team reasons with.
 
 - [current-quarter.md](current-quarter.md) — This quarter's objectives, key results, in-flight initiatives, and the explicit "not doing" list. Injected by the session-start hook, so keep it to one screen
 - [okr-guide.md](okr-guide.md) — How we write OKRs: good objectives vs bad, laddering to company OKRs, the 70% rule. Read when refreshing current-quarter.md
+- [feature-requests.md](feature-requests.md) — The act / decline / later triage board `/prioritize-requests` maintains over the request records in `user-insights/feature-requests/`

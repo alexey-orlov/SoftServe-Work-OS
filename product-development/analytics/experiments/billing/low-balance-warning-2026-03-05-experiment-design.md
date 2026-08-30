@@ -1,8 +1,13 @@
+---
+initiatives: [credit-usage-dashboard-v1]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Experiment Design: Low-Balance Warning (2026-03-05)
 
 > Synthetic worked example for the fictional product Beacon. Pre-registered before launch; invented numbers throughout.
 
-**Status:** Pre-registered 2026-03-04, started 2026-03-05 · **Owner:** PM, with analyst sign-off · **Feature:** `feature-index.yaml#billing.credit-usage-dashboard`
+**Status:** Pre-registered 2026-03-04, started 2026-03-05 · **Owner:** PM, with analyst sign-off
 
 ## Hypothesis
 
@@ -38,4 +43,4 @@ Showing an in-app banner plus a same-day email when an org crosses below 20% of 
 ## Related
 
 - Results: [low-balance-warning-2026-03-05-experiment-results.md](low-balance-warning-2026-03-05-experiment-results.md) (filed after readout)
-- PRD: [credit-usage-dashboard-prd.md](../../../product/PRDs/billing/credit-usage-dashboard-prd.md)
+- PRD: [credit-usage-dashboard-v1-prd.md](../../../product/PRDs/billing/credit-usage-dashboard-v1-prd.md)

@@ -2,7 +2,7 @@
 
 Root of all product, engineering, and analytics artifacts.
 
-**Read this when:** You need any artifact for a feature — start at `feature-index.yaml`.
+**Read this when:** You need any artifact — the catalog (`feature-index.yaml`) says what exists; initiative pages (`product/initiatives/`) hold each project's artifact trail.
 
 ## Contents
 
@@ -15,5 +15,5 @@ Root of all product, engineering, and analytics artifacts.
 
 ### Files
 
-- [feature-index.yaml](feature-index.yaml) — Master lookup mapping every feature to its artifacts and current initiatives (gated — changes need your in-session yes)
+- [feature-index.yaml](feature-index.yaml) — The product map: areas → features catalog with durable facts (status, shipped date); artifacts live on initiative pages, which declare their targets (gated — changes need your in-session yes)
 - [toolchain.yaml](toolchain.yaml) — The team's standing tool/approach choices plus live-connection records, one key per surface (nine surfaces: prototyping, user insights, ticketing, meeting transcripts, knowledge base, analytics, feature requests, team chat, calendar) — choices written by `/customize-os` and the OS Console, `connection:` blocks only by `/connect-mcps`, read by consuming skills before they ask (gated)

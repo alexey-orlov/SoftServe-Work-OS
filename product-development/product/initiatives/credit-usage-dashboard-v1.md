@@ -1,11 +1,15 @@
+---
+status: shipped
+note: "v1 live for all tiers (GA 2026-03-20)"
+updated: 2026-08-27
+owner: "[PM] (roster placeholder)"
+areas: [billing]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Credit Usage Dashboard v1
 
-_status: shipped 2026-03-20 — v1 live for all tiers_
-_updated: 2026-08-27_
-_target-feature(s): `feature-index.yaml#billing.credit-usage-dashboard`_
-_owner: [PM] (roster placeholder)_
-
-> Synthetic worked example for the fictional product Beacon. This page shows what a **closed, shipped** initiative looks like with a complete artifact trail — the companion [tier-discount-promo](tier-discount-promo.md) page shows the blocked-gate state.
+> Synthetic worked example for the fictional product Beacon. This page shows what a **closed, shipped** initiative looks like with a complete artifact trail — the companion [tier-discount-promo-v1](tier-discount-promo-v1.md) page shows the blocked-gate state.
 
 ## Snapshot
 
@@ -23,9 +27,13 @@ _owner: [PM] (roster placeholder)_
 
 -
 
+## Sources
+
+-
+
 ## Artifacts
 
-- PRD: [credit-usage-dashboard-prd.md](../PRDs/billing/credit-usage-dashboard-prd.md)
+- PRD: [credit-usage-dashboard-v1-prd.md](../PRDs/billing/credit-usage-dashboard-v1-prd.md)
 - Metrics: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
 - Experiments: [design](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md) · [results](../../analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md)
 - Investigation: [2026-03-10-credit-depletion-churn-analysis.md](../../analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md)

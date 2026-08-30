@@ -1,3 +1,8 @@
+---
+initiatives: [credit-usage-dashboard-v1]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Feature Launch Gate Verdict: Credit Usage Dashboard v1
 
 > Synthetic worked example for the fictional product Beacon — a filled `/feature-launch-gate` output showing what a PASS looks like. Run 2026-03-18 by the PM, two days before GA. Paths are relative to `product-development/`.
@@ -7,9 +12,9 @@
 
 ### PASSED (11/11)
 
-- ✅ PRD exists and passes content checks (6 sections, no placeholder tokens, ≥ 400 words): `product/PRDs/billing/credit-usage-dashboard-prd.md`
+- ✅ PRD exists and passes content checks (6 sections, no placeholder tokens, ≥ 400 words): `product/PRDs/billing/credit-usage-dashboard-v1-prd.md`
 - ✅ Decision logged: `product/decisions/2026-02-14-usage-based-pricing.md`
-- ✅ Feature registered with all artifacts: `feature-index.yaml#billing.credit-usage-dashboard`
+- ✅ Feature registered in the catalog: `credit-usage-dashboard` (billing) — artifacts on the [initiative page](../initiatives/credit-usage-dashboard-v1.md)
 - ✅ Figma flow / prototype / components referenced in the feature-index entry
 - ✅ Metric definitions with numerator + denominator + window: `analytics/metrics/billing/billing-metrics.md`
 - ✅ Each metric's "Canonical query" link resolves on disk: → `analytics/queries/billing/churn_by_segment.sql`

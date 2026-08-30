@@ -1,8 +1,13 @@
+---
+areas: [billing]
+features: [tier-discount-promo]
+---
+
 # EXAMPLE — Tier Discount Promo Metrics
 
 > Synthetic worked example for the fictional product Beacon. Follows the metric-definition convention in [billing-metrics.md](billing-metrics.md): numerator + denominator + window + owner + resolving canonical-query link, or it does not ship.
 
-**Feature:** `feature-index.yaml#billing.tier-discount-promo` — orgs that buy overage credits two consecutive months are offered the next tier at 20% off for 3 months. Data is internal-beta only until the feature clears `/feature-launch-gate` (PRD and eng plan still pending — see the [initiative page](../../../product/initiatives/tier-discount-promo.md)).
+**Feature:** `tier-discount-promo` — orgs that buy overage credits two consecutive months are offered the next tier at 20% off for 3 months. Data is internal-beta only until the feature clears `/feature-launch-gate` (PRD and eng plan still pending — see the [initiative page](../../../product/initiatives/tier-discount-promo-v1.md)).
 
 ---
 

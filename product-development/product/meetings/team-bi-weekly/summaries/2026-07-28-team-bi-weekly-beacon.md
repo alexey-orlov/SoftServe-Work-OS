@@ -1,11 +1,15 @@
+---
+date: 2026-07-28
+initiatives: [tier-discount-promo-v1]
+areas: [billing]
+---
+
 # EXAMPLE — Meeting Notes: Team Bi-Weekly — Dashboard Follow-up, Promo Re-scope, Q3 Preview
 
 > Synthetic worked example (fictional product Beacon), generated from the paired transcript.
 
-**Date:** 2026-07-28
 **Attendees:** [PM], [Engineer], [Designer] (roster placeholders)
 **Meeting Type:** Bi-weekly
-**Initiatives touched:** tier-discount-promo
 
 ## Summary
 

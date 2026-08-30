@@ -1,3 +1,8 @@
+---
+areas: [billing]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Credit Usage Dashboards
 
 > Synthetic worked example for the fictional product Beacon. Registry of the billing-area dashboards; URLs are placeholders in the template.
@@ -19,12 +24,12 @@
 ## Conventions
 
 - Every panel's metric name must match a definition in `analytics/metrics/billing/` — no dashboard-local metric math.
-- The in-product customer-facing dashboard is **not** listed here; it is a product surface (see the [PRD](../../../product/PRDs/billing/credit-usage-dashboard-prd.md)), not an analytics dashboard.
+- The in-product customer-facing dashboard is **not** listed here; it is a product surface (see the [PRD](../../../product/PRDs/billing/credit-usage-dashboard-v1-prd.md)), not an analytics dashboard.
 - Register new billing dashboards by appending a row to the table above and a line to this folder's CLAUDE.md.
 - Swap the placeholder `dashboards.example.com` URLs for your BI tool's real links during setup; keep one row per dashboard.
 - When a dashboard is retired, mark its row "frozen" with the end date rather than deleting it — readout archives get cited in decisions.
 
 ## Related
 
-- Feature index: `feature-index.yaml#billing.credit-usage-dashboard`
+- Feature: `credit-usage-dashboard` (billing) — catalog: `product-development/feature-index.yaml`
 - Catalog: `analytics/data-catalog.yaml#billing_events` (used-by lists this file)

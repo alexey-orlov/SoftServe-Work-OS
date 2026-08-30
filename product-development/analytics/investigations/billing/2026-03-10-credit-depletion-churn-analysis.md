@@ -1,3 +1,9 @@
+---
+initiatives: [credit-usage-dashboard-v1]
+areas: [billing]
+features: [credit-usage-dashboard, tier-discount-promo]
+---
+
 # EXAMPLE — Investigation: Credit Depletion → Churn (2026-03-10)
 
 > Synthetic worked example for the fictional product Beacon. Invented numbers throughout.
@@ -28,6 +34,6 @@ Yes, strongly. Orgs that hit a zero balance twice or more in a quarter churn the
 
 ## Recommendations
 
-1. Ship the [credit usage dashboard](../../../product/PRDs/billing/credit-usage-dashboard-prd.md) with the low-balance warning — done, GA 2026-03-20.
-2. Offer repeat overage buyers a discounted upgrade to the next tier — became `feature-index.yaml#billing.tier-discount-promo` ([metrics](../../metrics/billing/tier-discount-promo-metrics.md)).
+1. Ship the [credit usage dashboard](../../../product/PRDs/billing/credit-usage-dashboard-v1-prd.md) with the low-balance warning — done, GA 2026-03-20.
+2. Offer repeat overage buyers a discounted upgrade to the next tier — became the `tier-discount-promo` feature ([metrics](../../metrics/billing/tier-discount-promo-metrics.md)).
 3. Add depletion-count to the account-health signals reviewed in portfolio reviews.

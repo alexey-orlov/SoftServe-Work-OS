@@ -1,11 +1,16 @@
+---
+date: 2026-07-28
+status: Active
+initiatives: [tier-discount-promo-v1]
+areas: [billing]
+features: [tier-discount-promo]
+---
+
 # Reset Tier-Discount Promo v1 Target and Scope
 
 > EXAMPLE — synthetic worked example for the fictional product Beacon.
 
-**Date:** 2026-07-28
 **Decided by:** [PM], [Engineer], [Designer] (roster placeholders)
-**Initiative:** tier-discount-promo
-**Status:** Active
 
 **Decision:** Launch target moves to 2026-09-15, and v1 ships the in-app offer surface
 only — the email-nudge variant is cut. The in-app placement on the credit-usage dashboard

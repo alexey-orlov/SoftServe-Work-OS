@@ -1,9 +1,13 @@
-# EXAMPLE — Team Time-Off & Coverage
+---
+status: active
+note: "PRD in Planning Review; job cut + first job spec drafted (worked example)"
+updated: 2026-08-13
+owner: "PM (roster placeholder)"
+areas: [workforce]
+features: [time-off-requests]
+---
 
-_status: active — PRD in Planning Review; job cut + first job spec drafted (worked example)_
-_updated: 2026-08-13_
-_target-job(s): `feature-index.yaml#workforce.time-off-requests`_
-_owner: PM (roster placeholder)_
+# EXAMPLE — Team Time-Off & Coverage v1
 
 > Synthetic worked example for the fictional product **Beacon** — this initiative demonstrates the definition→delivery bridge: PRD → `/jobs-breakdown` → `/job-spec-draft`. Every number is invented.
 
@@ -19,13 +23,21 @@ _owner: PM (roster placeholder)_
 - **In scope:** request & decide, coverage handoff, allowances & balances, team calendar
 - **Out of scope:** HRIS/payroll export, cross-workspace policies, statutory leave workflows (v1)
 
+## Instructions
+
+-
+
+## Sources
+
+-
+
 ## Artifacts
 
-- PRD: [Team Time-Off & Coverage PRD](../PRDs/workforce/time-off-requests-prd.md)
+- PRD: [Team Time-Off & Coverage PRD](../PRDs/workforce/time-off-requests-v1-prd.md)
 - Assumption map: -
 - Challenge report: -
-- Jobs breakdown: [time-off-requests-jobs-breakdown.md](../PRDs/workforce/time-off-requests-jobs-breakdown.md)
-- Job specs: [J-1 — request & decide](../PRDs/workforce/time-off-requests-request-approval-job-spec.md)
+- Jobs breakdown: [time-off-requests-v1-jobs-breakdown.md](../PRDs/workforce/time-off-requests-v1-jobs-breakdown.md)
+- Job specs: [J-1 — request & decide](../PRDs/workforce/time-off-requests-v1-request-approval-job-spec.md)
 - Impact sizing: -
 - User insights: -
 - Competitive analysis: -

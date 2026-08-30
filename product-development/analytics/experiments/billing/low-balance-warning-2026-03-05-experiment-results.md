@@ -1,3 +1,8 @@
+---
+initiatives: [credit-usage-dashboard-v1]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Experiment Results: Low-Balance Warning (2026-03-05)
 
 > Synthetic worked example for the fictional product Beacon. Readout of the pre-registered [design](low-balance-warning-2026-03-05-experiment-design.md); invented numbers throughout.

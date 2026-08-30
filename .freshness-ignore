@@ -10,10 +10,11 @@ product-development/analytics/experiments/billing/*
 product-development/analytics/investigations/billing/*
 product-development/product/decisions/2026-02-14-usage-based-pricing.md
 product-development/product/initiatives/credit-usage-dashboard-v1.md
-product-development/product/initiatives/tier-discount-promo.md
+product-development/product/initiatives/tier-discount-promo-v1.md
 product-development/engineering/codebases/beacon-app.md
 product-development/product/PRDs/workforce/*
-product-development/product/initiatives/time-off-requests.md
+product-development/product/initiatives/time-off-requests-v1.md
+product-development/product/user-insights/transcripts/*
 # Stable references — change intentionally, not on a schedule:
 product-development/product/strategy/frameworks/*
 product-development/product/handbook/templates/*

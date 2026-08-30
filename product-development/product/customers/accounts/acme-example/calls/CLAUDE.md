@@ -1,6 +1,8 @@
 # Acme — Calls
 
-Call records for this account: raw transcripts and their summaries, by date.
+Call summaries for this account, by date. Raw transcripts live in the central tagged
+archive — `product/user-insights/transcripts/` — filtered by `customers: [acme-example]`;
+each summary links its transcript, so the trail is one click.
 
 **Read this when:** You need what was said on a specific Acme call.
 
@@ -8,5 +10,4 @@ Call records for this account: raw transcripts and their summaries, by date.
 
 ### Subfolders
 
-- [summaries/](summaries/) — Call summaries — read these first
-- [transcripts/](transcripts/) — Raw transcripts — open only when the summary is insufficient
+- [summaries/](summaries/) — Call summaries — read these first; each links its raw transcript in `user-insights/transcripts/`

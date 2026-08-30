@@ -6,7 +6,8 @@ type: feature
 priority_signal: must-have
 tracker_ref: "-"
 source: ../2026-07-30-interview-insights.md
-_updated: 2026-08-05
+features: [credit-usage-dashboard]
+updated: 2026-08-05
 ---
 
 # [Billing] Configurable low-balance credit alert
@@ -33,4 +34,4 @@ user-configured threshold, deliverable to an external messenger channel.
 - Extends the shipped credit-usage dashboard (`billing.credit-usage-dashboard`) rather
   than replacing it.
 
-**Provenance:** [interview insights](../2026-07-30-interview-insights.md) · [transcript](../interviews/2026-07-30-acme-example.md)
+**Provenance:** [interview insights](../2026-07-30-interview-insights.md) · [transcript](../transcripts/2026-07-30-acme-example-interview.md)

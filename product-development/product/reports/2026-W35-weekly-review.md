@@ -16,11 +16,11 @@ quarter: "-"
 
 ### Initiatives
 
-- **[tier-discount-promo](../initiatives/tier-discount-promo.md)** (active) — no movement
+- **[tier-discount-promo-v1](../initiatives/tier-discount-promo-v1.md)** (active) — no movement
   this week. Waiting on the PRD draft; the gate stays **BLOCKED** on PRD + eng plan.
   - ⚠️ Draft the tier-discount-promo PRD — [PM] — due 2026-08-15, **13 days overdue**, with
     the 2026-09-15 launch target now 18 days out.
-- **[time-off-requests](../initiatives/time-off-requests.md)** (active) — no movement this
+- **[time-off-requests-v1](../initiatives/time-off-requests-v1.md)** (active) — no movement this
   week. Waiting on agreeing the J-1 job spec's §14 engineering confirmations before
   `/create-tickets`; the open loop carries no due date.
 
@@ -45,7 +45,7 @@ quarter: "-"
 
 ### Next week
 
-- Draft the tier-discount-promo PRD — [PM] — overdue since 2026-08-15 — tier-discount-promo
+- Draft the tier-discount-promo PRD — [PM] — overdue since 2026-08-15 — tier-discount-promo-v1
 - Agree the J-1 job spec's §14 confirmations with Engineering, then `/create-tickets` —
   [PM] — no due date — time-off-requests
 - **Quarter checkpoint:** `current-quarter.md` is still the unfilled template — no objective

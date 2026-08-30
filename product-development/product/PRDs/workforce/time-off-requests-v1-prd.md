@@ -1,6 +1,11 @@
+---
+initiatives: [time-off-requests-v1]
+features: [time-off-requests]
+---
+
 # EXAMPLE — Team Time-Off & Coverage PRD
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Beacon's mid-market and enterprise orgs run standing data-operations teams around enrichment jobs; when the person who approves jobs or watches the credit budget is away with no handoff, runs stall and balances drain unseen — so Beacon is adding team time-off management where that duty lives: the workspace. Every number below is invented. Use this next to [the blank template](../../handbook/templates/prd-template.md); the job cut derived from it lives in [time-off-requests-jobs-breakdown.md](time-off-requests-jobs-breakdown.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Beacon's mid-market and enterprise orgs run standing data-operations teams around enrichment jobs; when the person who approves jobs or watches the credit budget is away with no handoff, runs stall and balances drain unseen — so Beacon is adding team time-off management where that duty lives: the workspace. Every number below is invented. Use this next to [the blank template](../../handbook/templates/prd-template.md); the job cut derived from it lives in [time-off-requests-v1-jobs-breakdown.md](time-off-requests-v1-jobs-breakdown.md).
 
 **DRI:** PM (see team roster in root CLAUDE.md) · **Stage:** Planning Review · **Status:** Draft · **Last updated:** 2026-08-13
 

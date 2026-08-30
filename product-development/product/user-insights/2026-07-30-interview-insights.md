@@ -1,10 +1,15 @@
+---
+date: 2026-07-30
+customers: [acme-example]
+areas: [billing, data-export]
+initiatives: []
+---
+
 # EXAMPLE — Customer Interview Insights — 2026-07-30
 
 > Synthetic worked example (fictional product Beacon). Source transcript:
-> [Acme 2026-07-30](interviews/2026-07-30-acme-example.md).
+> [Acme 2026-07-30](transcripts/2026-07-30-acme-example-interview.md).
 > PII rule applied: customer-side speakers by role only.
-
-**Initiatives touched:** -
 
 ## Existing Research Context
 

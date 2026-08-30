@@ -1,11 +1,16 @@
+---
+date: 2026-02-14
+status: Active
+initiatives: [credit-usage-dashboard-v1]
+areas: [billing]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Chose Usage-Based Pricing
 
 > Synthetic worked example for the fictional product Beacon (B2B data-enrichment SaaS).
 
-**Date:** 2026-02-14
 **Decided by:** [PM], [Engineer] (roster placeholders)
-**Initiative:** credit-usage-dashboard-v1
-**Status:** Active
 
 ## Options Considered
 
@@ -32,6 +37,6 @@ Revenue becomes less predictable, and silent credit depletion becomes a churn ri
 
 ## Related
 
-- Tradeoff PRD: [credit-usage-dashboard-prd.md](../PRDs/billing/credit-usage-dashboard-prd.md)
+- Tradeoff PRD: [credit-usage-dashboard-v1-prd.md](../PRDs/billing/credit-usage-dashboard-v1-prd.md)
 - Revisit-condition metrics: [billing-metrics.md](../../analytics/metrics/billing/billing-metrics.md)
-- Feature index: `feature-index.yaml#billing.credit-usage-dashboard`
+- Feature: `credit-usage-dashboard` (billing) — catalog: `product-development/feature-index.yaml`

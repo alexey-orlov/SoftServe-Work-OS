@@ -68,10 +68,10 @@ repos:
       - "**/node_modules/**"
       - "**/dist/**"
       - "**/*.generated.*"
-    feature_keys:                 # optional — present here because the mapping is clean
-      - billing.credit-usage-dashboard
-      - billing.tier-discount-promo
-      - workforce.time-off-requests
+    feature_keys:                 # optional — bare feature slugs (globally unique in the catalog)
+      - credit-usage-dashboard
+      - tier-discount-promo
+      - time-off-requests
     map:
       path: codebases/beacon-app.md
       generated_at_sha: 4f2a9c1d8e7b6a5f4e3d2c1b0a9f8e7d6c5b4a39

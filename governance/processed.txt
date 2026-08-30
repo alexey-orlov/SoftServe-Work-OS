@@ -1,2 +1,2 @@
 product-development/product/meetings/team-bi-weekly/transcripts/2026-07-28-team-bi-weekly-beacon.md
-product-development/product/user-insights/interviews/2026-07-30-acme-example.md
+product-development/product/user-insights/transcripts/2026-07-30-acme-example-interview.md

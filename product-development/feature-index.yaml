@@ -1,96 +1,77 @@
-# Feature Index
+# Product map — the AREAS → FEATURES catalog. The durable half of the product graph.
 #
-# Master lookup for every feature your team is building. Maps each feature to
-# all related artifacts so any teammate (or agent) can find what exists in one
-# read instead of grepping the repo.
+# Structure: areas: → {area-slug} → features: → {feature-slug} → durable facts.
+# An area is a product in a multi-product business, or a large functional section of
+# one product. A feature belongs to exactly ONE area (move the block to re-parent —
+# refs never embed the area, so nothing breaks). Feature slugs are globally unique,
+# and unique against initiative slugs too (link contract: governance/link-schema.yaml).
 #
-# Structure: product-area → sub-feature → all related artifacts
+# This file holds NO artifact paths and NO work state — artifacts and activity live on
+# initiative pages (product/initiatives/{slug}.md, frontmatter `features:`/`areas:`
+# declares the join; the OS Console rolls a feature's artifacts up through its
+# initiatives). Durable facts only:
+#   name:         display name
+#   status:       planned | live | retired   ("in progress" is DERIVED — an active
+#                 initiative targets it; /prioritize-requests reads live-ness here)
+#   shipped:      YYYY-MM-DD — first GA date; written by /feature-launch-gate on PASS,
+#                 the sole status writer (it flips planned → live in the same change)
+#   description:  one line, what it does for whom
+#   figma:        optional stable design pointer (file ids, not display names)
 #
-# Conventions
-# - Keep this file authoritative. Whenever a feature ships, the launch gate
-#   verifies its entry here.
-# - This file is gated in the write policy: agents confirm changes with the
-#   user before writing — see governance/write-policy.yaml.
-# - Paths are relative to product-development/.
-# - tickets references your tracker (Linear / Jira / Asana). Pick one format.
-# - Recognized artifact keys: prd, eng-plan, figma, tickets, table-schemas,
-#   queries, metrics, dashboards, experiments, investigations,
-#   decisions, initiatives — plus:
-#     reviews:          review artifacts in product/PRDs/{area}/reviews/ (assumption map,
-#                       red-team, challenge reports, pre-mortem, job-spec reviews), listed as they land
-#     impact-sizing:    analytics/investigations/{area}/impact-sizing-*.md
-#     launch-checklist: product/launches/{slug}-launch-checklist.md
-#     launch-gate:      product/launches/{slug}-gate-{date}.md verdict
-#     jobs-breakdown:   product/PRDs/{area}/{initiative-slug}-jobs-breakdown.md (/jobs-breakdown)
-#     job-specs:        list of product/PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md (/job-spec-draft)
-# - Omit keys that don't apply yet. Add them when artifacts exist.
+# New entries: proposed `status: planned` in the same gated prompt as the initiative
+# that introduces them (usually /prd-draft's registration step). Killed bets: the kill
+# flow proposes removing a planned-only entry. Gated — every change needs your yes.
+#
+# Replace the example areas below with your own product areas during /customize-os
+# (it seeds this catalog from your documents and public site). Keep one as a shape
+# reference until real entries land.
 
-# Replace these examples with your own product areas. Keep one or two as a
-# template for new entries.
+areas:
 
-billing:
-  credit-usage-dashboard:
-    # EXAMPLE (synthetic, fictional product Beacon)
-    # The starter template ships every artifact for this feature so the
-    # /feature-launch-gate gate passes on the example out of the box.
-    prd: product/PRDs/billing/credit-usage-dashboard-prd.md
-    # Figma references. Use file IDs (the abc123 in the URL), not display
-    # names — file IDs survive renames. For specific frames, add a node-id:
-    # https://figma.com/file/abc123/?node-id=42:128
-    # Multiple Figma artifacts per feature is fine — separate by purpose.
-    figma:
-      flow: https://figma.com/file/your-figma-file
-      prototype: https://figma.com/proto/your-figma-file
-      components: https://figma.com/file/your-design-system-file/?node-id=42:128
-    tickets:
-      - YOURPROJ/123
-      - YOURPROJ/124
-    table-schemas:
-      - analytics/schemas/billing/billing_events.md
-    queries:
-      - analytics/queries/billing/churn_by_segment.sql
-    metrics:
-      - analytics/metrics/billing/billing-metrics.md
-    dashboards: analytics/dashboards/billing/credit-usage-dashboards.md
-    experiments:
-      - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-design.md
-      - analytics/experiments/billing/low-balance-warning-2026-03-05-experiment-results.md
-    investigations:
-      - analytics/investigations/billing/2026-03-10-credit-depletion-churn-analysis.md
-    decisions:
-      - product/decisions/2026-02-14-usage-based-pricing.md
-    initiatives: [credit-usage-dashboard-v1]
+  billing:
+    name: Billing & Credits
+    description: Usage-based pricing surface — credits, burn visibility, overage, promos.
+    features:
 
-  tier-discount-promo:
-    # EXAMPLE (synthetic, fictional product Beacon)
-    # Original 2026-05-13 launch target slipped — /feature-launch-gate is
-    # BLOCKED until the PRD + eng plan land. Analyst-side artifacts present;
-    # PRD + eng plan owned by PM/Eng leads.
-    table-schemas:
-      - analytics/schemas/billing/promo_offers.md
-    queries:
-      - analytics/queries/billing/promo_conversion_rate.sql
-    metrics:
-      - analytics/metrics/billing/tier-discount-promo-metrics.md
-    initiatives: [tier-discount-promo]
+      credit-usage-dashboard:
+        name: Credit Usage Dashboard
+        status: live
+        shipped: 2026-03-20
+        description: In-app credit balance, burn by workspace/API key, projected depletion, low-balance warning.
 
-workforce:
-  time-off-requests:
-    # EXAMPLE (synthetic, fictional product Beacon) — the worked example of the
-    # definition→delivery bridge: PRD → /jobs-breakdown → /job-spec-draft.
-    prd: product/PRDs/workforce/time-off-requests-prd.md
-    jobs-breakdown: product/PRDs/workforce/time-off-requests-jobs-breakdown.md
-    job-specs:
-      - product/PRDs/workforce/time-off-requests-request-approval-job-spec.md   # J-1 request-approval
-    initiatives: [time-off-requests]
+      tier-discount-promo:
+        name: Tier Discount Promo
+        status: planned
+        description: Orgs buying overage two consecutive months get the next tier at 20% off for 3 months.
 
-# Add more product areas here. Common starting set:
-# onboarding:
-#   first-run-experience:
-#     prd: ...
-# core-product:
-#   ...
-# growth:
-#   ...
-# enterprise:
-#   ...
+  data-export:
+    name: Data Export
+    description: Getting enriched data out of Beacon — exports, schedules, presets.
+    features: {}
+    # No features yet — demand recorded in user-insights/feature-requests/
+    # (scheduled-csv-export); the entry lands here `planned` when an initiative picks it up.
+
+  workforce:
+    name: Workforce
+    description: Team operations inside Beacon workspaces — absence, coverage, approvals.
+    features:
+
+      time-off-requests:
+        name: Team Time-Off & Coverage
+        status: planned
+        description: Request → decide → coverage-handoff loop with allowances and a team calendar.
+
+# --- Starter areas (uncomment and rename during setup) -------------------------------
+# areas:
+#   onboarding:
+#     name: Onboarding
+#     features: {}
+#   core-product:
+#     name: Core Product
+#     features: {}
+#   growth:
+#     name: Growth
+#     features: {}
+#   enterprise:
+#     name: Enterprise
+#     features: {}

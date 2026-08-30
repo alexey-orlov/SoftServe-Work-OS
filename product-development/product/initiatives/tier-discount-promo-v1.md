@@ -1,9 +1,13 @@
-# EXAMPLE — Tier Discount Promo
+---
+status: active
+note: "analyst artifacts ready; PRD not started; target 2026-09-15"
+updated: 2026-08-09
+owner: "[PM] (roster placeholder)"
+areas: [billing]
+features: [tier-discount-promo]
+---
 
-_status: active — analyst artifacts ready; PRD not started; target 2026-09-15_
-_updated: 2026-08-09_
-_target-feature(s): `feature-index.yaml#billing.tier-discount-promo`_
-_owner: [PM] (roster placeholder)_
+# EXAMPLE — Tier Discount Promo v1
 
 > Synthetic worked example for the fictional product Beacon. This page deliberately shows the **blocked-gate** state: analytics is ready, the PRD is not, so `/feature-launch-gate` returns BLOCKED. Compare with the shipped [credit-usage-dashboard-v1](credit-usage-dashboard-v1.md).
 
@@ -20,9 +24,17 @@ _owner: [PM] (roster placeholder)_
 - **In scope:** in-app offer surface, `overage_2_consecutive_months` trigger, redemption via self-serve tier change.
 - **Out of scope:** discounts on annual contracts; sales-assisted custom offers; email-nudge offer variant (cut from v1, 2026-07-28).
 
+## Instructions
+
+-
+
+## Sources
+
+-
+
 ## Artifacts
 
-- PRD: [PENDING: product/PRDs/billing/tier-discount-promo-prd.md] — not started, blocks the gate
+- PRD: [PENDING: product/PRDs/billing/tier-discount-promo-v1-prd.md] — not started, blocks the gate
 - Metrics: [tier-discount-promo-metrics.md](../../analytics/metrics/billing/tier-discount-promo-metrics.md)
 - Table schema: [promo_offers.md](../../analytics/schemas/billing/promo_offers.md)
 - Canonical query: [promo_conversion_rate.sql](../../analytics/queries/billing/promo_conversion_rate.sql)
@@ -39,8 +51,8 @@ _owner: [PM] (roster placeholder)_
 
 ## Activity
 
-- 2026-07-28 — bi-weekly reset the launch target to 2026-09-15 and cut the email-nudge variant from v1 ([summary](../meetings/team-bi-weekly/summaries/2026-07-28-team-bi-weekly-beacon.md)).
 - 2026-08-03 — initiative page created; status confirmed active, gate still blocked on PRD + eng plan.
+- 2026-07-28 — bi-weekly reset the launch target to 2026-09-15 and cut the email-nudge variant from v1 ([summary](../meetings/team-bi-weekly/summaries/2026-07-28-team-bi-weekly-beacon.md)).
 - 2026-06-15 — internal beta events flowing into `promo_offers` (design-partner orgs only).
 - 2026-05-13 — original launch target slipped: `/feature-launch-gate` BLOCKED on missing PRD + eng plan.
 - 2026-05-06 — analyst artifacts landed (schema, canonical query, metric definitions).

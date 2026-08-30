@@ -23,7 +23,7 @@
 # - used_by: list of references that depend on this table. Each entry is
 #   either an analytics-relative path (this file lives in analytics/, so
 #   start paths with subfolders like dashboards/... queries/...) or a
-#   feature-index key (feature-index.yaml#area.feature). No free-text labels.
+#   typed feature ref (feature:{slug} — resolves in feature-index.yaml). No free-text labels.
 # - schema_doc: analytics-relative path to the full column-level doc
 #   (start with schemas/...) — must point to a real file
 
@@ -60,7 +60,7 @@ tables:
     last_validated: 2026-04-15
     used_by:
       - dashboards/billing/credit-usage-dashboards.md
-      - feature-index.yaml#billing.credit-usage-dashboard
+      - feature:credit-usage-dashboard
     # no schema_doc yet — add one under schemas/ when column-level detail is written
 
   billing_events:
@@ -79,7 +79,7 @@ tables:
       - dashboards/billing/credit-usage-dashboards.md
       - queries/billing/churn_by_segment.sql
       - metrics/billing/billing-metrics.md
-      - feature-index.yaml#billing.credit-usage-dashboard
+      - feature:credit-usage-dashboard
     schema_doc: schemas/billing/billing_events.md
 
   subscriptions:
@@ -97,7 +97,7 @@ tables:
     used_by:
       - queries/billing/churn_by_segment.sql
       - metrics/billing/billing-metrics.md
-      - feature-index.yaml#billing.credit-usage-dashboard
+      - feature:credit-usage-dashboard
     # no schema_doc yet — add one under schemas/ when column-level detail is written
 
   promo_offers:
@@ -115,7 +115,7 @@ tables:
     used_by:
       - queries/billing/promo_conversion_rate.sql
       - metrics/billing/tier-discount-promo-metrics.md
-      - feature-index.yaml#billing.tier-discount-promo
+      - feature:tier-discount-promo
     schema_doc: schemas/billing/promo_offers.md
 
 # Add more tables as your team registers them. Common starting set:

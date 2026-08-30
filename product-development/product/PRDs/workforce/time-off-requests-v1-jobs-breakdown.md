@@ -1,8 +1,12 @@
+---
+initiatives: [time-off-requests-v1]
+---
+
 # EXAMPLE — Team Time-Off & Coverage — Jobs Breakdown
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). This is the cut derived from [the time-off PRD](time-off-requests-prd.md) — one initiative broken into independently shippable jobs, sequenced by risk and dependency, the level between the PRD (why this bet) and the per-job job specs. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/jobs-breakdown-template.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). This is the cut derived from [the time-off PRD](time-off-requests-v1-prd.md) — one initiative broken into independently shippable jobs, sequenced by risk and dependency, the level between the PRD (why this bet) and the per-job job specs. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/jobs-breakdown-template.md).
 
-**Initiative:** [Team Time-Off & Coverage](../../initiatives/time-off-requests.md) · **PRD:** [time-off-requests-prd.md](time-off-requests-prd.md) · **Owner:** PM (see team roster in root CLAUDE.md) · **Updated:** 2026-08-13
+**Initiative:** [Team Time-Off & Coverage](../../initiatives/time-off-requests-v1.md) · **PRD:** [time-off-requests-v1-prd.md](time-off-requests-v1-prd.md) · **Owner:** PM (see team roster in root CLAUDE.md) · **Updated:** 2026-08-13
 
 ## 1) The backbone
 
@@ -16,7 +20,7 @@ Rebuilt from the PRD's problem statement and hypothesis (PRD — invented univer
 
 | ID | Job (code-name) | Type | Riskiest assumption it tests | Depends on | Priority — why | Status |
 |----|---------------------|------|------------------------------|-----------|----------------|--------|
-| J-1 | request-approval | Net new | Teams move requests + decisions into the workspace, and name covers unprompted — first read on the ≥ 80% cover-assignment target (PRD — invented universe) | — | Must ship first — walking skeleton; J-2, J-3, J-4 all consume its absence object and decision flow | drafted — [J-1 job spec](time-off-requests-request-approval-job-spec.md) |
+| J-1 | request-approval | Net new | Teams move requests + decisions into the workspace, and name covers unprompted — first read on the ≥ 80% cover-assignment target (PRD — invented universe) | — | Must ship first — walking skeleton; J-2, J-3, J-4 all consume its absence object and decision flow | drafted — [J-1 job spec](time-off-requests-v1-request-approval-job-spec.md) |
 | J-2 | coverage-handoff | Integration *(per PRD: routing rails already exist in the notification service — unverified in code, §4 #3)* | Automatic duty routing is what removes coverage-gap incidents — "coverage, not the calendar, is the job": the bet itself | J-1 — approved absence + named cover | Must — tests the bet's most dangerous unknown; the primary metric (5.8 → ≤ 1.0 incidents per 100 orgs, PRD — invented universe) is unmeasurable against target until this is live | not-drafted |
 | J-3 | allowances-balances | Net new | Orgs maintain policy + balances in Beacon without HRIS import, enough for managers to trust the decide step | J-1 — decision flow to count against | Should — nothing depends on it; needed before broad GA (managers otherwise decide blind), but the coverage bet doesn't wait for it; can run parallel to J-4 | not-drafted |
 | J-4 | calendar-conflict-view | Integration *(reads existing job-schedule + billing-cycle data against J-1 absences — data availability unverified, §4 #3)* | Overlap conflicts are computable from existing data and actually change approve/decline calls | J-1 — absence data | Could — no job depends on it; depth on the decide/see stations; can run parallel to J-3 | not-drafted |

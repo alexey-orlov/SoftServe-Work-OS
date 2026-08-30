@@ -1,3 +1,13 @@
+---
+date: 2026-07-30
+type: interview
+customers: [acme-example]
+areas: [billing, data-export]
+initiatives: []
+themes: [weekly-reporting, csv-export, low-balance-alerts]
+tag-amendments: []
+---
+
 # EXAMPLE — Customer Interview Transcript — Acme (2026-07-30)
 
 > Synthetic worked example for the fictional product Beacon (B2B data-enrichment SaaS).
@@ -5,9 +15,9 @@
 > (integration drop; date inferred from the filename prefix), filed here by
 > `/process-meeting`. Customer-side names appear here because the transcript is the
 > faithful record; summaries and reports downstream carry roles only (PII rule).
+> Tags above are filing metadata — corrected only via `/retag-transcript`; the body
+> below is immutable.
 
-**Call date:** 2026-07-30
-**Type:** discovery interview, 32 min
 **Participants:** [PM] (Beacon) · Jordan Reyes, Head of Ops (Acme) · Priya N., Data Analyst (Acme)
 **Report:** [interview insights](../2026-07-30-interview-insights.md) · **Account:** [Acme](../../customers/accounts/acme-example/account-context.md)
 

@@ -1,6 +1,11 @@
+---
+updated: 2026-08-05
+areas: [billing, data-export]
+features: [credit-usage-dashboard]
+---
+
 # Acme (acme-example) — Account Context
 
-_updated: 2026-08-05_
 
 > Synthetic EXAMPLE (fictional product Beacon).
 
@@ -23,4 +28,4 @@ _updated: 2026-08-05_
 
 ## History
 
-- 2026-07-30 — discovery interview → [transcript](../../../user-insights/interviews/2026-07-30-acme-example.md) · [interview insights](../../../user-insights/2026-07-30-interview-insights.md)
+- 2026-07-30 — discovery interview → [transcript](../../../user-insights/transcripts/2026-07-30-acme-example-interview.md) · [interview insights](../../../user-insights/2026-07-30-interview-insights.md)

@@ -1,3 +1,8 @@
+---
+initiatives: [credit-usage-dashboard-v1]
+features: [credit-usage-dashboard]
+---
+
 # EXAMPLE — Credit Usage Dashboard PRD
 
 > Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits (one credit per enriched record, pooled per organization). Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/prd-template.md).
@@ -14,7 +19,7 @@ Beacon moved to usage-based credit pricing on 2026-02-14 ([decision](../../decis
 
 ## Strategic Fit
 
-Usage-based pricing only works commercially if usage is legible to the buyer — this dashboard is the visibility half of the pricing decision and the core of the Q1 "make usage legible" bet (see `product/strategy/current-quarter.md`). It also produces the burn rollups the upcoming tier-discount promo (`feature-index.yaml#billing.tier-discount-promo`) needs. Alternatives considered: email digests only (no persistent surface; ignored after week one in past tests), CSV export (serves analysts, not the Head of Ops who owns the renewal), and waiting for auto-top-up (months out, and it treats the symptom rather than the visibility gap).
+Usage-based pricing only works commercially if usage is legible to the buyer — this dashboard is the visibility half of the pricing decision and the core of the Q1 "make usage legible" bet (see `product/strategy/current-quarter.md`). It also produces the burn rollups the upcoming `tier-discount-promo` feature needs. Alternatives considered: email digests only (no persistent surface; ignored after week one in past tests), CSV export (serves analysts, not the Head of Ops who owns the renewal), and waiting for auto-top-up (months out, and it treats the symptom rather than the visibility gap).
 
 ## Solution
 

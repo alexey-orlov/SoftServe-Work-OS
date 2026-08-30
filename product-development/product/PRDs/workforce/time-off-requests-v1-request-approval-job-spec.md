@@ -1,12 +1,16 @@
+---
+initiatives: [time-off-requests-v1]
+---
+
 # EXAMPLE — Team Time-Off & Coverage — J-1: request-approval
 
-> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits. This is the buildable contract for one job of the [Team Time-Off & Coverage](../../initiatives/time-off-requests.md) initiative — the level between the [PRD](time-off-requests-prd.md) (why this bet) and tickets (who builds what), drafted by `/job-spec-draft` from the [breakdown](time-off-requests-jobs-breakdown.md)'s J-1 row. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/job-spec-template.md).
+> Synthetic worked example for the fictional product **Beacon**, a B2B data-enrichment SaaS billed in usage credits. This is the buildable contract for one job of the [Team Time-Off & Coverage](../../initiatives/time-off-requests-v1.md) initiative — the level between the [PRD](time-off-requests-v1-prd.md) (why this bet) and tickets (who builds what), drafted by `/job-spec-draft` from the [breakdown](time-off-requests-v1-jobs-breakdown.md)'s J-1 row. Every number below is invented. Use this as a shape reference next to [the blank template](../../handbook/templates/job-spec-template.md).
 
 Workspace time-off: an analyst requests dates and proposes a cover, the workspace manager decides, and the whole team sees who's out and who covers. The absence object this creates — including the named cover — is the contract J-2 later routes duties on.
 
 | ID | Type | Parent | Effort | Priority — why | Depends on | Status | Updated |
 |----|------|--------|--------|----------------|-----------|--------|---------|
-| J-1 | Net new | [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-jobs-breakdown.md) | [Eng to confirm] | Must — walking skeleton; J-2/J-3/J-4 all consume its absence object and decision flow (breakdown §3) | — | Draft | 2026-08-13 |
+| J-1 | Net new | [PRD](time-off-requests-v1-prd.md) · [breakdown](time-off-requests-v1-jobs-breakdown.md) | [Eng to confirm] | Must — walking skeleton; J-2/J-3/J-4 all consume its absence object and decision flow (breakdown §3) | — | Draft | 2026-08-13 |
 
 ## 1) Why this exists
 
@@ -232,7 +236,7 @@ Auto-closers this run: **none ran** — all three candidate routes failed their 
 
 **Definition of done (delivery seam):** all ACs met · code review · QA on supported browsers · accessibility check · staging verified · PM sign-off.
 
-**Evidence & traceability:** PRD goal this serves: [`coverage_gap_incidents` 5.8 → ≤ 1.0](time-off-requests-prd.md) · Sources this job spec leans on: [PRD](time-off-requests-prd.md) · [breakdown](time-off-requests-jobs-breakdown.md) (J-1 row, §3, §4) · [initiative page](../../initiatives/time-off-requests.md) · [platform-model.md](../../strategy/business-context/platform-model.md) (unfilled — checked 2026-08-13) · [tech-constraints.md](../../../engineering/tech-constraints.md) (unfilled — checked 2026-08-13) · [code-repos.yaml](../../../engineering/code-repos.yaml) (no reachable access) · sweep battery S1–S4 run 2026-08-13.
+**Evidence & traceability:** PRD goal this serves: [`coverage_gap_incidents` 5.8 → ≤ 1.0](time-off-requests-v1-prd.md) · Sources this job spec leans on: [PRD](time-off-requests-v1-prd.md) · [breakdown](time-off-requests-v1-jobs-breakdown.md) (J-1 row, §3, §4) · [initiative page](../../initiatives/time-off-requests-v1.md) · [platform-model.md](../../strategy/business-context/platform-model.md) (unfilled — checked 2026-08-13) · [tech-constraints.md](../../../engineering/tech-constraints.md) (unfilled — checked 2026-08-13) · [code-repos.yaml](../../../engineering/code-repos.yaml) (no reachable access) · sweep battery S1–S4 run 2026-08-13.
 
 **Quality gate** (the single checklist — checked by `/job-spec-draft` before presenting; recheck on manual edits):
 

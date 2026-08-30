@@ -15,7 +15,7 @@ quarter: "-"
 
 ### Initiatives
 
-- **[tier-discount-promo](../initiatives/tier-discount-promo.md)** (active) — launch
+- **[tier-discount-promo-v1](../initiatives/tier-discount-promo-v1.md)** (active) — launch
   target reset to **2026-09-15** and the email-nudge variant cut from v1
   ([decision](../decisions/2026-07-28-tier-discount-promo-scope-and-target.md), made at
   the 2026-07-28 bi-weekly, folded into the repo this week). Gate still blocked on PRD +
@@ -45,8 +45,8 @@ quarter: "-"
 
 ### Next week
 
-- Draft tier-discount-promo PRD — [PM] — due 2026-08-15 — tier-discount-promo
-- In-app offer placement explorations — [Designer] — due 2026-08-15 — tier-discount-promo
+- Draft tier-discount-promo PRD — [PM] — due 2026-08-15 — tier-discount-promo-v1
+- In-app offer placement explorations — [Designer] — due 2026-08-15 — tier-discount-promo-v1
 - **Quarter checkpoint:** `current-quarter.md` is still the unfilled template — no
   objective to check movement against.
 

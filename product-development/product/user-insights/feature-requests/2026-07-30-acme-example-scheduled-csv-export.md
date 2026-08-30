@@ -6,7 +6,7 @@ type: feature
 priority_signal: must-have
 tracker_ref: "-"
 source: ../2026-07-30-interview-insights.md
-_updated: 2026-08-05
+updated: 2026-08-05
 ---
 
 # [Data Export] Scheduled CSV export with saved column presets
@@ -32,4 +32,4 @@ the CSV without manual steps.
 - Schedule supports a weekly cadence with day/time; delivery at minimum via download link.
 - A scheduled run's output is identical to the same preset run manually.
 
-**Provenance:** [interview insights](../2026-07-30-interview-insights.md) · [transcript](../interviews/2026-07-30-acme-example.md)
+**Provenance:** [interview insights](../2026-07-30-interview-insights.md) · [transcript](../transcripts/2026-07-30-acme-example-interview.md)
