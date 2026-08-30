@@ -82,8 +82,9 @@ tiers:
     - .github/**                                                   # CI — the weekly lint + gated-path audit
 
 # Living pages — edit-in-place current-truth files (auto tier unless listed above).
-# Informational: /wiki-lint verifies each exists, carries a `_updated:` header, and
-# stays within its size budget. Extend this list as the wiki grows.
+# Informational: /wiki-lint verifies each exists, carries an updated date (frontmatter
+# `updated:`, or the legacy `_updated:` line — both readable), and stays within its
+# size budget. Extend this list as the wiki grows.
 living-pages:
   - product-development/product/initiatives/*.md
   - product-development/product/customers/accounts/*/account-context.md

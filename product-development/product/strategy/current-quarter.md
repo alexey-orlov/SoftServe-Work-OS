@@ -30,10 +30,10 @@ Time-boxed by design: replace the contents at the start of each quarter rather t
 
 ## In Flight
 
-| Initiative | Objective it serves | Owner | Status | Feature index key |
+| Initiative (link its page) | Objective it serves | Owner | Status | Target feature(s) |
 |---|---|---|---|---|
-| [Initiative] | Objective 1 | [Name] | On track / At risk / Slipped | `[key]` |
-| [Initiative] | Objective 2 | [Name] | On track / At risk / Slipped | `[key]` |
+| [[initiative-slug]](../initiatives/[initiative-slug].md) | Objective 1 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
+| [[initiative-slug]](../initiatives/[initiative-slug].md) | Objective 2 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
 
 ## Explicitly Not Doing
 

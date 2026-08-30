@@ -1,6 +1,10 @@
-# Competitive Matrix — [Product Area]
+---
+updated: [YYYY-MM-DD]
+owner: "[Name]"
+areas: [[area-slug]]
+---
 
-_updated: [YYYY-MM-DD] · owner: [Name]_
+# Competitive Matrix — [Product Area]
 
 Capability comparison for the [product area] area, split out of `competitive-matrix.md` when the area outgrew the main file. Whole-product rows (the General table) stay there; this file holds one area's depth.
 

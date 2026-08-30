@@ -1,6 +1,6 @@
 # Prototypes
 
-Clickable prototypes and prototype-adjacent artifacts — one flat folder, files keyed by feature slug (matching `feature-index.yaml`).
+Clickable prototypes and prototype-adjacent artifacts — one flat folder, files keyed by INITIATIVE slug (a prototype explores a project's solution). The `.md` artifacts (feedback logs, challenge rounds, prompts, sketches, first-draft summaries) carry `initiatives:` frontmatter per `governance/link-schema.yaml`; `.html` prototypes are linked from the initiative page's Artifacts row.
 
 **Read this when:** You need a feature's prototype, its feedback history, a challenge report, or the cached design system.
 

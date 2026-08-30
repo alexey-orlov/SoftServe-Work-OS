@@ -1,6 +1,11 @@
+---
+initiatives: [[initiative-slug]]
+features: []
+---
+
 # PRD Template
 
-> **How to use:** Copy this template for your feature as `PRDs/{area}/{slug}-prd.md`. Delete sections that don't apply. Expand sections as the PRD matures through stages. For guided creation, run `/prd-draft` in Claude Code — it drafts, marks gaps, and tracks readiness run over run.
+> **How to use:** Copy this template for your initiative as `PRDs/{area}/{initiative-slug}-prd.md` — one PRD per initiative (a feature's history is its initiatives' PRDs); the area folder is the initiative's primary area. Fill the frontmatter above (link contract: `governance/link-schema.yaml`). Delete sections that don't apply. Expand sections as the PRD matures through stages. For guided creation, run `/prd-draft` in Claude Code — it drafts, marks gaps, and tracks readiness run over run.
 >
 > **Stage guidance:** Start short. A Team Kickoff PRD is 300-500 words. A Launch Readiness PRD is 1500-2000 words. Expand as you learn, not before.
 >

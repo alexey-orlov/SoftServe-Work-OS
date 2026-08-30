@@ -1,6 +1,10 @@
+---
+initiatives: [[initiative-slug]]
+---
+
 # [Initiative] — J[N]: [job code-name]
 
-> **How to use:** Copy for your job as `PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md`. For guided creation run `/job-spec-draft` — it reads this file fresh each run as the document contract: section order, table shapes, and register rules come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
+> **How to use:** Copy for your job as `PRDs/{area}/{initiative-slug}-{job-slug}-job-spec.md` (frontmatter names the initiative — link contract: `governance/link-schema.yaml`). For guided creation run `/job-spec-draft` — it reads this file fresh each run as the document contract: section order, table shapes, and register rules come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
 >
 > **What this document is:** the buildable contract for ONE job — the level between the PRD (why this bet) and tickets (who builds what). It describes what a user must be able to do and why: clear enough that the build can't get it wrong, open enough that design and engineering find the best way. No layout, no components, no copy, no implementation-how — `[code-names]` for anything that needs a label.
 >

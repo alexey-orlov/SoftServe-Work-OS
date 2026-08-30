@@ -1,6 +1,10 @@
+---
+initiatives: [[initiative-slug]]
+---
+
 # [Initiative] — Jobs Breakdown
 
-> **How to use:** Copy for your initiative as `PRDs/{area}/{initiative-slug}-jobs-breakdown.md`. For guided creation run `/jobs-breakdown` — it reads this file fresh each run as the document contract: section order, table shapes, and status vocabulary come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
+> **How to use:** Copy for your initiative as `PRDs/{area}/{initiative-slug}-jobs-breakdown.md` (frontmatter names the initiative — link contract: `governance/link-schema.yaml`). For guided creation run `/jobs-breakdown` — it reads this file fresh each run as the document contract: section order, table shapes, and status vocabulary come from here. `>` blockquotes are guidance to the drafting agent — never emitted into the document.
 >
 > **What this document is:** the cut — one initiative broken into independently shippable jobs, sequenced by risk and dependency. It sits between the PRD (why this bet) and the per-job job specs (`/job-spec-draft` — the buildable contract). One breakdown per initiative, edited in place as jobs get drafted, agreed, and handed off.
 

@@ -32,8 +32,9 @@ files with its series — a sprint review inside the sprint cadence goes to
 | `other/` | Nothing fits — all-hands, vendor calls, trainings, one-off cross-team syncs |
 
 Initiative-scoped meetings (most kickoffs, reviews, workshops) carry the slug in the
-filename (`{date}-{initiative}-kickoff.md`) and declare it in the summary's
-`Initiatives touched:` header — the initiative page links back (write-back contract rule 8).
+filename (`{date}-{initiative}-kickoff.md`) and declare it in the summary's frontmatter
+(`initiatives:` — legacy `Initiatives touched:` headers stay readable) — the initiative
+page links back with a dated Activity line (write-back contract rule 8).
 
 **Adding a genuinely new recurring series:** confirm with the team, create
 `meetings/{series}/{docs,transcripts,summaries}/` with a 5-line CLAUDE.md stub in each, and

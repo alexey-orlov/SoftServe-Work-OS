@@ -1,9 +1,16 @@
-# [Competitor Name] — Teardown
+---
+updated: [YYYY-MM-DD]
+slug: [kebab-case — must equal the folder name]
+tier: [direct | indirect | status-quo — as registered in business-info.md]
+last-deep-analysis: [YYYY-MM-DD or -]
+competes-areas: []       # all | [area slugs] — where we meet them; -except keys carve out exceptions
+competes-areas-except: []
+competes-features: []
+competes-features-except: []
+initiatives: []          # initiatives that picked this competitor as a target/reference
+---
 
-_updated: [YYYY-MM-DD]_
-_slug: [kebab-case — must equal the folder name]_
-_tier: [direct | indirect | status-quo — as registered in business-info.md]_
-_last-deep-analysis: [YYYY-MM-DD or -]_
+# [Competitor Name] — Teardown
 
 One competitor's living profile — current truth, refreshed in place. Cross-competitor comparison lives in `competitive-matrix.md` and `competitive-landscape.md` two levels up; monthly deltas land in `intel/{YYYY-MM}.md` records before being folded here.
 

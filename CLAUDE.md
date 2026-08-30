@@ -41,7 +41,7 @@ Your team's shared knowledge base. Every document, decision, metric definition, 
 
 ## Doc Index
 
-**When looking up artifacts for a specific feature (PRDs, RFCs, plans, schemas, dashboards, experiments, tickets), check `product-development/feature-index.yaml` first.** It maps every feature to all related artifacts in one place.
+**When looking up artifacts (PRDs, RFCs, plans, schemas, dashboards, experiments, tickets), the graph has two halves:** `product-development/feature-index.yaml` is the catalog — which areas and features exist, and whether each is planned / live / retired; the work and its artifacts live on **initiative pages** (`product/initiatives/{slug}.md`), which declare their target features/areas in frontmatter. For a feature's artifacts: find the initiatives targeting it (grep `features:` in initiatives/, or the Console's feature page rolls it up), then follow their artifact rows.
 
 ### Read Order for Common Queries
 
@@ -55,7 +55,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Who do we compete with / how do we compare on X?"* | `product/competitive-research/competitive-landscape.md` → `competitive-matrix.md` for capability detail → `competitors/{slug}/teardown.md` for one competitor |
 | *"What are this quarter's OKRs / priorities?"* | `product/strategy/current-quarter.md` → `product/strategy/okr-guide.md` only when writing new ones |
 | *"Who is stakeholder X, what do they care about, how do I get buy-in?"* | `product/strategy/business-context/stakeholders.md` → Team table above for handles |
-| *"What's the state of feature X?"* | `feature-index.yaml#X` → linked PRD, plan, latest experiment / investigation |
+| *"What's the state of feature X?"* | `feature-index.yaml` (catalog: planned / live / retired + shipped date) → the initiative pages whose `features:` frontmatter target it (current work + artifact trail) |
 | *"What's the state of initiative Y (current work)?"* | `product/initiatives/{slug}.md` → its linked artifacts and decisions |
 | *"Starting or stress-testing a new bet / feature?"* | `product/handbook/de-risk-a-bet.md` → the stage skill for your moment |
 | *"Process this meeting / call transcript?"* | run `/process-meeting` — files transcript + summary, routes records, updates the ledger |
@@ -73,10 +73,10 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 
 | Area | File | Description |
 |------|------|-------------|
-| Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
+| Feature index | `product-development/feature-index.yaml` | The product map: areas → features catalog with durable facts (status, shipped date, description) — artifacts hang off initiative pages; links contract in `governance/link-schema.yaml` |
 | Toolchain | `product-development/toolchain.yaml` | Per-surface tool/approach choices plus live-connection records — nine surfaces (design grounding, user insights, ticketing, meeting transcripts, knowledge base, analytics, feature requests, team chat, calendar). Choices written by `/customize-os` (guided targets) and the OS Console (approach/system fields); `connection:` blocks written only by `/connect-mcps` after a tested connect; read by the consuming skills before they ask |
 | Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
-| Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry + auto-sync switches), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending gated-change proposals) |
+| Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry + auto-sync switches), `link-schema.yaml` (the link registry: entities + required/optional links per artifact type), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending gated-change proposals) |
 | Write-back contract | `governance/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
 | Data catalog | `product-development/analytics/data-catalog.yaml` | Warehouse table registry — owner, refresh, upstream, used-by |
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences; `segmentation-matrix.md` — account counts + ARR by vertical × size band × use-case category. Living masters: edit in place, keep current |
@@ -98,7 +98,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
 | Reports | `product-development/product/reports/` | Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests; writers split by filename prefix |
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |
-| Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per feature — `/launch-checklist` writes here |
+| Launches | `product-development/product/launches/` | Filled launch checklists and gate records, one per INITIATIVE (`{initiative-slug}-launch-checklist.md`, `{initiative-slug}-gate-{date}.md`) — launches are launches of initiatives |
 | Documentation | `Documentation/` | The customer-facing documentation a team is sent — one self-contained site (`work-os-docs.html`, GitHub / Azure Repos switch), built from the single source in `src/content.js`. Gated. Change it with `/docs-update` (edit a specific thing, or `sync` to bring every stated fact back in line with the repo) |
 | OS Console | `os-console/` | Local web UI over this repo — friendly navigation, initiative grouping, steering/template management, setup + governance status, activity log. Run `python3 os-console/server.py` → http://127.0.0.1:4820, or with zero setup open `os-console/console.html` — a read-only snapshot (rebuilt on every push) that switches to the full console automatically when one is running. Derives everything from the canonical registries; saves respect the write policy and commit with the `console:` prefix |
 

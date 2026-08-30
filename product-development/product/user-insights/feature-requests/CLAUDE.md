@@ -15,7 +15,7 @@ reached the tracker yet.
 `{YYYY-MM-DD}-{account}-{request-slug}.md` with front-matter: `account`, `requested`
 (call date), `area` (feature-index area, existing or proposed), `type`
 (feature | improvement | bug), `priority_signal`, `tracker_ref` (`"-"` until pushed, then
-the ticket id or URL), `source` (relative link to the summary or report), `_updated`.
+the ticket id or URL), `source` (relative link to the summary or report), `updated`; optional link keys `features` / `initiatives` (bare catalog/initiative slugs) when the request maps to existing work — link contract: `governance/link-schema.yaml`.
 Body: `# [{Area}] {Request}` → the underlying need → the role-attributed quote →
 `## Draft ticket` (objective + acceptance-criteria seed — a tracker push uses it verbatim).
 
