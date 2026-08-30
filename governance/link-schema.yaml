@@ -171,7 +171,7 @@ types:
 catalog:
   feature-statuses: [planned, live, retired]   # "building" is DERIVED (an active initiative targets it)
   status-writer: /feature-launch-gate          # sole writer of live + shipped: (re-reads before writing)
-  new-entries: proposed in the same gated prompt as the initiative that introduces them (status: planned)
+  new-entries: "proposed in the same gated prompt as the initiative that introduces them (status: planned)"
 
 # Backlink policy: only initiative pages accumulate backlinks (Activity/Decisions
 # lines — write-back-contract rule 8). The catalog, account pages, and teardowns

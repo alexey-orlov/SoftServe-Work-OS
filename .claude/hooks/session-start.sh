@@ -13,7 +13,8 @@ DECISIONS=$(ls "$PD/product/decisions" 2>/dev/null | grep -E '^[0-9]{4}-' | sort
 if [ -n "$DECISIONS" ]; then
   echo "$DECISIONS" | while IFS= read -r f; do
     echo "• $f"
-    head -6 "$PD/product/decisions/$f" 2>/dev/null | sed 's/^/    /'
+    # skip the frontmatter fence so the preview shows title + key fields either format
+    head -14 "$PD/product/decisions/$f" 2>/dev/null | grep -v '^---$' | head -6 | sed 's/^/    /'
   done
 else
   echo "none yet"
@@ -23,10 +24,13 @@ echo "--- Current quarter (head) ---"
 head -25 "$PD/product/strategy/current-quarter.md" 2>/dev/null || echo "none yet"
 
 echo "--- Active initiatives ---"
-ACTIVE=$(grep -l '_status: active' "$PD"/product/initiatives/*.md 2>/dev/null)
+# dual-read: frontmatter `status: active` (v2) or legacy `_status: active` line
+ACTIVE=$(grep -lE '^_?status: active' "$PD"/product/initiatives/*.md 2>/dev/null)
 if [ -n "$ACTIVE" ]; then
   echo "$ACTIVE" | while IFS= read -r f; do
-    echo "• $(basename "$f" .md) — $(grep -m1 '_status:' "$f")"
+    S=$(grep -m1 -E '^_?status:' "$f" 2>/dev/null)
+    N=$(grep -m1 '^note:' "$f" 2>/dev/null | sed 's/^note:[[:space:]]*//; s/^"//; s/"$//')
+    echo "• $(basename "$f" .md) — ${S}${N:+ — $N}"
   done
 else
   echo "none"
@@ -48,8 +52,9 @@ echo "--- Fold backlog ---"
 BACKLOG=$(comm -23 \
   <(find "$PD"/product/customers/accounts \
          "$PD"/product/meetings \
+         "$PD"/product/user-insights \
          "$PD"/inbox \
-         -type f \( -path '*/transcripts/*' -o -path '*/inbox/*' \) \
+         -type f \( -path '*/transcripts/*' -o -path '*/interviews/*' -o -path '*/inbox/*' \) \
          \( -name '*.md' -o -name '*.txt' -o -name '*.pdf' -o -name '*.docx' \) \
          ! -name 'CLAUDE.md' 2>/dev/null | sort) \
   <(sort "governance/processed.txt" 2>/dev/null) 2>/dev/null | wc -l | tr -d ' ')

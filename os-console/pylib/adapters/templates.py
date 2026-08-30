@@ -13,7 +13,7 @@ DIR = 'product-development/product/handbook/templates'
 
 # Destination suggestions with {tokens} the person fills in before creating.
 SUGGEST = {
-    'prd-template.md': 'product-development/product/PRDs/{area}/{slug}-prd.md',
+    'prd-template.md': 'product-development/product/PRDs/{area}/{initiative}-prd.md',
     'initiative-page-template.md': 'product-development/product/initiatives/{slug}.md',
     'launch-checklist-template.md': 'product-development/product/launches/{slug}-launch-checklist.md',
     'retrospective-template.md': 'product-development/product/meetings/retros/{YYYY-MM-DD}-{slug}-retro.md',

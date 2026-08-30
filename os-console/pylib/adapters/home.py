@@ -332,7 +332,7 @@ def build():
         'customization': {'path': 'os-installation/customization-status.md', 'text': customization[:4000]}
         if customization else None,
         'counts': {
-            'initiatives': len([i for i in inits if i['status'] in ('active', 'exploring')]),
+            'initiatives': len([i for i in inits if i['status'] == 'active']),
             'initiativesTotal': len(inits),
             'accounts': accounts_count(),
             'proposals': len(gov['proposals']),

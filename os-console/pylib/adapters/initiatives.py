@@ -1,6 +1,12 @@
-# Initiatives adapter — joins the living initiative pages with feature-index.yaml.
-# The pages and the index stay canonical; this module only reads and does
-# surgical line edits (status, attach, create) that a person would make by hand.
+# Initiatives adapter — joins the living initiative pages with the product
+# catalog (feature-index.yaml). The pages and the catalog stay canonical; this
+# module only reads and does surgical line edits (status, attach, create) that
+# a person would make by hand.
+#
+# Link Architecture v2: pages declare their targets in fenced YAML frontmatter
+# (areas:/features: — link contract in governance/link-schema.yaml); the legacy
+# `_target-feature(s): feature-index.yaml#a.b` anchor stays readable forever
+# (dual-read — deployed instances converge gradually).
 import posixpath
 import re
 
@@ -13,6 +19,39 @@ DIR = 'product-development/product/initiatives'
 PD = 'product-development'
 TEMPLATE = 'product-development/product/handbook/templates/initiative-page-template.md'
 STATUS_ORDER = {'active': 0, 'exploring': 1, 'paused': 2, 'shipped': 3, 'killed': 4}
+UNKNOWN_RANK = 5  # unrecognized status: sorted last and flagged, never silently coerced
+
+
+def catalog():
+    """feature-index.yaml in either shape.
+    New (v2 catalog): {areas: {a: {name, description, features: {f: {status, shipped, ...}}}}}
+    Legacy: {a: {f: {artifact rows..., initiatives: [...]}}}
+    Returns {'shape': 'catalog'|'legacy'|'missing', 'areas': {...}, 'features': {slug: {area, ...facts}}}."""
+    try:
+        fi = miniyaml.load(repo.read_text('%s/feature-index.yaml' % PD)) or {}
+    except Exception:
+        return {'shape': 'missing', 'areas': {}, 'features': {}}
+    if not isinstance(fi, dict):
+        return {'shape': 'missing', 'areas': {}, 'features': {}}
+    feats = {}
+    if isinstance(fi.get('areas'), dict):
+        for a, aspec in fi['areas'].items():
+            if not isinstance(aspec, dict):
+                continue
+            fdict = aspec.get('features') if isinstance(aspec.get('features'), dict) else {}
+            for f, fspec in fdict.items():
+                entry = {'area': a}
+                if isinstance(fspec, dict):
+                    entry.update(fspec)
+                feats[f] = entry
+        return {'shape': 'catalog', 'areas': fi['areas'], 'features': feats}
+    for a, fdict in fi.items():
+        if not isinstance(fdict, dict):
+            continue
+        for f, spec in fdict.items():
+            if isinstance(spec, dict):
+                feats[f] = {'area': a}
+    return {'shape': 'legacy', 'areas': fi, 'features': feats}
 
 
 def normalize_artifact_path(p):
@@ -150,13 +189,26 @@ def feature_index_join():
 def parse_page(rel):
     text = repo.read_text(rel)
     slug = posixpath.basename(rel)[:-3] if rel.endswith('.md') else posixpath.basename(rel)
-    meta = md.meta_lines(text)
+    meta = md.page_meta(text)
+    fm = md.frontmatter(text)
     title = md.first_heading(text) or slug
-    status_text = meta.get('status', '')
-    parts = re.split(r'[\s—-]', status_text)
-    status_word = (parts[0] if parts and parts[0] else 'active').lower()
-    targets = [{'area': m.group(1), 'feature': m.group(2)}
-               for m in re.finditer(r'feature-index\.yaml#([a-z0-9_-]+)\.([a-z0-9_-]+)', text[:1500], re.I)]
+    if fm:
+        status_word = str(meta.get('status') or '').strip().lower()
+        note = str(meta.get('note') or '').strip()
+        status_text = status_word + (' — %s' % note if note else '')
+    else:
+        status_text = str(meta.get('status', ''))
+        parts = re.split(r'[\s—-]', status_text)
+        status_word = (parts[0] if parts and parts[0] else '').lower()
+    status_known = status_word in STATUS_ORDER
+    targets = []
+    for f in (fm.get('features') if isinstance(fm.get('features'), list) else []):
+        targets.append({'kind': 'feature', 'area': '', 'feature': str(f)})
+    for a in (fm.get('areas') if isinstance(fm.get('areas'), list) else []):
+        targets.append({'kind': 'area', 'area': str(a), 'feature': ''})
+    if not targets:  # legacy anchor form — readable forever (dual-read)
+        targets = [{'kind': 'feature', 'area': m.group(1), 'feature': m.group(2)}
+                   for m in re.finditer(r'feature-index\.yaml#([a-z0-9_-]+)\.([a-z0-9_-]+)', text[:1500], re.I)]
     artifacts = parse_artifact_bullets(rel, md.section(text, 'Artifacts'))
     decisions = []
     for b in md.bullets(md.section(text, 'Decisions')):
@@ -169,10 +221,14 @@ def parse_page(rel):
     return {
         'slug': slug, 'rel': rel, 'title': title,
         'isExample': bool(re.match(r'^EXAMPLE', title, re.I)) or 'Synthetic worked example' in text,
-        'status': status_word if status_word in STATUS_ORDER else 'active',
+        # status coercion kept ONLY for grouping back-compat; statusKnown/statusRaw
+        # carry the truth — the view flags unknown statuses instead of hiding them.
+        'status': status_word if status_known else 'active',
+        'statusKnown': status_known,
+        'statusRaw': status_word,
         'statusText': status_text,
-        'updated': meta.get('updated', ''),
-        'owner': meta.get('owner', ''),
+        'updated': str(meta.get('updated', ''))[:10],
+        'owner': str(meta.get('owner', '')),
         'targets': targets,
         'snapshot': md.section(text, 'Snapshot').strip(),
         'scope': md.section(text, 'Scope & goal').strip(),
@@ -189,20 +245,52 @@ def parse_page(rel):
     }
 
 
+def _stub_page(rel, error):
+    slug = posixpath.basename(rel)[:-3]
+    return {'slug': slug, 'rel': rel, 'title': slug, 'isExample': False,
+            'status': 'unknown', 'statusKnown': False, 'statusRaw': 'unknown',
+            'statusText': '', 'updated': '', 'owner': '', 'targets': [],
+            'snapshot': '', 'scope': '', 'instructions': '', 'sources': [],
+            'artifacts': [], 'decisions': [], 'openLoops': [], 'activity': [],
+            'artifactStats': {'present': 0, 'missing': 0}, 'features': [],
+            'parseError': str(error)[:200]}
+
+
 def list_pages():
-    join = feature_index_join()
+    cat = catalog()
+    legacy_join = feature_index_join() if cat['shape'] == 'legacy' else {}
     items = []
     for e in repo.list_dir(DIR):
         if e['type'] != 'file' or not e['name'].endswith('.md') or e['name'] == 'CLAUDE.md':
             continue
         try:
             page = parse_page(e['rel'])
-            page['features'] = join.get(page['slug'], [])
-            items.append(page)
-        except Exception:
-            pass  # unreadable page — skip rather than break the view
-    items.sort(key=lambda p: str(p['updated']), reverse=True)
-    items.sort(key=lambda p: STATUS_ORDER[p['status']])
+        except Exception as ex:
+            # a broken page stays VISIBLE — silent drops hid real damage
+            items.append(_stub_page(e['rel'], ex))
+            continue
+        if cat['shape'] == 'catalog':
+            feats = []
+            for t in page['targets']:
+                if t.get('feature') and t['feature'] in cat['features']:
+                    cf = cat['features'][t['feature']]
+                    feats.append({'area': cf.get('area', ''), 'feature': t['feature'],
+                                  'catalog': {k: (str(v)[:10] if k == 'shipped' else v)
+                                              for k, v in cf.items() if k != 'area'},
+                                  'artifacts': []})
+                elif t.get('feature'):
+                    feats.append({'area': t.get('area', ''), 'feature': t['feature'],
+                                  'catalog': {}, 'unknownSlug': True, 'artifacts': []})
+                elif t.get('area'):
+                    feats.append({'area': t['area'], 'feature': '',
+                                  'catalog': {}, 'artifacts': [],
+                                  'unknownSlug': t['area'] not in (cat['areas'] or {})})
+            page['features'] = feats
+        else:
+            page['features'] = legacy_join.get(page['slug'], [])
+        items.append(page)
+    items.sort(key=lambda p: str(p.get('updated', '')), reverse=True)
+    items.sort(key=lambda p: STATUS_ORDER.get(p['status'], UNKNOWN_RANK))
     return items
 
 
@@ -233,7 +321,61 @@ def replace_meta_line(text, key, new_line):
     return text
 
 
-def set_status(slug, status, note, settings):
+def _fm_set(text, key, value):
+    """Set/replace/remove one key inside the frontmatter fence. value None/'' removes;
+    a value starting with '[' is written raw (a YAML list); strings with spaces are quoted."""
+    lines = text.split('\n')
+    if not lines or lines[0].strip() != '---':
+        return text
+    end = next((i for i in range(1, min(len(lines), 60)) if lines[i].strip() == '---'), -1)
+    if end == -1:
+        return text
+    if value is None or value == '':
+        new_line = None
+    elif isinstance(value, str) and value.startswith('['):
+        new_line = '%s: %s' % (key, value)
+    elif isinstance(value, str) and re.search(r'[\s:#"—]', value):
+        new_line = '%s: "%s"' % (key, value.replace('"', "'"))
+    else:
+        new_line = '%s: %s' % (key, value)
+    for i in range(1, end):
+        if re.match(r'^%s\s*:' % re.escape(key), lines[i]):
+            if new_line is None:
+                del lines[i]
+            else:
+                lines[i] = new_line
+            return '\n'.join(lines)
+    if new_line is not None:
+        lines.insert(end, new_line)
+    return '\n'.join(lines)
+
+
+def _touch_meta(text, key, value):
+    """Write a meta field in the page's own format — frontmatter when it has a
+    fence, the legacy italic line otherwise (dual-WRITE mirrors dual-read)."""
+    if md.frontmatter(text) or text.startswith('---'):
+        return _fm_set(text, key, value)
+    if key == 'status':
+        return replace_meta_line(text, 'status', '_status: %s_' % value)
+    return replace_meta_line(text, key, '_%s: %s_' % (key, value))
+
+
+def _append_activity(text, line):
+    """Insert a dated line at the TOP of ## Activity (newest first, per template)."""
+    lines = text.split('\n')
+    start = next((i for i, l in enumerate(lines) if re.match(r'^##\s+Activity\s*$', l)), -1)
+    if start == -1:
+        return text.rstrip('\n') + '\n\n## Activity\n\n- %s\n' % line
+    at = start + 1
+    while at < len(lines) and lines[at].strip() == '':
+        at += 1
+    lines.insert(at, '- %s' % line)
+    if at == start + 1:
+        lines.insert(at, '')
+    return '\n'.join(lines)
+
+
+def set_status(slug, status, note, settings, force=False):
     rel = '%s/%s.md' % (DIR, slug)
     if not repo.exists(rel):
         raise repo.http_err(404, 'no initiative page %s' % slug)
@@ -241,8 +383,20 @@ def set_status(slug, status, note, settings):
     if status not in allowed:
         raise repo.http_err(400, 'status must be one of %s' % ', '.join(allowed))
     text = repo.read_text(rel)
-    text = replace_meta_line(text, 'status', '_status: %s%s_' % (status, ' — %s' % note if note else ''))
-    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    if status == 'shipped' and not force and 'launches/' not in text:
+        raise repo.http_err(400, 'closing as shipped needs the gate verdict linked '
+                                 '(product/launches/{slug}-gate-{date}.md) — attach it first, '
+                                 'or send force: true to override deliberately')
+    today = md.today()
+    if md.frontmatter(text) or text.startswith('---'):
+        text = _fm_set(text, 'status', status)
+        text = _fm_set(text, 'note', note or '')
+        text = _fm_set(text, 'updated', today)
+    else:
+        text = replace_meta_line(text, 'status', '_status: %s%s_' % (status, ' — %s' % note if note else ''))
+        text = replace_meta_line(text, 'updated', '_updated: %s_' % today)
+    # a status change is an event — it leaves a dated Activity line, always
+    text = _append_activity(text, '%s — status → %s%s (console)' % (today, status, ' — %s' % note if note else ''))
     repo.write_text(rel, text)
     commit = gitlib.commit_paths([rel], 'console: %s status → %s' % (slug, status))
     push = gitlib.maybe_push(settings)
@@ -267,12 +421,23 @@ def attach(slug, target_rel, label, settings):
         if re.match(r'^##\s+', lines[i]):
             end = i
             break
-    insert_at = end
-    while insert_at > start + 1 and lines[insert_at - 1].strip() == '':
-        insert_at -= 1
-    lines.insert(insert_at, bullet)
+    # an empty template row with the same label ('- PRD: -' / '- PRD: [PENDING: …]')
+    # is FILLED in place — appending would leave a duplicate label
+    filled = False
+    if label:
+        empty_row = re.compile(r'^-\s+\**%s\**\s*:\s*(-|—|\[PENDING:[^\]]*\])\s*$' % re.escape(label), re.I)
+        for i in range(start + 1, end):
+            if empty_row.match(lines[i].strip()):
+                lines[i] = bullet
+                filled = True
+                break
+    if not filled:
+        insert_at = end
+        while insert_at > start + 1 and lines[insert_at - 1].strip() == '':
+            insert_at -= 1
+        lines.insert(insert_at, bullet)
     text = '\n'.join(lines)
-    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    text = _touch_meta(text, 'updated', md.today())
     repo.write_text(rel, text)
     commit = gitlib.commit_paths([rel], 'console: attach %s to %s' % (posixpath.basename(target), slug))
     push = gitlib.maybe_push(settings)
@@ -309,7 +474,7 @@ def set_instructions(slug, instr, settings):
                             % (INSTRUCTIONS_MAX, len(instr)))
     body = instr.split('\n') if instr else ['-']
     text = _replace_section(repo.read_text(rel), 'Instructions', body)
-    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    text = _touch_meta(text, 'updated', md.today())
     repo.write_text(rel, text)
     commit = gitlib.commit_paths([rel], 'console: %s instructions %s' % (slug, 'updated' if instr else 'cleared'))
     push = gitlib.maybe_push(settings)
@@ -350,25 +515,58 @@ def set_sources(slug, items, settings):
             bullet += ' — %s' % note
         bullets_.append(bullet)
     text = _replace_section(repo.read_text(rel), 'Sources', bullets_ or ['-'])
-    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    text = _touch_meta(text, 'updated', md.today())
     repo.write_text(rel, text)
     commit = gitlib.commit_paths([rel], 'console: %s sources — %d entr%s' % (slug, len(bullets_), 'y' if len(bullets_) == 1 else 'ies'))
     push = gitlib.maybe_push(settings)
     return {'page': parse_page(rel), 'commit': commit, 'push': push}
 
 
-def create(slug, title, settings):
+def create(slug, title, settings, areas=None, features=None):
     if not re.match(r'^[a-z0-9]+(-[a-z0-9]+)*$', slug or ''):
         raise repo.http_err(400, 'slug must be kebab-case (a-z, 0-9, dashes)')
     if not title or not title.strip():
         raise repo.http_err(400, 'title required')
+    areas = [str(a).strip() for a in (areas or []) if str(a).strip()]
+    features = [str(f).strip() for f in (features or []) if str(f).strip()]
+    if not areas and not features:
+        raise repo.http_err(400, 'an initiative needs at least one target — the feature(s) '
+                                 'and/or area(s) it changes (an unmapped initiative cannot '
+                                 'exist; link contract: governance/link-schema.yaml)')
+    cat = catalog()
+    if slug in cat['features'] or slug in (cat['areas'] or {}):
+        raise repo.http_err(409, "'%s' already names a catalog feature/area — slugs are unique "
+                                 "across areas + features + initiatives (try '%s-v2')" % (slug, slug))
+    unknown = [f for f in features if f not in cat['features']] + \
+              [a for a in areas if a not in (cat['areas'] or {})]
+    if unknown and cat['shape'] != 'missing':
+        raise repo.http_err(400, 'unknown slug(s): %s — not in feature-index.yaml. Add the '
+                                 'catalog entry first (gated), or pick existing slugs.'
+                            % ', '.join(unknown))
     rel = '%s/%s.md' % (DIR, slug)
     if repo.exists(rel):
         raise repo.http_err(409, '%s already exists' % slug)
     text = repo.read_text(TEMPLATE)
     text = re.sub(r'^#\s+\[Initiative Name\]\s*$', lambda m: '# %s' % title.strip(), text, count=1, flags=re.M)
-    text = replace_meta_line(text, 'status', '_status: exploring — page created from the console; fill the snapshot next_')
-    text = replace_meta_line(text, 'updated', '_updated: %s_' % md.today())
+    note = 'page created from the console; fill the snapshot next'
+    if text.startswith('---'):
+        # frontmattered template (v2): fill its fields
+        text = _fm_set(text, 'status', 'exploring')
+        text = _fm_set(text, 'note', note)
+        text = _fm_set(text, 'updated', md.today())
+        text = _fm_set(text, 'areas', '[%s]' % ', '.join(areas) if areas else '')
+        text = _fm_set(text, 'features', '[%s]' % ', '.join(features) if features else '')
+    else:
+        # legacy template: drop its italic meta lines, prepend the v2 frontmatter
+        body = [l for l in text.split('\n') if not re.match(r'^_[a-z-]+(\(s\))?:.*_\s*$', l, re.I)]
+        fmt = ['---', 'status: exploring', 'note: "%s"' % note,
+               'updated: %s' % md.today(), 'owner: ""']
+        if areas:
+            fmt.append('areas: [%s]' % ', '.join(areas))
+        if features:
+            fmt.append('features: [%s]' % ', '.join(features))
+        fmt.append('---')
+        text = '\n'.join(fmt) + '\n' + '\n'.join(body).lstrip('\n')
     text = re.sub(r'\n<!--[\s\S]*?-->\s*$', '\n', text, count=1, flags=re.M)  # template-rules comment: "delete when filling"
     repo.write_text(rel, text)
 

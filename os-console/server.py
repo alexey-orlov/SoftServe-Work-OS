@@ -125,11 +125,13 @@ ROUTES = {
     'GET /api/overview': lambda q, body: home.build(),
     'GET /api/initiatives': lambda q, body: {'items': initiatives.list_pages()},
     'POST /api/initiatives/status': lambda q, body: initiatives.set_status(
-        body.get('slug'), body.get('status'), body.get('note') or '', policy.load()['settings']),
+        body.get('slug'), body.get('status'), body.get('note') or '', policy.load()['settings'],
+        force=bool(body.get('force'))),
     'POST /api/initiatives/attach': lambda q, body: initiatives.attach(
         body.get('slug'), body.get('path'), body.get('label') or '', policy.load()['settings']),
     'POST /api/initiatives/create': lambda q, body: initiatives.create(
-        body.get('slug'), body.get('title'), policy.load()['settings']),
+        body.get('slug'), body.get('title'), policy.load()['settings'],
+        areas=body.get('areas') or [], features=body.get('features') or []),
     'GET /api/library': lambda q, body: library.dir_info(q.get('path') or ''),
     'GET /api/file': _file_info,
     'PUT /api/file': _file_save,

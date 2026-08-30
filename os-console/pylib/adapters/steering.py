@@ -131,8 +131,11 @@ def _index_artifact(key, val, out):
 
 
 def feature_index():
-    """feature-index.yaml as a readable structure: area → feature → artifact rows
-    (each resolved to a real file, a URL, or a plain reference) + linked initiatives."""
+    """feature-index.yaml as a readable structure, either shape.
+    v2 catalog ({areas: {a: {features: {f: {status, shipped, …}}}}}): durable facts
+    only — artifact rollups come from initiative pages (initiatives adapter).
+    Legacy (area → feature → artifact rows): resolved rows + linked initiatives,
+    kept readable forever for mid-migration instances (dual-read)."""
     text = repo.read_text_or_null(FEATURE_INDEX)
     if text is None:
         return {'exists': False, 'areas': [], 'path': FEATURE_INDEX}
@@ -141,6 +144,25 @@ def feature_index():
     except Exception:
         return {'exists': True, 'areas': [], 'path': FEATURE_INDEX, 'parseError': True}
     areas = []
+    if isinstance(doc, dict) and isinstance(doc.get('areas'), dict):
+        for area, aspec in doc['areas'].items():
+            if not isinstance(aspec, dict):
+                continue
+            features = []
+            fdict = aspec.get('features') if isinstance(aspec.get('features'), dict) else {}
+            for feature, spec in fdict.items():
+                spec = spec if isinstance(spec, dict) else {}
+                features.append({'feature': feature,
+                                 'catalog': {'status': str(spec.get('status', '') or ''),
+                                             'shipped': str(spec.get('shipped', '') or '')[:10],
+                                             'name': str(spec.get('name', '') or ''),
+                                             'description': str(spec.get('description', '') or '')},
+                                 'artifacts': [], 'initiatives': [], 'present': 0, 'total': 0})
+            areas.append({'area': area, 'name': str(aspec.get('name', '') or ''),
+                          'description': str(aspec.get('description', '') or ''),
+                          'features': features})
+        return {'exists': True, 'shape': 'catalog', 'areas': areas, 'path': FEATURE_INDEX,
+                'lastChange': gitlib.last_change_iso(FEATURE_INDEX)}
     if isinstance(doc, dict):
         for area, feats in doc.items():
             if not isinstance(feats, dict):
@@ -160,7 +182,7 @@ def feature_index():
                                  'total': len(artifacts)})
             if features:
                 areas.append({'area': area, 'features': features})
-    return {'exists': True, 'areas': areas, 'path': FEATURE_INDEX,
+    return {'exists': True, 'shape': 'legacy', 'areas': areas, 'path': FEATURE_INDEX,
             'lastChange': gitlib.last_change_iso(FEATURE_INDEX)}
 
 

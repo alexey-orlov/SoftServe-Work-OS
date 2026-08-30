@@ -1,9 +1,15 @@
 # Markdown parsing helpers for the wiki's house conventions:
-# _key: value_ metadata lines, ## sections, CLAUDE.md navigation bullets.
+# fenced YAML frontmatter (Link Architecture v2), legacy _key: value_ metadata
+# lines, ## sections, CLAUDE.md navigation bullets.
+#
+# DUAL-READ IS PERMANENT: deployed instances converge to frontmatter gradually
+# (via /wiki-lint auto-fixes), so the legacy italic-meta fallback must never be
+# removed — page_meta() reads both, frontmatter winning per key.
 import posixpath
 import re
 from datetime import datetime, timezone
 
+from . import miniyaml
 from . import repo
 
 
@@ -19,6 +25,48 @@ def meta_lines(text):
         m = re.match(r'^_([a-z-]+(?:\(s\))?):\s*(.*?)_?\s*$', line, re.I)
         if m:
             out[m.group(1).lower()] = m.group(2).strip()
+    return out
+
+
+_FENCE_SCAN = 60  # frontmatter is small; the closing --- must appear this early
+
+
+def frontmatter(text):
+    """Fenced YAML frontmatter at the very top ('---' ... '---') -> dict.
+    {} when absent or unparseable. Keys per governance/link-schema.yaml."""
+    t = text or ''
+    lines = t.split('\n')
+    if not lines or lines[0].strip() != '---':
+        return {}
+    for i in range(1, min(len(lines), _FENCE_SCAN)):
+        if lines[i].strip() == '---':
+            try:
+                doc = miniyaml.load('\n'.join(lines[1:i]))
+            except Exception:
+                return {}
+            return doc if isinstance(doc, dict) else {}
+    return {}
+
+
+def strip_frontmatter(text):
+    """Text with the leading fenced frontmatter removed (unchanged when absent)."""
+    t = text or ''
+    lines = t.split('\n')
+    if not lines or lines[0].strip() != '---':
+        return t
+    for i in range(1, min(len(lines), _FENCE_SCAN)):
+        if lines[i].strip() == '---':
+            return '\n'.join(lines[i + 1:])
+    return t
+
+
+def page_meta(text):
+    """Unified page metadata: legacy italic `_key: value_` lines overlaid by fenced
+    YAML frontmatter (frontmatter wins per key). Keys lowercased. Values may be
+    lists (link keys: areas, features, initiatives, customers, competitors)."""
+    out = meta_lines(text)
+    for k, v in frontmatter(text).items():
+        out[str(k).lower()] = v
     return out
 
 
@@ -123,10 +171,11 @@ def intro(text):
 
 def placeholder_count(text):
     """Bracketed placeholders that are not markdown links: [Your Company], [N],
-    [GAP: ...] — the shared population signal (setup page, steering page)."""
+    [GAP: ...] — the shared population signal (setup page, steering page).
+    Frontmatter is excluded — YAML inline lists ([billing]) are data, not gaps."""
     if not text:
         return 0
-    return len(re.findall(r'\[[^\][\n]+\](?!\()', text))
+    return len(re.findall(r'\[[^\][\n]+\](?!\()', strip_frontmatter(text)))
 
 
 def today():

@@ -59,7 +59,7 @@ two prompts in, every run. Headless / scheduled runs can't ask: auto-tier repair
 applied, gated ones are filed as a proposal in `governance/proposals/`. Never bypass the
 guard (no Bash writes to gated paths).
 
-## The eleven checks
+## The twelve checks
 
 Each check keeps its number (other skills cite them) and reports under its plain name.
 *Fix* = mechanical repair applied by default; *Suggest* = the default suggested change
@@ -85,25 +85,29 @@ carried into the readout.
    describes the queue, not its contents. Fix: missing lines, missing stubs. Suggest: a nav
    line whose target is gone — repoint when exactly one file with that name exists elsewhere
    (name it), otherwise drop the line.
-3. **Feature-index ↔ disk** — *"The feature index (the master lookup)."* Every path in
-   `feature-index.yaml` resolves; every PRD / metric doc / experiment / investigation on disk
-   appears in some feature entry (orphans); every slug in an `initiatives:` list has a page in
-   `product/initiatives/`. Suggest: the exact index line to add or fix (gated — the guard
-   prompts), or the initiative page to scaffold via `/prd-draft`.
+3. **Product catalog** — *"The product map (areas → features)."* v2 catalog shape: every
+   feature carries `status: planned | live | retired`; `shipped:` dates are YYYY-MM-DD;
+   feature slugs are globally unique (one feature, one area). Legacy artifact-map shape
+   (mid-migration instances — readable forever): every path resolves; every slug in an
+   `initiatives:` list has a page in `product/initiatives/`. Suggest: the exact catalog
+   line to add or fix (gated — the guard prompts), or the legacy→catalog conversion.
 4. **Broken cross-references** — *"Links that lead nowhere."* Markdown links and backticked
    repo paths across `product-development/`, `governance/`, and `.claude/` that point at
    nothing. Suggest: repoint (unique same-name file found) or remove; group by source page.
-5. **Initiative-page health** — *"Initiative pages."* Every `initiatives/*.md` has `_status:`
-   + `_updated:`; pages with `_status: active` but no artifact/activity change in 30+ days
-   flagged; every artifact link on the page resolves. Join symmetry: every decision entry
-   whose `Initiative:` header names a slug is linked from that page's Decisions section, and
-   every meeting/call summary whose `Initiatives touched:` names a slug has a matching
-   Activity line there (one-way — pages may link records that don't name them). Suggest: the
-   missing header values; the missing Decisions / Activity line, quoted and ready to append;
-   "still active? — mark paused or done" for the quiet ones.
+5. **Initiative-page health** — *"Initiative pages."* Every `initiatives/*.md` has a status
+   + updated date (frontmatter `status:`/`updated:`, or the legacy `_status:`/`_updated:`
+   lines — both readable); ACTIVE pages with no artifact/activity change in 30+ days flagged
+   — closed pages (`shipped` / `killed`) are exempt, they never move again by design; every
+   artifact link on the page resolves. Join symmetry: every decision record naming a slug
+   (frontmatter `initiatives:` or legacy `Initiative:` header) is linked from that page's
+   Decisions section, and every meeting/call summary naming one has a matching Activity line
+   there (one-way — pages may link records that don't name them). Suggest: the missing
+   values; the missing Decisions / Activity line, quoted and ready to append; "still
+   active? — mark it paused, or close it (shipped / killed)" for the quiet ones.
 6. **Living-page registry** — *"Always-current pages."* Every glob in
    `write-policy.yaml#living-pages` matches at least the expected files; each living page
-   carries `_updated:`; each is within its ≤120-line budget (folder CLAUDE.mds ≤80; root
+   carries an updated date (`updated:` frontmatter or legacy `_updated:`); each is within
+   its ≤120-line budget (folder CLAUDE.mds ≤80; root
    CLAUDE.md ≤150; `segmentation-matrix.md` ≤200 — table-heavy by design). Suggest: add the
    header; for an over-budget page, name the sections to trim or move to a subfolder.
 7. **Mirror consistency** — *"The same fact in two places that disagree."* The root CLAUDE.md
@@ -145,8 +149,20 @@ carried into the readout.
     grounding: setup not finished" warning, not a failure. Suggest: "run `/connect-code
     --refresh`" for stale entries or drifted maps; the exact registry line for an
     unregistered map.
-
-## Output — plain language, three buckets
+12. **Link contract** — *"How work is connected."* Per `governance/link-schema.yaml`:
+    every initiative page names at least one target feature/area that resolves (an
+    unmapped initiative cannot exist) and carries a valid status
+    (exploring | active | paused | shipped | killed); every PRD / jobs-breakdown /
+    job spec / launch names its initiative — frontmatter `initiatives:`, or a filename
+    the lint can derive it from (Fix: write the derived frontmatter); slugs stay unique
+    across areas + features + initiatives; a slug referenced but still pending in
+    `governance/proposals/` is a warning, not an error. Legacy formats (italic meta
+    lines, `**Initiative:**` headers, anchor targets) are readable forever — Fix:
+    convert to frontmatter, content unchanged. Suggest, for an artifact whose
+    initiative can't be derived: "attach to {likeliest initiative} / create a new one" —
+    one keystroke each. Tier mechanics for fixes: auto-tier → applied silently;
+    gated + in-session → ONE batched prompt covering all of the run's gated fixes;
+    headless → a proposal file.
 
 **The plain-language contract** (applies to the chat readout, the report body, and any prompt
 text this skill composes). The reader is a PM or a teammate who has never opened a terminal.
@@ -200,7 +216,8 @@ the briefing — exactly this shape:
 ```
 # Wiki health — {YYYY-MM-DD}
 _verdict:_ {one line}
-_fixed:_ {n} · _needs a decision:_ {n} · _fine:_ {n} of 11 checks · _mode:_ {default | report-only}
+_fixed:_ {n} · _needs a decision:_ {n} · _fine:_ {n} of 12 checks · _mode:_ {default | report-only}
+_links:_ {n} broken · {m} unknown names   ← the link-health line; session-start prints this head
 _top decisions:_
 1. {what — where → suggested change (owner)}
 2. …
@@ -209,7 +226,7 @@ _full readout below · re-run /wiki-lint after acting on these_
 ```
 Then, in order: **Fixed for you** (each edit, before → after in one line) · **Needs your
 decision** (the full list, grouped by kind, owner and suggested change per item) · **Fine** ·
-**Technical appendix** (per-check counts 1–11, raw findings with paths, staleness table by
+**Technical appendix** (per-check counts 1–12, raw findings with paths, staleness table by
 tier and owner, the script's own output — for the person doing the fixing and for the
 Action-vs-skill agreement). If 30%+ of non-ignored files are stale: prepend the
 recovery-session block (1 hour, divide stale files among owners, update / archive / confirm
