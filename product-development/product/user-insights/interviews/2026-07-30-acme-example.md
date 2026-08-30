@@ -9,7 +9,7 @@
 **Call date:** 2026-07-30
 **Type:** discovery interview, 32 min
 **Participants:** [PM] (Beacon) · Jordan Reyes, Head of Ops (Acme) · Priya N., Data Analyst (Acme)
-**Report:** [interview insights](../../../../../user-research/2026-07-30-interview-insights.md)
+**Report:** [interview insights](../2026-07-30-interview-insights.md) · **Account:** [Acme](../../customers/accounts/acme-example/account-context.md)
 
 ---
 

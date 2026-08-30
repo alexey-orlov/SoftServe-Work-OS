@@ -153,7 +153,7 @@ For each phase, document:
 
 ### Output Format (User Journey Map)
 
-Save to: `product-development/product/user-research/journey-maps/[journey-name]-[date].md` (both modes — the one canonical location).
+Save to: `product-development/product/user-insights/journey-maps/[journey-name]-[date].md` (both modes — the one canonical location).
 
 ```markdown
 # User Journey Map: [Journey Name]
@@ -510,7 +510,7 @@ Remember: Journey maps are tools for empathy and alignment. A good journey map m
 When the PM uses `/journey-map`, the skill automatically:
 
 ### 1. Pull User Research for Personas & Pain Points
-**Source:** `product-development/product/customers/`, user research MCPs (Dovetail, UserTesting)
+**Source:** `product-development/product/user-insights/`, user research MCPs (Dovetail, UserTesting)
 - **What What to look for:** User personas, quotes, pain points, behavior patterns
 - **How the skill uses it:** Pre-populate persona sections with real research data
 - **Example:** Auto-pull quotes from interviews: "I always get stuck at the checkout step"
@@ -552,7 +552,7 @@ When the PM uses `/journey-map`, the skill automatically:
 
 Before presenting output to the PM, verify:
 
-- [ ] **File saved to correct location:** Output saved to `product-development/product/user-research/journey-maps/[journey-name]-[date].md`
+- [ ] **File saved to correct location:** Output saved to `product-development/product/user-insights/journey-maps/[journey-name]-[date].md`
 - [ ] **Context routing table was checked:** Reviewed `product-development/product/customers/` for user research, interview transcripts, and persona data before building the map
 - [ ] **Every stage has all four elements:** Each journey phase includes actions, thoughts, emotions, and pain points (no empty or missing sections)
 - [ ] **User quotes from research included:** Where available, real user quotes from `product-development/product/customers/` are embedded in relevant journey stages (not fabricated quotes)

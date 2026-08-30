@@ -5,7 +5,7 @@ area: data-export
 type: feature
 priority_signal: must-have
 tracker_ref: "-"
-source: ../../user-research/2026-07-30-interview-insights.md
+source: ../2026-07-30-interview-insights.md
 _updated: 2026-08-05
 ---
 
@@ -32,4 +32,4 @@ the CSV without manual steps.
 - Schedule supports a weekly cadence with day/time; delivery at minimum via download link.
 - A scheduled run's output is identical to the same preset run manually.
 
-**Provenance:** [interview insights](../../user-research/2026-07-30-interview-insights.md) · [transcript](../accounts/acme-example/calls/transcripts/2026-07-30.md)
+**Provenance:** [interview insights](../2026-07-30-interview-insights.md) · [transcript](../interviews/2026-07-30-acme-example.md)

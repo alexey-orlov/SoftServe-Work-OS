@@ -34,7 +34,7 @@ _owner: [Name from team roster]_
 - Jobs breakdown: -
 - Job specs: -
 - Impact sizing: -
-- User research: -
+- User insights: -
 - Competitive analysis: -
 - Pre-mortem: -
 - Eng plan: -

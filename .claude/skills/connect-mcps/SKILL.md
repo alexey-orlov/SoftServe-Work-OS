@@ -249,7 +249,7 @@ After successful integration, the skill:
 ```yaml
 ---
 system: Jira              # the tool actually connected — human name, as the team says it
-category: ticketing       # the toolchain.yaml surface this serves: prototyping | user-research |
+category: ticketing       # the toolchain.yaml surface this serves: prototyping | user-insights |
                           # ticketing | meeting-transcripts | knowledge-base | analytics |
                           # feature-requests | team-chat | calendar | other
 status: connected         # connected | failed — a failed run is still logged, honestly

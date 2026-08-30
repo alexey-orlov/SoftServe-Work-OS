@@ -40,7 +40,7 @@ A job spec here describes **what a user must be able to do and why** — clear e
 | 3 | Sibling job specs in the area | Shared objects and states — consistency, not reinvention; a sibling that lands mid-run gets re-read: inherit its shared rules, import its handed-off questions |
 | 4 | `strategy/business-context/platform-model.md` | Permission carriers, fixed enums, localization obligations, presumed-constraint domains, self-access rules |
 | 5 | `product-development/engineering/tech-constraints.md` | Limits, conventions, do-not-re-implement registry |
-| 6 | `product-development/product/user-research/` (synthesis reports) + `product-development/product/customers/` (feature-requests, call summaries) | The job in users' own words; variation signals; per-claim evidence |
+| 6 | `product-development/product/user-insights/` (syntheses, interviews, feature-requests) + `product-development/product/customers/` (call summaries) | The job in users' own words; variation signals; per-claim evidence |
 | 7 | `strategy/business-context/segmentation-matrix.md`, `customers/accounts/portfolio.yaml` | Reach denominators for §5 and §12 |
 | 8 | `product-development/analytics/` (metrics, investigations) | Baselines for §15 |
 | 9 | A prototype, if one exists (`product/prototypes/`) | **A hypothesis, not a requirement** — reconstruct the need underneath; never copy its UI into the job spec |

@@ -11,7 +11,7 @@ report — cross-interview patterns, personas, Mom Test validation, affinity map
 
 ## Step 0 — Connect to existing research (before processing)
 
-Search `product-development/product/user-research/` for previous syntheses;
+Search `product-development/product/user-insights/` for previous syntheses;
 note validated themes and which PRDs or initiatives these interviews relate to. Then label
 every theme that emerges:
 
@@ -58,7 +58,7 @@ When [situation], I want to [motivation], so I can [outcome].
 ## Session report
 
 Cards roll up into one report at
-`product-development/product/user-research/{date}-interview-insights.md`:
+`product-development/product/user-insights/{date}-interview-insights.md`:
 
 ```markdown
 # Customer Interview Insights — {date}
@@ -89,16 +89,23 @@ Cards roll up into one report at
 
 ## Save + write-backs (this category's Step 4)
 
-- **Report** → `user-research/{date}-interview-insights.md` (+ nav line in
-  that folder's CLAUDE.md).
-- **Transcripts** → the participant's account folder,
-  `accounts/{account}/calls/transcripts/{date}.md` (scaffold the account per
-  [customer-call.md](customer-call.md) write-back 1 if they're a real customer/prospect).
-  A participant that genuinely maps to no account (anonymous panel) → ask the user where to
-  file before writing.
+- **Report** → `user-insights/{date}-interview-insights.md` (+ nav line in
+  that folder's CLAUDE.md). The report is the summary layer for the transcripts below.
+- **Transcripts** → `user-insights/interviews/{date}-{participant-slug}.md`, one file
+  per interview (+ nav line in that folder's CLAUDE.md).
+- **Account mapping + cross-link** — every interview is also logged on the customer it
+  belongs to: resolve each participant against the account list
+  (`customers/accounts/` folders + `portfolio.yaml`, matching on company). Existing
+  account → add a dated History line to its `account-context.md` linking the transcript
+  and the report (`- {date} — {kind} interview → [transcript](…) · [interview insights](…)`).
+  No matching account but a real customer/prospect → confirm with the user, then scaffold
+  the account per [customer-call.md](customer-call.md) write-back 1 and add the History
+  line (headless runs: file the account question as an open item in the run summary
+  instead of guessing). A participant that genuinely maps to no account (anonymous
+  panel) → ask the user where to file before writing.
 - **Feature requests** from the insight cards → one dated record each in
-  `customers/feature-requests/` (per SKILL.md Step 3); the session report's Top Feature
-  Requests entries link their records.
+  `user-insights/feature-requests/` (per SKILL.md Step 3); the session report's Top
+  Feature Requests entries link their records.
 - **Ledger** every transcript filed.
 - Insights that clearly feed an active PRD → one line in that PRD's open questions
   (Tier 2 → confirm), per SKILL.md Step 3.

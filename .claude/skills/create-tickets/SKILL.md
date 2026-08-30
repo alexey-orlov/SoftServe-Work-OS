@@ -31,7 +31,7 @@ no sprint suggestions; those belong to the PRD flow below, which runs much later
 request theme graduates through `/prioritize-requests` → PRD. Intake often targets a
 different project/board (PM triage) than the dev backlog — confirm the target per batch.
 
-**Source:** a record in `product-development/product/customers/feature-requests/` (created
+**Source:** a record in `product-development/product/user-insights/feature-requests/` (created
 by `/process-meeting` from a call or interview; a summary's Feature Requests table row is
 an acceptable direct source, but create the record first). The record's `## Draft ticket`
 section is the ticket body verbatim; the title comes from its `# [{Area}] {Request}` line;
@@ -40,7 +40,7 @@ summary).
 
 **Push mode** — `/create-tickets push` or "push pending feature requests":
 
-1. Scan `customers/feature-requests/*.md` (excluding CLAUDE.md) for `tracker_ref: "-"`.
+1. Scan `user-insights/feature-requests/*.md` (excluding CLAUDE.md) for `tracker_ref: "-"`.
    First check `product-development/toolchain.yaml → ticketing:` — `approach: files` means
    the team deliberately works without a tracker connection: report the pending count and
    stop without probing for MCPs (the records are the backlog).

@@ -17,7 +17,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Current PRD | `product-development/product/PRDs/{area}/*.md` | feature name from chat | User impact, problem severity |
-| User Research | `product-development/product/customers/*.md` | feature problem, user quotes | Addressable users, pain severity |
+| User Research | `product-development/product/user-insights/` | feature problem, user quotes | Addressable users, pain severity |
 | Business Model | `product-development/product/strategy/business-context/business-info.md` | pricing, revenue model, TAM | Revenue impact drivers |
 | Segment Mix | `product-development/product/strategy/business-context/segmentation-matrix.md` | vertical, size band, use case | Account counts and ARR per segment — the denominators for eligible-accounts and revenue math |
 | Historical Data | `product-development/analytics/metrics/{area}/*.md` | similar features, baseline conversion | Reference adoption rates |

@@ -27,7 +27,7 @@ _owner: PM (roster placeholder)_
 - Jobs breakdown: [time-off-requests-jobs-breakdown.md](../PRDs/workforce/time-off-requests-jobs-breakdown.md)
 - Job specs: [J-1 — request & decide](../PRDs/workforce/time-off-requests-request-approval-job-spec.md)
 - Impact sizing: -
-- User research: -
+- User insights: -
 - Competitive analysis: -
 - Pre-mortem: -
 - Eng plan: -

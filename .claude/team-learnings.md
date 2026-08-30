@@ -35,3 +35,4 @@ rules as they come up._
 - 2026-08-03 — Customer summaries never include customer-side PII: role titles, not personal names.
 - 2026-08-03 — SQL queries always carry the `Last verified:` header with a real date — placeholder dates fail the launch gate.
 - 2026-08-03 — Skills stay universal: org- or customer-specific behavior (naming, formats, required fields) is read from customized context files (e.g. business-info.md convention blocks), never hardcoded in a skill; prefer extending an existing context file over creating a new one.
+- 2026-08-29 — Folder moves end with a semantic audit, not grep alone: skills cite content by role ("User Research | customers/*.md") with no old-path token on the line, so after updating path references, have fresh-eyed subagents read every consumer for meaning-level staleness.

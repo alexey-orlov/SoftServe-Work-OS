@@ -32,7 +32,7 @@ When this skill is invoked, immediately check:
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
 | Metrics/Analytics | `product-development/analytics/metrics/{area}/*.md` | "onboarding", "setup", "activation", D7, D30, "time to value", TTV | Current activation rates by stage, onboarding metrics, D7/D30 retention |
-| User Research | `product-development/product/customers/*.md` | "onboarding", "setup", "first time", "confused", "stuck", "struggle" | User feedback on onboarding, confusion points, success moments |
+| User Research | `product-development/product/user-insights/` | "onboarding", "setup", "first time", "confused", "stuck", "struggle" | User feedback on onboarding, confusion points, success moments |
 | Meeting Notes | `product-development/product/meetings/*/summaries/*.md` | "activation", "onboarding", "new users", "drop-off", "support tickets" | CS/support feedback on where users get stuck, win/loss reasons |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | "onboarding", "activation", "tutorial", "first-time user" | Past onboarding improvements, features to drive activation |
 | Business Info | `product-development/product/strategy/business-context/business-info.md` | target user, customer segment, use case, primary value | Who you're activating, what value matters to them |

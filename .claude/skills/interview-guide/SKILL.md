@@ -24,7 +24,7 @@ Tell me:
 I'll check your existing research first, then generate a guide that
 focuses on gaps -- not re-asking what you already know.
 
-Output: product-development/product/user-research/interview-guides/guide-[topic]-[date].md
+Output: product-development/product/user-insights/interview-guides/guide-[topic]-[date].md
 ```
 
 ---
@@ -36,11 +36,11 @@ When this skill is invoked, immediately check:
 
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
-| Research Plan | `product-development/product/user-research/*.md` | hypothesis, problem statement, target users | Current understanding of problem |
-| User Personas | `product-development/product/user-research/personas*.md` or stakeholder template | target segment, role, company size | Who to interview and their context |
+| Research Plan | `product-development/product/user-insights/*.md` | hypothesis, problem statement, target users | Current understanding of problem |
+| User Personas | `product-development/product/user-insights/personas*.md` or stakeholder template | target segment, role, company size | Who to interview and their context |
 | PRDs | `product-development/product/PRDs/{area}/*.md` | problem statement, user pain | Problem framing for interview hypothesis |
 | Strategy | `product-development/product/strategy/*.md` | user segment, JTBD canvas | Jobs framework and strategic fit |
-| Previous Research | `product-development/product/customers/accounts/{account}/calls/transcripts*.md` | similar problem area, past themes | Avoid revalidating, build on insights |
+| Previous Research | `product-development/product/user-insights/` (syntheses + `interviews/` transcripts) | similar problem area, past themes | Avoid revalidating, build on insights |
 
 **Context Priority:**
 1. Current PRD and problem statement FIRST
@@ -62,7 +62,7 @@ Before creating the guide, first establish what you're trying to learn...
 
 **Checking:**
 - `product-development/product/PRDs/{area}/` for the feature or problem you're researching
-- `product-development/product/user-research/` for previous findings on this area
+- `product-development/product/user-insights/` for previous findings on this area
 - `product-development/product/strategy/` for strategic context
 - Stakeholder profiles for interview target information
 
@@ -97,7 +97,7 @@ Before creating the guide, first establish what you're trying to learn...
 
 ## Step 0.5: Integrate Past Research
 
-**Before creating the guide, check `product-development/product/user-research/` for existing interview syntheses and findings.**
+**Before creating the guide, check `product-development/product/user-insights/` for existing interview syntheses and findings.**
 
 Search for:
 - Previous interview synthesis files (`*interview*`, `*research*`, `*synthesis*`)
@@ -109,7 +109,7 @@ Search for:
 ```
 ## Research Foundation for This Interview Guide
 
-**Based on [N] previous interviews/syntheses found in product-development/product/user-research/:**
+**Based on [N] previous interviews/syntheses found in product-development/product/user-insights/:**
 
 ### Well-Validated Themes (don't over-index here)
 These themes have strong evidence from prior research. Include 1-2 confirmation
@@ -133,7 +133,7 @@ Add open-ended discovery questions to surface new insights.
 **Add a note at the top of the generated guide:**
 > "Based on [N] previous interviews, we already know [validated themes summary]. This guide focuses on deepening [weak evidence areas] and exploring [new areas]. Avoid spending excessive time re-validating established findings."
 
-If no previous research is found, note: "No existing research found in product-development/product/user-research/. This is a discovery interview -- all questions are exploratory."
+If no previous research is found, note: "No existing research found in product-development/product/user-insights/. This is a discovery interview -- all questions are exploratory."
 
 ---
 
@@ -320,8 +320,8 @@ Wrap up, ask for referrals
 ### Where Files Go
 
 **Interview guides:**
-- Active work: `product-development/product/user-research/interview-guides/guide-[topic]-[date].md`
-- When finalized: Archive to `product-development/product/user-research/interview-guides/` for team reference
+- Active work: `product-development/product/user-insights/interview-guides/guide-[topic]-[date].md`
+- When finalized: Archive to `product-development/product/user-insights/interview-guides/` for team reference
 - Use directly: Share with interviewing team before sessions
 
 ### Link to Other Work
@@ -340,7 +340,7 @@ After creating the guide:
 - `/write-prod-strategy` - Deep user research informs strategic decisions
 
 **Pulls from:**
-- `product-development/product/user-research/` - Previous research on this topic
+- `product-development/product/user-insights/` - Previous research on this topic
 - `product-development/product/strategy/` - Strategic context about this user problem
 - Stakeholder profiles - Information about target user segment
 
@@ -368,7 +368,7 @@ Before delivering the interview guide, verify:
 
 | Check | Criteria | Pass? |
 |-------|----------|-------|
-| **Past research checked** | Searched `product-development/product/user-research/` and categorized findings into validated/needs-evidence/unexplored | [ ] |
+| **Past research checked** | Searched `product-development/product/user-insights/` and categorized findings into validated/needs-evidence/unexplored | [ ] |
 | **Guide reflects prior knowledge** | Questions focus on gaps, not re-validating what's already known | [ ] |
 | **Research foundation note included** | Top of guide states what's known and where this guide focuses | [ ] |
 | **No leading questions** | Every question is open-ended, not suggesting a desired answer | [ ] |
@@ -376,7 +376,7 @@ Before delivering the interview guide, verify:
 | **Time-boxed sections** | Each section has a suggested time allocation that totals 45-60 min | [ ] |
 | **Follow-up prompts included** | At least 2-3 follow-up probes per core question | [ ] |
 | **Closing includes referrals** | Guide asks "Who else should I talk to?" | [ ] |
-| **Output file saved** | Guide saved to `product-development/product/user-research/interview-guides/guide-[topic]-[date].md` | [ ] |
+| **Output file saved** | Guide saved to `product-development/product/user-insights/interview-guides/guide-[topic]-[date].md` | [ ] |
 
 **If any check fails, address it before delivering the output.**
 

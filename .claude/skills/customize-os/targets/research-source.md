@@ -1,6 +1,6 @@
 # Playbook — target: `research-source`
 
-Record where user-research and meeting records come from — the `user-research:` key in
+Record where user-insights material and meeting records come from — the `user-insights:` key in
 `product-development/toolchain.yaml` (gated) — align the meeting folders to the org's real
 cadences, and optionally load the first batch. Re-running re-asks the full question; that
 IS how the choice is changed later. Shared lifecycle, state, readout, and write rules:

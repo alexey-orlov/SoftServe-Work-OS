@@ -197,7 +197,7 @@ The walking skeleton (submit → decide → see → activate/complete) is in by 
 | 8 | Head-of-Ops read: map to an existing org-admin surface, widen J-4, or explicitly out? | §16 | PM | Stakeholder decision; platform-model §3 fill | Open |
 | 9 | Cover-is-absent warn at approval: J-1 floor or defer to J-4? | E4 | PM | Decide after §14 effort signal | Open |
 
-Auto-closers this run: **none ran** — all three candidate routes failed their source gates (`/code-qa`: no reachable repo access; segmentation-matrix: unfilled scaffold; corpus synthesis: user-research holds no time-off material — checked 2026-08-13).
+Auto-closers this run: **none ran** — all three candidate routes failed their source gates (`/code-qa`: no reachable repo access; segmentation-matrix: unfilled scaffold; corpus synthesis: user-insights holds no time-off material — checked 2026-08-13).
 
 ## 14) Engineering confirmations needed
 

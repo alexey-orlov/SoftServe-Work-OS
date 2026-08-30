@@ -564,7 +564,7 @@ Before creating any wireframe, check these sources:
 | Source | Files | What to Extract |
 |--------|-------|-----------------|
 | Active PRD | `product-development/product/PRDs/{area}/*.md` | UI requirements, user flows, feature scope, non-goals (what NOT to design) |
-| User Research | `product-development/product/customers/*.md` | Pain points to solve, user quotes about current UX frustrations |
+| User Research | `product-development/product/user-insights/` | Pain points to solve, user quotes about current UX frustrations |
 | Stakeholder Profiles | `product-development/product/strategy/business-context/stakeholders.md` | Designer preferences (e.g., [design lead] wants accessibility-first), exec priorities |
 | Design System | Any design docs or style references in workspace | Colors, component patterns, layout conventions to follow |
 | Past Prototypes | `product-development/product/prototypes/*.md` | Existing wireframes for consistency, decisions already made |

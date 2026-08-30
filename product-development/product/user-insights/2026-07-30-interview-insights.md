@@ -1,14 +1,14 @@
 # EXAMPLE — Customer Interview Insights — 2026-07-30
 
 > Synthetic worked example (fictional product Beacon). Source transcript:
-> [Acme 2026-07-30](../customers/accounts/acme-example/calls/transcripts/2026-07-30.md).
+> [Acme 2026-07-30](interviews/2026-07-30-acme-example.md).
 > PII rule applied: customer-side speakers by role only.
 
 **Initiatives touched:** -
 
 ## Existing Research Context
 
-No prior syntheses in `user-research/` — this is the first interview in the corpus;
+No prior syntheses in `user-insights/` — this is the first interview in the corpus;
 every theme below is labeled NEW.
 
 ## Executive Summary
@@ -43,11 +43,11 @@ every theme below is labeled NEW.
 1. **Scheduled CSV export with saved column presets** — priority: must-have — requested by
    Their Head of Ops and Their Data Analyst — underlying need: the Monday pipeline review
    runs on a fixed-shape report; the export should produce it unattended →
-   [record](../customers/feature-requests/2026-07-30-acme-example-scheduled-csv-export.md)
+   [record](feature-requests/2026-07-30-acme-example-scheduled-csv-export.md)
 2. **Configurable low-balance alert** — priority: must-have (ranked second of the two) —
    requested by both — underlying need: proactive warning at a self-set threshold,
    delivered where the team lives (their messenger), before jobs fail →
-   [record](../customers/feature-requests/2026-07-30-acme-example-low-balance-alert.md)
+   [record](feature-requests/2026-07-30-acme-example-low-balance-alert.md)
 
 ## Theme Labels vs Prior Research
 

@@ -223,7 +223,7 @@ move completed items (add date) → add new items:
    `size_band` / `use_cases` too and flag `segmentation-matrix.md` cells for
    `/context-update` (Tier 2 → confirm).
 5. **Feature-request records:** one dated record per request in
-   `customers/feature-requests/` (per SKILL.md Step 3), each linked from its Feature
+   `user-insights/feature-requests/` (per SKILL.md Step 3), each linked from its Feature
    Requests table row (Full variant) or noted alongside the implied gap in the Executive
    Summary (Quick).
 

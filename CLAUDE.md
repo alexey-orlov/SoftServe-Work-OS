@@ -74,7 +74,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | Area | File | Description |
 |------|------|-------------|
 | Feature index | `product-development/feature-index.yaml` | Master lookup — every feature mapped to its PRDs, plans, experiments, tickets, and current initiatives |
-| Toolchain | `product-development/toolchain.yaml` | Per-surface tool/approach choices plus live-connection records — nine surfaces (design grounding, user research, ticketing, meeting transcripts, knowledge base, analytics, feature requests, team chat, calendar). Choices written by `/customize-os` (guided targets) and the OS Console (approach/system fields); `connection:` blocks written only by `/connect-mcps` after a tested connect; read by the consuming skills before they ask |
+| Toolchain | `product-development/toolchain.yaml` | Per-surface tool/approach choices plus live-connection records — nine surfaces (design grounding, user insights, ticketing, meeting transcripts, knowledge base, analytics, feature requests, team chat, calendar). Choices written by `/customize-os` (guided targets) and the OS Console (approach/system fields); `connection:` blocks written only by `/connect-mcps` after a tested connect; read by the consuming skills before they ask |
 | Initiatives | `product-development/product/initiatives/` | One living page per current work effort — status, artifacts, decisions, open loops in one place |
 | Governance | `governance/` | The admin surface — `CLAUDE.md` (system map), `write-policy.yaml` (tier registry + auto-sync switches), `write-back-contract.md`, `processed.txt` (ingestion ledger), `health/` (lint reports), `proposals/` (pending gated-change proposals) |
 | Write-back contract | `governance/write-back-contract.md` | Mandatory closing steps for every repo-writing skill — how files stay findable |
@@ -82,8 +82,8 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | **Business context** | `product-development/product/strategy/business-context/` | `business-info.md` — company, product, ICP, personas, pricing, market, values; `stakeholders.md` — stakeholder profiles and communication preferences; `segmentation-matrix.md` — account counts + ARR by vertical × size band × use-case category. Living masters: edit in place, keep current |
 | Product | `product-development/product/CLAUDE.md` | Product context, PRDs, customers, decisions |
 | PRDs | `product-development/product/PRDs/` | PRDs by product area, plus worked examples in `examples/` |
-| Customers | `product-development/product/customers/CLAUDE.md` | Account folders — context, calls, transcripts, feature requests |
-| User research | `product-development/product/user-research/CLAUDE.md` | The research corpus — cross-interview syntheses, interview guides, journey maps |
+| Customers | `product-development/product/customers/CLAUDE.md` | The tracked customers and their specifics — account context, calls, transcripts |
+| User insights | `product-development/product/user-insights/CLAUDE.md` | Everything learned from users — cross-interview syntheses, raw interviews, feature requests, interview guides, journey maps |
 | Competitive research | `product-development/product/competitive-research/CLAUDE.md` | Competitor matrix and per-competitor teardowns |
 | Strategy | `product-development/product/strategy/` | `current-quarter.md` (this quarter's OKRs), `roadmaps/`, `business-context/`, `frameworks/` |
 | Decisions | `product-development/product/decisions/CLAUDE.md` | Non-architectural decisions with reasoning |
@@ -94,7 +94,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | OS installation | `os-installation/` | Install guide, first-session checklist, Claude Code guides |
 | Reviewer personas | `.claude/agents/reviewers/` | Nine review lenses for `/prd-challenge`, `/strategy-sprint`, and `/job-spec-challenge` |
 | Inbox | `product-development/inbox/` | Integration drop zone — transcripts land here; sweeps gate them, `/process-meeting` files them to their canonical home |
-| Feature requests | `product-development/product/customers/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
+| Feature requests | `product-development/product/user-insights/feature-requests/` | One dated record per customer request — evidence, draft ticket, tracker push state; pushed by `/create-tickets push` |
 | Code repos | `product-development/engineering/code-repos.yaml` | Which repos implement the product — remote, coverage, entry points, deployed ref, access tier; optional SHA-stamped maps in `engineering/codebases/` |
 | Reports | `product-development/product/reports/` | Periodic rollups — weekly reviews, portfolio pulses, status updates, batch-day digests; writers split by filename prefix |
 | Planning | `product-development/product/planning/` | Daily plans + weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review` for plan-vs-actual |

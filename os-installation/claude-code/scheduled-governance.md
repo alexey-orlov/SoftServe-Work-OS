@@ -143,7 +143,7 @@ switch to the GitHub Action below and delete the scheduled task — never run bo
 
 The task's prompt: run `/weekly-review --digest` for the current ISO week; write/update
 the week's digest file in place; include the feature-request lines from
-`product-development/product/customers/feature-requests/`; post Part A via the team
+`product-development/product/user-insights/feature-requests/`; post Part A via the team
 messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
 record only"; never edit gated files headlessly (file a proposal in
 `governance/proposals/` instead — the inbox itself sits under gated `governance/`, so

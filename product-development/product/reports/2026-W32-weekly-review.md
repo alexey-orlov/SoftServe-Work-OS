@@ -29,13 +29,13 @@ quarter: "-"
   rebuilt by hand weekly — *"if Beacon just exported it on a schedule I'd get half a day
   back." — Their Head of Ops*; June credit depletion was discovered only from job
   failures. Expansion signal: EU ops team wants a regional workspace next quarter.
-  ([interview insights](../user-research/2026-07-30-interview-insights.md))
+  ([interview insights](../user-insights/2026-07-30-interview-insights.md))
 - **Feature requests:** Scheduled CSV export with saved presets — acme-example
   (data-export) — pending push
-  ([record](../customers/feature-requests/2026-07-30-acme-example-scheduled-csv-export.md))
+  ([record](../user-insights/feature-requests/2026-07-30-acme-example-scheduled-csv-export.md))
 - **Feature requests:** Configurable low-balance credit alert — acme-example (billing) —
   pending push
-  ([record](../customers/feature-requests/2026-07-30-acme-example-low-balance-alert.md))
+  ([record](../user-insights/feature-requests/2026-07-30-acme-example-low-balance-alert.md))
 - ⏳ 2 request(s) awaiting tracker push — `/create-tickets push` (no tracker MCP connected
   yet)
 - **Analytics:** -

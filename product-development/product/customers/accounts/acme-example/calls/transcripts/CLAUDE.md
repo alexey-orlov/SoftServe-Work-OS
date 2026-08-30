@@ -7,4 +7,6 @@ report is insufficient.
 
 ## Contents
 
-- [2026-07-30.md](2026-07-30.md) — EXAMPLE (synthetic) — discovery interview: Monday export ritual, June credit depletion, EU expansion ask
+_No call transcripts yet. (The 2026-07-30 discovery interview moved to
+[user-insights/interviews/](../../../../../user-insights/interviews/) — interviews live
+there; this folder holds commercial/CS call transcripts.)_

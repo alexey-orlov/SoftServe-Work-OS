@@ -90,7 +90,7 @@ Play the team's REAL customers, not invented ones. Load the actual voices first:
 
 1. `product-development/product/strategy/business-context/business-info.md` — the personas section (roles, pains, buying triggers)
 2. `product-development/product/customers/accounts/*/account-context.md` — named accounts: their context, workflows, and standing asks
-3. `product-development/product/user-research/` — synthesized interview themes and verbatim quotes
+3. `product-development/product/user-insights/` — synthesized interview themes and verbatim quotes
 
 Represent those actual users in your review — their roles, vocabulary, workflows, and the complaints already on record. Ground every "I would / wouldn't use this" reaction in what these sources say, and cite the source when a reaction leans on it.
 

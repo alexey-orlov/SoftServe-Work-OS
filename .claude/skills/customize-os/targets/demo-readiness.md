@@ -9,13 +9,13 @@ would contradict it later. Shared lifecycle, state, readout, and write rules: SK
 ## Step 1 — Assess from the repo, not from memory
 
 Read the actual state: initiative pages and what each links, `governance/processed.txt`
-(what has really been ingested), `user-research/` and interview records,
+(what has really been ingested), `user-insights/` and interview records,
 the coverage lines in the customization status file. Sufficient for a demo means roughly:
 
 - ≥1 initiative with at least one substantive linked artifact (PRD/brief, breakdown, or
   a folded source doc), and
 - ≥2 processed meeting/call records attached to initiatives, and
-- ≥3 user-research items (interviews or synthesis) if research workflows are part of the
+- ≥3 user-insights items (interviews or synthesis) if research workflows are part of the
   demo.
 
 Thresholds are guidance, not gates — state what's there and judge honestly.

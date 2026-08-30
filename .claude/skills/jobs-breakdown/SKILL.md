@@ -32,7 +32,7 @@ group: definition
 | 1 | The PRD (`PRDs/{area}/{slug}-prd.md`) | The proto-job list — its solution/feature-set section is the seam; scope boundary and non-goals feed the coverage check |
 | 2 | `product-development/product/initiatives/{slug}.md` | Status, attached artifacts, open loops |
 | 3 | `PRDs/{area}/reviews/` (challenge report, assumption map, red-team) | Ranked unverified assumptions — the input to riskiest-first sequencing |
-| 4 | `product-development/product/user-research/` (synthesis reports) + `product-development/product/customers/` (feature-requests, call summaries) | The actors and variations that exist in reality, not in the org chart |
+| 4 | `product-development/product/user-insights/` (syntheses, interviews, feature-requests) + `product-development/product/customers/` (call summaries) | The actors and variations that exist in reality, not in the org chart |
 | 5 | `strategy/business-context/platform-model.md` | Permission model, fixed enums, compliance domains the cut must respect |
 | 6 | `product-development/engineering/tech-constraints.md` | Do-not-re-implement registry + platform limits that shape cut lines and job Type |
 | 7 | `product-development/engineering/code-repos.yaml` → `/code-qa` | What exists today in the touched area — decides Integration vs Net new typing |

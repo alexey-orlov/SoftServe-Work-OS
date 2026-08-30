@@ -43,7 +43,7 @@ duplicate crons, nothing tied to one person's laptop):
    the same way.
 5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
 6. The latest report in `governance/health/` — staleness count.
-7. `product-development/product/customers/feature-requests/` — records with `requested:`
+7. `product-development/product/user-insights/feature-requests/` — records with `requested:`
    in the window, and their `tracker_ref` state (`"-"` = awaiting tracker push). When a
    tracker MCP is connected (Linear / Jira / Asana), cross-check tickets labeled
    `customer-request` created in the window.
@@ -52,7 +52,7 @@ duplicate crons, nothing tied to one person's laptop):
 you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
 suggest `/weekly-plan` Monday), `planning/` daily plans (what actually
 happened), PRDs modified this week (for work no initiative tracks),
-`launches/`, `user-research/` (research conducted). MCPs when
+`launches/`, `user-insights/` (research conducted). MCPs when
 connected: Linear/Jira for completed tasks, analytics for launched-feature metrics.
 
 ## Part A — Team Digest (Slack-ready)

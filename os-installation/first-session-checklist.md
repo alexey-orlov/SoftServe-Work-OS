@@ -57,7 +57,7 @@ I have:
 Please read each one and organize them into the appropriate folders in product-development/:
 - PRDs/specs/one-pagers → product-development/product/PRDs/{area}/
 - Roadmaps/OKRs/strategy docs → product-development/product/strategy/
-- User research → product-development/product/customers/
+- User research / interviews / feature requests → product-development/product/user-insights/
 - Competitive analysis → product-development/product/competitive-research/
 - Decision logs/trade-off docs → product-development/product/decisions/
 - Launch plans/release notes → product-development/product/launches/

@@ -6,7 +6,7 @@
 
 ## 1) The backbone
 
-Rebuilt from the PRD's problem statement and hypothesis (PRD — invented universe). No challenge report, assumption map, or customer research exists for this initiative yet (`reviews/` absent; user-research holds no time-off material — checked 2026-08-13), so the risk ranking below derives from the PRD's own hypothesis.
+Rebuilt from the PRD's problem statement and hypothesis (PRD — invented universe). No challenge report, assumption map, or customer research exists for this initiative yet (`reviews/` absent; user-insights holds no time-off material — checked 2026-08-13), so the risk ranking below derives from the PRD's own hypothesis.
 
 **Actors:** Analyst (requests time off; often personally holds one of the two duties) · Workspace manager (decides requests; confirms the cover) · Covering teammate (receives job-approval duty + burn-alert watch) · Workspace team (consumes who's-out visibility) · Head of Ops (accountable for coverage incidents; the buyer) · Notification service (system actor — owns today's approval/alert routing). Out of scope: HR/payroll admin (non-goal), enterprise security reviewer (evaluates absence handling, never operates it).
 **Core objects:** time-off request (dates + status) · absence (approved request in effect) · coverage assignment (named teammate + the two duties) · org time-off policy + per-person balance · the duties themselves (enrichment-job approval; burn-alert watch) · team absence/conflict view (absences × job schedules × billing-cycle deadlines).

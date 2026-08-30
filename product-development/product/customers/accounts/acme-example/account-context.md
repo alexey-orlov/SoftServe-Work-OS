@@ -16,11 +16,11 @@ _updated: 2026-08-05_
   surface.
 - Top friction: manual Monday export rebuild (~half a day per week, copy-paste errors have
   reached their VP); June credit depletion was discovered only when enrichment jobs failed.
-- Open asks: [scheduled CSV export with saved presets](../../feature-requests/2026-07-30-acme-example-scheduled-csv-export.md)
-  (must-have) · [configurable low-balance alert](../../feature-requests/2026-07-30-acme-example-low-balance-alert.md).
+- Open asks: [scheduled CSV export with saved presets](../../../user-insights/feature-requests/2026-07-30-acme-example-scheduled-csv-export.md)
+  (must-have) · [configurable low-balance alert](../../../user-insights/feature-requests/2026-07-30-acme-example-low-balance-alert.md).
 - Expansion: their EU ops team wants a regional workspace next quarter
-  ([interview](../../../user-research/2026-07-30-interview-insights.md)).
+  ([interview](../../../user-insights/2026-07-30-interview-insights.md)).
 
 ## History
 
-- 2026-07-30 — discovery interview → [interview insights](../../../user-research/2026-07-30-interview-insights.md)
+- 2026-07-30 — discovery interview → [transcript](../../../user-insights/interviews/2026-07-30-acme-example.md) · [interview insights](../../../user-insights/2026-07-30-interview-insights.md)

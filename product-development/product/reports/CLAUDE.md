@@ -21,3 +21,4 @@ One folder, four writers, told apart by filename prefix (registry: `governance/w
 ### Files
 
 - [2026-W32-weekly-review.md](2026-W32-weekly-review.md) — EXAMPLE (synthetic) — promo re-scope decision, Acme interview insights, 2 requests awaiting tracker push
+- [2026-W35-weekly-review.md](2026-W35-weekly-review.md) — Weekly digest, W35 — initiative movement, stalls, repo health, 2 requests still awaiting tracker push

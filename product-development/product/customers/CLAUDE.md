@@ -1,15 +1,14 @@
 # Customers
 
-One folder per account: context, call summaries, raw transcripts.
+The customers we track and their specifics — one folder per account: context page, call summaries, raw call transcripts.
 
-**Read this when:** You need to know what a customer said, asked for, or is at risk over. Cross-interview themes live in [../user-research/](../user-research/), not here.
+**Read this when:** You need to know who a customer is, what they said on a call, or what they are at risk over. Research material — interviews, syntheses, feature requests — lives in [../user-insights/](../user-insights/); each account's History cross-links its interviews.
 
 ## Contents
 
 ### Subfolders
 
 - [accounts/](accounts/) — One subfolder per customer account, slugified. Also holds `portfolio.yaml`, the cross-account health registry read by `/portfolio-pulse`
-- [feature-requests/](feature-requests/) — One dated record per customer feature request: evidence, draft ticket body, tracker push state (`tracker_ref`)
 
 ### Created on demand
 

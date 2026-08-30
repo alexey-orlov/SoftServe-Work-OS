@@ -12,7 +12,7 @@
 #
 # Who writes what:
 #   /customize-os — the guided targets for the two rich surfaces (`prototyping:` via
-#     `/customize-os design-system`, `user-research:` via `/customize-os research-source`).
+#     `/customize-os design-system`, `user-insights:` via `/customize-os research-source`).
 #     Re-running a target re-asks the full question.
 #   The OS Console (Set up this OS → Integrations) — `approach:` and `system:` on any
 #     surface; each save is a gated write the person approves in the console.
@@ -43,11 +43,11 @@ prototyping:
   decided:              # YYYY-MM-DD, stamped when the choice is made; empty while undecided
   notes: ""             # one line of rationale, if any
 
-# Where user-research material (interviews, research notes) comes from. Consulted when
+# Where user-insights material (interviews, research notes) comes from. Consulted when
 # loading or locating research material. Distinct from `meeting-transcripts:` below —
-# this is the research corpus, that is the transcription tool for meetings generally.
-# Set or change with: /customize-os research-source
-user-research:
+# this is the research corpus (product/user-insights/), that is the transcription tool
+# for meetings generally. Set or change with: /customize-os research-source
+user-insights:
   source: undecided     # inbox-manual | mcp | undecided
   system: ""            # the research/notes tool, if any (e.g. Dovetail, Notion)
   # Parameters by source:
@@ -107,7 +107,7 @@ analytics:
 feature-requests:
   approach: undecided   # mcp | files | undecided
   system: ""            # e.g. Intercom, Zendesk, Productboard
-  # files = dated records in product/customers/feature-requests/ plus pasted
+  # files = dated records in product/user-insights/feature-requests/ plus pasted
   #         exports (CSV, spreadsheet, Slack thread).
   params: {}
   decided:
