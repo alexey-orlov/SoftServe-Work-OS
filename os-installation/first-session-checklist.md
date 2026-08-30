@@ -530,7 +530,7 @@ The repo maintains itself — confirm the machinery works before trusting it:
 ## Need Help?
 
 - **Documentation:** README.md and CLAUDE.md
-- **Examples:** Check product-development/product/PRDs/examples/ and the two worked initiative pages in product-development/product/initiatives/
+- **Examples:** Check product-development/product/PRDs/examples/ and the three worked initiative pages in product-development/product/initiatives/
 - **Templates:** Browse product-development/product/handbook/templates/
 - **Workflows:** See `.claude/skills/` for slash command workflows
 - **Governance:** os-installation/claude-code/scheduled-governance.md once on GitHub

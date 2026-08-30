@@ -13,7 +13,7 @@ re-cats it:
 
 1. **Recent decisions** — the 3 newest files in `product-development/product/decisions/`
 2. **Current priorities** — head of `strategy/current-quarter.md`
-3. **Active initiatives** — every `initiatives/*.md` with `_status: active`
+3. **Active initiatives** — every `initiatives/*.md` with `status: active` (frontmatter; legacy `_status:` reads the same)
 4. **Team learnings** — `.claude/team-learnings.md` (the agent-behavior rules; capped ~30 lines)
 5. **Latest health report** — head of the newest `governance/health/*-wiki-lint.md`
 6. **Fold backlog** — count of transcripts not yet in the ledger ("run /context-update")

@@ -36,7 +36,7 @@ See [CLAUDE.md](CLAUDE.md) for the full doc index, governance rules, and the pri
 1. Fill [product-development/product/strategy/business-context/business-info.md](product-development/product/strategy/business-context/business-info.md) — company, product, ICP, pricing, market.
 2. Mirror its highlights into the **Company & Product Fundamentals** block in [CLAUDE.md](CLAUDE.md). That block loads every session and is what stops Claude giving generic answers.
 3. Fill the team roster and Slack channel tables in [CLAUDE.md](CLAUDE.md), this quarter's goals in [product-development/product/strategy/current-quarter.md](product-development/product/strategy/current-quarter.md), and the steward name in [governance/write-policy.yaml](governance/write-policy.yaml).
-4. Replace `[Your Product]` throughout. Keep or replace the worked example (`billing` area + the two example initiatives) — it demos a PASS and a BLOCKED launch gate.
+4. Replace `[Your Product]` throughout. Keep or replace the worked example (`billing` area + the three example initiatives) — it demos a PASS and a BLOCKED launch gate.
 5. `git init && git add . && git commit -m "Initialize Team OS"` (skip if cloned), then `chmod +x .claude/hooks/*.sh` — the next session opens with the team briefing.
 6. Once pushed to GitHub: enable enforcement per [os-installation/claude-code/scheduled-governance.md](os-installation/claude-code/scheduled-governance.md).
 

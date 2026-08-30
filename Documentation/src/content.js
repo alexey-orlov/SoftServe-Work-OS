@@ -89,7 +89,7 @@ const doc = {
           "│   ├── agents/                      code explorer + reviewer personas",
           "│   └── team-learnings.md            corrections that became rules",
           "├── product-development/",
-          "│   ├── feature-index.yaml           feature → artifacts map",
+          "│   ├── feature-index.yaml           areas → features catalog",
           "│   ├── inbox/                       transcript drop zone",
           "│   ├── product/",
           "│   │   ├── strategy/                business context · current quarter · roadmaps",
@@ -147,7 +147,7 @@ const doc = {
         ]),
         h3("Initiatives and definition work", "work"),
         catalog([
-          { name: "Feature index (`feature-index.yaml`)", kind: "registry", what: "Master lookup: every feature mapped to its PRD, plan, metrics, experiments, tickets and initiative", use: "First stop for any \"state of feature X\" question; every repo-writing skill updates it" },
+          { name: "Feature index (`feature-index.yaml`)", kind: "registry", what: "The product map: areas → features with durable facts (planned / live / retired, shipped date) — artifacts live on initiative pages, which declare their targets", use: "First stop for any \"state of feature X\" question; new entries proposed with the initiative that introduces them, status flipped only by the launch gate" },
           { name: "Initiatives", kind: "living", what: "One page per current work effort: status, artifacts, decisions, open loops", use: "First stop for \"state of initiative Y\"; created by `/prd-draft`, rolled up by `/weekly-review`" },
           { name: "PRDs, breakdowns and job specs (`PRDs/{area}/`)", kind: "deliverable", what: "The definition chain's documents by product area, with `examples/` worked examples and `reviews/` challenge reports", use: "Written by the chain in [Skills and agents](#/overview/skills/lifecycle) — `/prd-draft` through `/job-spec-challenge`" },
           { name: "Prototypes", kind: "deliverable", what: "Clickable prototypes with per-prototype feedback logs and challenge reports; `design-system/` caches the design tokens they follow", use: "`/prototype` builds, `/prototype-challenge` critiques, `/prototype-feedback` applies review rounds" },
@@ -156,10 +156,10 @@ const doc = {
         ]),
         h3("Customers and user insights", "customers"),
         catalog([
-          { name: "Accounts (`customers/accounts/{account}/`)", kind: "living", what: "One folder per customer: the account context on top, call summaries next, raw transcripts underneath", use: "`/process-meeting` files calls here; \"what did customer Y say\" reads the summary first" },
+          { name: "Accounts (`customers/accounts/{account}/`)", kind: "living", what: "One folder per customer: the account context on top, call summaries next — raw transcripts live in the central tagged archive (`user-insights/transcripts/`), linked from each summary", use: "`/process-meeting` files calls here; \"what did customer Y say\" reads the summary first" },
           { name: "Portfolio (`portfolio.yaml`)", kind: "registry", what: "Cross-account registry: segment, health, ARR per customer", use: "Read by `/portfolio-pulse`" },
           { name: "Feature requests", kind: "raw", what: "One dated record per customer request: evidence, draft ticket, tracker state", use: "Clustered by `/prioritize-requests`; pushed by `/create-tickets`" },
-          { name: "User insights (`user-insights/`)", kind: "deliverable", what: "Everything learned from users, its own folder beside `customers/`: cross-interview syntheses, raw interview transcripts (`interviews/`, cross-linked from each account), feature-request records, interview guides, journey maps", use: "Written by `/process-meeting`, `/user-research-synthesis`, `/interview-guide`, `/journey-map`; the evidence base for PRDs" },
+          { name: "User insights (`user-insights/`)", kind: "deliverable", what: "Everything learned from users, its own folder beside `customers/`: cross-interview syntheses, the central transcript archive (`transcripts/` — interviews + customer calls, tagged by customer/area/feature/initiative, cross-linked from each account), feature-request records, interview guides, journey maps", use: "Written by `/process-meeting`, `/user-research-synthesis`, `/retag-transcript`, `/interview-guide`, `/journey-map`; the evidence base for PRDs" },
         ]),
         h3("Competitive picture", "competitive"),
         catalog([
