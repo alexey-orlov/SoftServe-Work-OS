@@ -30,7 +30,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v4.5 · August 2026",
+  version: "v4.6 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -684,7 +684,7 @@ const doc = {
           "**Claude Code desktop app** — where all your Work OS work happens.",
           "**Git** — brings the repository to your computer and saves your work.",
           "**{gh:GitHub CLI (`gh`)|az:Azure CLI (`az`), with its Azure DevOps extension}** — lets auto-sync open and merge pull requests as you. Claude installs it in step 6 if it's missing; the approval is what to secure here.",
-          "**Python 3** (version 3.8 or newer; the standard installation, no additional packages) — powers the full Work OS console: editing pages in the browser, with a live view of your work. Without it the console page is read-only. Installed in step 2.",
+          "**Node.js** (the current LTS version; the standard installation, no additional packages) — powers the full Work OS console: editing pages in the browser, with a live view of your work. Without it the console page is read-only. Installed in step 2.",
         ]),
         callout("check", "An item counts as granted when the tool is in the software catalog, or IT has confirmed you may install it from the vendor's site. Approvals still pending? You can start anyway — steps 2–5 need only Claude Code and Git."),
         h2("Step 2 — Install the tools", "c1"),
@@ -694,8 +694,8 @@ const doc = {
             callout("note", "**Windows:** install Git *before* you open Claude Code — on Windows, Claude Code uses Git for Windows to run the Work OS's automation. If Claude Code is already open, close it and open it again after installing Git.")),
           step("**Claude Code desktop app** — install it from your organization's software catalog, or from [claude.ai/download](https://claude.ai/download). Open it and sign in with the account your organization uses for Claude — usually your work e-mail. If you're not sure which account, the Work OS admin knows.",
             callout("expected", "Claude Code opens and shows you as signed in, and asks for a project folder — that's step 3.")),
-          step("**Python 3** — powers the **Work OS console**, a page in the repository folder (`os-console/console.html`) that shows the whole Work OS in your browser. The page works without Python, but read-only: a snapshot, current as of the repository's last update. With Python installed, ask Claude to *start the Work OS console* and the same page switches to the full version by itself: it shows your latest work live — updating within seconds as you and Claude change things — and lets you edit and save pages right in the browser, each save recorded like any other change. The full version is also where the Work OS is managed point-and-click: setup and integrations, the context files with how filled-in each one is, the product map, an initiative's sources and instructions, the auto-sync mode, the gated-file list, and the approvals waiting for you. Install version 3.8 or newer from your organization's software catalog, or from [python.org/downloads](https://www.python.org/downloads/) — the standard installation, no additional packages.",
-            callout("note", "No Python yet? Everything else in this article works — the console page simply stays read-only until it arrives.")),
+          step("**Node.js** — powers the **Work OS console**, a page in the repository folder (`os-console/console.html`) that shows the whole Work OS in your browser. The page works without Node.js, but read-only: a snapshot, current as of the repository's last update. With Node.js installed, ask Claude to *start the Work OS console* and the same page switches to the full version by itself: it shows your latest work live — updating within seconds as you and Claude change things — and lets you edit and save pages right in the browser, each save recorded like any other change. The full version is also where the Work OS is managed point-and-click: setup and integrations, the context files with how filled-in each one is, the product map, an initiative's sources and instructions, the auto-sync mode, the gated-file list, and the approvals waiting for you. Install the current LTS version from your organization's software catalog, or from [nodejs.org/en/download](https://nodejs.org/en/download) — the standard installation, no additional packages.",
+            callout("note", "No Node.js yet? Everything else in this article works — the console page simply stays read-only until it arrives.")),
         ]),
         h2("Step 3 — Open a folder for the Work OS", "c2"),
         steps([
