@@ -43,17 +43,26 @@ export async function render(view) {
   }
   // "In progress" is derived, not a catalog fact: an ACTIVE initiative targets it.
   const inProgress = (slug) => (byFeature[slug] || []).some((it) => it.status === 'active');
+  const areaBusy = (slug) => (byArea[slug] || []).some((it) => it.status === 'active');
 
   const allFeatures = (fi.areas || []).flatMap((a) => a.features);
   const liveCount = allFeatures.filter((f) => f.catalog && f.catalog.status === 'live').length;
   const wipCount = allFeatures.filter((f) => inProgress(f.feature)).length;
-  const rollArt = (slug) => (byFeature[slug] || []).flatMap((it) =>
-    (it.artifacts || []).filter((a) => a.kind === 'file' || a.kind === 'pending'));
+  const arts = (it) => (it.artifacts || []).filter((a) => a.kind === 'file' || a.kind === 'pending');
+  // Every initiative ON the map contributes its artifacts — including whole-area
+  // ones. An instance whose initiatives all target areas (no feature named yet) is
+  // normal, and its artifact count must not read 0/0. Dedupe: one initiative can
+  // target a feature here and a whole area there.
+  const onMap = {};
+  for (const list of [...Object.values(byFeature), ...Object.values(byArea)]) {
+    for (const it of list) onMap[it.slug] = it;
+  }
+  const mapped = Object.values(onMap);
   const artTotal = catalogMode
-    ? allFeatures.reduce((n, f) => n + rollArt(f.feature).length, 0)
+    ? mapped.reduce((n, it) => n + arts(it).length, 0)
     : allFeatures.reduce((n, f) => n + f.total, 0);
   const artPresent = catalogMode
-    ? allFeatures.reduce((n, f) => n + rollArt(f.feature).filter((a) => a.exists).length, 0)
+    ? mapped.reduce((n, it) => n + arts(it).filter((a) => a.exists).length, 0)
     : allFeatures.reduce((n, f) => n + f.present, 0);
 
   const expandBtn = el('button', { class: 'btn small quiet' }, 'Expand all');
@@ -102,14 +111,14 @@ export async function render(view) {
       el('div', { class: 'n' }, String(allFeatures.length)), el('div', { class: 't' }, allFeatures.length === 1 ? 'feature inside them' : 'features inside them')),
     catalogMode ? el('div', { class: 'tile', style: 'cursor:default' },
       el('div', { class: 'n' }, String(liveCount)), el('div', { class: 't' }, 'live')) : null,
-    catalogMode ? el('div', { class: 'tile', style: 'cursor:default', title: 'Derived — an active initiative targets the feature' },
-      el('div', { class: 'n' }, String(wipCount)), el('div', { class: 't' }, 'in progress')) : null,
+    catalogMode ? el('div', { class: 'tile', style: 'cursor:default', title: 'Derived — an active initiative names the feature. Work aimed at a whole area shows on the area itself.' },
+      el('div', { class: 'n' }, String(wipCount)), el('div', { class: 't' }, 'features in progress')) : null,
     el('div', { class: 'tile', style: 'cursor:default' },
       el('div', { class: 'n' }, `${artPresent}/${artTotal}`), el('div', { class: 't' }, 'artifacts in place')),
   ));
 
   for (const area of fi.areas) {
-    page.append(areaCard(area, { catalogMode, byFeature, byArea, inProgress }));
+    page.append(areaCard(area, { catalogMode, byFeature, byArea, inProgress, areaBusy }));
   }
 }
 
@@ -118,13 +127,14 @@ export async function render(view) {
 // features nested inside the same box. The card IS the fold.
 
 function areaCard(area, ctx) {
-  const { catalogMode, byFeature, byArea, inProgress } = ctx;
+  const { catalogMode, byArea, inProgress, areaBusy } = ctx;
   const n = area.features.length;
   const card = el('div', { class: 'card area-card' });
 
   const live = area.features.filter((f) => f.catalog && f.catalog.status === 'live').length;
   const wip = area.features.filter((f) => inProgress(f.feature)).length;
   const areaInits = byArea[area.area] || [];
+  const busy = areaBusy(area.area);
 
   const head = el('div', { class: 'area-head' },
     el('div', { class: 'area-eyebrow' }, icon('folder'), 'Product area'),
@@ -133,7 +143,10 @@ function areaCard(area, ctx) {
       el('span', { class: 'area-mix' },
         el('b', {}, String(n)), n === 1 ? ' feature' : ' features',
         catalogMode && live ? el('span', {}, ' · ', el('b', {}, String(live)), ' live') : null,
-        catalogMode && wip ? el('span', {}, ' · ', el('b', {}, String(wip)), ' in progress') : null)),
+        catalogMode && wip ? el('span', {}, ' · ', el('b', {}, String(wip)), ' in progress') : null,
+        // an area worked as a whole has no feature-level count to show — say so here,
+        // or the area reads as idle while an active initiative is running on it
+        catalogMode && !wip && busy ? el('span', {}, ' · ', el('b', {}, 'work in flight')) : null)),
     el('div', { class: 'area-slug mono' }, area.area),
     area.description ? el('div', { class: 'hint area-desc' }, area.description) : null,
     // Initiatives aimed at the WHOLE area (not one feature) belong to the area,
