@@ -14,9 +14,15 @@
 # is either filled or explicitly `[GAP: …]`-marked. One source of field truth: the template.
 #
 # Drift guard: the verify stage cross-checks every `section` below against the actual
-# headings of `file` at run time. A mismatch (template evolved, manifest didn't) is
+# headings of `file` at run time — for a YAML target, `section` names a top-level key and
+# is matched as a key, not a heading. A mismatch (template evolved, manifest didn't) is
 # reported in the readout — never silently skipped. Keep this file in the same change as
 # any steering-template heading change.
+#
+# `installed_by:` marks an item this target RESOLVES but another target installs. It ends a
+# context-core run as **resolved — installs with the {target} target**: not filled (the file
+# is untouched), not a GAP (the fact is settled), and exempt from the residue and heading
+# checks until its installing target runs. Report it on its own line in the coverage count.
 #
 # `web:` marks items whose facts are typically discoverable from authoritative public
 # sources (company site, docs, pricing page, filings, reputable press). It gates ONLY
@@ -107,8 +113,16 @@ items:
     group: company-basics
     file: product-development/product/strategy/business-context/business-info.md
     section: "Product Information > Product Categories"
-    what: "Major product areas / modules / use-case categories"
+    what: "The org's product areas / modules / use-case categories, in prose — the same list fi-areas carries as catalog entries"
     web: true
+  - id: fi-areas
+    group: company-basics
+    file: product-development/feature-index.yaml
+    section: "areas"
+    what: "The org's product areas / modules and the named features under each, in the org's own vocabulary"
+    web: true
+    installed_by: initiatives   # one writer for the catalog: resolved here, installed by the
+                                # initiatives target's gated batch — resolved counts as filled
   - id: root-fundamentals
     group: company-basics
     file: CLAUDE.md
@@ -403,6 +417,9 @@ facts:
   - id: segments
     label: "Customer segments / segmentation axes vocabulary"
     consumers: [bi-customer-segments, seg-axes]
+  - id: product-areas
+    label: "Product areas / modules vocabulary"
+    consumers: [bi-product-categories, fi-areas]
 
 # Adjacent setup surfaces the intake table POINTS AT but context-core never collects —
 # each has its own owner; listing them keeps the "what else exists" picture honest:

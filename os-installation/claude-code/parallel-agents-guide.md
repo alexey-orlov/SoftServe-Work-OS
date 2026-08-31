@@ -90,7 +90,7 @@ Focus on: pricing, features, positioning
 
 **Window 2: User Feedback Analysis**
 ```
-Use /user-research-synthesis to analyze these 50 user feedback items:
+Use /prioritize-requests to triage these 50 user feedback items:
 [paste feedback]
 
 Extract:

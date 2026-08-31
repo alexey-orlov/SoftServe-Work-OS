@@ -10,7 +10,8 @@ Authored and maintained by [SoftServe](https://www.softserveinc.com).
 |---|---|
 | New to the team | [os-installation/first-session-checklist.md](os-installation/first-session-checklist.md) |
 | Setting up your machine | [os-installation/installation-guide.md](os-installation/installation-guide.md) |
-| Looking for a feature's artifacts | [product-development/feature-index.yaml](product-development/feature-index.yaml) |
+| Looking for a feature's artifacts | [product-development/product/initiatives/](product-development/product/initiatives/) — the initiatives whose `features:` frontmatter targets it |
+| Checking which features exist, and their status | [product-development/feature-index.yaml](product-development/feature-index.yaml) |
 | Wondering how the repo is organized | [CLAUDE.md](CLAUDE.md) |
 
 ## What's In Here

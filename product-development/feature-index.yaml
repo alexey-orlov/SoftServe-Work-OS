@@ -14,7 +14,9 @@
 #   status:       planned | live | retired   ("in progress" is DERIVED — an active
 #                 initiative targets it; /prioritize-requests reads live-ness here)
 #   shipped:      YYYY-MM-DD — first GA date; written by /feature-launch-gate on PASS,
-#                 the sole status writer (it flips planned → live in the same change)
+#                 the sole status writer (it flips planned → live in the same change) —
+#                 except /customize-os's one-time setup seeding batch, which may seed
+#                 status: live + shipped: from what the org's own site/docs show shipped
 #   description:  one line, what it does for whom
 #   figma:        optional stable design pointer (file ids, not display names)
 #

@@ -58,6 +58,14 @@ This supports [specific strategic bet/pillar] because [why now, not later].
 **Hypothesis:**
 If we [build X], then [Y metric] will [change by Z], because [assumption about user behavior].
 
+**Key hypotheses** — at most 5, ranked; the beliefs this bet rests on. Full inventory: [`reviews/{initiative-slug}-assumption-map.md`](reviews/{initiative-slug}-assumption-map.md).
+
+| Hypothesis | Risk lens | Confidence | Validation route | Priority |
+|------------|-----------|------------|------------------|----------|
+| [Falsifiable statement — one observation could break it] | Desirability / Viability / Feasibility / Usability | High / Med / Low | [the cheapest probe that moves the belief, and who runs it] | 1 |
+
+> Rows come FROM `/assumption-map` — it owns surfacing, rating, and ranking; this table is the headline, never the method. Import its **Test First** rows first (they take the top priorities), then its *kill criterion + monitor* rows (validation route = the threshold you would watch) until you reach five — past five, the map is where they belong. Priority is the validate-first rank (1 = first), not a scope tier. `/prd-draft` refreshes the table whenever the map is the newer file. No map yet → one row per hypothesis you can state, each carrying `[GAP: unranked — run /assumption-map]`. Lens vocabulary: the map's **Value** category is **Desirability** here — same lens, PRD-side name; a map run in initiative mode adds Ethics, Go-to-Market, Strategy & Objectives and Team & Org — those keep their own names in this column.
+
 **Impact by lever** — name **at most two primary levers**; mark the rest "not what this bet is for." Each named lever needs a number built as *reach × baseline × expected change* (method: `/impact-sizing`); a lever with no baseline gets a `[GAP:]`, not a guess.
 
 | Lever | Primary? | Estimate | Basis |
@@ -201,7 +209,7 @@ Every level carries at least one metric — an empty level gets a `[GAP:]`, not 
 - [ ] [Question] -- @[owner]
 - [ ] [Question] -- @[owner]
 
-> `/prd-challenge` writes its ranked unverified assumptions here — each with the next research step and its owner.
+> `/prd-challenge` writes its ranked unverified assumptions here — each with the next research step and its owner. Questions, not beliefs: the standing hypothesis list lives in section 2's Key hypotheses table.
 
 **Next Milestones:**
 
@@ -254,6 +262,7 @@ Every level carries at least one metric — an empty level gets a `[GAP:]`, not 
 - [ ] Frequency and criticality stated with a source
 - [ ] Today's alternative described (what the solution must beat)
 - [ ] Hypothesis is testable ("If we... then... because...")
+- [ ] Key hypotheses table filled — each row lensed, rated, routed, and ranked (imported from the assumption map, or `[GAP:]`-marked)
 - [ ] At most two primary impact levers named, others marked "not this bet"
 - [ ] Qualitative evidence included (user quotes, research)
 - [ ] Competitive landscape surveyed

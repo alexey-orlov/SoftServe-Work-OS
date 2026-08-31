@@ -92,6 +92,9 @@ Install resolved values into the steering files:
   policy lists) each pass the native write prompt. The root fundamentals block, the H1
   title, and `business-info.md` are written in the same change (the mirror rule);
   segmentation totals must agree with business-info Key Metrics in the same change.
+- **Not the catalog:** `fi-areas` resolves here but is INSTALLED by the `initiatives`
+  target's gated seeding batch — `feature-index.yaml` has one writer. Annex the resolved
+  value; write nothing under `areas:` from this target.
 - **A declined write is recorded, not retried:** mark the file's items
   `pending approval` with the reason in the annex, and show them that way in the report.
 - Respect the page budgets in `governance/write-back-contract.md`; provenance stays in
@@ -126,7 +129,7 @@ table, one line per group with per-item detail beneath:
 
 ```
 | Steering surface | Status | Detail |
-✅ filled · ◻ GAP · N/A · ⏸ pending approval
+✅ filled · ◻ GAP · N/A · ⏸ pending approval · 🔗 resolved — installs with its `installed_by:` target
 ```
 
 - File names are clickable repo links; every filled item names its source; every

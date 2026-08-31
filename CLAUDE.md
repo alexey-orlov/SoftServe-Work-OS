@@ -57,6 +57,7 @@ Don't load every CLAUDE.md eagerly. Follow these read orders:
 | *"Who is stakeholder X, what do they care about, how do I get buy-in?"* | `product/strategy/business-context/stakeholders.md` → Team table above for handles |
 | *"What's the state of feature X?"* | `feature-index.yaml` (catalog: planned / live / retired + shipped date) → the initiative pages whose `features:` frontmatter target it (current work + artifact trail) |
 | *"What's the state of initiative Y (current work)?"* | `product/initiatives/{slug}.md` → its linked artifacts and decisions |
+| *"Give me an overview of area / initiative / feature X"* | run `/overview {slug}` — one-screen orientation composed from the registries; `onboarding {area}` for the new-PM cut |
 | *"Starting or stress-testing a new bet / feature?"* | `product/handbook/de-risk-a-bet.md` → the stage skill for your moment |
 | *"Process this meeting / call transcript?"* | run `/process-meeting` — files transcript + summary, routes records, updates the ledger |
 | *"Something new worth keeping (thread, doc, fact)?"* | run `/context-update` — routes it by type, updates pages, navigation, and the ledger |
@@ -136,7 +137,7 @@ If you find any of these in this repo, treat it as an incident: revert the commi
 |------|----------------|------------------|
 | PM | `product/decisions/`, `product/customers/accounts/`, `product/PRDs/`, `product/strategy/` | Decision logs, call summaries, PRDs, strategy |
 | Engineer | `engineering/plans/`, `engineering/tech-constraints.md` | Implementation plans; tech constraints + do-not-re-implement registry |
-| Designer | `product/PRDs/` (rationale sections) | Design rationale, UX findings (design artifacts live in Figma, linked from feature-index) |
+| Designer | `product/PRDs/` (rationale sections) | Design rationale, UX findings (design artifacts live in Figma, linked from the initiative page) |
 | Analyst | `analytics/metrics/`, `analytics/queries/`, `analytics/experiments/`, `analytics/investigations/` | Metric definitions, SQL, experiment results |
 | Strategy / Ops | `product/competitive-research/`, `product/strategy/`, `product/handbook/` | Competitive intel, vision docs, conventions |
 

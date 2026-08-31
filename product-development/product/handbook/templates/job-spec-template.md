@@ -128,9 +128,11 @@ stateDiagram-v2
 ## 13) Open questions & research needed
 
 > Every open question, provisional priority, and unverified assumption gets an owner and a best-method route: interviews → `/interview-guide` (suggested, never auto-run) · existing corpus → `/user-research-synthesis` or direct read · reach & baselines → `segmentation-matrix.md` / analytics · competitors → `/competitor-analysis` · feasibility → `/code-qa` or `[TODO: eng consult]`. Questions are about the need, never the UI.
+>
+> Ranked by **Priority**, highest first — this is the job's hypothesis backlog, not a parking lot. Priority is the answer-first rank (1 = answer first), not §12's Must/Should tier: a question about a Could-tier item can still be #1. `#` stays a stable row id — other sections cite rows as *§13 #3* — so it never re-numbers on a re-rank. **Risk lens**, one per row: Desirability / Viability / Feasibility / Usability. **Confidence** is inherited from the §12 (or §9) row the question traces to, by its evidence label — `[Evidenced]` → High · `[Partial]` → Med · `[Hypothesis — needs validation]` → Low; a question with no labelled source row is Low. Job-level only: bet-level hypotheses live in the PRD's Key hypotheses table — link, don't restate. Proportionality holds — an Integration job may have three rows.
 
-| # | Question | Blocks | Owner | Best method → route | Status |
-|---|----------|--------|-------|---------------------|--------|
+| # | Question / assumption | Risk lens | Confidence | Priority | Blocks | Owner | Best method → route | Status |
+|---|-----------------------|-----------|------------|----------|--------|-------|---------------------|--------|
 
 ## 14) Engineering confirmations needed
 
@@ -172,7 +174,7 @@ stateDiagram-v2
 - [ ] Every §10 row answered; every §11 exception has an outcome or an explicit `?`
 - [ ] Every §5 variation dispositioned (nuance / branch / different job / not material)
 - [ ] Every §12 priority grounded in a sourced number or marked provisional with a §13 row
-- [ ] Every §13 question has an owner and a route; §14 lists what Engineering must confirm
+- [ ] Every §13 row carries a lens, a confidence, a priority, an owner and a route, ranked highest-first; §14 lists what Engineering must confirm
 - [ ] Ambiguity lint: no bare "should", "fast", "easy", "handle", "appropriate", "etc." as requirement language (§12's Must/Should/Could tier labels are vocabulary, not violations)
 - [ ] Traces to a named PRD goal; nothing invented where evidence is absent — flagged instead
 

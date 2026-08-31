@@ -278,28 +278,26 @@ claude "Review this PRD from an engineering perspective, focusing on technical f
 
 ## Test 6: User Research Synthesis
 
-**What we're testing:** Analysis commands work
+**What we're testing:** Analysis commands work over the filed corpus
+
+The skill synthesizes what is *filed and tagged*, not what you paste — so scope it at an
+area (any slug from `feature-index.yaml`; the shipped example repo has `billing`):
 
 ```bash
-claude "/user-research-synthesis
-
-Analyze these interview excerpts:
-
-User 1: 'I love the app but the search is frustrating. I can never find old tasks.'
-User 2: 'Search is my biggest pain point. Wish it was more like Google.'
-User 3: 'The app is great! Though finding completed tasks from last month is hard.'
-User 4: 'Everything works well except search. It's pretty basic.'
-User 5: 'I end up scrolling through lists instead of using search because it's unreliable.'
-"
+claude "/user-research-synthesis --area billing"
 ```
 
 **Expected result:**
-- Claude identifies the pattern (search is the problem)
-- Synthesizes across interviews
-- Suggests solutions
-- Quotes specific users
+- The coverage readout comes first: how many transcripts carry the tag, how many were read,
+  anything excluded and why, plus near-misses it offers to `/retag-transcript`
+- Then themes with frequency (X of N read), severity, and role-attributed quotes
+- On a fresh install with nothing tagged yet, it says so and stops instead of inventing —
+  that is a pass too
 
-✅ **Mark complete when:** You get research insights
+✅ **Mark complete when:** You get the coverage readout, then insights or an honest stop
+
+> Raw interview text pasted into chat is `/process-meeting`'s job — it files and tags each
+> conversation; this skill reads the filed set afterwards.
 
 ---
 

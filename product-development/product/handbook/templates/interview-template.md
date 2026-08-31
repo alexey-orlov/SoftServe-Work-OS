@@ -424,7 +424,7 @@ Memory is unreliable. Always record (with permission) so you can focus on listen
 
 ## After Your Interviews
 
-Once you've completed 5-8 interviews, use `/user-research-synthesis` to turn your raw data into actionable product insights.
+File each interview with `/process-meeting` as you finish it; once 5-8 are filed, run `/user-research-synthesis --area {slug}` (or `--initiative`, `--feature`, `--customer`) over the filed set to turn them into actionable product insights.
 
 The real work isn't the interview - it's the synthesis.
 

@@ -4,8 +4,8 @@ Every skill that writes a file into this repo closes the loop in the same way. T
 the contract's source of truth; each writing skill carries a short "Write-back (mandatory)"
 block that points here. Change the contract here — the blocks in skills stay stable.
 Exempt (nothing to write back): `slack-message` (Slack is the artifact's home),
-`context-update` and `wiki-lint` (they ARE the loop), `code-qa` (answers live in chat;
-durable findings route via `/context-update`).
+`context-update` and `wiki-lint` (they ARE the loop), `code-qa` and `overview` (answers
+live in chat; durable findings route via `/context-update`).
 
 **Why this exists:** the repo is a self-updating wiki. A file without a navigation entry is
 invisible to every future session; an index nobody produces goes stale the day it's written.
@@ -116,7 +116,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | Surface | Only writer |
 |---|---|
 | `decisions/CLAUDE.md` "Recent Decisions" list | `/decision-log-entry` (and `/decision-doc` via the same rule) — append-only |
-| `feature-index.yaml` (the catalog) | New entries (`status: planned`) proposed by `/prd-draft` and `/context-update` in the same gated change that creates the targeting initiative; `/customize-os` seeds areas + features once during guided setup. Status flips are `/feature-launch-gate` ONLY — `planned → live` + `shipped:` date on PASS, re-reading the catalog immediately before writing; the kill flow (`/decision-log-entry`) proposes removing a planned-only entry. The catalog holds NO artifact rows — no other skill writes here |
+| `feature-index.yaml` (the catalog) | New entries (`status: planned`) proposed by `/prd-draft` and `/context-update` in the same gated change that creates the targeting initiative; `/customize-os` seeds areas + features once during guided setup (seeded features may carry `status: live`, plus `shipped:` where the date is known, when the org's site/docs show them shipped — the one exception to the gate-only flip, setup batch only). Status flips are `/feature-launch-gate` ONLY — `planned → live` + `shipped:` date on PASS, re-reading the catalog immediately before writing; the kill flow (`/decision-log-entry`) proposes removing a planned-only entry. The catalog holds NO artifact rows — no other skill writes here |
 | initiative pages `status:` | transitions are events, each appending a dated Activity line in the same change: `/prd-draft` sets it at creation (exploring/active) · `/feature-launch-gate` flips to `shipped` on PASS (verdict linked) · a kill decision (`/decision-log-entry`) flips to `killed` in the same change · `/weekly-review` proposes `paused` for silent actives · the OS Console dropdown (same rules, `shipped` demands the verdict link) |
 | transcript tag frontmatter (`user-insights/transcripts/*`) | `/retag-transcript` only — every change appended to `tag-amendments:`; bodies immutable |
 | `governance/processed.txt` | ingest skills (rule 6) |
@@ -125,7 +125,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change — both gated: the user approves both together in-session; a headless change to business-info files the matching root-block proposal in the same run |
 | `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always gated; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
 | `user-insights/transcripts/` (central archive) + `accounts/{c}/calls/summaries/` + `meetings/{type}/` records | `/process-meeting` — files customer-facing transcripts to the central home (`{date}-{account}-{type}.md`, tags proposed from content), writes the summaries in their per-account / per-series homes, internal-meeting transcripts stay under `meetings/{type}/transcripts/`; `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; raw transcripts handed straight to `/user-research-synthesis` are delegated to it for filing too — the synthesis skill never files or edits raw material |
-| `product/user-insights/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview — queries transcripts by tag) — distinct filename patterns; the History cross-link in each participant's `account-context.md` lands in the same change; `interview-guides/` → `/interview-guide`, `journey-maps/` → `/journey-map` |
+| `product/user-insights/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview — queries transcripts by tag) — distinct filename patterns; for `/process-meeting` the History cross-link in each participant's `account-context.md` lands in the same change — syntheses back-link initiative pages only (rule 8); `interview-guides/` → `/interview-guide`, `journey-maps/` → `/journey-map` |
 | `reports/` (periodic rollups) | by filename prefix: `*-weekly-review.md` → `/weekly-review` · `*-portfolio-pulse-*.md` → `/portfolio-pulse` · `*-status-*.md` → `/status-update` · `*-daily-batch.md` → `/process-meeting` |
 | `planning/` (forward plans) | by filename prefix: `*-daily-plan.md` / `*-draft.md` → `/daily-plan` · `*-weekly-plan.md` → `/weekly-plan` |
 | `meetings/retros/lessons-learned.md` | append-only, by `/process-meeting`, `/weekly-review`, and `/context-update` |

@@ -82,11 +82,13 @@ Check, in this priority order:
 
 ## Step 2: The Intake Checkpoint (first runs)
 
-One message, and the turn ends on it — no file exists until the PM replies. Three parts, each as short as the input allows:
+One message, and the turn ends on it — no file exists until the PM replies. Four parts, each as short as the input allows:
 
 1. **Open questions** — the required list below, minus what's answered. **Answered means the PM said it in this conversation, or an artifact attached to this initiative says it.** Repo-wide context — strategy docs, `business-info.md`, old research — never silently answers a required question; it prefills part 2.
 2. **Played-back answers** — one line each: "From [source] I'm taking segment = X, today's alternative = Y — correct anything wrong."
 3. **The write plan** — the files this run will create, the lists it will append to, the closers it will run (Step 5), and the initiative status it files under (Step 4 — `exploring` or `active`). One "go" covers the whole run; no per-file prompts follow.
+
+4. **What will draft as a gap** — the Important items (7–11 below) this run will carry as `[GAP:]` markers rather than ask about: named, not asked, so the PM sees every open question the document will hold and can settle one on the spot. Not a re-listing of part 1.
 
 Only the PM's own words skip the checkpoint ("just draft it", "no questions — go"), never a judgment that the input looks complete. A detailed brief empties part 1; it doesn't skip parts 2–3. Later runs have no checkpoint — questions raised by new evidence go to the readout instead.
 
@@ -156,6 +158,7 @@ Don't stop at naming the gaps — close the closable ones in the same run. A gap
 | Viability — missing baseline (churn, activation, NRR) | `/retention-analysis` · `/activation-analysis` · `/expansion-strategy` | warehouse MCP connected, or baselines in `analytics/metrics/{area}/` |
 | Viability — a named lever with no money number | `/impact-sizing` | the baseline above + `segmentation-matrix.md` filled |
 | Market — competitor claim unverified | `/competitor-analysis` | `competitive-research/` scaffold (web access for deep mode) |
+| Hypotheses unranked / confidence unrated | `/assumption-map` | always available — the map works from the PRD or the bare idea |
 
 Rules for the pass:
 
@@ -166,6 +169,7 @@ Rules for the pass:
 5. **Gated batched:** catalog additions from sub-runs are proposed once, together, at the end of the run.
 6. **`--draft-only` skips this pass** — for fast text-only iterations.
 7. **Never auto-run:** `/prd-challenge` — a judged checkpoint, not a data fetch: it rewrites the PRD's Open Questions and the initiative's Open loops, so firing it on a half-edited draft thrashes both, and it costs 10+ parallel lenses. Also never auto-run anything human-facing (`/interview-guide` is offered; interviews are the PM's) or outbound (`/slack-message`, `/create-tickets`).
+8. **The assumption-map closer syncs the PRD table.** `/assumption-map` creates or re-rates `PRDs/{area}/reviews/{initiative-slug}-assumption-map.md` — its file, its method — and this run then copies the map's Test First rows into the PRD's **Key hypotheses** table (whatever the installed template calls it): lens, confidence, the suggested probe as the validation route, ranked, capped at five. Later runs re-sync whenever the map is the newer file; an unchanged map is left alone — the sync is bookkeeping, not a closer, and doesn't spend the budget in rule 1. Neither surface writes into the other — the map belongs to `/assumption-map`, the table to this skill.
 
 ## Step 6: The Readiness Readout (every run ends here)
 

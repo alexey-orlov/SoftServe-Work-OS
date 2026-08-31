@@ -100,7 +100,7 @@ Score each variation and each major candidate requirement/exception per [referen
 
 ## Step 8: Route the research — and close what you can
 
-Every open question, provisional priority, and unverified assumption gets a §13 row: best method → route.
+Every open question, provisional priority, and unverified assumption gets a §13 row: best method → route. Rank the rows by priority, highest first (answer-first rank, not §12's tier — `#` stays the stable row id other sections cite); name the risk lens each one sits on — Desirability / Viability / Feasibility / Usability; inherit Confidence from the §12 (or §9) row the question traces to, by its evidence label — `[Evidenced]` → High · `[Partial]` → Med · `[Hypothesis — needs validation]` → Low, and Low when no labelled source row exists. Job-level questions only; the bet-level hypothesis list is the PRD's.
 
 | Need | Route |
 |------|-------|

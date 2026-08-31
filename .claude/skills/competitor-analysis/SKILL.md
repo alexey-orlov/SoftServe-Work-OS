@@ -12,7 +12,7 @@ Two modes: **Deep Analysis** (comprehensive one-time research) + **Ongoing Monit
 ## Quick Start
 
 1. Name the competitor(s) you want to analyze
-2. Choose mode: **Deep Analysis** (full research) or **Ongoing Monitoring** (monthly check-in)
+2. Choose mode: **Deep Analysis** (full research) or **Ongoing Monitoring** (monthly check-in) — deep runs also get a suggested **analysis path** from the stated goal (baseline, pricing, capability gap, positioning, win/loss)
 3. The skill plays back the learning goal, the scope, and what it will change — one "go" starts the run (Ongoing Monitoring and delegated runs skip it)
 4. The skill checks your workspace first -- user research, meeting notes, churn data, past analysis
 5. The skill shows what we already know, identifies gaps, then fills gaps with web research
@@ -22,7 +22,7 @@ Two modes: **Deep Analysis** (comprehensive one-time research) + **Ongoing Monit
 
 **Output:** `product-development/product/competitive-research/competitors/{slug}/teardown.md` (living profile, refreshed in place) + updates to `competitive-matrix.md` and `competitive-landscape.md`
 
-**Time:** Deep Analysis: 2-4 hours | Monitoring: 30 min/month
+**Time:** Deep Analysis: 45 min–4 hours by path | Monitoring: 30 min/month
 
 ## Context Routing Logic (Internal - for Claude)
 
@@ -57,7 +57,7 @@ already exists — may precede the go-gate; it is what fills the gate's write pl
 One message before any research, and the turn ends on it — a teardown that answers no question still rewrites three living pages. Three parts, each as short as the ask allows:
 
 1. **Question and decision** — what this analysis has to answer, and the call it feeds: "are we losing enterprise renewals to them on SSO? — feeds the Q4 roadmap cut".
-2. **Scope** — the product areas it covers, by slug from `product-development/feature-index.yaml`, or whole-product. Scope fixes which `competitive-matrix.md` tables this run may touch.
+2. **Scope and path** — the suggested analysis path (`references/analysis-paths.md`) and the product areas the run covers, by slug from `product-development/feature-index.yaml`, or whole-product. The path fixes which phases run and which surfaces change; scope fixes which `competitive-matrix.md` tables this run may touch.
 3. **The write plan** — the surfaces this run changes: the competitor's `teardown.md`, the matrix tables in scope, the affected `competitive-landscape.md` sections, plus — first analysis of a competitor — the new `competitors/{slug}/` folder and its roster lines.
 
 One "go" covers the whole run; no per-file prompts follow. Only the PM's own words skip it ("just run it", "no questions — go"), never a judgment that the ask looks clear enough. **Ongoing Monitoring is exempt** — a monthly check-in carries a standing goal. **Delegated runs never stop:** when another skill's auto-research pass dispatches this one (`/prd-draft`, `/job-spec-draft`), its `[GAP:]` line is the question and its initiative is the decision fed — inherited, recorded the same way, answered back to the caller.
@@ -130,29 +130,27 @@ Based on internal context, we **don't yet know:**
 
 ## Step 1: Choose Your Analysis Mode
 
-Based on your objective and existing context:
+Two choices, made together and played back at the go-gate: **mode** — Deep Analysis or Ongoing Monitoring — and, for deep runs, **path** — which subset of the Phase 1-5 machinery the stated goal actually needs. Paths are defined in [references/analysis-paths.md](references/analysis-paths.md): suggest one from the goal with a one-line why; the gate's single "go" confirms mode, path, and write plan together. Delegated runs inherit the path from the caller's `[GAP:]` line (usually the capability-gap path) — chosen and recorded the same way, no stop.
 
 ### Deep Analysis Mode
 
-**Use when:**
-- Entering a new market or launching major feature
-- Significant shift in competitive landscape
-- Need to inform strategic decision (roadmap, pricing, positioning)
-- Preparing for funding/board presentation
-- Haven't done competitive research in 6+ months
+**Use when:** the goal is a specific decision — a roadmap cut, a pricing call, a positioning refresh, a churn question — or no baseline for the competitor exists at all.
 
-**What the skill does:**
-1. **Internal Intelligence First** - Synthesize what we already know
-2. **Gap Analysis** - Identify missing information
-3. **Web Research** - Fill gaps with public data (websites, pricing, reviews)
-4. **SWOT Analysis** - Per competitor
-5. **Positioning Map** - Visual 2x2 showing market space
-6. **Strategic Recommendations** - Roadmap, pricing, GTM implications
-7. **Fold Through** - Refresh the teardowns, the matrix, and the landscape with what changed
+**The five paths** (full definitions — triggers, required inputs, PM questions, phase subsets, write surfaces, self-check subsets — in [references/analysis-paths.md](references/analysis-paths.md)):
 
-**Time:** 2-4 hours (depending on number of competitors)
+| Path | Answers | Suggest when |
+|------|---------|--------------|
+| **(a) Full baseline / new entrant** | Who are they, where do they threaten us — the whole picture | No `competitors/{slug}/teardown.md` exists (the default), or it's 6+ months stale and the ask is broad |
+| **(b) Pricing & packaging** | How they price and package, and what our next pricing call should do about it | The goal names pricing, tiers, discounts, packaging |
+| **(c) Capability gap** (area-scoped) | What they can do in {area} that we can't — and which gaps block deals | The goal names a product area or capability; most delegated `[GAP:]` runs |
+| **(d) Positioning & differentiation** | Where we sit in the field and the thesis we act on | The goal is messaging, strategy input, launch narrative |
+| **(e) Win/loss & churn** | Who we're actually losing to, when, and why | The goal names lost deals, renewals, churn |
 
-**Output:** `competitors/{slug}/teardown.md` refreshed in place per competitor (stamp `last-deep-analysis:`; keep the frontmatter's `competes-areas:`/`competes-features:` [+ `-except` carve-outs] current — bare catalog slugs or `all`, per `governance/link-schema.yaml`), the competitor's column in `competitive-matrix.md`, and the affected `competitive-landscape.md` sections
+Paths (b)-(e) update a baseline — no teardown means (a) runs instead, with Phase 2 weighted toward the asked-about surface (one path per run; a goal needing two is a baseline, or two runs). Suggest, don't assign: the PM overrides at the gate with a word.
+
+**Time:** path (a): 2-4 hours per competitor · paths (b)-(e): 45-90 minutes
+
+**Output:** the surfaces the chosen path lists — always the teardown frontmatter stamps (`last-deep-analysis:`, `analysis-goal:`, `analysis-scope:`, `updated:` bumped; `competes-areas:`/`competes-features:` [+ `-except` carve-outs] kept current — bare catalog slugs or `all`, per `governance/link-schema.yaml`), then only the teardown sections, matrix tables, and `competitive-landscape.md` sections the path names
 
 ### Ongoing Monitoring Mode
 
@@ -176,46 +174,13 @@ Based on your objective and existing context:
 
 ## Deep Analysis Mode: PM-Specific Questions
 
-Instead of generic "Who are your competitors?", You'll be asked:
-
-### Question 1: Competitive Context
-**"Which competitors appear most frequently in your user research or churn interviews?"**
-
-This reveals who actually threatens your business (not just who you think competes with you).
-
-### Question 2: Customer Segment
-**"Where do competitors win with your target customer segment?"**
-
-Focus on specific segments, not broad "they have more features."
-
-Examples:
-- "Competitor X dominates with enterprise IT buyers because..."
-- "SMB customers choose Competitor Y because..."
-
-### Question 3: Churn Reasons
-**"What do churned customers say about why they picked competitors?"**
-
-Pull from actual customer interviews, not assumptions.
-
-### Question 4: Distribution Advantage
-**"Where does Competitor X have stronger distribution/presence?"**
-
-Examples:
-- Geographic presence
-- Channel partnerships
-- Integration ecosystem
-- Community/network effects
-
-### Question 5: Lost Segments
-**"What customer segments are you losing to specific competitors?"**
-
-Be specific: "Enterprise healthcare" not "big companies"
+Instead of a generic "Who are your competitors?", each path opens with 3-5 tailored questions — the sets live with the path definitions in [references/analysis-paths.md](references/analysis-paths.md). Ask the chosen path's questions before Phase 1; skip any the go-gate exchange already answered. Path (a)'s five (competitive context, customer segment, churn reasons, distribution advantage, lost segments) are the fullest set; the scoped paths ask sharper, narrower ones.
 
 ---
 
 ## Deep Analysis Framework
 
-Once the skill understands the competitive landscape from internal intel + your answers:
+Once the skill understands the competitive landscape from internal intel + your answers, run the phases the chosen path lists ([references/analysis-paths.md](references/analysis-paths.md)) — path (a) runs all five, the scoped paths subset them:
 
 ### Phase 1: Synthesize Internal Intelligence (15 min)
 
@@ -441,6 +406,8 @@ This skill can help you set up:
 **Deep Analysis:**
 - `product-development/product/competitive-research/competitors/{slug}/teardown.md` — the competitor's living profile, refreshed in place (first time: copy `product/handbook/templates/competitor-teardown-template.md`); stamp the frontmatter keys `last-deep-analysis:` and `updated:`
 - Fold through: the competitor's column and cells in `competitive-matrix.md` + the affected `competitive-landscape.md` sections
+- **Area write-through (scoped runs):** when `analysis-scope:` names areas, write or refresh each area's table in `competitive-matrix.md` — create the area's section when none exists (section name = the `PRDs/{area}/` folder name). When the area outgrows the file's ≤120-line budget, split: copy `product/handbook/templates/competitive-area-matrix-template.md` to `competitive-matrix-{area}.md` beside the main file, move the area's tables there, replace the area's section in `competitive-matrix.md` with a link, and END-append the new file in `competitive-research/CLAUDE.md` (the `competitive-matrix-` prefix keeps splits discoverable by the `competitive-*.md` pattern skills read)
+- **Resolve before write:** `competes-areas:` / `competes-features:` values are bare slugs resolved from `product-development/feature-index.yaml` before filing — read the catalog, match the areas the evidence touches, never freehand a slug; a capability with no catalog home stays out of the keys and goes to the run report instead
 
 **Ongoing Monitoring:**
 - `product-development/product/competitive-research/intel/{YYYY-MM}.md` — one cross-competitor record per run, append-only
@@ -594,7 +561,7 @@ Don't spend all your time playing catch-up.
 
 ## Output Quality Self-Check
 
-Before delivering a competitive analysis, verify:
+Before delivering, run the checks the chosen path lists — its self-check subset in [references/analysis-paths.md](references/analysis-paths.md). The five process checks (internal intel first, gaps identified, sources dated, confidence levels, actionable recommendations) run on every path; the deliverable checks apply only where the path produces that deliverable — a deliverable the path does not produce is not a failure. Path (a) runs all nine. The full menu:
 
 - [ ] **Internal intel checked first** -- User research, meetings, PRDs, strategy, and metrics were searched before web research
 - [ ] **Gaps identified explicitly** -- Report clearly separates "what we know" from "what we researched externally"
@@ -606,7 +573,7 @@ Before delivering a competitive analysis, verify:
 - [ ] **Recommendations are actionable** -- Defensive, offensive, and innovative plays are specific enough to inform roadmap decisions
 - [ ] **Cross-skill links included** -- References to relevant retention-analysis, user-research-synthesis, or strategy docs where appropriate
 
-If any check fails, fix it before delivering. The best competitive analysis drives clear decisions, not just awareness.
+If a check the chosen path lists fails, fix it before delivering. The best competitive analysis drives clear decisions, not just awareness.
 
 ---
 

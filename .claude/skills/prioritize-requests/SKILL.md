@@ -1,21 +1,22 @@
 ---
 name: prioritize-requests
-description: Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park. Reads the repo's feature-request records and call summaries, or a pasted pile from support and sales, grounds every verdict in current-quarter objectives, and keeps declined themes settled so they stop coming back.
-argument-hint: "[paste list or export path]"
+description: Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park. Reads the repo's feature-request records and call summaries, or a pasted pile from support and sales, grounds every verdict in current-quarter objectives, and keeps declined themes settled so they stop coming back. Pass a single bare slug — an initiative, feature, or area — to triage only the demand joined to it: same board, saved beside the global one, which a scoped run never rewrites.
+argument-hint: "[paste list or export path | {initiative|feature|area slug}]"
 group: delivery
 ---
 
 ## Quick Start
 
-**What to provide:** Nothing, if the repo has feature-request records or call summaries. Otherwise paste a pile.
+**What to provide:** Nothing, if the repo has feature-request records or call summaries. Otherwise paste a pile — or pass one bare slug to triage just that slice of it.
 
 ```
-/prioritize-requests                        → Read the feature-request records + every account's call summaries
-/prioritize-requests [paste a request list] → Triage a pasted pile (Zendesk, Intercom, CSV, Slack)
-/prioritize-requests [path/to/export.csv]   → Triage a structured export
+/prioritize-requests                           → Read the feature-request records + every account's call summaries
+/prioritize-requests [paste a request list]    → Triage a pasted pile (Zendesk, Intercom, CSV, Slack)
+/prioritize-requests [path/to/export.csv]      → Triage a structured export
+/prioritize-requests credit-usage-dashboard-v1 → Scoped: only the records joined to that initiative / feature / area
 ```
 
-**What you get:** Every request clustered into themes named for the *job behind the ask*, demand counted by distinct accounts, and a verdict per theme — act now, collect signal, decline, or park — each with the exact repo destination its rows belong in.
+**What you get:** Every request clustered into themes named for the *job behind the ask*, demand counted by distinct accounts, and a verdict per theme — act now, collect signal, decline, or park — each with the exact repo destination its rows belong in. A scoped run produces the same board over one slug's demand, in its own file — the global board is left exactly as it was.
 
 **Where requests come from:** `product-development/toolchain.yaml → feature-requests:` records the team's route. `approach: files` means the dated records in `user-insights/feature-requests/` plus pasted exports ARE the chosen intake — don't suggest connecting a feedback MCP; `approach: mcp` with a live `connection:` means that tool can be queried for the pile directly.
 
@@ -36,6 +37,7 @@ A request pile is a **demand signal, not a truth signal.** Twelve people asking 
 - **Before quarterly or monthly planning** — when you are about to fill or revise `current-quarter.md` and the roadmap, and need to know what the queue is asking for
 - **When ~20+ new requests have landed** since the last run
 - When a stakeholder asks "are we going to build X?" and you want a defensible answer on file
+- **Before an initiative's planning or PRD pass** — `/prioritize-requests {slug}` reads only the demand joined to that initiative, feature, or area, and leaves the global board alone
 
 **Not weekly.** Triaging a two-request delta produces noise and re-litigates themes you already settled. That is what the Revision History exists to prevent.
 
@@ -65,7 +67,7 @@ Both cluster customer input into themes. The seam is **the sample, not the techn
 - You want a routing verdict per theme, with declines that stay declined
 - Output: A living ledger of themes with a verdict, destination, and demand count each
 
-The two are not rivals — they measure different things. A request is weak evidence about *truth* and valid evidence about *demand*. When a theme lands in Collect Signal, `/user-research-synthesis` is the instrument that resolves it, and its themes (carrying `% affected`, `Severity`, `Frequency: X out of Y`) are the strongest evidence this skill can read.
+The two are not rivals — they measure different things. A request is weak evidence about *truth* and valid evidence about *demand*. When a theme lands in Collect Signal, `/user-research-synthesis` is the instrument that resolves it, and its themes (carrying `Frequency: X of N read`, `Severity`, `Evidence strength`) are the strongest evidence this skill can read.
 
 **Handoff:** "[N] themes landed in Collect Signal — the demand is there but we've never watched anyone hit this problem. Want to run interviews there (`/interview-guide` → `/process-meeting`), then `/user-research-synthesis`?"
 
@@ -86,9 +88,10 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 | `product-development/product/strategy/current-quarter.md` | Objectives, Strategic Themes, and `## Explicitly Not Doing` — **one of two sources for the Fit axis** (the other is `product-development/product/strategy/roadmaps/`) | Not filled → fall through to the Step 4 gate. Fit reads `unknown` only if the roadmap is *also* unfilled |
 | `product-development/product/strategy/roadmaps/*.md` | What is already NOW / NEXT / Under Consideration — do not re-triage committed work | "No roadmap yet" — note it, continue |
 | `product-development/product/decisions/` | Already decided? Do not re-litigate a settled call | — |
-| `product-development/product/user-insights/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
+| `product-development/product/user-insights/` | Themes carrying `Frequency: X of N read` / `Severity` / `Evidence strength` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
 | `product-development/feature-index.yaml` | Does it already ship? — TRUE only when the catalog entry says `status: live`. **A request for a live feature is a discoverability problem, not a demand signal** — exclude from counts, list separately. `planned` entries are demand FOR in-flight work — count them and link the targeting initiative beside the theme; `retired` means we removed it — decline precedent, not demand | Only the starter example areas → print "catalog not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
-| `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list | First run — create it |
+| `product-development/product/initiatives/*.md` | **Scoped mode:** the initiative registry a bare slug resolves against (the filename minus `.md` IS the slug), and the pages that take the Act Now backlink | Folder empty → an initiative slug cannot resolve; a feature or area slug still can |
+| `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list. **Scoped mode:** still read — a decline settled globally stays settled (Rule 7) — but never rewritten; the run's own prior board is `feature-requests-{slug}.md` | First run — create it |
 
 ---
 
@@ -97,6 +100,41 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 **Repo mode (default).** Reads the table above. Needs at least one feature-request record, or one account with call summaries.
 
 **Paste mode.** The PM pastes or points at a pile — a Zendesk or Intercom export, a CSV, a spreadsheet, a Slack thread. Parse each row into core ask / context / segment / frequency where present. Preserve the source column structure and offer an enriched export with `theme`, `job`, and `verdict` columns appended.
+
+**Scoped mode.** The argument is one bare kebab-case slug — an initiative, a feature, or an
+area (`credit-usage-dashboard-v1`, `credit-usage-dashboard`, `billing`). Resolve it in this
+order: initiative filenames (`product-development/product/initiatives/*.md`), then catalog
+features, then catalog areas (`product-development/feature-index.yaml`). Slugs are unique
+across all three (`governance/link-schema.yaml` → `slugs.uniqueness: union`), so the first
+hit is the only hit — say which registry matched. **An unresolvable slug stops the run:**
+name the three registries you checked and the nearest slugs in them. Never guess the intent,
+never fall back to a global triage.
+
+**Membership is resolved, never asked.** A record is in scope when it declares the slug
+itself — its own `initiatives:`, `features:`, or `area:` frontmatter. When it declares none
+of them, fall back to the summary named in its `source:` and read **the summary key that
+matches the scope type** — `initiatives:` for an initiative scope, `features:` for a feature
+scope, `areas:` for an area scope (legacy `**Initiatives touched:**` headers count for the
+first). An **area** scope also admits every record whose `area:` matches. A summary's
+Feature Requests row with no record of its own is in scope only through its summary's
+frontmatter. Report the split — how many records each route admitted — and list the records
+excluded for carrying no join at all: an unlinked record is invisible to every scoped run,
+which is a filing gap worth naming, not a silent drop.
+
+**Slug resolves, nothing admitted:** write nothing. Print the registry that matched, the
+records and summaries checked, and the unlinked ones as the filing gap to close — the
+repo-wide empty case below does not apply, and an empty scoped board is not worth a file.
+
+**Settled declines still bind (Rule 7), and a scoped run cannot lift them.** If a
+globally-declined theme's re-open condition is met inside the scope, say so in chat as a
+re-open candidate — "run the global board to re-rate it" — and leave the theme off the
+scoped board. Two boards disagreeing on one theme is the failure this avoids.
+
+An MCP-sourced pile (`toolchain.yaml → feature-requests: approach: mcp`) has no frontmatter
+to resolve against: triage it globally, or file its items as records first.
+
+Everything downstream runs unchanged inside the scope — same clustering, same 2×2, same
+caps. Three Act Now themes for one initiative is still three.
 
 **Normalize account labels to slugs** (lowercase, hyphenated) before counting, and print the normalization map so the PM can correct it — `Acme Corp` and `acme-corp` counted as two accounts would inflate the one number the entire Evidence rating rests on. If account identity is absent from the data entirely, say so explicitly and rate evidence on request volume and segment only — flag that **account-level dedup was not possible**.
 
@@ -113,7 +151,7 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 
 ### Step 1: Pick the mode and fill the gaps
 
-Determine Repo or Paste mode, then ask only the intake questions the repo can't answer.
+Determine Repo, Paste, or Scoped mode — an argument that is one bare kebab slug and not a path is a scope, anything else is a pile. A scoped run resolves its slug **first**; an unresolvable slug stops the run before anything else is read. Then ask only the intake questions the repo can't answer.
 
 ### Step 2: Read the pile and cluster by the job
 
@@ -122,6 +160,8 @@ Determine Repo or Paste mode, then ask only the intake questions the repo can't 
 Each remaining theme is named for **the outcome the customer wants**, never the solution they proposed. "Add dark mode" becomes "reduce eye strain in long sessions." "Add a CSV export button" becomes "get our data into our own reporting stack."
 
 **The splitting test.** Two asks belong to the same theme if one solution could satisfy both askers' stated outcome. If satisfying one still leaves the other unsatisfied, split them. Say which test you applied when the call is close — theme granularity moves the account counts, so a silent choice is an unreproducible ranking.
+
+**Show the asks you folded.** Every theme row carries the literal asks it absorbed, in the customers' own words, under `Requests folded in`. The job name is the decision; that column is the audit trail that lets a reader check the clustering instead of trusting it — and it is where a wrongly merged ask becomes visible. Over five asks: the five most-requested, then `+N more`.
 
 If more than 50 raw requests, cluster into themes *before* rating anything and report the theme count first. While clustering, note themes that pull against each other.
 
@@ -181,7 +221,7 @@ Effort is not an axis. It sets sequence, not whether — and estimating effort a
 
 ## Output Format
 
-Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place** (rewrite to current truth, bump its `_updated:` line; never stack "UPDATE:" sections). After the first save, append it to the END of `product-development/product/strategy/CLAUDE.md`'s `### Files` list. Themes routed "act now": link the initiative page that picks the theme up (the initiative flow — usually `/prd-draft` — owns the catalog proposal; this skill never writes the catalog, per its own rule 11). End your reply listing every repo path written — full contract: `governance/write-back-contract.md`.
+Save to: `product-development/product/strategy/feature-requests.md` — **one living file, updated in place** (rewrite to current truth, bump its `_updated:` line; never stack "UPDATE:" sections). A **scoped run saves `product-development/product/strategy/feature-requests-{slug}.md` instead** — same template, the scoped header below — and leaves the global board untouched: a slice of the pile cannot honestly re-rate themes it never read. Either file, on its first save, gets one line appended to the END of `product-development/product/strategy/CLAUDE.md`'s `### Files` list. Themes routed "act now": link the initiative page that picks the theme up, and append to that page's `## Activity` the one dated line Rule 11 permits — `YYYY-MM-DD — request triage: "[theme]" routed Act now ([board](../strategy/feature-requests[-{slug}].md))` — the path is the board THIS run wrote, one line per named page, in the same change (write-back-contract rule 8). The initiative flow — usually `/prd-draft` — owns the catalog proposal; this skill never writes the catalog. End your reply listing every repo path written — full contract: `governance/write-back-contract.md`.
 
 ````markdown
 # Feature Requests
@@ -194,9 +234,9 @@ Inbound demand, clustered by the job behind the ask, with a verdict per theme.
 
 ## Themes
 
-| # | Theme — the job behind it | Requests | Accounts | Fit | Evidence | Verdict |
-|---|---------------------------|---------:|---------:|-----|----------|---------|
-| 1 | [The outcome wanted, not the feature named] | 12 | 4 | High — Objective 2 | Strong — 4 accounts, 3 enterprise | Act now |
+| # | Theme — the job behind it | Requests folded in | Requests | Accounts | Fit | Evidence | Verdict |
+|---|---------------------------|--------------------|---------:|---------:|-----|----------|---------|
+| 1 | [The outcome wanted, not the feature named] | [the literal asks, as customers worded them — "scheduled CSV export", "saved column presets", "email it to us Monday"] | 12 | 4 | High — Objective 2 | Strong — 4 accounts, 3 enterprise | Act now |
 
 ## Act Now
 
@@ -248,6 +288,25 @@ Destination for these rows: `current-quarter.md` → `## Explicitly Not Doing` (
 
 An optional Slack draft is offered in chat only — never saved to the file, always "review before posting", and **counts and segments only, never account names** (Rule 9).
 
+### Scoped header
+
+A scoped run keeps every section of the template above and swaps its top block:
+
+````markdown
+# Feature Requests — {Scope display name}
+
+Inbound demand joined to `{slug}` ({initiative | feature | area}), clustered by the job
+behind the ask, with a verdict per theme. The whole-pile board is
+[feature-requests.md](feature-requests.md); this file never re-rates it.
+
+**Read this when:** You are planning `{slug}` and want only the demand attached to it.
+
+**Last triaged:** [YYYY-MM-DD] · **Scope:** `{slug}` ({type}, matched in {registry}) · **Sources:** [R records + S summaries across M accounts] · **Admitted:** [N by own links · N via source summary · N by area] · **Window:** [date range]
+````
+
+The `Admitted:` counts are the membership audit — a reader must be able to see why each
+record was in scope without re-deriving it.
+
 ### If Fit is unknown
 
 When the Step 4 gate fails, **still save the file** — the inventory is the work, and it will be re-rated in place once strategy exists. Emit only these sections, in the same order the main template uses: the header, `## Themes` (with every `Fit` cell reading `unknown — no filled strategy source` and every `Verdict` cell reading `— pending`; `Evidence` is rated normally), `## Conflicts`, `## Defects, Not Demand`, `## Already Ships` (omit per the Inputs table if `feature-index.yaml` is unpopulated), and `## Revision History`. **Omit Act Now, Collect Signal, Declined, and Parked entirely** — do not emit them as empty headers.
@@ -281,12 +340,12 @@ Nothing is written in this case — `feature-requests.md` is created on the firs
 3. **Never invent data.** No source for a number → `(no data)`. Every theme cites at least one backticked repo path, or in Paste mode its source row.
 4. **Fit is read, not guessed.** Fit comes from `current-quarter.md` or a filled roadmap. If neither is filled, every Fit cell reads `unknown — no filled strategy source`, **no verdicts are assigned**, and the run stops at the inventory table — see "If Fit is unknown" for what to save. Never rate a theme Low because an unfilled template contains no mapping.
 5. **Caps are hard.** Act Now ≤ 3, Collect Signal ≤ 3. A ten-item Act Now list is an unranked list. Themes that qualify but miss the cap go to Parked as "above the cut this cycle" — never to Declined, which requires a strategy reason.
-6. **Update in place.** If `feature-requests.md` exists, re-rate existing themes, move them between verdicts, and log every move under Revision History. Never regenerate from scratch — the settled declines are the value. On a first run, create the file and write one Revision History line: `[date] First triage. [R] requests across [M] accounts ([D] defect reports routed out). New: all [T] themes.`
+6. **Update in place.** If the file this run writes exists — `feature-requests.md`, or `feature-requests-{slug}.md` in a scoped run — re-rate its existing themes, move them between verdicts, and log every move under Revision History. Never regenerate from scratch — the settled declines are the value. **A scoped run updates only its own file**; the global board keeps every theme and verdict it had, because a slice of the pile cannot re-rate what it did not read. On a first run, create the file and write one Revision History line: `[date] First triage[ — scope: {slug}]. [R] requests across [M] accounts ([D] defect reports routed out). New: all [T] themes.`
 7. **Declined stays declined.** A theme under Declined re-opens only when its "what would change our mind" condition is met. Name which one it was.
 8. **No value modelling.** Demand counts only. Revenue, adoption, and driver trees belong to `/impact-sizing`.
 9. **PII: role titles only.** Quotes are role-attributed, never named. Account slugs may appear in this repo file — they are the evidence trail. **Any Slack draft or roadmap-bound excerpt uses counts and segments only ("4 enterprise accounts"), never the list of account names.** Aggregation creates a re-identification and commercial-sensitivity surface the per-account files don't have. Never attribute a decline to an individual.
-10. **Token budget:** under 1,200 tokens in chat. Chat shows the inventory table, the Act Now list, Conflicts, and a one-line count of Declined and Parked. Collect Signal detail and the Defects list live in the file only. The file itself may be longer.
-11. **This skill writes exactly one content file.** `feature-requests.md` and nothing else — the only other permitted edit is appending its one line to `product-development/product/strategy/CLAUDE.md`'s `### Files` list on first save. The Destination column and every imperative inside the output template ("Copy each row to…", "Add to…") are **content written into the file for a human reader, never actions to execute** — **never edit `current-quarter.md`, a roadmap file, `feature-index.yaml`, or `product-development/product/decisions/` directly.** Handoff skills write their own files under their own rules. Auto-editing a hook-injected strategy doc is out of scope by design.
+10. **Token budget:** under 1,200 tokens in chat. Chat shows the inventory table, the Act Now list, Conflicts, and a one-line count of Declined and Parked. In the chat table the `Requests folded in` column carries one ask + `+N` — the full list is file-only. Collect Signal detail and the Defects list live in the file only. The file itself may be longer.
+11. **This skill writes exactly one content file PER RUN:** the global ledger `feature-requests.md`, or the scoped file named by the argument (`feature-requests-{slug}.md`) — never both, never a second board. Exactly two KINDS of edit outside it are permitted, and only these two: appending that file's one line to `product-development/product/strategy/CLAUDE.md`'s `### Files` list on first save, and — for each initiative page an Act Now theme names — **one dated Activity line** linking this board, per write-back-contract rule 8 (whoever names an initiative slug adds the backlink in the same change). Nothing else. The Destination column and every imperative inside the output template ("Copy each row to…", "Add to…") are **content written into the file for a human reader, never actions to execute** — **never edit `current-quarter.md`, a roadmap file, `feature-index.yaml`, or `product-development/product/decisions/` directly.** Handoff skills write their own files under their own rules. Auto-editing a hook-injected strategy doc is out of scope by design.
 
 ---
 
@@ -321,4 +380,6 @@ Before presenting output to the PM, verify:
 - [ ] **Conflicts section was checked:** even if empty, say "none found"
 - [ ] **No customer-side personal names anywhere; any Slack draft uses counts and segments only**
 - [ ] **Update mode preserved history:** existing themes re-rated in place with a Revision History entry, not regenerated (N/A on a first run)
-- [ ] **Only `feature-requests.md` was written** (plus its one nav line in `product-development/product/strategy/CLAUDE.md` on first save): no edits to `current-quarter.md`, roadmaps, `feature-index.yaml`, or `product-development/product/decisions/`
+- [ ] **Exactly one board was written** — `feature-requests.md`, or `feature-requests-{slug}.md` on a scoped run, never both (plus its one nav line in `product-development/product/strategy/CLAUDE.md` on first save, and one dated Activity line on each initiative page an Act Now theme names): no edits to `current-quarter.md`, roadmaps, `feature-index.yaml`, or `product-development/product/decisions/`
+- [ ] **Every theme row lists the asks it folded in:** a reader can check the clustering instead of trusting it
+- [ ] **Scoped run — the slug resolved and membership is auditable:** the matching registry is named, the `Admitted:` counts add up, records carrying no join at all are listed as a filing gap, and the global board was not touched

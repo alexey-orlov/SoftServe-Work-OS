@@ -34,7 +34,7 @@ This is a **mapping** skill, not an attack. It never argues an assumption is wro
 ## When to Use
 
 - Before drafting a PRD — map the idea's assumptions so the PRD is written with open eyes
-- When a PRD's Confidence Assessment table has more than 3–4 rows, or the ratings feel like guesses
+- When a PRD's **Key hypotheses** table is empty or thin, or its ratings read like guesses — this skill produces the rows it carries
 - When the team agreed too quickly (fast consensus usually means unexamined assumptions)
 - After experiment results land — re-run in update mode to re-rate the map
 - When choosing between two directions and you want to compare what each one bets on
@@ -67,9 +67,9 @@ Both skills rank risky beliefs — deliberately. This skill ranks the *full inve
 
 **Handoff:** "Your map's Test First quadrant has [N] items and a PRD now exists — want `/red-team` to attack the claims the PRD builds on them?"
 
-### This Skill vs the confidence tables in /impact-sizing and /prd-draft
+### This Skill vs the summary tables in /impact-sizing and the PRD
 
-`/impact-sizing` Step 3 and `/prd-draft` Step 3 each carry an `| Assumption | Confidence | ... |` table. Those tables are **summaries** — sizing-model inputs and PRD headlines. This skill is the **method** behind them: run it when the table is getting long or the ratings are guesses, then import the Test First rows back into those tables.
+`/impact-sizing` Step 3 carries an `| Assumption | Confidence | ... |` table of sizing-model inputs; the PRD template carries a **Key hypotheses** table of at most five rows. Both are **summaries** — this skill is the **method** behind them, and the only place assumptions get rated and ranked. Run it when a table is thin or the ratings are guesses; the Test First rows flow back — into `/impact-sizing`'s table by hand, into the PRD's by `/prd-draft` (its Step 5 re-syncs whenever this map is the newer file).
 
 ---
 
@@ -243,7 +243,7 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 - `/user-research-synthesis` or `/competitor-analysis` - Evidence sources that sharpen the map
 
 **After this:**
-- `/prd-draft` - Write the PRD with the map's Test First rows in its Confidence Assessment
+- `/prd-draft` - Write the PRD; its Key hypotheses table imports this map's Test First rows (re-synced whenever this map is the newer file)
 - `/experiment-decision` - Decide test-vs-ship for the top assumption
 - `/red-team` - Attack the load-bearing claims once a doc exists
 - `/decision-log-entry` - Record a direction change the map triggered

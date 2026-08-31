@@ -1,637 +1,273 @@
 ---
 name: user-research-synthesis
-description: Turn user interviews into actionable insights. Advanced synthesis techniques and frameworks.
-argument-hint: "[interview notes or topic]"
+description: Cross-interview synthesis over the central tagged transcript archive — what is actually true about a problem, across 4+ filed interviews. Scope a run by topic or slug (--initiative/--area/--feature/--customer, resolved against the governance/link-schema.yaml registries — unknown slug stops the run) or by --hypothesis (evidence for and against one named PRD/job-spec hypothesis → supported/refuted/mixed verdict + a suggested confidence update, applied to the PRD only by /prd-draft). Prints the coverage readout before synthesizing — N transcripts carry the scope tag, N read, exclusions with reasons, near-misses offered to /retag-transcript — then extracts Mom-Test-weighted observations, affinity-maps them into a theme hierarchy with honest frequencies (X of N read), severity, contradictions, and missing segments, and saves user-insights/{topic}-{date}.md with scope-link frontmatter, linked from each named initiative page. Pasted material is additional input; pasted raw transcripts go to /process-meeting for filing first. Use on /user-research-synthesis, "what did we learn about X across interviews?", "does the evidence support this hypothesis?". NOT for filing transcripts or per-session processing (/process-meeting — this skill never files or edits raw material and never creates feature-request records), correcting transcript tags (/retag-transcript), counting demand in a request pile (/prioritize-requests), or editing the PRD (/prd-draft).
+argument-hint: "[topic | --initiative {slug} | --area {slug} | --feature {slug} | --customer {slug} | --hypothesis {text or PRD/job-spec hypothesis row}]"
 group: discovery-customers
 ---
 
-# /user-research-synthesis - Turn Interview Data Into Insights
+## Quick Start
 
-When the PM types `/user-research-synthesis`, transform raw user interview notes, transcripts, and observations into actionable product insights.
+**What to provide:** A scope. Nothing else — the corpus is already filed and tagged in
+`product-development/product/user-insights/transcripts/`.
 
-## Context Routing Logic (Internal - for Claude)
+```
+/user-research-synthesis onboarding friction                → free topic: themes:/content match
+/user-research-synthesis --initiative time-off-requests-v1  → transcripts tagged with that initiative
+/user-research-synthesis --area billing                     → transcripts tagged with that area
+/user-research-synthesis --feature credit-usage-dashboard   → transcripts tagged with that feature
+/user-research-synthesis --customer acme-example            → that account's transcripts
+/user-research-synthesis --hypothesis "SMB admins self-serve setup without a call"
+                                                            → evidence for and against, verdict
+```
 
-**Automatic Context Checks:**
-When this skill is invoked, immediately check:
+**What you get:** the coverage readout (what's in the corpus, what was excluded and why,
+what looks mistagged), then themes with frequency and severity, contradictions, missing
+segments, and recommendations — saved to `user-insights/{topic}-{date}.md`. Hypothesis
+mode gets an evidence-for/against table and a supported/refuted/mixed verdict instead.
 
-| Source | Files/Folders | Search Terms | What to Extract |
-|--------|---------------|--------------|-----------------|
-| Existing Research | `product-development/product/user-insights/*.md` | topic from chat, user segments | Previous findings to avoid duplication |
-| Transcript archive | `product-development/product/user-insights/transcripts/` | tag frontmatter filters — `type:`, `customers:`, `areas:`, `features:`, `initiatives:`, `themes:` (never by folder) | The raw corpus: every interview and customer call in one tagged home |
-| Related PRDs | `product-development/product/PRDs/{area}/*.md` | problem related to interviews | Problem framing and hypothesis |
-| Strategy Context | `product-development/product/strategy/*.md` | user segment, strategic fit | How findings ladder to strategy |
-| Previous Synthesis | `product-development/product/user-insights/` | topic name | Past research to build on |
-| Interview Guides | `product-development/product/user-insights/interview-guides/` | topic | What questions were asked |
-
-**Context Priority:**
-1. Raw interview data FIRST (always use verbatim quotes)
-2. Related PRDs and problem statements SECOND
-3. Previous research on related topics THIRD
-4. Strategic context FOURTH
-
-**Cross-Skill Links:**
-- After synthesis → Link to `/prd-draft` to turn insights into feature spec
-- If about competitor mentions → Link to `/competitor-analysis`
-- If about retention → Link to `/retention-analysis` for churn patterns
-- If informing strategy → Link to `/write-prod-strategy`
+**Time:** 15–30 minutes depending on corpus size.
 
 ---
 
-## Step 0: Understanding Your Research Context
+# User Research Synthesis
 
-Before we synthesize, first establish what you've learned...
+Establish what is **true** about a problem from interviews you designed and ran. A request
+pile tells you what customers want (`/prioritize-requests` counts that); this skill tells
+you what is actually going on — with "you should add Z" explicitly discarded as unreliable
+and past behavior weighted over promises.
 
-**Checking:**
-- `product-development/product/user-insights/` for previous findings on this topic
-- `product-development/product/PRDs/{area}/` for the problem statement
-- Interview guides used: what were you trying to validate?
-- Previous synthesis on related topics
-
-**Based on what found, This skill surfaces:**
-
-### What You Were Researching
-
-**Topic:**
-- [What problem or feature were you exploring?]
-- [Your original hypothesis: what did you expect to find?]
-
-**Sample:**
-- [Who did you interview? # of participants, roles, segments]
-- [Notable characteristics: power users? churn risk? non-users?]
-
-**Context from Previous Research:**
-- [What do we already know about this problem?]
-- [What did you expect research to confirm/disprove?]
-
-### PM-Specific Diagnosis Questions
-
-1. **Research Quality:** Are these high-quality interviews with right users, or preliminary conversations?
-2. **Saturation:** How many interviews did you do? (5-8 = good, 3-4 = preliminary, 10+ = very deep)
-3. **Bias Risk:** Are you interviewing customers who love you, or a balanced sample?
-4. **Surprise Factor:** What surprised you? (Best insights often contradict expectations)
-5. **Action Threshold:** Do you have enough evidence to make decisions, or need more research?
+The corpus is the central tagged archive, not an upload. `/process-meeting` files every
+interview and customer call to `user-insights/transcripts/` with tag frontmatter; this
+skill queries those tags, reads the filed set, and writes one cross-interview report. One
+filing pipeline, one synthesis layer.
 
 ---
 
 ## When to Use
 
-- After completing 5-8 user interviews
-- Processing customer feedback from multiple sources
-- Synthesizing usability test results
-- Analyzing support tickets or sales call notes
-- Converting qualitative data into product decisions
+- **After a research round completes** — 4+ interviews filed across sessions (per-session
+  insight reports are `/process-meeting`'s job; the ladder governs who synthesizes)
+- **Before or during `/prd-draft`** — when an initiative's evidence needs consolidating,
+  or a Key-hypotheses row needs a verdict (`--hypothesis`)
+- **When a Collect Signal theme from `/prioritize-requests` needs resolving** — demand is
+  proven, truth isn't; this is the instrument that resolves it
+
+**When NOT to use:**
+
+- One session's interviews → `/process-meeting` (interview category writes the session report)
+- Inbound request piles from support/sales → `/prioritize-requests`
+- Quantifying a feature's value → `/impact-sizing`
+- Writing the interview questions → `/interview-guide`
 
 ---
 
-## How It Works
+## Scoping
 
-This is a 4-step process:
+Resolve the scope before anything else. Slug scopes resolve against the entity registries
+in `governance/link-schema.yaml`:
 
-### Step 1: Upload Your Raw Data
-### Step 2: Extract Key Observations  
-### Step 3: Cluster Into Themes (Affinity Mapping)
-### Step 4: Generate Actionable Recommendations
+| Flag | Resolves against |
+|------|------------------|
+| `--initiative {slug}` | `product-development/product/initiatives/*.md` — the filename is the slug |
+| `--area {slug}` / `--feature {slug}` | `product-development/feature-index.yaml` catalog |
+| `--customer {slug}` | `product-development/product/customers/accounts/*/` folder names |
 
----
+**Unknown slug → stop.** Print the nearest existing slugs and end the run — never
+synthesize against a scope that resolves to nothing. A free-text topic needs no registry:
+it matches `themes:` tags plus title/content — and its report's scope links are the UNION
+of the `areas:` / `features:` / `customers:` tags on the transcripts it actually read (the
+`synthesis` type requires at least one; a union that comes back empty means the corpus is
+untagged — say so and stop rather than filing a linkless report).
 
-## Step 1: Upload Your Raw Data
-
-When the PM types `/user-research-synthesis`, start with:
-
-```
-Let's turn your user research into actionable insights.
-
-**What data do you have?**
-
-Upload or paste any combination of:
-- Interview transcripts (from Grain, Otter.ai, or manual notes)
-- Usability test recordings or notes
-- Customer support tickets
-- Sales call summaries
-- Survey responses (open-ended)
-- Slack messages from customer channels
-
-You can upload multiple files or just paste everything into this chat.
-
-**How many interviews/data points?**
-[Let me know so I can gauge the scope]
-
-**What were you trying to learn?**
-(e.g., "Why users churn after the first week" or "Pain points in the onboarding flow")
-```
-
-### What to Look For in the Data
-
-As you upload, the skill automatically starts flagging:
-- **Direct quotes** - Verbatim user language (the most powerful stuff)
-- **Behavioral patterns** - What users actually did (not what they said they'd do)
-- **Pain points** - Explicit frustrations or workarounds
-- **Jobs to be done** - What users are trying to accomplish
-- **Unexpected use cases** - How they're using the product in ways you didn't anticipate
-- **Emotion signals** - Moments of frustration, delight, confusion
+**`--hypothesis` mode.** Name the hypothesis verbatim — typically a row from a PRD's Key
+hypotheses table or a job spec's open question, or pasted text. When it comes from a
+PRD/job spec, the corpus is scoped by that document's initiative (resolve the slug as
+above); free-text hypotheses are topic-scoped. The run synthesizes evidence FOR and
+AGAINST that one statement and ends with a supported/refuted/mixed verdict plus a
+suggested confidence update (e.g. `Med → High`) — **written into the synthesis report
+only**. The PRD's table is updated by `/prd-draft`, its one writer; say so in the readout.
 
 ---
 
-## Step 2: Extract Key Observations
+## Inputs
 
-Once your data is provided, the skill responds:
+| Source | What to extract | If missing |
+|--------|-----------------|------------|
+| `product-development/product/user-insights/transcripts/*.md` | **The primary corpus.** Read the fenced frontmatter of every file; filter by the run's scope tag (`initiatives:` / `areas:` / `features:` / `customers:`, or `themes:` + content for a free topic). `type: interview` is primary evidence; `type: call` corroborates | Nothing carries the tag → print the coverage readout anyway and stop — build the corpus via `/interview-guide` → `/process-meeting`. Exception: pasted non-transcript material (survey verbatims, support excerpts) is present → proceed on it, label the report **preliminary**, and state in the readout that N counts pasted items, not filed transcripts |
+| Prior syntheses — `user-insights/{topic}-{date}.md` | Previous findings on adjacent topics — build on, don't duplicate; name any theme the new corpus overturns | First synthesis — note it, continue |
+| Session reports — `user-insights/{date}-interview-insights.md` | Per-session insight cards for in-scope transcripts — the fast first pass before the raw read | Read the raw transcripts directly |
+| `user-insights/feature-requests/*.md` | Explicit asks from in-scope accounts — demand context beside a theme, never truth evidence on its own | — |
+| `product-development/product/PRDs/{area}/*.md` | Problem framing + the Key hypotheses table — what the team already believes; the source row in `--hypothesis` mode | Note the missing framing, continue |
+| `product-development/product/strategy/` (`current-quarter.md`, `business-context/business-info.md`) | Strategic fit for recommendations; ICP + personas for the missing-segments check | Recommendations carry no fit line; missing-segments check runs on sample facts only |
+| `user-insights/interview-guides/` | What was asked — the leading-question risk check for evidence weighting | Skip the bias check, say so |
 
-```
-Great, I've reviewed [X] interviews/data points.
-
-I'm going to extract individual observations - each one gets its own "sticky note."
-
-This will take a few minutes. I'll create:
-- User quotes (in their exact words)
-- Observed behaviors (what they actually did)
-- Pain points (explicit problems they mentioned)
-- Workarounds (clever hacks they've built)
-- Context (their role, goals, environment)
-
-Processing now...
-```
-
-### Output Format
-
-The skill creates a structured list like this:
-
-> Example (synthetic — illustrative format, not repo data):
-
-```markdown
-## Observation #1
-**Type:** Pain Point  
-**User:** Marcus (PM, Spotify)  
-**Quote:** "I have 47 voice memos on my phone that are just 'remember to follow up with design about X.' I never convert them."  
-**Context:** Uses multiple task managers, frustrated with manual entry  
-**Emotion:** Frustration (high)
-
-## Observation #2
-**Type:** Behavior  
-**User:** Priya (PM, Notion)  
-**Quote:** "Half my tasks come from casual hallway conversations."  
-**Behavior:** Captures ideas verbally but loses them before writing down  
-**Context:** Fast-paced startup environment
-
-[... continues for all observations]
-```
-
-### Quality Checks
-
-As The skill extracts, the skill flags:
-- ⚠️ **Vague statements** - "Users want a better experience" (not actionable)
-- ⚠️ **Future predictions** - "I would definitely use this" (unreliable)
-- ⚠️ **Leading question responses** - If the interviewer asked a leading question
-- ✅ **High-quality signals** - Specific stories, concrete examples, strong emotion
+**Pasted or uploaded material is additional input**, layered on top of the filed corpus —
+notes, survey verbatims, support excerpts. **Pasted raw transcripts are the exception:**
+they route through the delegation clause in Write-back below — `/process-meeting` files
+them first, then this run synthesizes over the filed set.
 
 ---
 
-## Step 3: Cluster Into Themes (Affinity Mapping)
+## Coverage Readout (mandatory — before any synthesis)
 
-After extraction, the skill responds:
+Print, in chat, before extracting a single observation:
 
 ```
-I've extracted [X] observations from your data.
-
-Now I'm going to group these into themes using affinity mapping.
-
-I'll look for:
-- Patterns that appear across multiple users
-- Contradictions (where users disagree)
-- Underlying needs beneath surface-level requests
-- Jobs-to-be-done that aren't being solved
-
-Clustering now...
+Corpus — {scope}: 7 transcripts carry the tag · 6 read
+Excluded: 2026-05-02-acme-example-call.md — status call, no research content (stated in report)
+Near misses (share the scope's neighborhood, lack the tag):
+  2026-06-11-initech-interview.md — tagged areas:[billing], not initiatives:[credit-usage-dashboard-v1]
+  → retag via /retag-transcript? Continuing on the tagged corpus either way.
 ```
 
-### The Clustering Process
-
-The skill creates theme clusters like this:
-
-> Example (synthetic — illustrative format, not repo data):
-
-```markdown
-## Theme 1: "Task Capture Friction"
-**Frequency:** 6 out of 8 users mentioned this  
-**Severity:** High (blocks daily workflow)
-
-**Key Observations:**
-- [Observation #1: Marcus voice memos]
-- [Observation #2: Priya hallway conversations]
-- [Observation #5: Jake loses tasks from Slack]
-- [Observation #12: Sarah Excel spreadsheet workaround]
-
-**Pattern:**
-Users capture tasks in the moment (voice, text, conversation) but face friction converting them into their task manager. The "structuring" step is the bottleneck.
-
-**Direct Quotes:**
-- "I never convert them." - Marcus
-- "Then 3 days later I'm like... wait, what API thing?" - Priya
-
-**Jobs-to-be-done:**
-When I have a spontaneous task idea, I want to capture it instantly without thinking about structure, so that I don't lose track of commitments.
+- **Every scope-tagged transcript is accounted for** — read, or excluded with a stated
+  reason that also lands in the report's Coverage section. Never silently synthesize a
+  partial corpus.
+- **Near-miss detection:** derive the scope's neighborhood and list transcripts tagged in
+  it but missing the scope tag itself — for an initiative scope, transcripts carrying the
+  initiative page's declared `areas:`/`features:`/`customers:`; for a feature scope, its
+  parent area (the catalog resolves it); for a customer scope, filenames carrying the
+  account slug whose `customers:` tag lacks it. Offer `/retag-transcript`, then continue
+  on the tagged corpus — retagging is the PM's call, not this run's.
+- **N = the read count.** Every frequency claim downstream uses it as the denominator
+  ("4 of 6 transcripts read") — never a vaguer base.
+- Fewer than 4 `type: interview` transcripts in scope → say so and proceed only on an
+  explicit yes, labeling the report **preliminary**.
 
 ---
 
-## Theme 2: "Context Loss Between Tools"
-**Frequency:** 5 out of 8 users  
-**Severity:** Medium
+## What It Does
 
-[... continues for each theme]
-```
+### Step 1: Resolve the scope
 
-### Handling Contradictions
+Per Scoping above. Unknown slug stops the run.
 
-When users disagree, the skill will explicitly call it out:
+### Step 2: Discover the corpus and print the coverage readout
 
-> Example (synthetic — illustrative format, not repo data):
+Read the fenced frontmatter of every file in `transcripts/`, filter by the scope tag,
+detect near misses, print the readout. Layer in any pasted additional input (delegating
+raw transcripts first).
 
-```markdown
-## 🔴 Contradiction Detected: "Manual Control vs Automation"
+### Step 3: Extract observations
 
-**User Group A (3 users):** Want AI to automatically assign tasks
-- "Just figure out who it should go to" - Jake
-- "I don't want to think about it" - Maria
+Per transcript: verbatim quotes, observed behaviors, pain points, workarounds, context
+(role, segment, environment), emotion signals. Weight each observation by the Mom Test:
 
-**User Group B (5 users):** Want full manual control
-- "AI might get this wrong" - Priya
-- "I need to decide priority myself" - Marcus
+| Unreliable — flag, never count as truth | Reliable — evidence |
+|---|---|
+| Future predictions ("I would definitely use this") | Past behavior ("last time I tried X, I had to Y") |
+| Hypotheticals ("if you built X, I'd Y") | Specific stories with sequence and consequence |
+| Compliments without specifics | Recurring observed patterns ("every single time…") |
+| Naked feature requests ("you should add Z") | Workarounds actually built (spreadsheets, scripts, manual steps) |
 
-**Recommendation:**
-Default to manual with an "AI suggestion" that users can accept/reject. This preserves control while reducing friction.
-```
+Cross-check the interview guide: answers to leading questions get their weight cut, and
+the report says which.
+
+### Step 4: Cluster into a theme hierarchy (affinity mapping)
+
+Group observations into sub-themes, sub-themes into themes. Each theme carries:
+
+- **Frequency** — X of N transcripts read (N from the readout)
+- **Severity** — High / Med / Low, from emotion intensity + workaround cost
+- **Evidence strength** — **Strong**: 3+ transcripts with reliable-column evidence ·
+  **Moderate**: 2 transcripts, or one strong story corroborated by a feature-request
+  record · **Weak**: single anecdote, or reliable-column evidence absent. A theme resting
+  only on unreliable-column material is flagged, never promoted.
+- **JTBD framing** — When [situation], I want to [motivation], so I can [outcome]
+- **Root cause** — run Five Whys past the surface ask ("wants better search" → scattered
+  templates); name the level you stopped at
+- **Verbatim quotes** — role-attributed with the account slug, never customer-side names
+  (transcripts keep names; every downstream layer is roles-only)
+
+**Contradictions get their own callout** — both camps, counts, and a recommendation.
+Evidence that contradicts the going-in hypothesis gets extra weight; it is the hardest
+to see.
+
+### Step 5: Check the sample (missing voices)
+
+Compare who was interviewed against the ICP and personas in `business-info.md`: segments,
+sizes, roles, tiers not in the corpus. State the generalization risk and the next research
+round that closes it. If findings contradict a persona or ICP fact, propose the exact
+before/after edit to `business-info.md` — gated, applied only on the user's yes, with the
+root CLAUDE.md fundamentals block kept consistent in the same change (mirror rule).
+
+### Step 6: Recommend
+
+Build / explore-next / deprioritize — each naming a concrete area, feature, or flow, with
+strategic fit read from `current-quarter.md` when it's filled. Open questions carry an
+owner. Themes deliberately not addressed get a reason.
+
+**`--hypothesis` mode replaces Steps 4–6:** two evidence tables (FOR / AGAINST, one row
+per observation with its transcript path and Mom Test weight), the verdict
+(supported / refuted / mixed), the suggested confidence update for the source row, and
+what would settle a mixed verdict. Hand the update to `/prd-draft`.
+
+### Step 7: Save and write back
+
+Per Output Format and Write-back below.
 
 ---
 
-## Step 4: Generate Actionable Recommendations
+## Output Format
 
-After clustering, the skill creates your final output:
+Save to: `product-development/product/user-insights/{topic}-{date}.md` — scoped runs use
+the slug as `{topic}` (e.g. `time-off-requests-v1-2026-08-30.md`); hypothesis runs append
+`-hypothesis` to the source document's initiative slug, or kebab the pasted statement.
+Never the `*-interview-insights.md` pattern — that filename belongs to `/process-meeting`.
 
-```
-I've identified [X] major themes from your research.
+Fenced YAML frontmatter — the scope links plus every transcript read (link contract:
+`governance/link-schema.yaml#types.synthesis`):
 
-Now I'll translate these into actionable recommendations with:
-- What to build (prioritized)
-- What NOT to build (non-goals)
-- Open questions (what you still need to learn)
-- Success metrics (how to measure if you solved the problem)
-
-Generating recommendations...
-```
-
-### Recommendation Format
-
-```markdown
-# User Research Synthesis: [Topic]
-**Date:** [Today's date]  
-**Interviews:** [X participants]  
-**Synthesized by:** [PM name]
-
+```yaml
 ---
+date: 2026-08-30
+type: synthesis
+initiatives: [time-off-requests-v1]   # the run's scope links — only the keys the scope names
+areas: []
+features: []
+customers: []
+themes: [approval-chains, mobile-requests]
+docs:
+  - product-development/product/user-insights/transcripts/2026-08-12-acme-example-interview.md
+  - product-development/product/user-insights/transcripts/2026-08-19-initech-interview.md
+---
+```
+
+Report skeleton:
+
+````markdown
+# Research Synthesis: {topic}
+
+**Scope:** {scope} · **Corpus:** {tagged} tagged / {N} read · **Date:** {YYYY-MM-DD}
+
+## Coverage
+[The readout, verbatim: read / excluded-with-reason / near-miss disposition]
 
 ## Executive Summary
+[Top 3 insights, each one line with frequency. Recommended actions: build / explore / deprioritize.]
 
-**Top 3 Insights:**
-1. [Insight with impact]
-2. [Insight with impact]
-3. [Insight with impact]
+## Themes
+[Per theme: frequency X of N · severity · evidence strength · JTBD · root cause ·
+role-attributed quotes with transcript links · contradiction callouts where found]
 
-**Recommended Actions:**
-1. [Build this first]
-2. [Explore this next]
-3. [Deprioritize this]
+## Missing Voices
+[Who wasn't in the sample vs ICP/personas · generalization risk · next round]
 
----
+## Not Addressing (and why)
 
-## Theme 1: [Theme Name]
-**User Impact:** [% of users affected]  
-**Severity:** [High/Medium/Low]  
-**Current Workaround:** [How users solve this today]
+## Open Questions
+[Each with an owner]
 
-### The Problem
-[Describe the core issue in user language]
+## Appendix: Observations
+[The extracted observations, per transcript]
+````
 
-### Supporting Evidence
-- **Direct Quote:** "[Exact user words]" - [User name]
-- **Observed Behavior:** [What you saw them do]
-- **Frequency:** [X out of Y users mentioned this]
+Hypothesis runs swap Themes → Evidence FOR / Evidence AGAINST tables + Verdict +
+Suggested confidence update ("Confidence: Med → High — 5 of 6 transcripts show the
+behavior; `/prd-draft` applies this to the PRD row").
 
-### Recommended Solution
-**Build:** [Specific feature/change]
-
-**Why this solution:**
-- Addresses the root cause: [explain]
-- Fits into existing workflow: [explain]
-- Validated by user behavior: [explain]
-
-**What NOT to build:**
-- [Alternative you considered but rejected]
-- [Why it won't work]
-
-**Success Metrics:**
-- Primary: [How you'll measure success]
-- Guardrail: [Metric that can't get worse]
-
-**Open Questions:**
-- [ ] [What you still need to validate] - @[who to ask]
-- [ ] [Edge case to test]
-
----
-
-[Repeat for each theme]
-
----
-
-## Themes We're NOT Addressing (And Why)
-
-### Theme X: [Lower priority theme]
-**Why we're not prioritizing:**
-- Only 2 out of 8 users mentioned it
-- Workarounds exist and aren't too painful
-- Doesn't align with our Q2 strategy
-
----
-
-## Contradictions & Open Questions
-
-[List any conflicts in the data]
-[List assumptions that need more validation]
-
----
-
-## Appendix: Raw Observations
-
-[All extracted observations for reference]
-```
-
----
-
-## Advanced Techniques
-
-### The Mom Test Check
-
-As The skill analyzes, the skill flags any data that might be unreliable:
-
-❌ **Future predictions:** "I would definitely use this"
-❌ **Hypotheticals:** "If you built X, I would Y"
-❌ **Compliments:** "This is great!" (without specifics)
-❌ **Feature requests:** "You should add Z" (without context)
-
-✅ **Past behaviors:** "Last time I tried to do X, I had to Y"
-✅ **Specific stories:** "Here's exactly what happened..."
-✅ **Observed patterns:** "Every single time I do this..."
-✅ **Workarounds:** "Here's my hack for this problem"
-
-### Advanced Interview Question Patterns
-
-**1. The Time Machine Question**
-- **Ask:** "Walk me through the last time you [did this task]. What happened first, then what?"
-- **Why:** Gets specific, grounded stories instead of generalized opinions
-- **Example:** "Walk me through the last time you tried to book a meeting with your team"
-
-**2. The Money Question**
-- **Ask:** "Have you paid for a solution to this problem? What did you buy?"
-- **Why:** Actual purchasing behavior reveals true pain severity
-- **Red flag:** If they haven't spent money/time, the pain might not be real
-
-**3. The Workaround Deep-Dive**
-- **Ask:** "Show me how you're solving this today. Can you share your screen?"
-- **Why:** Existing workarounds reveal the real job-to-be-done
-- **Look for:** Complex Excel sheets, manual processes, duct-taped integrations
-
-**4. The Switching Cost Question**
-- **Ask:** "What would it take for you to stop using [current solution] and switch to something new?"
-- **Why:** Reveals switching barriers and minimum viable features
-- **Red flag:** "Oh I'd switch immediately!" = probably won't
-
-**5. The Budget Authority Question**
-- **Ask:** "If you wanted to buy a solution tomorrow, what's your process? Who needs to approve?"
-- **Why:** Identifies if you're talking to the decision-maker
-- **Critical for B2B:** Understanding org structure and buying process
-
-**6. The Failure Story**
-- **Ask:** "Tell me about a time this went wrong. What broke? What did you do?"
-- **Why:** Failure moments reveal pain intensity and consequences
-- **Example:** "When was the last time you missed a deadline because of this issue?"
-
-**7. The Champion Question**
-- **Ask:** "Who else at your company has this problem? Can you introduce me?"
-- **Why:** Tests if problem is widespread, gets referrals
-- **Red flag:** "Just me, I think" = niche problem
-
-**8. The Recent Purchase Question**
-- **Ask:** "What other tools/products have you bought in the last 6 months? What made you buy?"
-- **Why:** Reveals buying patterns and decision criteria
-- **Look for:** Procurement process, evaluation criteria, deal-breakers
-
-### Five Whys Technique
-
-**When users give surface-level answers, dig deeper:**
-
-```
-User: "I want better search"
-You: "Why do you need better search?"
-User: "I can't find my old tasks"
-You: "Why do you need to find old tasks?"
-User: "Because I reference them for new projects"
-You: "Why do you reference old tasks?"
-User: "Because I repeat similar patterns"
-You: "Why don't you have templates?"
-User: "I DO have templates, but they're scattered across 3 tools"
-
-→ Real problem: Template organization, not search
-```
-
-**Apply this during synthesis - The skill automatically runs "5 Whys" on pain points to find root causes.**
-
-### The Silent Segments Framework
-
-**Who you DIDN'T talk to matters as much as who you did.**
-
-After interviews, the skill creates a "Missing Voices" section:
-
-```markdown
-## 🚨 Missing Segments (Research Gaps)
-
-**Who we talked to:**
-- 8 enterprise PMs (large companies, >1000 employees)
-- All technical backgrounds
-- All English-speaking, US-based
-
-**Who we DIDN'T talk to:**
-- Small company PMs (<100 employees)
-- Non-technical PMs (marketing, ops)
-- International users (Asia, Europe, LatAm)
-- Free tier users (only talked to paid)
-
-**Risks:**
-- Our insights may not apply to SMB market
-- May miss non-technical user pain points
-- International workflows might differ significantly
-- Free users might have different needs
-
-**Recommendation:**
-- Next round: 5 interviews with SMB PMs
-- Test prototypes with non-technical users
-- Consider international user research
-```
-
-**This prevents building for a narrow segment while claiming broad applicability.**
-
-### Sentiment Analysis
-
-For each theme, the skill will assess emotional intensity:
-
-- **😤 High frustration** - Active blocker, considering alternatives
-- **😕 Medium pain** - Annoying but manageable
-- **🤷 Low priority** - Nice-to-have, not urgent
-
-This helps prioritize which problems to solve first.
-
-### Job-to-be-Done Framing
-
-For each theme, the skill will translate into JTBD format:
-
-**When** [situation],  
-**I want to** [motivation],  
-**So I can** [outcome].
-
-Example:
-- **When** I'm in a meeting and someone mentions an action item,
-- **I want to** capture it instantly without disrupting the conversation,
-- **So I can** ensure I don't forget commitments and follow through.
-
----
-
-## Common Mistakes to Avoid
-
-### Mistake 1: Treating All Feedback Equally
-Not all user feedback is equally valuable. This skill helps you:
-- Weight feedback by frequency (how many users mentioned it)
-- Consider severity (how painful the problem is)
-- Factor in strategic fit (does this align with your roadmap)
-
-### Mistake 2: Building Exactly What Users Ask For
-Users are great at describing problems, terrible at designing solutions.
-
-When a feature request appears, the skill will dig into:
-- What problem are they really trying to solve?
-- What's the job-to-be-done?
-- Are there simpler solutions?
-
-### Mistake 3: Confirmation Bias
-If you went into interviews with a hypothesis, the skill flags:
-- Evidence that supports your hypothesis
-- Evidence that contradicts it
-- **Contradictory evidence gets extra weight** (it's harder to see)
-
-### Mistake 4: The Silent Majority
-Remember: the users who agreed to be interviewed are not representative of all users.
-
-The skill will remind you:
-- Who did you NOT talk to?
-- What segments are missing from this research?
-- What assumptions are you making about non-participants?
-
----
-
-## Output Integration
-
-### Where Files Go
-
-**Research synthesis:**
-- `product-development/product/user-insights/[topic]-[date].md` — records stay where they land; no archive move
-- Executive summary: Can be shared directly with stakeholders
-- Per-interview inputs typically come from `/process-meeting`'s interview category (insight cards + transcripts already filed and ledgered)
-
-### Link to Other Work
-
-After synthesis:
-- **Create PRD** - Use `/prd-draft` to turn top themes into feature spec
-- **Inform strategy** - If findings affect multiple features, feed to `/write-prod-strategy`
-- **Update roadmap** - Which themes map to Q# priorities?
-- **Competitive context** - If competitor mentions appear, link to `/competitor-analysis`
-
-### Cross-Skill Integration
-
-**Feeds into:**
-- `/prd-draft` - Auto-populate Hypothesis with user quotes and insights
-- `/write-prod-strategy` - Themes inform strategic pillars
-- `/status-update` - Key research findings go in stakeholder updates
-- `/competitor-analysis` - If competitors mentioned, extract those mentions
-
-**Pulls from:**
-- `product-development/product/user-insights/interview-guides/` - What questions were asked?
-- `product-development/product/PRDs/{area}/` - What was the original problem hypothesis?
-- `/interview-guide` - Questions asked in the interview
-- `product-development/product/meetings/` - Past conversations about this problem
-
----
-
-## Integration With Your PRD
-
-After synthesis, You'll be offered:
-
-```
-Your research synthesis is complete!
-
-**Next steps:**
-
-1. **Create a PRD** - Use `/prd-draft` to turn these insights into a spec
-2. **Update roadmap** - Which themes should we prioritize this quarter?
-3. **Share with stakeholders** - I can help draft a summary for leadership
-4. **Plan follow-up research** - What open questions need validation?
-
-What would you like to do first?
-```
-
-### Auto-Populate PRD Sections
-
-When you use `/prd-draft` after synthesis, the skill automatically:
-- Pull user quotes into the "Hypothesis" section
-- Add frequency data to "Strategic Fit"
-- Suggest success metrics based on pain points
-- Flag non-goals from lower-priority themes
-
----
-
-## Tips for Better Synthesis
-
-### 1. Synthesize Quickly
-Do this within 24 hours of your last interview while insights are fresh.
-
-### 2. Involve Your Team
-Share the raw observations with designers and engineers. Let them help cluster themes. They'll spot patterns you might miss.
-
-### 3. Look for the "Why"
-Don't stop at surface-level problems. Keep asking "Why?" until you get to the root cause.
-
-Bad: "Users want a faster app"
-Good: "Users abandon tasks mid-flow because load times break their mental model of the workflow"
-
-### 4. Preserve User Language
-Use exact quotes. Don't paraphrase into "product-speak." User language is powerful for presentations.
-
-### 5. Note What Surprised You
-The most valuable insights are often the ones that contradicted your assumptions.
-
----
-
-## Output Deliverables
-
-When synthesis is complete, the skill creates:
-
-1. **Executive Summary** (1 page) - For leadership and stakeholders
-2. **Full Synthesis Report** (Markdown file) - Complete analysis with all themes
-3. **Insight Highlights** (Video clips or quotes) - For sharing with the team
-4. **Research Archive** (Appendix) - Raw observations for future reference
-
-All files will be saved to:
-- `product-development/product/user-insights/[topic]-[date].md`
-
-**If the synthesis changes persona or ICP facts:** propose the exact edit to
-`product-development/product/strategy/business-context/business-info.md` (show the before/after)
-and apply it only after the user confirms — that file is gated in `governance/write-policy.yaml`.
-Keep the root CLAUDE.md fundamentals block consistent with `business-info.md` in the same change.
+**Chat budget:** the coverage readout, executive summary, and theme list (or the verdict)
+in chat; full detail lives in the file.
 
 ## Write-back (mandatory)
 
@@ -649,6 +285,13 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
+For this skill specifically: each initiative named in the report's frontmatter gets the
+report linked from its page plus one dated Activity line (contract rule 8) — and that is
+the only backlink surface. **This skill never writes `feature-index.yaml`** — its scope
+slugs were resolved against the catalog before the run started, so the uniform block's
+new-entry clause never fires here; a theme that deserves a new catalog feature routes
+through `/prd-draft`'s registration step.
+
 **Raw transcripts (delegation clause):** when handed raw transcripts directly (not already
 processed by `/process-meeting`), this skill never files them itself — hand them to
 `/process-meeting` first (batch mode for 4+, interview category per conversation: each is
@@ -661,21 +304,37 @@ over the filed set. One filing pipeline, one writer per surface
 
 ---
 
-## When to Do More Research
+## Boundaries
 
-After synthesis, the skill may recommend additional research if:
-
-- Themes lack depth (not enough examples)
-- Major contradictions remain unresolved
-- You talked to <5 users (not enough for saturation)
-- Critical segments are missing from your sample
-- Open questions outnumber clear insights
-
-**Rule of thumb:** After 5-8 interviews with the right users, you should have 3-5 clear themes with strong supporting evidence. If not, talk to more people.
+- **Never files transcripts** — raw material arriving here is delegated to
+  `/process-meeting` (clause above).
+- **Never edits raw material** — transcript bodies are immutable; tags are corrected only
+  by `/retag-transcript` (this skill offers it at the readout, never applies it).
+- **Never creates feature-request records** — `/process-meeting` and `/context-update`
+  own those.
+- **Not per-session processing** — one session's interviews get their insight report from
+  `/process-meeting`; this skill starts at 4+ across sessions.
+- **Never edits a PRD or job spec** — hypothesis verdicts and confidence updates live in
+  the synthesis report; `/prd-draft` and `/job-spec-draft` fold them into their own files.
+- **Never writes `feature-index.yaml`** — no catalog entries, no status flips.
+- **Truth, not demand** — counting askers and routing verdicts is `/prioritize-requests`;
+  its Collect Signal themes are this skill's best customers, and its Evidence axis reads
+  this skill's themes as the strongest corroboration in the repo.
 
 ---
 
-Remember: User research isn't about validation. It's about discovery. The goal isn't to hear what you want; it's to learn what you need to know.
+## Related Skills
+
+**Before this:**
+- `/interview-guide` — design the questions; its guide feeds the bias check here
+- `/process-meeting` — files every transcript this skill reads; the 4+ ladder hands off here
+- `/retag-transcript` — fix the tags the coverage readout flags, then re-run
+
+**After this:**
+- `/prd-draft` — turn themes into a spec; folds hypothesis confidence updates into the PRD
+- `/prioritize-requests` — reads these themes as its strongest evidence
+- `/competitor-analysis` — competitor mentions surfaced in themes route there
+- `/write-prod-strategy` — cross-feature findings ladder into strategy
 
 ---
 
@@ -683,11 +342,15 @@ Remember: User research isn't about validation. It's about discovery. The goal i
 
 Before presenting output to the PM, verify:
 
-- [ ] **File saved to correct location:** Output saved to `product-development/product/user-insights/[topic]-[date].md`
-- [ ] **Context routing table was checked:** Reviewed `product-development/product/user-insights/` for past findings, `product-development/product/PRDs/{area}/` for related problem statements, and `product-development/product/strategy/` for strategic fit
-- [ ] **Themes backed by 2+ sources:** Every theme in the synthesis is supported by observations from at least 2 different interview participants (not a single anecdote)
-- [ ] **Direct user quotes included:** Each key finding includes at least one verbatim user quote with attribution (participant name or identifier)
-- [ ] **Insight severity/frequency rated:** Every theme has a frequency count (e.g., "6 out of 8 users") and a severity rating (High/Medium/Low)
-- [ ] **Recommendations linked to specific product areas:** Each recommendation names a concrete feature, flow, or product area it applies to (not "improve the experience")
-- [ ] **Contradictory findings explicitly flagged:** Any cases where users disagreed or data conflicted are called out in a dedicated section with both perspectives presented
-- [ ] **Handoff to `/prd-draft` suggested:** If actionable findings exist that could become features, the output explicitly suggests running `/prd-draft` as a next step
+- [ ] **Scope resolved:** slug matched its registry (or the run stopped), or a free topic was declared
+- [ ] **Coverage readout printed before synthesis:** every scope-tagged transcript read or excluded with a stated reason, in chat and in the report
+- [ ] **Near misses listed and `/retag-transcript` offered** — or "none found" stated
+- [ ] **Every frequency uses N (the read count) as denominator** — no vaguer base anywhere
+- [ ] **Mom Test weighting applied:** unreliable evidence flagged, no theme promoted on predictions or compliments alone
+- [ ] **Themes backed by 2+ transcripts** (or explicitly marked Weak/preliminary), each with evidence strength, severity, JTBD, and a root cause
+- [ ] **Contradictions and Missing Voices sections present** — even if "none found"
+- [ ] **Quotes role-attributed with account slug** — no customer-side names outside transcripts
+- [ ] **Frontmatter carries the scope links + `docs:` listing every transcript read**
+- [ ] **Report linked from each named initiative page with a dated Activity line** in the same change; nav line appended to the END of `user-insights/CLAUDE.md`'s file list
+- [ ] **No writes to `transcripts/`, `feature-requests/`, `feature-index.yaml`, any PRD or job spec** — hypothesis mode left the PRD untouched and said `/prd-draft` applies the update
+- [ ] **Every repo path written is listed** at the end of the reply

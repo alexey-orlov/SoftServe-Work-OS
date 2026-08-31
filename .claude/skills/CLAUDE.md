@@ -1,6 +1,6 @@
 # Skills
 
-56 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
+59 skills, invoked as `/{skill-name}`. Grouped below by use-case block; each skill carries its group in the `group:` frontmatter key.
 
 **Read this when:** You want to know what `/`-commands this repo provides, or you are adding one.
 
@@ -32,14 +32,14 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 
 | Group | Covers | Skills |
 |-------|--------|--------|
-| [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 11 |
+| [`communication-ops`](#communication--ops) | Meeting processing, decision logging, status updates and digests, personal planning. | 13 |
 | [`definition`](#definition) | Strategy, PRDs, metric definitions, impact sizing, experiment design, and the critique passes that stress-test them. | 17 |
 | [`delivery`](#delivery) | Turning a spec into tickets, code and a shipped launch — plus what the shipped code actually does, and triaging what comes back in. | 7 |
 | [`discovery-market`](#discovery-market-analysis) | Competitor teardowns, market environment scans, sizing. | 1 |
 | [`discovery-customers`](#discovery-customers) | Interview prep and cross-interview synthesis. | 2 |
 | [`discovery-analytics`](#discovery-product-analytics) | Retention, activation and funnel reads against the warehouse. | 2 |
 | [`prototyping`](#prototyping) | Sketches, clickable prototypes, prototype critique and feedback rounds, journey maps. | 5 |
-| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 11 |
+| [`os-admin`](#os-admin--governance) | Setting the OS up, and keeping the repo honest before and after a feature ships. | 12 |
 
 ### Communication & ops
 
@@ -57,6 +57,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [weekly-review/](weekly-review/) — Close out the week: the initiative-spine team digest (absorbs weekly-synthesis; `--digest` = cron-safe Part A) + your execution review
 - [process-meeting/](process-meeting/) — One entry point for every meeting record: customer calls, interviews, internal meetings, retros, batch days — transcript filed, summary written, records routed, ledger updated
 - [retag-transcript/](retag-transcript/) — Correct a filed transcript's tag frontmatter (customers, areas, features, initiatives, themes) — the only sanctioned edit path for raw-material filing metadata; every change logged in tag-amendments, body untouched
+- [overview/](overview/) — One-screen orientation for any slug (area / feature / initiative), read-only in chat: status, active work + open loops, customer signal, the numbers, dated decisions, a 5-item read-next path; `onboarding {area}` adds the new-PM extras
 
 ### Definition
 
@@ -103,7 +104,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 `group: discovery-customers` — Interview prep and cross-interview synthesis. (Per-interview and call processing live in `/process-meeting`, communication-ops.)
 
 - [interview-guide/](interview-guide/) — Create JTBD-based interview guides for user research. Structured questions for discovery interviews
-- [user-research-synthesis/](user-research-synthesis/) — Turn user interviews into actionable insights. Advanced synthesis techniques and frameworks
+- [user-research-synthesis/](user-research-synthesis/) — Cross-interview synthesis over the tagged transcript archive: scope by topic, slug (--initiative/--area/--feature/--customer), or --hypothesis (evidence for/against + verdict); mandatory coverage readout with near-miss retag offers; Mom-Test-weighted themes saved to user-insights/{topic}-{date}.md
 
 ### Discovery: product analytics
 
@@ -127,7 +128,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 `group: os-admin` — Setting the OS up, and keeping the repo honest before and after a feature ships.
 
 - [connect-mcps/](connect-mcps/) — Connect MCP tool servers (analytics, PM, research, docs, design) one at a time or in batch; detects already-live connections (Settings › Connectors counts) and skips to wiring, else suggests the app's connector directory, then `claude mcp add`, local server, manual auth; wires the benefiting skills + CLAUDE.md routing registry
-- [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check. Verifies PRD, metrics, queries, schemas, decisions, and feature-index entry exist before a feature ships
+- [feature-launch-gate/](feature-launch-gate/) — Pre-launch repo completeness check, run per initiative — derives its checklist from the initiative page's rows; on PASS it is the catalog's sole status writer (planned → live + shipped date)
 - [context-update/](context-update/) — The ingest engine: fold transcripts, pasted threads, documents, and session facts into the wiki — routed by type, navigation and indexes updated, everything ledgered
 - [wiki-lint/](wiki-lint/) — The health engine: eleven checks (untouched pages, folder contents lists, links that lead nowhere, feature-index gaps, facts that disagree in two places, code-registry freshness, …); fixes mechanical drift by default and lists everything else as plain-language suggestions with an owner and a suggested change — nothing else changes without a yes; dated reports to `governance/health/`; `--report-only` looks without touching
 - [connect-code/](connect-code/) — Register product repos, set up local clone access (machine-local, read-only), and generate SHA-stamped codebase maps; --refresh keeps them current
@@ -137,6 +138,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 - [propose/](propose/) — The "propose" step of the pr landing strategy: turns the gated commits auto-sync kept on your branch into ONE pull request with a plain-language description (files, why, commits, the Azure path-filter reminder when the gated list changed) via gh or az repos; --draft / --ready / --update; on GitHub the desktop Create PR button is the equivalent
 - [docs-update/](docs-update/) — The one way into the customer-facing documentation in `Documentation/`: edit mode applies a requested change to the single source (`src/content.js`) in the docs' own vocabulary and conventions, sync mode checks every stated fact against its source of truth in the repo (write policy, skills index, agents, hooks, admin guides, connection skills) and corrects what went stale — never adding articles unasked; both rebuild the site, verify, and report article › section
 - [demo-data/](demo-data/) — Small, internally consistent synthetic demo data for a customer instance: scenario approved before anything is written, raw artifacts run through the real pipeline (`/process-meeting`, `/context-update`) so records stay consistent by construction, everything `[DEMO]`-marked and manifest-recorded; `remove` reverses the manifest exactly
+- [demo-showcase/](demo-showcase/) — The spec-driven demo builder for a whole demo instance: reads a scenario spec (invocation + expected outcome per scenario), plans and generates the data each scenario needs through the real pipeline, then **evals** — runs every scenario exactly as the presenter will and writes a pass/fail run log with evidence, bucketing failures into data gap / skill behaviour / wrong expectation; sandbox mode leaves no visible `[DEMO]` marking while the manifest keeps removal exact; optional presenter deck, one slide per passing scenario
 
 ## Gaps
 

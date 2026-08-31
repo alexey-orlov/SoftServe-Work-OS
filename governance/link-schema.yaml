@@ -146,6 +146,13 @@ types:
       - product-development/product/user-insights/*-interview-insights.md
     optional: [initiatives, areas, features, customers]
 
+  synthesis:
+    home: product-development/product/user-insights/*.md    # {topic}-{date}.md — cross-interview reports
+    # *-interview-insights.md files in the same folder are the summary type above, not
+    # this one — the more specific glob wins.
+    required-any: [initiatives, areas, features, customers] # the run's scope links
+    optional: [docs, themes]                # docs: lists every transcript the run read
+
   decision:
     home: product-development/product/decisions/*.md
     optional: [initiatives, features, areas, customers, competitors, docs]
@@ -171,6 +178,7 @@ types:
 catalog:
   feature-statuses: [planned, live, retired]   # "building" is DERIVED (an active initiative targets it)
   status-writer: /feature-launch-gate          # sole writer of live + shipped: (re-reads before writing)
+                                               # — except /customize-os's one-time setup seeding batch
   new-entries: "proposed in the same gated prompt as the initiative that introduces them (status: planned)"
 
 # Backlink policy: only initiative pages accumulate backlinks (Activity/Decisions

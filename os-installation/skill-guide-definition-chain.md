@@ -137,6 +137,7 @@ Two rules run through all of them: **the template owns the format** (skills stay
 - Missing baseline → `/retention-analysis` · `/activation-analysis` · `/expansion-strategy` (needs warehouse access or stored baselines)
 - Lever with no money number → `/impact-sizing` (needs the baseline + a filled segmentation matrix)
 - Unverified competitor claim → `/competitor-analysis`
+- Hypotheses unranked / confidence unrated → `/assumption-map` (always available — it works from the PRD or the bare idea); the run then syncs the PRD's Key hypotheses table from the map's Test First rows
 - **Never auto-run:** `/prd-challenge`, anything human-facing (`/interview-guide`), anything outbound (`/slack-message`, `/create-tickets`)
 
 ---

@@ -19,13 +19,19 @@ reached the tracker yet.
 (feature | improvement | bug), `priority_signal`, `tracker_ref` (`"-"` until pushed, then
 the ticket id or URL), `source` (relative link to the summary or report; a non-transcript
 arrival cites its artifact/inbox path, or `(chat, YYYY-MM-DD, <who shared>)` when nothing
-was committed), `updated`; optional link keys `features` / `initiatives` (bare catalog/initiative slugs) when the request maps to existing work — link contract: `governance/link-schema.yaml`.
+was committed), `updated`; optional link keys `features` / `initiatives` (bare
+catalog/initiative slugs) when the request maps to existing work — written by the creating
+skill (`/process-meeting`, `/context-update`) at creation time whenever they resolve from
+the conversation, never asked of the user. They are what a scoped
+`/prioritize-requests {slug}` run reads to decide membership. Link contract:
+`governance/link-schema.yaml`.
 Body: `# [{Area}] {Request}` → the underlying need → the role-attributed quote →
 `## Draft ticket` (objective + acceptance-criteria seed — a tracker push uses it verbatim).
 
 **Not the triage board:** cross-account clustering and act/decline verdicts live in
-`product-development/product/strategy/feature-requests.md` (written only by
-`/prioritize-requests`). This folder is per-request evidence + push state; that file is
+`product-development/product/strategy/feature-requests.md` — plus the per-slug boards
+`feature-requests-{slug}.md` a scoped run writes — all written only by
+`/prioritize-requests`. This folder is per-request evidence + push state; that file is
 the routed judgment across them.
 
 ## Contents
