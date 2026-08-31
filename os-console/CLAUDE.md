@@ -1,9 +1,11 @@
 # OS Console
 
 A local web UI over this repo — friendly navigation, initiative grouping (with
-drag-prioritized sources and per-initiative instructions), the Features page (the
-feature-index as a navigable product map, primary nav next to Initiatives — with
-stat tiles, per-feature health pills and expand-all), the Skills page (every
+drag-prioritized sources and per-initiative instructions), the Product map page (the
+feature-index as a navigable two-level structure, primary nav next to Initiatives —
+each product AREA is one container card whose header names it and whose body folds
+the FEATURES inside it, plus stat tiles ordered outer-level-first, catalog status
+pills, the derived "in progress" state and expand-all), the Skills page (every
 `.claude/skills` program in three projections: mapped against the product workflow
 with the definition chain as the solid spine, by use-case group, and A–Z — every
 projection opens the same skill card with the command to copy), tabbed setup

@@ -41,7 +41,7 @@ Your team's shared knowledge base. Every document, decision, metric definition, 
 
 ## Doc Index
 
-**When looking up artifacts (PRDs, RFCs, plans, schemas, dashboards, experiments, tickets), the graph has two halves:** `product-development/feature-index.yaml` is the catalog — which areas and features exist, and whether each is planned / live / retired; the work and its artifacts live on **initiative pages** (`product/initiatives/{slug}.md`), which declare their target features/areas in frontmatter. For a feature's artifacts: find the initiatives targeting it (grep `features:` in initiatives/, or the Console's feature page rolls it up), then follow their artifact rows.
+**When looking up artifacts (PRDs, RFCs, plans, schemas, dashboards, experiments, tickets), the graph has two halves:** `product-development/feature-index.yaml` is the catalog — which areas and features exist, and whether each is planned / live / retired; the work and its artifacts live on **initiative pages** (`product/initiatives/{slug}.md`), which declare their target features/areas in frontmatter. For a feature's artifacts: find the initiatives targeting it (grep `features:` in initiatives/, or the Console's Product map page rolls it up), then follow their artifact rows.
 
 ### Read Order for Common Queries
 

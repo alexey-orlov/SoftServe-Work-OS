@@ -17,7 +17,7 @@ FEATURE_INDEX = 'product-development/feature-index.yaml'
 
 CORE = [
     {'path': 'CLAUDE.md', 'role': 'Root steering — loads every session: fundamentals, doc index, the four rules'},
-    {'path': FEATURE_INDEX, 'role': 'The product map — areas → features (status, shipped)'},
+    {'path': FEATURE_INDEX, 'role': 'The Product map — product areas, each folding its features (status, shipped)'},
     {'path': 'product-development/toolchain.yaml', 'role': 'Tool/approach choices + live connections, one key per surface'},
     {'path': '.claude/team-learnings.md', 'role': 'Cross-cutting agent rules — injected at every session start'},
     {'path': 'governance/write-policy.yaml', 'role': 'The write policy itself — tiers list + auto-sync switchboard'},
@@ -156,7 +156,8 @@ def feature_index():
                                  'catalog': {'status': str(spec.get('status', '') or ''),
                                              'shipped': str(spec.get('shipped', '') or '')[:10],
                                              'name': str(spec.get('name', '') or ''),
-                                             'description': str(spec.get('description', '') or '')},
+                                             'description': str(spec.get('description', '') or ''),
+                                             'figma': str(spec.get('figma', '') or '')},
                                  'artifacts': [], 'initiatives': [], 'present': 0, 'total': 0})
             areas.append({'area': area, 'name': str(aspec.get('name', '') or ''),
                           'description': str(aspec.get('description', '') or ''),

@@ -176,7 +176,7 @@ types:
 # Catalog lifecycle (machine-relevant bits; prose in write-back-contract.md)
 # ---------------------------------------------------------------------------
 catalog:
-  feature-statuses: [planned, live, retired]   # "building" is DERIVED (an active initiative targets it)
+  feature-statuses: [planned, live, retired]   # "in progress" is DERIVED (an active initiative targets it)
   status-writer: /feature-launch-gate          # sole writer of live + shipped: (re-reads before writing)
                                                # — except /customize-os's one-time setup seeding batch
   new-entries: "proposed in the same gated prompt as the initiative that introduces them (status: planned)"

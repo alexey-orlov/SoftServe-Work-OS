@@ -33,7 +33,7 @@ const NAV = {
   primary: [
     ['home', 'Home', 'home'],
     ['initiatives', 'Initiatives', 'flag'],
-    ['features', 'Features', 'compass'],
+    ['features', 'Product map', 'compass'],
     ['library', 'Library', 'book'],
     ['activity', 'Activity', 'clock'],
   ],

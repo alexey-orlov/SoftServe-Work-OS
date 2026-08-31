@@ -9,6 +9,7 @@
   --muted: #6d7885;
   --line: #e3e7ea;
   --line-soft: #edf0f2;
+  --area-head: #f7f9fa;       /* product-map area header band — the container's lid */
   --accent: #1485c4;          /* brand blue */
   --accent-ink: #0d6ba0;
   --accent-tint: #e8f3fa;
@@ -41,6 +42,7 @@
     --muted: #8b96a2;
     --line: #29323c;
     --line-soft: #212a33;
+    --area-head: #1c242c;
     --accent: #4aa3d8;
     --accent-ink: #7cc0e8;
     --accent-tint: #14283a;
@@ -488,11 +490,45 @@ table.integrations .sys-locked { display: inline-flex; align-items: center; gap:
 table.integrations .acts { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .table-scroll { overflow-x: auto; }
 
+/* product map — an AREA is one container card that visibly folds its FEATURES */
+.area-card { padding: 0; overflow: hidden; }
+.area-card + .area-card { margin-top: 16px; }
+.area-head { padding: 14px 18px 13px; background: var(--area-head); border-bottom: 1px solid var(--line); }
+.area-eyebrow {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10.5px; font-weight: 650; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 5px;
+}
+.area-eyebrow svg.ico { width: 12px; height: 12px; }
+.area-title-row { gap: 12px; }
+h2.area-name { font-size: 17px; font-weight: 690; letter-spacing: -.012em; color: var(--ink); margin: 0; }
+.area-mix { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.area-mix b { color: var(--ink-2); font-weight: 650; }
+.area-slug { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.area-desc { margin: 6px 0 0; max-width: 76ch; }
+.area-inits { margin-top: 9px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.area-inits .lbl { font-size: 11.5px; color: var(--muted); }
+/* the fold: features live inside the area card, inset from its edge */
+.area-body { padding: 4px 18px 14px; }
+.subgroup.area-sub { margin: 11px 0 2px; }
+.area-body > .empty { padding: 10px 0 4px; text-align: left; }
+
 /* features page — expandable feature rows */
 .fi-feature summary { cursor: pointer; padding: 7px 0; display: flex; gap: 9px; align-items: center; flex-wrap: wrap; list-style: none; }
 .fi-feature summary::-webkit-details-marker { display: none; }
 .fi-feature summary::before { content: '▸'; color: var(--muted); font-size: 10px; }
 .fi-feature[open] summary::before { content: '▾'; }
+.fi-feature .feat-name { font-weight: 600; }
+.fi-feature + .fi-feature { border-top: 1px solid var(--line-soft); }
+/* derived state — dashed outline says "computed here, not stored in the map" */
+.pill.derived {
+  background: transparent; color: var(--muted);
+  border: 1px dashed var(--line); font-weight: 600; padding: 1.5px 8px;
+}
+.fi-feature .feat-desc { padding-left: 16px; }
+.fi-feature .art-row.feat-init { padding: 4px 0 6px 16px; border-bottom: 0; font-size: 12.5px; }
+.fi-feature .art-row.feat-art { padding: 2px 0 3px 16px; border-bottom: 0; font-size: 12.5px; }
+.fi-feature .art-row.feat-art.deep { padding-left: 34px; }
 
 /* guided-way strip on the Setup page */
 .setup-banner {

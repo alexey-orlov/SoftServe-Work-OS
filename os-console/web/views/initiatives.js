@@ -107,7 +107,7 @@ function list(view, items) {
         field('Title', titleIn),
         field('Short name (permanent — becomes the page\'s address everywhere)', slugIn),
         field('Target feature(s)', featIn),
-        field('Target area(s)', areaIn, 'At least one target is required — an unmapped initiative cannot exist. Slugs must exist in the catalog (Features page); a brand-new feature is registered through /prd-draft, which proposes its planned catalog entry.'),
+        field('Target area(s)', areaIn, 'At least one target is required — an unmapped initiative cannot exist. Slugs must already be on the Product map; a brand-new feature is registered through /prd-draft, which proposes its planned catalog entry.'),
         el('div', { class: 'hint' }, 'Creates the living page from the house template — frontmatter targets filled — and registers it in the folder navigation; it reaches the team per your auto-sync mode.'),
       ),
       actions: [{
@@ -164,7 +164,7 @@ function detail(view, items, slug) {
     el('span', {}, i.statusText.replace(/^\w+\s*[—-]?\s*/, '')),
     el('span', {}, `· updated ${i.updated || '—'}`),
     i.owner ? el('span', {}, `· ${i.owner}`) : null,
-    ...i.targets.map((t) => el('a', { class: 'tag', href: '#/features', title: 'open the product map' }, t.feature ? (t.area ? `${t.area} · ${t.feature}` : t.feature) : `area: ${t.area}`)),
+    ...i.targets.map((t) => el('a', { class: 'tag', href: '#/features', title: 'open the Product map' }, t.feature ? (t.area ? `${t.area} · ${t.feature}` : t.feature) : `area: ${t.area}`)),
   ));
 
   const split = el('div', { class: 'split' });
@@ -222,8 +222,8 @@ function detail(view, items, slug) {
   // product-map join: catalog facts (v2) or legacy artifact rows
   for (const f of i.features || []) {
     const c = el('div', { class: 'card' },
-      el('h3', {}, f.feature ? `From the product map — ${f.area ? f.area + ' · ' : ''}${f.feature}` : `From the product map — area: ${f.area}`),
-      el('div', { class: 'hint' }, 'What the catalog registers for this target.'));
+      el('h3', {}, f.feature ? `From the Product map — ${f.area ? f.area + ' · ' : ''}${f.feature}` : `From the Product map — area: ${f.area}`),
+      el('div', { class: 'hint' }, 'What the map registers for this target.'));
     if (f.unknownSlug) c.append(el('div', { class: 'pill err' }, '⚠ not in the catalog — register it (gated) or fix the page frontmatter'));
     if (f.catalog && f.catalog.status) {
       c.append(el('div', { class: 'art-row' },

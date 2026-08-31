@@ -18,7 +18,7 @@ const QUICK = [
   {
     // Order is deliberate: identity first (CLAUDE.md → business → segments),
     // then the governed instruments (templates, competition), people last.
-    // Feature index lives in the Features nav entry; Toolchain in Setup → Integrations.
+    // Feature index lives in the Product map nav entry; Toolchain in Setup → Integrations.
     title: 'Steering files',
     key: 'steering',
     groups: [{
