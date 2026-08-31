@@ -64,6 +64,15 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
 - **Everything displayed is derived** from the canonical registries — `governance/write-policy.yaml`,
   `product-development/feature-index.yaml`, `toolchain.yaml`, initiative pages, and folder
   CLAUDE.md navigation files. The console adds no second source of truth.
+- **The few hardcoded maps are the drift surface — update them in the same commit as the
+  structure they describe.** Four small tables name repo paths the registries do not:
+  `lib/adapters/activity.js AREA_MAP` (path → friendly area), `lib/adapters/templates.js
+  SUGGEST` (template → destination), `lib/adapters/home.js STEERING_FILES` + `SURFACES`, and
+  `lib/adapters/steering.js CORE`. A folder move, a new template, a new steering file or a new
+  toolchain surface silently invalidates one of them. Checking that the paths still EXIST is
+  not enough — the destination a template row suggests can point at a folder that is still
+  there but no longer holds that kind of file. Read the row's meaning against the folder's own
+  CLAUDE.md, which is where destinations are stated.
 - **Writes respect the write policy.** One endpoint resolves every path against the policy's
   gated globs; gated files are badged in the UI and a save there is the person's approval
   (the human is the approver the gate exists for). The console never writes scripts, `.git/`,
