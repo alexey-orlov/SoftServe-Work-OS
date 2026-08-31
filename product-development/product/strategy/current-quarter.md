@@ -32,8 +32,8 @@ Time-boxed by design: replace the contents at the start of each quarter rather t
 
 | Initiative (link its page) | Objective it serves | Owner | Status | Target feature(s) |
 |---|---|---|---|---|
-| [[initiative-slug]](../initiatives/[initiative-slug].md) | Objective 1 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
-| [[initiative-slug]](../initiatives/[initiative-slug].md) | Objective 2 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
+| [initiative-slug](../initiatives/[initiative-slug].md) | Objective 1 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
+| [initiative-slug](../initiatives/[initiative-slug].md) | Objective 2 | [Name] | On track / At risk / Slipped | `[feature-slug]` |
 
 ## Explicitly Not Doing
 

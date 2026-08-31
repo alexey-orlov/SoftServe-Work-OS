@@ -112,7 +112,7 @@ I'll help you create a results doc that captures outcomes and learnings.
 
 ```markdown
 ---
-initiatives: [[initiative-slug]]
+initiatives: [initiative-slug]
 date: [YYYY-MM-DD]
 ---
 

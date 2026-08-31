@@ -69,7 +69,7 @@ Create file: `product-development/product/launches/[initiative-slug]-launch-chec
 
 ```markdown
 ---
-initiatives: [[initiative-slug]]
+initiatives: [initiative-slug]
 date: YYYY-MM-DD
 features: []
 ---

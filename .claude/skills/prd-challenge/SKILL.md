@@ -110,7 +110,7 @@ Wait for all lenses. Then:
 
 ```markdown
 ---
-initiatives: [[initiative-slug]]
+initiatives: [initiative-slug]
 prd: [path]
 date: YYYY-MM-DD
 stage: [stage]

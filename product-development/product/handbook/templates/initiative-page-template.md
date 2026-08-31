@@ -3,8 +3,8 @@ status: exploring
 note: "[one line: where this stands right now]"
 updated: [YYYY-MM-DD]
 owner: "[Name from team roster]"
-areas: [[area-slug]]
-features: [[feature-slug]]
+areas: [area-slug]
+features: [feature-slug]
 ---
 
 # [Initiative Name]

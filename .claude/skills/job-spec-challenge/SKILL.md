@@ -163,7 +163,7 @@ Wait for all lenses. Then:
 
 ```markdown
 ---
-initiatives: [[initiative-slug]]
+initiatives: [initiative-slug]
 job-spec: [path]
 breakdown: [path#J-N | none — ad-hoc spec]
 date: YYYY-MM-DD

@@ -1,7 +1,7 @@
 ---
 updated: [YYYY-MM-DD]
 owner: "[Name]"
-areas: [[area-slug]]
+areas: [area-slug]
 ---
 
 # Competitive Matrix — [Product Area]

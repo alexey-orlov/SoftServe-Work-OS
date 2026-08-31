@@ -1,5 +1,5 @@
 ---
-initiatives: [[initiative-slug]]
+initiatives: [initiative-slug]
 ---
 
 # [Initiative] — Jobs Breakdown
