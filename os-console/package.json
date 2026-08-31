@@ -1,0 +1,14 @@
+{
+  "name": "os-console",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Work OS Console — local web UI over this repo. Zero dependencies: Node's standard library only, no npm install, ever.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "node build-console.js"
+  }
+}
