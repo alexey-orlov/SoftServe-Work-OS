@@ -232,12 +232,12 @@ const doc = {
         p("Files sort by **what they are**, never by what project they serve: every transcript in one central archive, every PRD in `PRDs/{area}/`, every decision in `decisions/`, every metric definition in `analytics/metrics/`. One home per kind means one template, one owner and one place to look — the [six kinds of files](#/overview/context/kinds) each behave one way, wherever the work came from."),
         p("The initiative page is deliberately the opposite. It creates no folder and holds no copies: one living page per bet that **links** each artifact where it lives — the PRD row points into `PRDs/`, the metrics row into `analytics/`, the decisions list into `decisions/`. Artifacts stay in their functional folders; the initiative page joins them."),
         loop([
-          { title: "Functional homes", sub: "`transcripts/` · `PRDs/{area}/` · `decisions/` · `analytics/metrics/` — one folder, one template, one writer per kind" },
-          { title: "Initiative page", sub: "`tier-discount-promo-v1.md` — one bet's status, artifact links, decisions and open loops on one screen" },
-          { title: "The catalog", sub: "`feature-index.yaml` — areas → features, durable facts only" },
+          { title: "Functional homes", sub: "one folder, one template, one writer per kind of file" },
+          { title: "Initiative page", sub: "one bet's status, artifacts, decisions and open loops" },
+          { title: "The catalog", sub: "areas → features, durable facts only" },
         ], [
-          { label: "the page links each artifact · each artifact names its initiative" },
-          { label: "targets declared · *building* derived" },
+          { label: "links each artifact" },
+          { label: "declares its targets" },
         ]),
         p("Open the example initiative page next to the folders it points into and the principle is visible in thirty seconds: `initiatives/tier-discount-promo-v1.md` links metric definitions in `analytics/metrics/billing/`, decisions in `decisions/`, and a PRD slot naming `PRDs/billing/` — the page itself is links, status and open loops, nothing more. What this buys:"),
         bullets([
