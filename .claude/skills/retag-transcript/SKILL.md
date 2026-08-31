@@ -1,7 +1,7 @@
 ---
 name: retag-transcript
 description: Correct or amend the tag frontmatter (customers, areas, features, initiatives, themes, type) on a filed transcript — the only sanctioned edit path for raw-material filing metadata. Appends every change to the transcript's tag-amendments log, never touches the body, keeps initiative-page Activity backlinks in step when initiative tags change, and updates the ingestion ledger when a file is renamed. Use on /retag-transcript, "retag this transcript", "this call was actually about X too", "wrong customer on this interview". NOT for editing transcript content (immutable raw material), summaries (their writers own them — /process-meeting), or filing new transcripts (/process-meeting).
-group: knowledge
+group: communication-ops
 ---
 
 # Retag Transcript
