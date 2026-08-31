@@ -18,6 +18,7 @@ const SUGGEST = {
   'interview-template.md': 'product-development/product/customers/accounts/{account}/calls/{YYYY-MM-DD}-interview.md',
   'competitor-teardown-template.md': 'product-development/product/competitive-research/competitors/{slug}/teardown.md',
   'competitive-area-matrix-template.md': 'product-development/product/competitive-research/competitive-matrix-{area}.md',
+  'account-context-template.md': 'product-development/product/customers/accounts/{account}/account-context.md',
   'jobs-breakdown-template.md': 'product-development/product/PRDs/{area}/{initiative}-jobs-breakdown.md',
   'job-spec-template.md': 'product-development/product/PRDs/{area}/{initiative}-{job}-job-spec.md',
 };
