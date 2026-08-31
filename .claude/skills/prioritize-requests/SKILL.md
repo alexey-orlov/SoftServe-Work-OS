@@ -1,16 +1,16 @@
 ---
 name: prioritize-requests
-description: Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park. Reads the repo's call summaries or a pasted pile from support and sales, grounds every verdict in current-quarter objectives, and keeps declined themes settled so they stop coming back.
+description: Cluster inbound customer feature requests by the job behind them, size demand by distinct accounts, and route every theme to act now, collect signal, decline, or park. Reads the repo's feature-request records and call summaries, or a pasted pile from support and sales, grounds every verdict in current-quarter objectives, and keeps declined themes settled so they stop coming back.
 argument-hint: "[paste list or export path]"
 group: delivery
 ---
 
 ## Quick Start
 
-**What to provide:** Nothing, if the repo has call summaries. Otherwise paste a pile.
+**What to provide:** Nothing, if the repo has feature-request records or call summaries. Otherwise paste a pile.
 
 ```
-/prioritize-requests                        → Read every account's call summaries
+/prioritize-requests                        → Read the feature-request records + every account's call summaries
 /prioritize-requests [paste a request list] → Triage a pasted pile (Zendesk, Intercom, CSV, Slack)
 /prioritize-requests [path/to/export.csv]   → Triage a structured export
 ```
@@ -79,21 +79,22 @@ This skill counts **askers**. `/impact-sizing` models **value** — driver trees
 
 | Source | What to extract | If missing |
 |--------|-----------------|------------|
-| `product-development/product/customers/accounts/*/calls/summaries/*.md` → `## Feature Requests` | The ask, the role-attributed quote, the area. **The account slug comes from the path — that is the dedup key** | No accounts → run the empty case below and offer Paste mode |
+| `product-development/product/user-insights/feature-requests/*.md` | The ask, the role-attributed quote, the draft ticket. **The record's `account:` frontmatter is the dedup key** — `area:` places the theme | Folder empty → fall through to the call summaries below |
+| `product-development/product/customers/accounts/*/calls/summaries/*.md` → `## Feature Requests` | The ask, the role-attributed quote, the area. **The account slug comes from the path — that is the dedup key** | No summaries → offer Paste mode; run the empty case below only if the records folder is empty too |
 | Same files → `**Key Product Gaps**` in the Executive Summary | Implied demand — things customers work around, do manually, or switch tools for. **Weight higher than explicit asks** | — |
 | Same files, Quick-variant Executive Summary prose | Implied gaps stated in prose. Rate evidence weak — a prose mention is not a structured request | — |
 | `product-development/product/strategy/current-quarter.md` | Objectives, Strategic Themes, and `## Explicitly Not Doing` — **one of two sources for the Fit axis** (the other is `product-development/product/strategy/roadmaps/`) | Not filled → fall through to the Step 4 gate. Fit reads `unknown` only if the roadmap is *also* unfilled |
 | `product-development/product/strategy/roadmaps/*.md` | What is already NOW / NEXT / Under Consideration — do not re-triage committed work | "No roadmap yet" — note it, continue |
 | `product-development/product/decisions/` | Already decided? Do not re-litigate a settled call | — |
 | `product-development/product/user-insights/` | Themes carrying `% affected` / `Severity` / `Frequency: X out of Y` — the strongest evidence in the repo; corroboration here promotes a theme to Strong | Folder empty — note it, continue |
-| `product-development/feature-index.yaml` | Does it already ship? — TRUE only when the catalog entry says `status: live`. **A request for a live feature is a discoverability problem, not a demand signal** — exclude from counts, list separately. `planned` entries are demand FOR in-flight work — count them and link the targeting initiative | Only the starter example areas → print "catalog not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
+| `product-development/feature-index.yaml` | Does it already ship? — TRUE only when the catalog entry says `status: live`. **A request for a live feature is a discoverability problem, not a demand signal** — exclude from counts, list separately. `planned` entries are demand FOR in-flight work — count them and link the targeting initiative beside the theme; `retired` means we removed it — decline precedent, not demand | Only the starter example areas → print "catalog not populated — Already Ships not checkable" and skip that section. Never match a theme against a template example |
 | `product-development/product/strategy/feature-requests.md` | The prior run: existing themes, verdicts, first-seen dates, the declined list | First run — create it |
 
 ---
 
 ## Modes
 
-**Repo mode (default).** Reads the table above. Needs at least one account with call summaries.
+**Repo mode (default).** Reads the table above. Needs at least one feature-request record, or one account with call summaries.
 
 **Paste mode.** The PM pastes or points at a pile — a Zendesk or Intercom export, a CSV, a spreadsheet, a Slack thread. Parse each row into core ask / context / segment / frequency where present. Preserve the source column structure and offer an enriched export with `theme`, `job`, and `verdict` columns appended.
 
@@ -126,7 +127,7 @@ If more than 50 raw requests, cluster into themes *before* rating anything and r
 
 ### Step 3: Count demand honestly
 
-Report **requests** and **distinct accounts** separately. Twelve requests from one account is one account. Cross-check `feature-index.yaml` — asks for something that already ships come out of the counts and into a separate "Already Ships" list.
+Report **requests** and **distinct accounts** separately. Twelve requests from one account is one account. A dated record and the summary row it was filed from are ONE request — dedup on account + ask before counting (the record's `source:` names its summary). Cross-check `feature-index.yaml` — asks for something the catalog carries `status: live` come out of the counts and into a separate "Already Ships" list.
 
 ### Step 4: Rate Fit and Evidence
 
@@ -136,7 +137,7 @@ Report **requests** and **distinct accounts** separately. Twelve requests from o
 
 Once the gate passes:
 - **High** — the job maps to an Objective or Strategic Theme in `current-quarter.md`, or to a NOW/NEXT theme on the current roadmap
-- **Low** — no mapping in the *filled* source, or it appears on `## Explicitly Not Doing`, or `product-development/product/decisions/` already declined it
+- **Low** — no mapping in the *filled* source, or it appears on `## Explicitly Not Doing`, or `product-development/product/decisions/` already declined it, or the catalog carries the feature `retired` — we removed it once already
 
 **Demand evidence**
 - **Strong** — 3+ distinct accounts, **or** ≥50% of accounts in the pile when the pile has 3–5 accounts **and the theme has at least 2 distinct accounts** (state the denominator), **or** 2+ accounts where one is in a priority segment, **or** corroborated by a `product-development/product/user-insights/` theme with a frequency and severity rating, **or** appears as a `**Key Product Gaps**` entry in 2+ accounts
@@ -189,7 +190,7 @@ Inbound demand, clustered by the job behind the ask, with a verdict per theme.
 
 **Read this when:** Someone asks "are we going to build X?" or "what did customers ask for?"
 
-**Last triaged:** [YYYY-MM-DD] · **Sources:** [N summaries across M accounts | pasted pile of N rows] · **Window:** [date range]
+**Last triaged:** [YYYY-MM-DD] · **Sources:** [R request records + S summaries across M accounts | pasted pile of N rows] · **Window:** [date range]
 
 ## Themes
 
@@ -261,11 +262,11 @@ Clustering outputs survive the stop; only verdict sections are suppressed. Close
 
 Do not emit an empty report. Print this instead:
 
-> No feature requests found. `product-development/product/customers/accounts/` has no call summaries with a `## Feature Requests` section yet.
+> No feature requests found. `product-development/product/user-insights/feature-requests/` holds no records, and `product-development/product/customers/accounts/` has no call summaries with a `## Feature Requests` section yet.
 >
 > Two ways forward:
 > - **Paste a pile** — a Zendesk or Intercom export, a CSV, a spreadsheet, or a Slack thread.
-> - **Build the corpus** — `/process-meeting` (customer-call, **Full variant**) writes the Feature Requests tables this skill reads. The Quick variant only notes implied gaps in prose, which triage rates as weak evidence.
+> - **Build the corpus** — `/process-meeting` (customer-call, **Full variant**) files the per-request records in `user-insights/feature-requests/` and writes the Feature Requests tables this skill reads; `/context-update` files a record when a request arrives outside a transcript (thread, email, support doc). The Quick variant only notes implied gaps in prose, which triage rates as weak evidence.
 >
 > Either way, fill `current-quarter.md`'s Objectives, or add a NOW/NEXT theme to a roadmap file, first — without one of them there is no strategic-fit axis and this skill can only rank by demand.
 
@@ -292,7 +293,7 @@ Nothing is written in this case — `feature-requests.md` is created on the firs
 ## Related Skills
 
 **Before this:**
-- `/process-meeting` (customer-call Full variant) — writes the Feature Requests tables this skill reads
+- `/process-meeting` (customer-call Full variant) — files the request records and writes the Feature Requests tables this skill reads; `/context-update` files records for requests arriving outside transcripts
 - `/user-research-synthesis` — its themes are the strongest evidence available
 
 **After this:**

@@ -32,7 +32,8 @@ request theme graduates through `/prioritize-requests` → PRD. Intake often tar
 different project/board (PM triage) than the dev backlog — confirm the target per batch.
 
 **Source:** a record in `product-development/product/user-insights/feature-requests/` (created
-by `/process-meeting` from a call or interview; a summary's Feature Requests table row is
+by `/process-meeting` from a call or interview, or by `/context-update` when the request
+arrived outside a transcript; a summary's Feature Requests table row is
 an acceptable direct source, but create the record first). The record's `## Draft ticket`
 section is the ticket body verbatim; the title comes from its `# [{Area}] {Request}` line;
 label `customer-request`; the description ends with provenance links (record + source

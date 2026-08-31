@@ -88,8 +88,9 @@ After saving, close the loop — full contract: `governance/write-back-contract.
    budget, split a subpage and link it — don't let it sprawl. `/wiki-lint` check 6
    enforces the same numbers — change them here and there in the same change.
 6. **The ledger** (`governance/processed.txt`) is appended only by ingest
-   skills — the ones that consume raw sources: `/context-update`, `/process-meeting`, and
-   `/user-research-synthesis` (when handed raw transcripts directly). One repo-root-relative
+   skills — the ones that consume raw sources: `/context-update` and `/process-meeting`
+   (raw transcripts handed to `/user-research-synthesis` are filed — and ledgered — by
+   `/process-meeting`). One repo-root-relative
    path per line, kept sorted (`sort -o`). Junk and duplicates are ledgered too, so nothing
    is re-judged. One removal exception: `/demo-data remove` strips exactly the lines its
    manifest records (synthetic content leaving the repo takes its ledger lines with it).
@@ -123,14 +124,14 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 | `governance/proposals/` | headless runs (created), humans (cleared) |
 | root CLAUDE.md fundamentals block ↔ `business-info.md` | kept consistent in the SAME change — both gated: the user approves both together in-session; a headless change to business-info files the matching root-block proposal in the same run |
 | `segmentation-matrix.md` (segment counts / ARR) | quarterly refresh + `/context-update` segment-shift folds, always gated; its General-matrix totals reconciled with business-info Key Metrics and the root fundamentals ARR in the SAME change |
-| `user-insights/transcripts/` (central archive) + `accounts/{c}/calls/summaries/` + `meetings/{type}/` records | `/process-meeting` — files customer-facing transcripts to the central home (`{date}-{account}-{type}.md`, tags proposed from content), writes the summaries in their per-account / per-series homes, internal-meeting transcripts stay under `meetings/{type}/transcripts/`; `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; `/user-research-synthesis` may file directly-handed raw transcripts |
+| `user-insights/transcripts/` (central archive) + `accounts/{c}/calls/summaries/` + `meetings/{type}/` records | `/process-meeting` — files customer-facing transcripts to the central home (`{date}-{account}-{type}.md`, tags proposed from content), writes the summaries in their per-account / per-series homes, internal-meeting transcripts stay under `meetings/{type}/transcripts/`; `/context-update` sweeps gate junk/dups and delegate unprocessed transcripts to it; raw transcripts handed straight to `/user-research-synthesis` are delegated to it for filing too — the synthesis skill never files or edits raw material |
 | `product/user-insights/` | `/process-meeting` (`{date}-interview-insights.md`, per session) and `/user-research-synthesis` (`{topic}-{date}.md`, cross-interview — queries transcripts by tag) — distinct filename patterns; the History cross-link in each participant's `account-context.md` lands in the same change; `interview-guides/` → `/interview-guide`, `journey-maps/` → `/journey-map` |
 | `reports/` (periodic rollups) | by filename prefix: `*-weekly-review.md` → `/weekly-review` · `*-portfolio-pulse-*.md` → `/portfolio-pulse` · `*-status-*.md` → `/status-update` · `*-daily-batch.md` → `/process-meeting` |
 | `planning/` (forward plans) | by filename prefix: `*-daily-plan.md` / `*-draft.md` → `/daily-plan` · `*-weekly-plan.md` → `/weekly-plan` |
 | `meetings/retros/lessons-learned.md` | append-only, by `/process-meeting`, `/weekly-review`, and `/context-update` |
 | `meetings/{type}/docs/feedback-*.md` | `/meeting-feedback` |
 | `product-development/inbox/` | integrations (and humans) drop files, `/demo-data` drops its marked synthetic raw files; `/context-update` sweeps gate them; `/process-meeting` moves them out to their transcript home; humans clear junk (file + ledger line together) |
-| `user-insights/feature-requests/` records | created by `/process-meeting`; `tracker_ref` set only by `/create-tickets` push mode |
+| `user-insights/feature-requests/` records | created by `/process-meeting` from a call or interview, and by `/context-update` when the request arrives outside a transcript (thread, email, support doc) — same schema either way, evidence appended to an existing record rather than a second one filed; `tracker_ref` set only by `/create-tickets` push mode |
 | navigation list re-ordering | `/wiki-lint` only (its mechanical repairs, run by default) |
 | `engineering/code-repos.yaml` + `engineering/codebases/*.md` | `/connect-code` (create, refresh, regenerate) — `/code-qa` reads only, writes nothing |
 | `competitive-research/` living surfaces — `competitive-landscape.md`, `competitive-matrix*.md`, `competitors/*/teardown.md` | `/competitor-analysis` owns them; `/context-update` and `/process-meeting` may refresh matrix cells, teardown facts, and landscape lines when folding call-borne intel; `/customize-os` may seed landscape and matrix rows once during guided setup |

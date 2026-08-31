@@ -13,9 +13,10 @@ Two modes: **Deep Analysis** (comprehensive one-time research) + **Ongoing Monit
 
 1. Name the competitor(s) you want to analyze
 2. Choose mode: **Deep Analysis** (full research) or **Ongoing Monitoring** (monthly check-in)
-3. The skill checks your workspace first -- user research, meeting notes, churn data, past analysis
-4. The skill shows what we already know, identifies gaps, then fills gaps with web research
-5. The skill delivers a strategic report with defensive, offensive, and innovative plays
+3. The skill plays back the learning goal, the scope, and what it will change — one "go" starts the run (Ongoing Monitoring and delegated runs skip it)
+4. The skill checks your workspace first -- user research, meeting notes, churn data, past analysis
+5. The skill shows what we already know, identifies gaps, then fills gaps with web research
+6. The skill delivers a strategic report with defensive, offensive, and innovative plays
 
 **Example:** "Analyze Competitor X -- we're losing enterprise deals to them"
 
@@ -26,7 +27,8 @@ Two modes: **Deep Analysis** (comprehensive one-time research) + **Ongoing Monit
 ## Context Routing Logic (Internal - for Claude)
 
 **Automatic Context Checks:**
-When this skill is invoked, immediately check:
+Before any web research or write (a read-only glance — e.g. whether `competitors/{slug}/`
+already exists — may precede the go-gate; it is what fills the gate's write plan), check:
 
 | Source | Files/Folders | Search Terms | What to Extract |
 |--------|---------------|--------------|-----------------|
@@ -47,6 +49,29 @@ When this skill is invoked, immediately check:
 - If churn mentioned → Link to `retention-analysis`
 - If user feedback → Link to `user-research-synthesis`
 - If positioning mentioned → Link to `write-prod-strategy`
+
+---
+
+## The Go-Gate: Confirm the Learning Goal
+
+One message before any research, and the turn ends on it — a teardown that answers no question still rewrites three living pages. Three parts, each as short as the ask allows:
+
+1. **Question and decision** — what this analysis has to answer, and the call it feeds: "are we losing enterprise renewals to them on SSO? — feeds the Q4 roadmap cut".
+2. **Scope** — the product areas it covers, by slug from `product-development/feature-index.yaml`, or whole-product. Scope fixes which `competitive-matrix.md` tables this run may touch.
+3. **The write plan** — the surfaces this run changes: the competitor's `teardown.md`, the matrix tables in scope, the affected `competitive-landscape.md` sections, plus — first analysis of a competitor — the new `competitors/{slug}/` folder and its roster lines.
+
+One "go" covers the whole run; no per-file prompts follow. Only the PM's own words skip it ("just run it", "no questions — go"), never a judgment that the ask looks clear enough. **Ongoing Monitoring is exempt** — a monthly check-in carries a standing goal. **Delegated runs never stop:** when another skill's auto-research pass dispatches this one (`/prd-draft`, `/job-spec-draft`), its `[GAP:]` line is the question and its initiative is the decision fed — inherited, recorded the same way, answered back to the caller.
+
+Record what was approved in the teardown's frontmatter:
+
+```yaml
+last-deep-analysis: 2026-08-30
+analysis-goal: are we losing enterprise renewals to them on SSO? — feeds the Q4 roadmap cut
+analysis-scope: [billing, data-export]   # area slugs from the catalog, or: all
+initiatives: [q4-enterprise-sso]         # append the goal's initiative when it isn't listed
+```
+
+The `last-deep-analysis:` / `analysis-goal:` / `analysis-scope:` keys are replaced each run — never stacked; history lives in the `intel/` records. `initiatives:` is different: a declared-link key (link contract: `governance/link-schema.yaml`) that accumulates — append, never remove entries other runs or skills declared. Bump `updated:` in the same edit. `analysis-scope:` is this run's coverage — leave `competes-areas:`/`competes-features:` for where we actually meet them.
 
 ---
 
@@ -99,7 +124,7 @@ Based on internal context, we **don't yet know:**
 - [Gap 2]: Current pricing model for Competitor Y
 - [Gap 3]: Distribution channels for Competitor Z
 
-**Should the skill fill these gaps with web research, or do you want to provide additional context first?**
+**Filling these with web research is the default** — the go-gate's one "go" already covered it. Name a gap here only if you hold context that closes it faster than the web will.
 
 ---
 

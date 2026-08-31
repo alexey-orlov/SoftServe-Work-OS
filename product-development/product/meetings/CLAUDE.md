@@ -13,6 +13,14 @@ Summaries and transcripts file under exactly these type folders, each a
 `{docs,transcripts,summaries}` triad. `/process-meeting` routes into them; no skill ever
 invents a new folder from a meeting title.
 
+**The transcript boundary.** Internal-meeting and retro transcripts stay here, under
+`meetings/{type}/transcripts/` and `retros/transcripts/` — they never move. Customer-facing
+raw material (interviews, customer calls) files to the central tagged archive instead,
+`user-insights/transcripts/{date}-{account}-{type}.md` — a call's summary goes to the
+account's `calls/summaries/`, an interview's session report to
+`user-insights/{date}-interview-insights.md` — never under `meetings/`. `/process-meeting`
+makes the call at filing time.
+
 **Recurring series** — one folder per series your team actually runs. The template ships
 three examples from a sprint-based setup — `standup` · `sprint-planning` · `team-bi-weekly`
 — rename or replace them to match your own cadences: a PM org that sits outside the dev

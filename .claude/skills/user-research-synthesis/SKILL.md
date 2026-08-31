@@ -649,14 +649,15 @@ After saving, close the loop — full contract: `governance/write-back-contract.
 3. In the artifact's header, link the source material it was derived from.
 4. End your reply by listing every repo path you wrote or updated.
 
-**Ledger (ingest clause):** when handed raw transcripts directly (not already processed by
-`/process-meeting`), file each one to
-`product-development/product/user-insights/transcripts/{date}-{account}-interview.md` (tag frontmatter per `governance/link-schema.yaml` — filter the archive by `type:`, `customers:`, `areas:`, `features:`, `initiatives:` instead of by folder)
-(+ nav line in that folder's CLAUDE.md, + the dated History cross-link in each
-participating account's `account-context.md` — the same filing contract as
-`/process-meeting`'s interview category) and append its repo path to
-`governance/processed.txt` (one repo-root-relative path per line, kept
-sorted) — otherwise `/context-update` sweeps will re-discover them.
+**Raw transcripts (delegation clause):** when handed raw transcripts directly (not already
+processed by `/process-meeting`), this skill never files them itself — hand them to
+`/process-meeting` first (batch mode for 4+, interview category per conversation: each is
+filed to the central archive with tag frontmatter, the session report written,
+feature-request records created, the ledger appended — the 3+/4+ interview ladder governs
+who SYNTHESIZES, not filing, which is per-conversation and unbounded), then synthesize
+over the filed set. One filing pipeline, one writer per surface
+(`governance/write-back-contract.md` rule 6 and the one-writer table); the cost is one
+"filing N transcripts first…" line before the synthesis starts.
 
 ---
 

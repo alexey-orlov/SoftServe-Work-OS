@@ -141,9 +141,9 @@ else runs `/weekly-review` manually whenever they like.
 A missed-run catch-up is fine, but if the team wants a runner tied to no machine at all,
 switch to the GitHub Action below and delete the scheduled task — never run both.
 
-The task's prompt: run `/weekly-review --digest` for the current ISO week; write/update
-the week's digest file in place; include the feature-request lines from
-`product-development/product/user-insights/feature-requests/`; post Part A via the team
+The task's prompt: run `/weekly-review --digest` for the current ISO week per
+`.claude/skills/weekly-review/SKILL.md` (the skill owns what the digest contains);
+write/update the week's digest file in place; post Part A via the team
 messenger MCP when one is connected (Slack, Teams), otherwise note "not posted — repo
 record only"; never edit gated files headlessly (file a proposal in
 `governance/proposals/` instead — the inbox itself sits under gated `governance/`, so

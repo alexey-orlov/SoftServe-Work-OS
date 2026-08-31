@@ -202,6 +202,7 @@ conflicts — to `reports/{date}-daily-batch.md` per
 - [ ] Summary follows the loaded reference format; frontmatter links declared (`initiatives:` resolved or empty — the writer resolves, never the reader); transcript tags proposed and confirmed
 - [ ] Every action item has an owner and a due date (flag "schedule within 48h" when missing)
 - [ ] Every decision filed via `/decision-log-entry` and linked, with rationale — never inline-only
+- [ ] Feature-request record created + linked for every request found (`tracker_ref: "-"` until `/create-tickets push`)
 - [ ] PII pass done on customer-facing summaries (roles only, Art. 9 clean)
 - [ ] Initiative Activity lines appended for every named slug (same change)
 - [ ] Navigation rows appended at the END; new folders got a stub + parent entry
@@ -234,6 +235,6 @@ keep the file sorted — so `/context-update` sweeps know the artifact is handle
 - `/meeting-feedback` — was the meeting itself effective (scorecards, not summaries)
 - `/user-research-synthesis` — cross-interview synthesis once 4+ interviews are processed
 - `/context-update` — folds non-meeting artifacts; its sweeps delegate raw transcripts here
-- `/prioritize-requests` — reads the Full-variant Feature Requests tables across accounts
+- `/prioritize-requests` — reads the feature-request records this skill files, plus the Full-variant Feature Requests tables across accounts
 - `/weekly-review`, `/portfolio-pulse` — periodic rollups that read what this skill files
 - `/decision-log-entry`, `/create-tickets`, `/slack-message` — downstream record + share paths

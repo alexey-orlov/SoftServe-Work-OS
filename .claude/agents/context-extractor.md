@@ -38,8 +38,10 @@ one-line note.
   dispatched domain(s) — a name-collision company is worse than no answer, so a fact is
   attributable only if the page clearly concerns the anchored company. Acceptable sources:
   the company's own site/docs/pricing, regulatory filings, and reputable press. Forums,
-  rumor, and AI-generated aggregator pages are not sources. Record the URL and date with
-  every fact.
+  rumor, and AI-generated aggregator pages are not sources. Company-stated facts come only
+  from the roots you were dispatched with — a company page outside them comes back under
+  `out_of_scope:`, never used as a source; regulatory filings and reputable press stay
+  admissible with URL + date. Record the URL and date with every fact.
 - **Privacy:** if a source is sensitive personal or financial material (compensation,
   board packets, personal records), extract only the business facts the items ask for and
   set the quote to `(withheld — {source name})`. Never reproduce personal data, salaries,
@@ -59,6 +61,8 @@ sources_read:
   - {path or URL} ({pages/sections covered, or "full"})
 unreadable:
   - {path} — {why, and what would make it readable}
+out_of_scope:                                        # web mode — outside the dispatched roots
+  - {URL} — {what it appears to be}
 items:
   {item-id}:
     status: found | conflict | absent

@@ -23,7 +23,8 @@ you're querying by tag (customer, area, feature, initiative).
 ## Writers
 
 `/process-meeting` (interview and customer-call categories) files transcripts here with
-their tags proposed from content; `/user-research-synthesis` when handed raw transcripts
-directly; `/retag-transcript` corrects tags. Transcripts are the faithful record — raw
+their tags proposed from content — raw transcripts handed straight to
+`/user-research-synthesis` are delegated to `/process-meeting` for filing too; the
+synthesis skill never writes here. `/retag-transcript` corrects tags. Transcripts are the faithful record — raw
 names may appear here; the roles-only PII rule applies to the summary layer, never
 retroactively to transcripts.

@@ -24,7 +24,7 @@ group: <one-of-eight>    # repo convention consumed by this index; Claude Code i
 ```
 
 - **No restated defaults.** `disable-model-invocation` and `user-invocable` are omitted: every skill here is deliberately both user- and model-invocable — descriptions are the natural-language router, cron runs (`/weekly-review --digest`, `/wiki-lint`) and skill-to-skill orchestration (`/prd-challenge`, `/context-update` → `/process-meeting`) require model invocation, and `disable-model-invocation: true` would also drop the description from context and block scheduled/subagent use. Set a non-default flag only when a new skill genuinely needs it (external side effects on explicit user timing → `disable-model-invocation: true`; background knowledge with no meaningful command → `user-invocable: false`) and record the reason here.
-- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: customize-os at ~1,510).
+- **Description budget:** Claude Code truncates skill listings at 1,536 characters — keep the NOT-for tail inside the cap (largest today: job-spec-draft at ~1,530).
 - **`argument-hint` is always double-quoted** — unquoted `[...]` parses as a YAML list.
 - **No other keys.** `group` is the only custom key; if tooling ever needs machine-readable extras, use the Agent Skills spec's `metadata:` map instead of new top-level keys.
 

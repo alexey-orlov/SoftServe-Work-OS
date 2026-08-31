@@ -22,4 +22,10 @@ Everything learned from users, in one tree — cross-interview synthesis reports
 
 ## Writers
 
-`/process-meeting` (interview + customer-call categories) files transcripts to `transcripts/` with proposed tags, writes the session report here (`{date}-interview-insights.md`) or the account's call summary, creates feature-request records, and adds a dated History cross-link line to each participating customer's `account-context.md` — resolving every participant to an existing account, confirming before creating a new one, asking where to file anonymous panelists. `/retag-transcript` corrects transcript tags. `/user-research-synthesis` writes cross-interview syntheses here (`{topic}-{date}.md`), querying transcripts by tag; `/interview-guide` and `/journey-map` write their on-demand subfolders; `/create-tickets` push mode sets `tracker_ref` on feature-request records.
+| Skill | Writes here | Never |
+|---|---|---|
+| `/process-meeting` | Per-conversation folding — files each interview / customer-call transcript to `transcripts/` with proposed tags, writes the session report here (`{date}-interview-insights.md`) or the account's call summary, creates feature-request records, and adds a dated History cross-link line to each participating customer's `account-context.md` — resolving every participant to an existing account, confirming before creating a new one, asking where to file anonymous panelists | Never synthesizes beyond the session — 4+ interviews across sessions are `/user-research-synthesis`'s job |
+| `/user-research-synthesis` | Cross-interview syntheses here (`{topic}-{date}.md`), once 4+ interviews are filed, querying `transcripts/` by tag | Never files transcripts (hands raw ones to `/process-meeting`), never edits raw material, never creates feature-request records |
+| `/context-update` | Non-meeting folding and the sweep — facts from threads, docs and pasted material onto the pages that own them; feature-request records when the request arrives outside a transcript | Never writes summaries or syntheses; delegates every unprocessed transcript to `/process-meeting` |
+
+`/retag-transcript` corrects transcript tags; `/interview-guide` and `/journey-map` write their on-demand subfolders; `/create-tickets` push mode sets `tracker_ref` on feature-request records.

@@ -20,4 +20,4 @@ Product context, PRDs, customers, strategy, decisions, and the team handbook.
 - [planning/](planning/) — Daily plans and weekly priorities (`/daily-plan`, `/weekly-plan`); read back by `/weekly-review`
 - [launches/](launches/) — Filled launch checklists and gate records, one per feature; `/launch-checklist` writes here
 - [prototypes/](prototypes/) — Clickable prototypes and prototype artifacts by feature slug: HTML previews, feedback logs, challenge reports, external-tool prompts, plus the shared design-system cache
-- [user-insights/](user-insights/) — Everything learned from users: cross-interview syntheses, raw interview transcripts (`interviews/`), customer feature requests (`feature-requests/`), interview guides and journey maps
+- [user-insights/](user-insights/) — Everything learned from users: cross-interview syntheses, the central tagged transcript archive (`transcripts/` — interviews and customer calls), customer feature requests (`feature-requests/`), interview guides and journey maps

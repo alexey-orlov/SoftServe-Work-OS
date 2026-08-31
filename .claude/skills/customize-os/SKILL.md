@@ -167,8 +167,10 @@ once per status file which repo this is (record it as `mode:`):
 
 Before the first target: confirm the mode (above), and capture the org's name, product
 name(s), official website domain, and a one-paragraph description in the user's own
-words. The domain anchors any later web research; the description seeds nothing by itself
-— population works from sources, not from this paragraph alone.
+words. The domain is where later web research starts, not a settled source — the roots
+under it are discovered and confirmed with the user when that research runs
+(`targets/context-core.md`); the description seeds nothing by itself — population works
+from sources, not from this paragraph alone.
 
 ## The auto-sync close (once per instance, at the close of the run)
 

@@ -4,10 +4,16 @@ Per-interview processing for discovery/research conversations — 1 to 3 intervi
 single session. PII rules live in SKILL.md and apply here.
 
 **Scope boundary:** this category extracts quotes, themes, and insight cards from
-*individual* conversations, same-day. Synthesizing **4+ interviews** into a unified research
-report — cross-interview patterns, personas, Mom Test validation, affinity mapping — is
-`/user-research-synthesis`. After processing 3+ interviews, offer the handoff: "You now have
-[N] processed interviews. Run /user-research-synthesis to find cross-interview patterns?"
+*individual* conversations, same-day.
+
+**Counts — one ladder** (the full ladder lives here; single rungs are mirrored in
+process-meeting/SKILL.md, user-insights/CLAUDE.md and user-research-synthesis — change
+them in the same change)**:** the lane is the 1–3 interviews of a single
+session; at **3+ processed** offer the handoff — "You now have [N] processed interviews.
+Run /user-research-synthesis to find cross-interview patterns?"; from **4+**
+`/user-research-synthesis` owns the cross-interview work — patterns, personas, Mom Test
+validation, affinity mapping; **5–8** is the range where themes saturate, so the synthesis
+reads best there. Three rungs of one ladder, not three rules.
 
 ## Step 0 — Connect to existing research (before processing)
 
@@ -117,5 +123,6 @@ Cards roll up into one report at
 - [ ] Pain points show count + severity + workaround
 - [ ] At least 3 recommended actions with owners and dates
 - [ ] Insights linked to relevant active PRDs
+- [ ] Feature-request records created + linked for every request in the cards
 - [ ] At least 1 surprise or challenged assumption captured
 - [ ] 3+ interviews → `/user-research-synthesis` handoff offered

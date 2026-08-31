@@ -3,6 +3,8 @@ updated: [YYYY-MM-DD]
 slug: [kebab-case — must equal the folder name]
 tier: [direct | indirect | status-quo — as registered in business-info.md]
 last-deep-analysis: [YYYY-MM-DD or -]
+analysis-goal: [- | one line: the question the last deep run answered — replaced each run]
+analysis-scope: []       # that run's coverage: area slugs, or: all — replaced each run
 competes-areas: []       # all | [area slugs] — where we meet them; -except keys carve out exceptions
 competes-areas-except: []
 competes-features: []

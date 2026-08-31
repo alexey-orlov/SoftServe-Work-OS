@@ -34,7 +34,7 @@ Intake rules:
   (board packets, comp data) is accepted as a source, but only steering-safe business
   facts are extracted from it — the privacy contract in root CLAUDE.md wins over
   completeness.
-- **Label sources as they arrive:** kind (deck / site / sheet / doc / export) and how
+- **Label sources as they arrive:** kind (deck / site / docs-site / sheet / doc / export) and how
   current the user says it is. When two sources later disagree, these labels — not
   guessing — decide precedence.
 - **Readability check before extraction:** verify each file opens (`.md`/`.txt`/`.pdf`
@@ -57,7 +57,9 @@ Record everything under **Inputs received**; phase → `gathering`.
 Dispatch `context-extractor` subagents (agent definition in `.claude/agents/`): each
 batch gets the relevant manifest items (id, section, `what`) and its sources, and returns
 a fact sheet — found (value + verbatim quote + exact source) / conflict (both readings) /
-absent. The orchestrating session reads fact sheets only, never the sources themselves.
+absent. The orchestrating session reads fact sheets only, never the sources themselves
+(one exception: the Step 7 source-discovery pass, which fetches candidate roots to play
+back — discovery, not extraction).
 Persist returned facts into the facts annex (format below) as they arrive, so an
 interrupted run resumes without re-extraction.
 
@@ -144,7 +146,16 @@ table, one line per group with per-item detail beneath:
 
 ## Step 7 — Web enrichment (only what the user selected)
 
-Dispatch `context-extractor` in web mode — anchored on the confirmed official domain,
+**Find and confirm the sources first — nothing is fetched for extraction before that
+yes.** Bounded discovery from the preflight domain: fetch the root, follow its nav one
+level, and collect candidate roots — marketing / product pages, docs or help, developer,
+pricing, trust, newsroom. Play the candidates back as ONE table (URL · what it appears to
+be · which GAP groups it serves) and ask ONE question: confirm all, drop the ones that
+don't apply, add a root the discovery missed. Record the confirmed set in the annex's
+`sources:` list — `kind: site` for the marketing/product web, `docs-site` for a
+documentation or developer site (both in Step 1's kind vocabulary).
+
+Then dispatch `context-extractor` in web mode — anchored on the confirmed root set,
 selected GAP items only. Rules: authoritative sources only; **fills GAPs only** — a web
 finding that conflicts with an already-installed value is reported, never applied;
 anything ambiguous stays GAP. Install per Step 4, verify per Step 5 (new items only),

@@ -45,7 +45,7 @@ Stay in the conversation. Sharpen the problem, walk options and risks, name the 
 1. Re-read the initiative page, the PRD, and every artifact linked since the last run (new call summaries, research syntheses, investigations, competitive updates, code answers). The page's `## Instructions` section is standing steering — follow it; `## Sources` lists the initiative's source-of-truth documents in priority order (first wins on conflict) — consult them before outside material.
 2. Fold new evidence into the PRD: close `[GAP:]` markers the evidence resolves, update numbers, bump the stage when the content supports it.
 3. Run the auto-research pass on the gaps that remain (Step 5).
-4. Update the initiative page (`_updated:`, Activity line, new artifact links).
+4. Update the initiative page (`updated:`, Activity line, new artifact links).
 5. Close with the readout — leading with **what moved this run**.
 
 Never refuse to draft because **evidence** is missing: always draft, always mark — then close what you can yourself (Step 5). A `[GAP:]` in the right section beats a blocked PM; a gap closed in the same run beats both. What does wait is first-run **intent**: one checkpoint before the first file exists (Step 2), because a guessed segment or hypothesis doesn't land as a `[GAP:]` — it lands as registered truth. After that one reply, nothing stops the loop again.
@@ -132,6 +132,8 @@ Whatever the section names, route the core evidence slots to wherever the templa
 | Solution Review | 1000–1500 | Full spec: edge cases, behavior, rollout |
 | Launch Readiness | 1500–2000 | Rollback, kill criteria, go/no-go |
 | Impact Review | 500–800 | Results vs targets, learnings |
+
+**Status stamp.** The checkpoint's "go" approves the direction, not the document: on first creation set the installed template's status field (the Meta table's **Status** row) to `Draft` and record the approval as the first Appendix changelog row — `[date] | direction approved at intake | [PM]`. The changelog is written from first creation even when the stage trim drops the rest of §9 — a kickoff-stage PRD carries §9 as just that one row. It moves to `Approved` only when the PM approves the PRD itself, with its own changelog row and a bumped **Last Updated**. Status lives in the document, never in the frontmatter — that carries links only (`governance/link-schema.yaml`).
 
 **Writing:** the template's own voice notes first, then the PM's voice per `product-development/product/handbook/writing-guides/` — real quotes, actual numbers, named stakeholders, no corporate filler. Quality bar: the Quality Checklist at the bottom of the template — the single checklist; check the items for the current stage before presenting.
 

@@ -30,6 +30,14 @@ duplicate crons, nothing tied to one person's laptop):
 
 ## One data pass (read in this order)
 
+**Git is enrichment, not a precondition.** Check once before step 1 (`git log -1` in the
+repo). No repository, or a history shorter than the window, and you skip step 2, the
+status-change detection in step 1, the catalog-flip read in step 5, and the Contributors
+count: Repo Health comes from file signals (files added in the window, modification
+dates) and the ledger instead, and the run prints one honest line — "no git history here —
+movement read from files and the ledger only". A run that quietly reports an empty week
+because git was missing is the bug.
+
 1. `product-development/product/initiatives/` — every page with `status: active` (frontmatter; legacy `_status:` reads the same), plus any page whose status changed during the week. Quiet actives get a `paused?` proposal in the digest (this skill is the named proposer of `paused`). Pull each page's Activity lines dated in
    the window and its Open loops with due dates.
 2. Git commits from the last 7 days across `product-development/` — catches changes no
@@ -37,15 +45,25 @@ duplicate crons, nothing tied to one person's laptop):
 3. `product-development/product/decisions/` — entries dated this week. Each entry's
    `initiatives:` frontmatter (legacy `Initiative:` header) routes it: a named slug → that initiative's bullet; empty → "Also
    this week".
-4. The week's meeting and call summaries (`meetings/*/summaries/`,
-   `customers/accounts/*/calls/summaries/`) — their `initiatives:` frontmatter (legacy `Initiatives touched:`) routes
-   the same way.
-5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint.
+4. The week's summaries — meetings and calls (`meetings/*/summaries/`,
+   `customers/accounts/*/calls/summaries/`) plus research
+   (`user-insights/*-interview-insights.md` session reports and the
+   `user-insights/{topic}-{date}.md` cross-interview syntheses) — their `initiatives:`
+   frontmatter (legacy `Initiatives touched:`) routes the same way.
+5. `product-development/product/strategy/current-quarter.md` — for the quarter checkpoint;
+   the latest file in `strategy/roadmaps/` when the team keeps one; and any
+   `product-development/feature-index.yaml` status flip in the week's diff (`planned` →
+   `live` / `retired`) — read only, `/feature-launch-gate` is the catalog's one status writer.
 6. The latest report in `governance/health/` — staleness count.
 7. `product-development/product/user-insights/feature-requests/` — records with `requested:`
    in the window, and their `tracker_ref` state (`"-"` = awaiting tracker push). When a
    tracker MCP is connected (Linear / Jira / Asana), cross-check tickets labeled
    `customer-request` created in the window.
+8. Transcripts dated in the window — `product-development/product/user-insights/transcripts/`
+   (the central customer-facing archive) and `meetings/*/transcripts/` (internal meetings
+   and retros, which stay there by design) — diffed against `governance/processed.txt`.
+   Carry two numbers into Repo Health: how many landed this week, with their accounts, and
+   how many are not yet folded.
 
 **Part B additionally:** `planning/{YYYY}-W{XX}-weekly-plan.md` (what
 you intended — if none exists, note "week wasn't planned, reviewing what happened only" and
@@ -61,14 +79,24 @@ connected: Linear/Jira for completed tasks, analytics for launched-feature metri
 
 ### Initiatives
 
+**{Area}**
+
 - **[{slug}]({link to page})** ({status}) — {1-2 lines: what moved, from this week's Activity}
   - ⚠️ {overdue open loop — owner — days overdue} (only when true)
 - **{slug}** (active) — no movement this week. {One line: what it's waiting on, from Open loops.}
+
+{repeat per area — group by each initiative's `areas:` frontmatter, display names from
+`feature-index.yaml`; a page declaring only `features:` gets its area resolved through the
+catalog; an initiative spanning two areas is listed under the first. One area in play →
+flat list, no header.}
+
+Quiet this week: {catalog areas with no active initiative — names only} (omit when none)
 
 ### Also this week (no initiative)
 
 - **Decisions:** {title} — {one line} ({link})
 - **Customer calls:** {customer}: {key takeaway, role-attributed quote if relevant}
+- **Research:** {session report or cross-interview synthesis} — {one line} ({link})
 - **Feature requests:** {request} — {account} — {pending push | {tracker_ref}} ({link to record})
 - ⏳ {N} request(s) awaiting tracker push — `/create-tickets push` (only when N > 0)
 - **Analytics:** {metrics, queries, schemas, experiments that changed}
@@ -79,7 +107,8 @@ connected: Linear/Jira for completed tasks, analytics for launched-feature metri
 
 - {Open loop due within 7 days} — {owner} — {due date} — {initiative}
 - {Launch or gate expected: {initiative} → `/feature-launch-gate`}
-- **Quarter checkpoint:** {one line — which current-quarter objective this week's movement served, or "no objective moved this week"}
+- **Quarter checkpoint:** {one line — which current-quarter objective this week's movement served, or "no objective moved this week"; when current-quarter.md is still the unfilled template, say so once — "quarter not filled in — `/customize-os`" — and move on}
+- **Catalog:** {`{feature}` planned → live (shipped {date}) / retired, one line} (only when a status flipped this week; add the roadmap in the same line when the latest `roadmaps/` file changed)
 
 ### ⚡ Top 3 Things to Know
 
@@ -91,6 +120,12 @@ connected: Linear/Jira for completed tasks, analytics for launched-feature metri
 
 - Files added: {N} · Contributors: {N} of {team size} {— first-time contributor 🎉 if any}
 - Stale files (latest /wiki-lint report): {N}
+- Transcripts: {N} this week ({accounts}){ · {M} not yet folded — `/process-meeting`, only when M > 0}
+
+### 🔎 Where to look
+
+- {The one page worth opening this week} ({link}) — {why, half a line}
+- {Second, only when there is one}
 ```
 
 **If nothing changed this week, don't skip it.** Post the digest anyway with:
@@ -116,6 +151,8 @@ The gentle nudge prevents the repo from going silent without being preachy.
    no baseline for next week's diff. A `--digest` (headless) run posts automatically when
    a messenger MCP is connected and otherwise notes "not posted — repo record only" in its
    run summary; interactive runs show the draft and ask before posting.
+7. Drop empty categories in "Also this week" — no stub bullets, no "none this week". If
+   every category is empty, the section goes with them.
 
 ## Part B — Execution Review (default; skipped by --digest)
 
@@ -172,8 +209,10 @@ to `reports/CLAUDE.md` on first write of the week.
 
 ## Output quality self-check
 
-- [ ] Every active initiative has a bullet, silent ones included
-- [ ] Declared headers routed first; git diff only filled the gaps
+- [ ] Every active initiative has a bullet, silent ones included, grouped by area
+- [ ] Declared links routed first (`initiatives:` frontmatter, legacy headers read the same);
+      git diff only filled the gaps — and was skipped honestly when there is no history
+- [ ] Empty "Also this week" categories dropped, not stubbed
 - [ ] Part A under 500 words, Slack-ready, saved to the repo regardless of posting
 - [ ] Part B compares against the actual weekly plan (or says the week wasn't planned)
 - [ ] Learnings are specific and actionable; at least one thing that didn't go well, with a
