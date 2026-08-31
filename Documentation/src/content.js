@@ -30,7 +30,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v4.3 · August 2026",
+  version: "v4.4 · August 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -327,6 +327,7 @@ const doc = {
         p("Meeting processing, decision logging, status updates and digests, personal planning."),
         table(["Skill", "What it does", "You give it", "You get"], [
           ["`/process-meeting`", "One entry point for every meeting record — customer calls, interviews, internal meetings, retros", "A transcript (pasted, a file, or from a connected tool)", "Filed transcript + summary; decisions and lessons routed; account and initiative pages updated"],
+          ["`/retag-transcript`", "Corrects the tags on a filed transcript — the one sanctioned way to change filing metadata", "The transcript and what is wrong about its tags", "Corrected tags, every change logged; the transcript body untouched"],
           ["`/decision-doc`", "Deliberates a decision *before* it is made — options, tradeoffs, recommendation, sign-off routing", "The decision to make and what you know", "A decision document; files the record once decided"],
           ["`/decision-log-entry`", "Records a decision *after* it is made — reasoning, options, tradeoff, who was in the room", "What was decided, why, alternatives", "A dated entry in `product/decisions/`"],
           ["`/meeting-agenda`", "Creates a structured agenda", "Topic, attendees, duration, decisions needed", "A ready-to-send agenda"],
@@ -337,6 +338,7 @@ const doc = {
           ["`/weekly-plan`", "Sets next week's priorities against the quarter", "Your candidates for the week", "A prioritized weekly plan in `product/planning/`"],
           ["`/daily-plan`", "A compact daily plan with context", "Nothing required", "TL;DR, top 3, schedule, heads-up"],
           ["`/portfolio-pulse`", "Exec-grade synthesis across accounts and active features", "Nothing — reads accounts, initiatives, reports", "Health, risks, expansion signals, top 3 priorities, drafted messages"],
+          ["`/overview`", "A one-screen orientation on any area, feature or initiative — status, active work, customer signal, the numbers, decisions", "One name: an area, a feature or an initiative", "The orientation in the chat, ending with a five-item read-next path; nothing is written"],
         ], [1800, 3200, 2200, 2600]),
         h3("Definition", "g-def"),
         p("Strategy, PRDs, metric definitions, impact sizing, experiment design — and the critique passes that stress-test them."),
@@ -368,7 +370,7 @@ const doc = {
           ["`/pm-handoff`", "Readiness gate for handing requirements to BA / TPM / PO", "An initiative or job", "READY / NOT READY with a checklist"],
           ["`/launch-checklist`", "Prioritized, dependency-mapped launch plan sized to the launch", "What you're launching", "The checklist in `product/launches/`"],
           ["`/feature-results`", "Post-launch analysis and results", "Feature, hypothesis, actual results", "A results record"],
-          ["`/prioritize-requests`", "Clusters inbound requests by the job behind them and routes each theme", "Call summaries or a pasted pile of requests", "One living prioritization file"],
+          ["`/prioritize-requests`", "Clusters inbound requests by the job behind them, sizes demand by how many accounts asked, and routes each theme", "Nothing — reads the filed requests and call summaries; or a pasted pile. One name narrows it to that initiative, feature or area", "One living prioritization file; a narrowed run saves its own board beside it"],
         ], [1800, 3400, 2200, 2400]),
         h3("Discovery: market analysis", "g-market"),
         table(["Skill", "What it does", "You give it", "You get"], [
@@ -377,7 +379,7 @@ const doc = {
         h3("Discovery: customers", "g-cust"),
         table(["Skill", "What it does", "You give it", "You get"], [
           ["`/interview-guide`", "JTBD-based interview guides", "Topic and who you'll interview", "A ready interview guide"],
-          ["`/user-research-synthesis`", "Turns interviews into actionable insights", "Interview notes or transcripts", "A synthesis report in `user-insights/`"],
+          ["`/user-research-synthesis`", "Finds what is true across the filed interviews — themes, frequencies, contradictions; can also weigh the evidence for and against one hypothesis", "A topic or one name (an initiative, area, feature or customer) — it finds the interviews itself", "A synthesis report in `user-insights/`, opening with which interviews it read and which it skipped"],
         ], [1800, 3400, 2200, 2400]),
         h3("Discovery: product analytics", "g-analytics"),
         table(["Skill", "What it does", "You give it", "You get"], [
@@ -402,9 +404,11 @@ const doc = {
           ["`/connect-code`", "Registers your product's code repositories and grants read-only access on your computer", "The repository link", "A registry entry; local read access"],
           ["`/context-update`", "Folds new material into the wiki — threads, documents, facts — routed by type", "A path, pasted content, or nothing (sweep the inbox)", "Updated pages, navigation and ledger"],
           ["`/wiki-lint`", "Health-checks the repository and fixes mechanical drift", "Nothing", "A dated health report; fixes applied; suggestions listed"],
+          ["`/docs-update`", "Changes this documentation — or checks every statement in it against the repository and corrects what went stale", "What to change; or nothing, to check the whole of it", "The updated documentation site, and a report of what changed where"],
           ["`/feature-launch-gate`", "Pre-launch completeness check of the repository for a feature", "The feature", "A ship / not-yet verdict"],
           ["`/session-retro`", "End-of-session sweep for durable takeaways", "Nothing", "Rules routed to the right place, or a proposal"],
           ["`/demo-data`", "Generates a small, clearly marked set of demo content — an initiative, meetings, decisions, research — through the same pipeline real records take, and removes it cleanly later", "A yes to the scenario it proposes", "Demo content, all `[DEMO]`-marked; one-command removal"],
+          ["`/demo-showcase`", "Builds the demo content a set of scenarios needs, then runs every scenario the way the presenter will and reports which ones actually work", "The scenarios the demo must show, and the outcome each should produce", "Demo content, a pass/fail run log with the evidence, and presenter slides on request"],
         ], [1800, 3400, 2200, 2400]),
         h2("Agents", "agents"),
         p("You don't run agents directly — skills do. Knowing them explains where a report's perspectives come from."),
@@ -419,6 +423,7 @@ const doc = {
           ["PO / BA reviewer", "Rules, acceptance criteria and ticket-cuttability of a job spec", "`/job-spec-challenge`"],
           ["QA lead reviewer", "Testability of a job spec as written", "`/job-spec-challenge`"],
           ["Code explorer", "Read-only investigator of your product's codebase; returns findings with file-and-line citations", "`/code-qa`"],
+          ["Context extractor", "Read-only reader of your own documents; every fact it returns carries a quote and its source, and anything the documents don't say comes back marked missing rather than guessed", "`/customize-os`"],
         ], [2200, 4400, 2800]),
       ]},
 
