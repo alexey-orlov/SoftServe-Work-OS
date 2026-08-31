@@ -13,3 +13,6 @@ The single source of the documentation and the script that builds the site from 
 - [pillars.jpg](pillars.jpg) — Illustration for *Work OS 101*: the six capabilities (AI PM Jumpstart, Session 1 deck).
 - [levels.jpg](levels.jpg) — Illustration for *Work OS 101*: the four levels of AI acceleration (same deck).
 - [admin-duties.jpg](admin-duties.jpg) — Illustration for *Everyday work*: the Work OS admin's five ongoing duties (AI PM Jumpstart, Session 3 deck).
+- [feature-catalog.jpg](feature-catalog.jpg) — Illustration for *Key context principles*: the console's Features page (areas → features → status → targeting initiative).
+- [initiatives.jpg](initiatives.jpg) — Illustration for *Key context principles*: the console's Initiatives page (one living page per bet, artifact counts).
+- [initiative-artifacts.jpg](initiative-artifacts.jpg) — Illustration for *Key context principles*: an initiative page's Artifacts panel (linked files, In place / Pending).
