@@ -13,7 +13,8 @@ _extracted-personal/
 # OS Console per-user prefs overlay (pins, recents) — never canonical truth
 os-console/state.json
 
-# Python bytecode caches (the console's Python runtime)
-__pycache__/
+# npm's install dir — the console is zero-dependency, but a stray install
+# must never land in the repo
+node_modules/
 
 .DS_Store

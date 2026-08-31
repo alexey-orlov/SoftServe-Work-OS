@@ -17,22 +17,22 @@ tile groups and the Gated-files group headings share one vocabulary (Steering fi
 System rules), with a quiet color code per Library group: the group speaks through the
 tile frame and icon tint while titles stay neutral ink. Second-level group pages
 (Templates, Competition, Skills) share one skeleton — crumbs back to Library, title +
-one-line purpose, tile grid. Zero install: it runs on the Python 3.8+ standard library —
-no packages, no package manager, nothing beyond the interpreter — with the frontend's one
-MIT-licensed library vendored in `vendor/`.
+one-line purpose, tile grid. Zero install: it runs on the Node 18+ standard library —
+no dependencies, no `npm install`, ever, nothing beyond the runtime — with the frontend's
+one MIT-licensed library vendored in `vendor/`.
 
 **Read this when:** You want the human-facing window onto the OS, or you are extending it.
 
 ## Run
 
 ```bash
-python3 os-console/server.py     # Windows: py -3 os-console\server.py
+node os-console/server.js
 ```
 
 Then open http://127.0.0.1:4820 (set `OS_CONSOLE_PORT` to change the port). The server
-binds localhost only.
+binds localhost only. The same command works on macOS, Linux and Windows.
 
-No Python on the machine? Open [console.html](console.html) instead — the
+No Node on the machine? Open [console.html](console.html) instead — the
 zero-setup light mode below.
 
 ## Light mode — the zero-setup snapshot
@@ -40,10 +40,10 @@ zero-setup light mode below.
 `console.html` is the whole console as ONE self-contained read-only file: the same
 frontend with every view's data, all wiki file contents, a client-side search index, and
 the built docs site baked in. Open it from the clone, a file share, or any static host —
-no runtime, no install, nothing to approve. Built by `build-console.py` (same Python stdlib);
+no runtime, no install, nothing to approve. Built by `build-console.js` (same Node stdlib);
 on GitHub the `build-console` workflow rebuilds and commits it on every push to main, so
 the file in the repo is always the latest state of main. Azure instances run
-`python3 os-console/build-console.py` from a pipeline (or by hand) instead.
+`node os-console/build-console.js` from a pipeline (or by hand) instead.
 
 **Two modes, one behavior:** the light page probes `http://127.0.0.1:4820/api/ping`
 (the server's one CORS-open endpoint — a static "I am the console" flag, no data) on
@@ -75,7 +75,7 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
   connection setup are handed off via the copy-prompt popup (`promptModal` — prompt text,
   short instruction, Copy button; no URL scheme, by decision). Three writes ARE
   reimplemented server-side because they are switches, not judgment: the **auto-sync
-  flip** (`pylib/actions.py autosync_set` — the same three settings switches + strategy
+  flip** (`lib/actions.js autosyncSet` — the same three settings switches + strategy
   and the same guards as `/auto-sync`; **if that skill changes, change this module in the
   same commit**), **gated-list add/remove** (comment-preserving line surgery +
   CODEOWNERS regen via `gated-paths.sh`, Azure path-filter reminder surfaced), and
@@ -96,11 +96,13 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
   who approved or merged it), merge commits are skipped, bot/CI/agent identities
   filtered — so it counts the same whether work lands as direct pushes or through
   pull requests, and needs no platform CLI.
-- **Live refresh.** The server watches the repo (a polling scanner, `.git` noise
-  filtered to ref/HEAD moves) and streams change events over SSE (`/api/events`);
-  open views re-render automatically, within ~2s of a change. Auto-refresh holds back while the person is typing or has a
-  modal open — the ⟳ button shows a dot and catches up on blur. Where `fs.watch` is
-  unavailable the button alone still works.
+- **Live refresh.** The server watches the repo (a polling scanner on a 1.5s tick —
+  never `fs.watch`, whose per-platform recursion and rename semantics differ; `.git`
+  noise is filtered to ref/HEAD moves) and streams change events over SSE
+  (`/api/events`); open views re-render automatically, within ~2s of a change.
+  Auto-refresh holds back while the person is typing or has a modal open — the ⟳
+  button shows a dot and catches up on blur, and is the whole story for a snapshot
+  opened without a server.
 - **Documentation is embedded as a black box.** The sidebar's Documentation group is
   derived from the built site's own section tabs; each entry shows
   `Documentation/work-os-docs.html` in an in-app panel (`/docs-site`), deep-linked via
@@ -118,13 +120,14 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
 
 ### Files
 
-- [server.py](server.py) — HTTP server: API routes, static files, SSE live refresh, localhost-only
+- [server.js](server.js) — HTTP server: API routes, static files, SSE live refresh, localhost-only
+- [package.json](package.json) — Name, `"type": "module"`, the Node 18+ engine floor, and the two scripts (`npm start`, `npm run build`); no `dependencies` key, by rule
 - [state.json] — created on demand; per-user prefs overlay (gitignored)
-- [build-console.py](build-console.py) — Bakes the zero-setup snapshot; run by the build-console workflow on every push to main
+- [build-console.js](build-console.js) — Bakes the zero-setup snapshot; run by the build-console workflow on every push to main
 - [console.html](console.html) — Light mode: the console as one read-only file, no runtime needed; auto-switches to a running full console
 
 ### Subfolders
 
-- [pylib/](pylib/) — Server core (repo safety, policy, git, markdown + YAML parsing) + one adapter per surface
+- [lib/](lib/) — Server core (repo safety, policy, git, subprocess, markdown + YAML parsing) + one adapter per surface
 - [web/](web/) — No-build ES-module frontend: shell, shared UI toolkit, one module per view
 - [vendor/](vendor/) — Vendored marked 12.0.2 (MIT, header retained)

@@ -103,7 +103,7 @@ export function gatedTag(tier, compact = false) {
 // write affordance renders locked there — same layout, honest hint, no 403s.
 
 export const LITE = typeof window !== 'undefined' && !!window.__LITE__;
-export const LITE_HINT = 'Read-only snapshot — run the full console (python3 os-console/server.py) to do this';
+export const LITE_HINT = 'Read-only snapshot — run the full console (node os-console/server.js) to do this';
 
 export function liteLock(node, hint) {
   if (!LITE) return node;
@@ -117,14 +117,14 @@ export function liteLock(node, hint) {
 }
 
 // A view that needs a payload shape the running server does not produce yet —
-// the server process predates the frontend on disk (Python loads at start, the
-// browser reads modules fresh). Say so, never render a silently empty page.
+// the server process predates the frontend on disk (the server's modules load once
+// at start, the browser reads its own fresh). Say so, never render a silently empty page.
 export function staleServerCard() {
   return el('div', { class: 'card' },
     el('h3', {}, 'The running console server is older than this page'),
     el('div', { class: 'hint', style: 'margin-bottom:8px' },
       'The server process was started before the console\'s last update, so it still serves the old data shapes. Restart it, then reload this page:'),
-    el('pre', { class: 'prompt-box' }, 'python3 os-console/server.py'),
+    el('pre', { class: 'prompt-box' }, 'node os-console/server.js'),
   );
 }
 

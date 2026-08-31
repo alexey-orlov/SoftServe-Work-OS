@@ -25,7 +25,7 @@ export function httpErr(status, message) {
   return new HttpError(status, message);
 }
 
-/** Escape a literal string for use inside a RegExp (Python's re.escape). */
+/** Escape a literal string for use inside a RegExp. */
 export function reEscape(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

@@ -1,8 +1,8 @@
 // Subprocess helpers — the two things Node's standard library leaves to the
-// caller that Python's shutil/subprocess gave us for free: PATH lookup
-// (so a missing CLI is reported as "not found" rather than an opaque spawn
-// error, and Windows .cmd/.exe shims resolve) and a decoded, size-safe,
-// timeout-bounded run. Every external command in the console goes through here.
+// caller: PATH lookup (so a missing CLI is reported as "not found" rather than an
+// opaque spawn error, and Windows .cmd/.exe shims resolve) and a decoded,
+// size-safe, timeout-bounded run. Every external command in the console goes
+// through here, and none of them may throw at the caller.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

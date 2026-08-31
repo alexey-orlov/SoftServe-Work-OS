@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "os-console",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["os-console/server.py"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["os-console/server.js"],
       "port": 4820
     }
   ]

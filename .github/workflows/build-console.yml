@@ -26,8 +26,14 @@ jobs:
         with:
           fetch-depth: 0   # full history — the snapshot bakes per-file last-change dates
 
+      # The builder is Node standard library only — no install step, ever.
+      # This pins the floor rather than trusting whatever the runner image ships.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Build console.html
-        run: python3 os-console/build-console.py
+        run: node os-console/build-console.js
         env:
           GH_TOKEN: ${{ github.token }}
 

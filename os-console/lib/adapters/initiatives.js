@@ -246,8 +246,8 @@ export function parsePage(rel) {
     statusKnown,
     statusRaw: statusWord,
     statusText,
-    // Python's str(meta.get('updated', '')) rendered a null frontmatter value as
-    // the literal "None"; an absent value is absent, so it reads as '' here.
+    // An empty `updated:` in the frontmatter reads as absent, not as a value —
+    // the date display and the sort below both want '' rather than a stand-in.
     updated: String(meta.updated || '').slice(0, 10),
     owner: String(meta.owner || ''),
     targets,
