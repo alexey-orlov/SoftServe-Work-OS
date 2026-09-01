@@ -197,27 +197,39 @@ for ip in glob.glob(os.path.join(init_dir, "*.md")):
         continue
     inits[os.path.basename(ip)[:-3]] = (ip, open(ip, encoding="utf-8").read())
 
-ARTIFACT_GLOBS = [os.path.join(PD, "product", "PRDs", "**", "*.md"),
-                  os.path.join(PD, "product", "launches", "**", "*.md"),
-                  os.path.join(PD, "product", "user-insights", "*.md")]
-seen = set()
-for g in ARTIFACT_GLOBS:
-    for a in glob.glob(g, recursive=True):
-        if a in seen or os.path.basename(a) == "CLAUDE.md" or a.startswith(EXEMPT):
+# Frontmatter-driven, NOT path-glob-driven: an instance that renames its files (house
+# naming) must not silently drop out of coverage. Anything that DECLARES an initiative is
+# an artifact of it and belongs on its page. Raw transcripts are exempt (immutable source,
+# never listed as artifacts) and so are feature-request records (they route via triage
+# boards, not initiative rows).
+EXCLUDE_DIRS = (os.path.join(PD, "product", "user-insights", "transcripts"),
+                os.path.join(PD, "product", "user-insights", "feature-requests"),
+                os.path.join(PD, "product", "initiatives"),
+                os.path.join(PD, "inbox"))
+checked = 0
+for a in sorted(content_files()):
+    if a.startswith(EXCLUDE_DIRS) or a.startswith(EXEMPT) or os.path.basename(a) == "CLAUDE.md":
+        continue
+    if not a.startswith(os.path.join(PD, "product")) and not a.startswith(os.path.join(PD, "analytics")):
+        continue
+    head = open(a, encoding="utf-8").read()[:2000]
+    m = re.search(r'^initiatives:\s*\[([^\]]*)\]', head, re.M)
+    if not m:
+        continue
+    base = os.path.basename(a)
+    for slug in [x.strip() for x in m.group(1).split(",") if x.strip()]:
+        checked += 1
+        if slug not in inits:
+            fail("artifact names an initiative with no page — %s -> %s" % (a, slug))
             continue
-        seen.add(a)
-        head = open(a, encoding="utf-8").read()[:2000]
-        m = re.search(r'^initiatives:\s*\[([^\]]*)\]', head, re.M)
-        if not m:
-            continue
-        base = os.path.basename(a)
-        for slug in [s.strip() for s in m.group(1).split(",") if s.strip()]:
-            if slug not in inits:
-                fail("artifact names an initiative with no page — %s -> %s" % (a, slug))
-                continue
-            ipath, ibody = inits[slug]
-            if base not in ibody:
-                fail("artifact is not on its initiative page (write-back rule 8: row + dated Activity line) — %s missing from %s" % (a, ipath))
+        ipath, ibody = inits[slug]
+        if base not in ibody:
+            fail("artifact is not on its initiative page (write-back rule 8: row + dated "
+                 "Activity line) — %s missing from %s" % (a, ipath))
+if inits and checked == 0:
+    fail("join symmetry matched NOTHING — no artifact anywhere declares an initiative. "
+         "Either the frontmatter link contract is unused, or this check has drifted from "
+         "how artifacts are actually written. A check that matches nothing must not pass")
 
 # ---- Check 5b(ii): a [PENDING: path] whose file already exists is a false statement --
 PEND = re.compile(r'\[PENDING:\s*([^\]]+?)\s*\]')
@@ -354,6 +366,9 @@ def read_meta(path):
         text = open(path, encoding="utf-8").read()
     except Exception:
         return None, ""
+    text = text.lstrip("\ufeff")   # a leading UTF-8 BOM must not defeat the parse:
+                                  # without this, frontmatter reads as EMPTY and every
+                                  # link the file declares goes silently unchecked
     lines = text.split("\n")
     if lines and lines[0].strip() == "---":
         for i in range(1, min(len(lines), 60)):
@@ -374,6 +389,7 @@ if os.path.isdir("governance/proposals"):
                 pass
 
 init_slugs = set()
+init_targets = []          # (slug, features[], areas[]) per initiative page
 link_broken = 0
 unknown_slugs = 0
 for page in sorted(glob.glob(os.path.join(init_dir, "*.md"))):
@@ -410,6 +426,7 @@ for page in sorted(glob.glob(os.path.join(init_dir, "*.md"))):
     if not t_feats and not t_areas:
         err(f"initiative {slug} names no target feature or area — an unmapped initiative cannot exist (add areas:/features: frontmatter)")
         link_broken += 1
+    init_targets.append((slug, list(t_feats), list(t_areas)))
     for f in t_feats:
         if f not in features:
             if f in pending:
@@ -423,9 +440,36 @@ for page in sorted(glob.glob(os.path.join(init_dir, "*.md"))):
             unknown_slugs += 1
 
 # chain artifacts name their initiative (frontmatter, or a filename lint can derive it from)
-for pat in ("product/PRDs/*/*-prd.md", "product/PRDs/*/*-jobs-breakdown.md",
-            "product/PRDs/*/*-job-spec.md", "product/launches/*.md"):
+# Filename suffixes are the OS's canonical ones. An instance that renames its FILES
+# (house naming goes on titles and prose, never filenames) drops out of this glob
+# silently — the zero-coverage assertion below is what makes that visible instead of
+# letting the link contract go unenforced for every artifact in the repo.
+CHAIN_PATS = ("product/PRDs/*/*-prd.md", "product/PRDs/*/*-jobs-breakdown.md",
+              "product/PRDs/*/*-job-spec.md", "product/launches/*.md")
+chain_seen = 0
+if glob.glob(os.path.join(pd, "product/PRDs/*/*.md")) and not any(
+        glob.glob(os.path.join(pd, q)) for q in CHAIN_PATS):
+    err("the chain-artifact check matched NOTHING while product/PRDs/ holds files — the "
+        "repo's artifact filenames do not use the canonical suffixes (-prd / -jobs-breakdown "
+        "/ -job-spec), so the link contract is going unenforced for every one of them. "
+        "Rename the files to the canonical suffixes (house terms belong in titles and prose, "
+        "not filenames) or update this check deliberately")
+    link_broken += 1
+chain_matched = set()
+for pat in CHAIN_PATS:
+    chain_matched |= set(glob.glob(os.path.join(pd, pat)))
+all_prd_files = {q for q in glob.glob(os.path.join(pd, "product/PRDs/*/*.md"))
+                 if os.path.basename(q) != "CLAUDE.md" and "/examples/" not in q.replace(os.sep, "/")}
+unmatched = sorted(all_prd_files - chain_matched)
+if unmatched:
+    wrn("%d file(s) under product/PRDs/ match no canonical chain suffix (-prd / -jobs-breakdown "
+        "/ -job-spec), so the link contract never checks them: %s%s. House terms belong in "
+        "titles and prose, not filenames — rename, or extend CHAIN_PATS deliberately"
+        % (len(unmatched), ", ".join(os.path.basename(q) for q in unmatched[:4]),
+           " ..." if len(unmatched) > 4 else ""))
+for pat in CHAIN_PATS:
     for path in glob.glob(os.path.join(pd, pat)):
+        chain_seen += 1
         base = os.path.basename(path)
         if base == "CLAUDE.md" or "/examples/" in path.replace(os.sep, "/"):
             continue
@@ -444,6 +488,26 @@ for pat in ("product/PRDs/*/*-prd.md", "product/PRDs/*/*-jobs-breakdown.md",
         else:
             err(f"{rel} maps to no initiative — every PRD / breakdown / job spec / launch belongs to a project (add initiatives: frontmatter)")
             link_broken += 1
+
+# Catalog join: an initiative naming an area that HAS catalogued features should name at
+# least one of them. Area-only targeting is legal (an emerging module carries no features
+# yet), but when EVERY such initiative does it, the feature->initiative rollup that
+# /overview {area} and the Console feature view depend on returns nothing, for every
+# feature in the catalog.
+featured_areas = set(features.values())      # areas that actually have catalogued features
+if featured_areas and init_targets:
+    relevant = [(sl, fe) for sl, fe, ar in init_targets if set(ar) & featured_areas]
+    empty = [sl for sl, fe in relevant if not fe]
+    if relevant and len(empty) == len(relevant):
+        wrn("NO initiative anywhere names a target feature (features: [] on %s) while %d "
+            "area(s) carry catalogued features — the feature-to-initiative rollup returns "
+            "nothing for all %d features; /overview {area} and the Console feature view are "
+            "blind. Declare features: on the initiatives that target them"
+            % (", ".join(sorted(empty)), len(featured_areas), len(features)))
+    else:
+        for sl in sorted(empty):
+            wrn(f"initiative '{sl}' targets an area with catalogued features but names none "
+                f"(features: []) — it will not appear in those features' rollup")
 
 # the link-health line — session-start prints the report head, so this reaches every session
 print(f"links: {link_broken + unknown_slugs} broken · {unknown_slugs} unknown slug(s)")
@@ -493,6 +557,35 @@ while IFS= read -r nav; do
     esac
   done
 done < <(find "$PD" governance .claude -name 'CLAUDE.md' 2>/dev/null)
+
+# ---- Check 9b: byte-order marks ------------------------------------------------------
+# A leading UTF-8 BOM is invisible in an editor and silently defeats any parser that tests
+# the first line for '---'. It is how a file can declare its links and have none of them
+# read. Cheap to strip, expensive to debug.
+if command -v python3 >/dev/null 2>&1; then
+  python3 - "$PD" <<'BOMEOF'
+import os, sys
+PD = sys.argv[1]
+BOM = b"\xef\xbb\xbf"
+hits = []
+for base in (PD, "governance", ".claude", ".github"):
+    for dp, dn, fn in os.walk(base):
+        if ".git" in dp:
+            continue
+        for f in fn:
+            if f.endswith((".md", ".yaml", ".yml")):
+                p = os.path.join(dp, f)
+                try:
+                    if open(p, "rb").read(3) == BOM:
+                        hits.append(p)
+                except Exception:
+                    pass
+if hits:
+    print("\u26a0\ufe0f  %d file(s) start with a byte-order mark — invisible, and it makes "
+          "frontmatter parse as empty so declared links go unchecked. /wiki-lint strips them: %s%s"
+          % (len(hits), ", ".join(sorted(hits)[:6]), " ..." if len(hits) > 6 else ""))
+BOMEOF
+fi
 
 # ---- Check 10: YAML parse -------------------------------------------------------------
 if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; then

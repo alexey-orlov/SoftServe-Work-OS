@@ -85,7 +85,14 @@ carried into the readout.
    describes the queue, not its contents. Fix: missing lines, missing stubs. Suggest: a nav
    line whose target is gone — repoint when exactly one file with that name exists elsewhere
    (name it), otherwise drop the line.
-3. **Product catalog** — *"The product map (areas → features)."* v2 catalog shape: every
+3. **Product catalog** — *"The product map (areas → features)."* **A check that matches
+   nothing must not pass:** when `product/PRDs/` holds files but none carry a canonical
+   chain suffix (`-prd` / `-jobs-breakdown` / `-job-spec`), say so — an instance that
+   renamed its FILES to house terms silently drops out of the link contract entirely, and
+   a clean report then means "checked nothing", not "found nothing". Same for the catalog
+   join: when every initiative carries `features: []` while areas hold catalogued
+   features, the feature→initiative rollup returns nothing for the whole catalog and
+   `/overview {area}` goes blind — report it rather than passing. The rest of check 3: v2 catalog shape: every
    feature carries `status: planned | live | retired`; `shipped:` dates are YYYY-MM-DD;
    feature slugs are globally unique (one feature, one area). Legacy artifact-map shape
    (mid-migration instances — readable forever): every path resolves; every slug in an
@@ -148,7 +155,11 @@ carried into the readout.
    is gone — drop it (or repoint if the file moved); a backlog — "run `/context-update`"; each
    old proposal — apply or reject, with one line on what it asks; learnings — the weakest
    entry to prune, or "still true? keep / drop" per old entry.
-9. **Placeholder / truncation scan** — *"Unfinished setup text."* `[Your `, `[FILL IN]`,
+9. **Placeholder / truncation scan** — *"Unfinished setup text."* Also **byte-order
+   marks**: a file starting with a UTF-8 BOM is invisible in an editor and makes every
+   frontmatter parser that tests the first line for `---` read the file as having none —
+   so the file declares its links and not one of them is ever checked. Fix: strip it.
+   The original scan: `[Your `, `[FILL IN]`,
    `[NEED:` outside `handbook/templates/`, `PRDs/examples/`, and the root-CLAUDE.md setup
    blocks (report as "setup not finished" on a fresh clone, warning not failure); nav
    description lines that end mid-word (the truncation bug class). Suggest: the field to fill

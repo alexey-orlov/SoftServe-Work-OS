@@ -1,6 +1,14 @@
 ---
 name: overview
 description: Compose a one-screen orientation for any slug — area, feature, or initiative — read-only and chat-only; it never writes, edits, or files anything. One bare argument; the registries resolve the scope in order (area, feature, initiative), naming which one matched. Fixed read order per scope, capped ~15 files headers-first with an explicit skipped list — initiative: the living page + headers of its linked artifacts; feature: catalog entry + every initiative targeting it + tagged metric/decision docs + matching feature requests; area: catalog block, ALL targeting initiatives by status, area metrics + dashboards, area-tagged and initiative-linked decisions, area feature requests, the competitive-matrix area table. Answers in fixed sections: What it is · Status now · Active work + open loops · Customer signal · The numbers that matter · Key decisions (dated) · Read next (5-item path) · staleness line. `/overview onboarding {area}` adds the new-PM extras — ICP, pricing and Key Metrics from business-info.md, stakeholders, the team table, the orientation tail. Use on /overview, "give me an overview of X", "catch me up on billing", "what's the state of the workforce area?", "I'm the new PM on X". NOT for the week's delta (/weekly-review), exec account rollups (/portfolio-pulse), what the code actually does (/code-qa), iterating the PRD (/prd-draft), or clickable browsing of the same rollups (the OS Console derives them live).
+7. **The steering surfaces — always, and never skip them when the six above come up thin.**
+   `strategy/business-context/business-info.md` (the module's line in the product table,
+   its personas), `strategy/business-context/segmentation-matrix.md` (its adoption and
+   account counts), `strategy/current-quarter.md` (the objectives and win/loss gaps naming
+   it). In most instances these are the ONLY populated numbers for a module: metrics/ and
+   dashboards/ are per-area folders that stay empty until an analyst fills them, so an
+   area overview built from 1–6 alone reports "no numbers" while the real ones sit two
+   files away. Cite them as the source when the per-area folders are empty.
 argument-hint: "[slug] | onboarding [area-slug]"
 group: communication-ops
 ---

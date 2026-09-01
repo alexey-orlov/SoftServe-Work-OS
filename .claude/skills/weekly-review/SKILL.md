@@ -209,6 +209,9 @@ to `reports/CLAUDE.md` on first write of the week.
 
 ## Output quality self-check
 
+- [ ] **Every "missing / not recorded / no outcome" claim was checked against the page it links.** A digest bullet saying a thing was not recorded, printed beside a link to the page that records it, is the failure this line exists to stop — the leader clicks through and the digest is wrong on its own evidence. Before writing any gap claim, open the initiative page, the account's summaries folder, and the feature-request records for that date, and search for it. Report what you found, not what you did not look for
+- [ ] **Counts recomputed this run, never carried forward** — awaiting-push totals, transcript counts and inbox backlog are counted from the files at run time; a number inherited from a prior digest is stated as "as of {date}" or dropped
+- [ ] **Window honest when git is unusable** — if the history is an import (every commit one day, or uniform file mtimes) BOTH the git path and the mtime fallback are blind. Derive the window from artifact frontmatter dates instead, say so in one line, and check the ISO week actually matches the dates claimed — an artifact dated outside `week_start`..`week_end` belongs to another week's digest, however recent it looks
 - [ ] Every active initiative has a bullet, silent ones included, grouped by area
 - [ ] Declared links routed first (`initiatives:` frontmatter, legacy headers read the same);
       git diff only filled the gaps — and was skipped honestly when there is no history
