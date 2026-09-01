@@ -91,6 +91,14 @@ use customer-call and give the discovery findings their own summary section.
    material at its destination, and the ledger gets the destination path. When the
    filename carries no date: ISO or `GMT{YYYYMMDD}` filename prefix → a date line in the
    content → file mtime, flagged "date inferred" in the run summary.
+   **Verify the move, don't assume it.** After writing the destination, re-check the inbox
+   path: if it still exists, the move did not happen — the conversation is now in the repo
+   twice, and every later sweep will re-offer it as unprocessed. Delete it, or if you cannot,
+   say so explicitly in the run summary and name the path. A copy left in staging is the
+   failure this step exists to prevent, and `/wiki-lint` check 8 will report it as
+   duplication. **Provenance points at the filed home:** the transcript header may record
+   `Filed from: {inbox path}` as origin, but every durable page — account context, initiative
+   page, summary — links the *destination*, never the staging path, which is gone by design.
 2. **Load the one reference file** for the category and write the summary in its format.
    Every summary declares its links in frontmatter — `initiatives:`, plus `areas:`/`features:`/`customers:` when relevant (legacy `**Initiatives touched:**` headers stay readable) — check
    `product-development/product/initiatives/` for active slugs.
@@ -101,6 +109,17 @@ use customer-call and give the discovery findings their own summary section.
 5. **Initiative join** (contract rule 8): for every slug in the summary's `initiatives:`,
    append one dated Activity line to that initiative's page linking this summary —
    **in the same change**: `YYYY-MM-DD — [one-line outcome] ([summary](relative/path.md))`.
+   **Enumerate, then verify.** Write the slug list out before you start and tick each page as
+   you write it: a transcript tagged to three initiatives produces three Activity lines, on
+   three pages, or the run is not done. The common failure is silent partial completion —
+   the first page written, the rest forgotten — and it is invisible afterwards because the
+   summary still looks correct. Confirm each page by re-reading it, and name every page you
+   touched in the run summary. If a slug has no page, create it (the join is not optional);
+   if you genuinely cannot write one, the run reports it as an open write-back, never as a
+   success. The same rule covers the **account History cross-link**: every participating
+   customer's `account-context.md` gets its dated History line linking this summary, in this
+   same change — a call summary that no account page points at is unreachable from the
+   customer view, which is the view PMs actually open.
 6. **Navigation:** one line for each new file at the END of its folder's `CLAUDE.md` list.
 7. **Ledger:** append every transcript path filed this run (batch mode: every member) to
    `governance/processed.txt`, one repo-root-relative path per line, kept
@@ -204,7 +223,10 @@ conflicts — to `reports/{date}-daily-batch.md` per
 - [ ] Every decision filed via `/decision-log-entry` and linked, with rationale — never inline-only
 - [ ] Feature-request record created + linked for every request found (`tracker_ref: "-"` until `/create-tickets push`)
 - [ ] PII pass done on customer-facing summaries (roles only, Art. 9 clean)
-- [ ] Initiative Activity lines appended for every named slug (same change)
+- [ ] Initiative Activity lines appended for every named slug — **count them: N slugs → N pages re-read and confirmed**, listed by path below. A partial join is a failed run, not a minor gap
+- [ ] Account History cross-link written for every participating customer, linking this summary
+- [ ] Inbox originals verified GONE for every moved file (re-checked, not assumed) — any survivor named explicitly
+- [ ] Every durable link written this run points at a filed home, never at `inbox/`
 - [ ] Navigation rows appended at the END; new folders got a stub + parent entry
 - [ ] Ledger updated for every transcript filed (batch: all members)
 - [ ] Run summary printed — paths, records, refusals, Tier-2 asks

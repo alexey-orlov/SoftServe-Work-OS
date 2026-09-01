@@ -34,3 +34,13 @@ Thresholds are guidance, not gates — state what's there and judge honestly.
 
 `/demo-data` owns everything about generation, marking, and removal — this target only
 hands over the gap list.
+
+## What this target does NOT cover
+
+Sufficiency is not deliverability. This target asks whether enough **data** exists; it
+never checks that the links between that data resolve, that artifacts are reachable from
+their initiative pages, that `.claude/` survives the way the repo will actually be
+delivered, or that the slash commands the repo tells a reader to type exist at all. Those
+are `targets/instance-handoff.md`, and they are a **gate** — an instance can be richly
+populated and still be undemoable. Run `instance-handoff` before any handover, and
+whenever this target returns **Ready**.

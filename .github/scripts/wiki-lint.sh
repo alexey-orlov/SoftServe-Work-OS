@@ -1,7 +1,8 @@
 #!/bin/bash
 # Mechanical wiki-lint — the scriptable subset of .claude/skills/wiki-lint/SKILL.md
-# (checks 2–4, 8–10, and 12: nav coverage, catalog + link contract, broken links,
-# ledger integrity, placeholder/truncation scan, YAML parse). The judgment checks
+# (checks 2–5 and 8–12: nav coverage, cross-references, catalog + link contract,
+# join symmetry, staging hygiene, ledger integrity, truncation scan, YAML parse,
+# CODEOWNERS sync). The judgment checks
 # (staleness tiers, contradiction sweep, initiative health) live in the /wiki-lint skill.
 # This script REPORTS ONLY — the repairs (and the plain-language readout with suggested
 # changes) are the skill's job; run /wiki-lint in a session to fix what is listed here.
@@ -23,6 +24,41 @@ fail()  { printf '❌ %s\n' "$*"; FAIL=$((FAIL+1)); }
 warn()  { printf '⚠️  %s\n' "$*"; WARN=$((WARN+1)); }
 
 note "== wiki-lint (mechanical checks — this run only reports; run /wiki-lint in a session to fix) =="
+
+# ---- Check 0: script/skill parity ---------------------------------------------------
+# The skill (.claude/skills/wiki-lint/SKILL.md) is the spec of record; this script is its
+# mechanical subset. Drift between them is how check 4 went missing for a whole release
+# while this header still claimed it. This guard makes the claim testable: every check the
+# skill defines must be listed here as either implemented or judgment-only.
+SKILL_MD=".claude/skills/wiki-lint/SKILL.md"
+IMPLEMENTED="2 3 4 5 8 9 10 12"   # has a mechanical section below
+JUDGMENT_ONLY="1 6 7 11"          # runs only in a session via /wiki-lint
+if [ -f "$SKILL_MD" ] && command -v python3 >/dev/null 2>&1; then
+  python3 - "$SKILL_MD" "$IMPLEMENTED" "$JUDGMENT_ONLY" <<'PARITY' || FAIL=$((FAIL+1))
+import re, sys
+skill, impl, judg = sys.argv[1], set(sys.argv[2].split()), set(sys.argv[3].split())
+body = open(skill, encoding="utf-8").read()
+m = re.search(r'^## The twelve checks\s*$(.*?)^\*\*The plain-language contract\*\*', body, re.M | re.S)
+if not m:
+    print("❌ cannot find the check list in %s — script/skill parity is unverifiable" % skill)
+    sys.exit(1)
+defined = set(re.findall(r'^(\d+)\. \*\*', m.group(1), re.M))
+claimed = impl | judg
+missing = sorted(defined - claimed, key=int)
+extra = sorted(claimed - defined, key=int)
+if missing:
+    print("❌ the skill defines check(s) %s that this script neither implements nor lists as "
+          "judgment-only — implement them or add them to JUDGMENT_ONLY (KEEP IN SYNC)"
+          % ", ".join(missing))
+if extra:
+    print("❌ this script claims check(s) %s that the skill no longer defines — remove them"
+          % ", ".join(extra))
+if not missing and not extra:
+    print("script/skill parity: %d checks defined, %d mechanical, %d judgment-only"
+          % (len(defined), len(impl), len(judg)))
+sys.exit(1 if (missing or extra) else 0)
+PARITY
+fi
 
 # ---- Check 2a: every directory under product-development/ has a CLAUDE.md ----------
 while IFS= read -r d; do
@@ -63,6 +99,179 @@ while IFS= read -r f; do
     fail "file missing from its folder's contents list (CLAUDE.md) — /wiki-lint adds the line: $f"
   fi
 done < <(find "$PD" governance -type f ! -path '*/.git*')
+
+# ---- Check 4 + 5b/5c + 8c: cross-references, join symmetry, staging hygiene ----------
+# Check 4 (broken cross-references, repo-wide): the skill's check 4 scans EVERY content
+# file, not only CLAUDE.md — check 2b above covers nav links alone. Blank scaffolds
+# (handbook/templates/, PRDs/examples/) are exempt: their links are illustrative.
+# Check 5b (artifact join symmetry): write-back-contract rule 8 — an artifact that names
+# an initiative must appear on that initiative's page. Also: [PENDING: path] means
+# "planned but not written yet" (initiative-page-template), so a PENDING marker whose
+# file EXISTS is a false statement on the page.
+# Check 5c (account join symmetry): a call summary must be reachable from its
+# account-context.md — the per-customer view the contract makes /process-meeting write.
+# Check 8c (staging hygiene): filing MOVES; an inbox source whose filed artifact cites it
+# was copied, not moved, and now exists twice.
+# These FAIL LOUD when they cannot run — a silent skip once hid real damage.
+if command -v python3 >/dev/null 2>&1; then
+  python3 - "$PD" <<'PYEOF' || FAIL=$((FAIL+1))
+import sys, os, re, glob
+
+PD = sys.argv[1]
+bad = 0
+def fail(m):
+    global bad
+    print("❌ %s" % m); bad += 1
+def warn(m):
+    print("⚠️  %s" % m)
+
+EXEMPT = (os.path.join(PD, "product", "handbook", "templates"),
+          os.path.join(PD, "product", "PRDs", "examples"))
+LINK = re.compile(r'\[[^\]]*\]\(([^)\s]+)\)')
+FENCE = re.compile(r'```.*?```', re.S)
+CODE = re.compile(r'`[^`\n]*`')
+
+def strip_code(t):
+    # A link inside a code span or fenced block is sample text, not a link — markdown
+    # does not render it as one either. Scanning it produces false "leads nowhere" hits
+    # on every doc that documents a link shape.
+    return CODE.sub("", FENCE.sub("", t))
+
+def content_files():
+    for base in (PD, "governance"):
+        for dp, dn, fn in os.walk(base):
+            if ".git" in dp:
+                continue
+            for f in fn:
+                if f.endswith(".md"):
+                    yield os.path.join(dp, f)
+
+# ---- Check 4: every markdown link in every content file resolves --------------------
+broken = []
+for p in content_files():
+    if p.startswith(EXEMPT):
+        continue
+    try:
+        txt = open(p, encoding="utf-8").read()
+    except Exception:
+        continue
+    for m in LINK.finditer(strip_code(txt)):
+        t = m.group(1)
+        if t.startswith(("http", "#", "mailto:")) or "{" in t or "[" in t:
+            continue
+        t = t.split("#")[0]
+        if not t:
+            continue
+        tgt = os.path.normpath(os.path.join(os.path.dirname(p), t))
+        if not os.path.exists(tgt):
+            broken.append((p, t))
+for p, t in broken[:25]:
+    fail("link leads nowhere — %s -> %s" % (p, t))
+if len(broken) > 25:
+    print("   ...and %d more broken links (full list: run /wiki-lint in a session)" % (len(broken) - 25))
+
+# ---- Check 4b: durable pages must not cite the transient inbox ----------------------
+inbox_root = os.path.join(PD, "inbox")
+for p in content_files():
+    if p.startswith(inbox_root) or p.startswith(EXEMPT):
+        continue
+    try:
+        txt = open(p, encoding="utf-8").read()
+    except Exception:
+        continue
+    for m in LINK.finditer(strip_code(txt)):
+        t = m.group(1).split("#")[0]
+        # folder-level references (and nav files) legitimately describe the queue;
+        # only a link at a FILE inside the inbox is provenance that will break on drain.
+        if t.endswith("/") or os.path.basename(p) == "CLAUDE.md":
+            continue
+        if "inbox/" in t and not t.startswith("http"):
+            warn("durable page cites the transient inbox as provenance — repoint at the filed home: %s -> %s" % (p, t))
+            break
+
+# ---- Check 5b: artifact <-> initiative-page join symmetry ---------------------------
+init_dir = os.path.join(PD, "product", "initiatives")
+inits = {}
+for ip in glob.glob(os.path.join(init_dir, "*.md")):
+    if os.path.basename(ip) == "CLAUDE.md":
+        continue
+    inits[os.path.basename(ip)[:-3]] = (ip, open(ip, encoding="utf-8").read())
+
+ARTIFACT_GLOBS = [os.path.join(PD, "product", "PRDs", "**", "*.md"),
+                  os.path.join(PD, "product", "launches", "**", "*.md"),
+                  os.path.join(PD, "product", "user-insights", "*.md")]
+seen = set()
+for g in ARTIFACT_GLOBS:
+    for a in glob.glob(g, recursive=True):
+        if a in seen or os.path.basename(a) == "CLAUDE.md" or a.startswith(EXEMPT):
+            continue
+        seen.add(a)
+        head = open(a, encoding="utf-8").read()[:2000]
+        m = re.search(r'^initiatives:\s*\[([^\]]*)\]', head, re.M)
+        if not m:
+            continue
+        base = os.path.basename(a)
+        for slug in [s.strip() for s in m.group(1).split(",") if s.strip()]:
+            if slug not in inits:
+                fail("artifact names an initiative with no page — %s -> %s" % (a, slug))
+                continue
+            ipath, ibody = inits[slug]
+            if base not in ibody:
+                fail("artifact is not on its initiative page (write-back rule 8: row + dated Activity line) — %s missing from %s" % (a, ipath))
+
+# ---- Check 5b(ii): a [PENDING: path] whose file already exists is a false statement --
+PEND = re.compile(r'\[PENDING:\s*([^\]]+?)\s*\]')
+for slug, (ipath, ibody) in inits.items():
+    for m in PEND.finditer(ibody):
+        raw = m.group(1).strip()
+        if "{" in raw or "[" in raw:
+            continue
+        for cand in (os.path.join(PD, raw), raw, os.path.normpath(os.path.join(os.path.dirname(ipath), raw))):
+            if os.path.exists(cand):
+                fail("initiative page marks an artifact PENDING but the file exists — replace the marker with the link: %s -> %s" % (ipath, raw))
+                break
+
+# ---- Check 5c: call summary <-> account-context.md ----------------------------------
+acct_root = os.path.join(PD, "product", "customers", "accounts")
+if os.path.isdir(acct_root):
+    for acct in sorted(os.listdir(acct_root)):
+        ad = os.path.join(acct_root, acct)
+        ctx = os.path.join(ad, "account-context.md")
+        if not os.path.isdir(ad) or not os.path.exists(ctx):
+            continue
+        body = open(ctx, encoding="utf-8").read()
+        for s in sorted(glob.glob(os.path.join(ad, "calls", "summaries", "*.md"))):
+            if os.path.basename(s) == "CLAUDE.md":
+                continue
+            if os.path.basename(s) not in body:
+                fail("call summary is not linked from its account page (History cross-link, same change) — %s missing from %s" % (s, ctx))
+
+# ---- Check 8c: an inbox source whose filed artifact cites it was copied, not moved ---
+if os.path.isdir(inbox_root):
+    citers = {}
+    for p in content_files():
+        if p.startswith(inbox_root):
+            continue
+        try:
+            citers[p] = open(p, encoding="utf-8").read()
+        except Exception:
+            pass
+    for dp, dn, fn in os.walk(inbox_root):
+        for f in fn:
+            if f in ("CLAUDE.md", "index.md") or f.startswith("."):
+                continue
+            src = os.path.join(dp, f)
+            for p, txt in citers.items():
+                if src in txt and ("/transcripts/" in p or "account-context" in p):
+                    fail("inbox source still present although its record was filed (copied, not moved — the file now exists twice): %s, cited by %s" % (src, p))
+                    break
+
+print("cross-references: %d broken · join + staging checks complete" % len(broken))
+sys.exit(1 if bad else 0)
+PYEOF
+else
+  fail "python3 unavailable — the cross-reference and join checks CANNOT run (install python3)"
+fi
 
 # ---- Check 3 + 12: product catalog + link contract ----------------------------------
 # Check 3 (either index shape): v2 catalog — feature status vocabulary, shipped dates,
@@ -297,7 +506,8 @@ if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; t
   done
 fi
 
-# ---- Check 11: server-side mirror of the gated list (CODEOWNERS) is in sync ------------
+# ---- Script-only: server-side mirror of the gated list (CODEOWNERS) is in sync --------
+# NOT the skill's check 11 (code-grounding registry, judgment-only) — this is CI housekeeping.
 # .github/CODEOWNERS is generated from governance/write-policy.yaml by gated-paths.sh;
 # a stale copy means GitHub asks the wrong reviewers (or none) for gated pull requests.
 if [ -f .github/CODEOWNERS ] && [ -x .github/scripts/gated-paths.sh ]; then

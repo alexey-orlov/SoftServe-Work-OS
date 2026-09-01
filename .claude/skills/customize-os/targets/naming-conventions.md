@@ -33,6 +33,32 @@ every skill for one instance — the same rule that keeps a house format a templ
 never a skill fork. Net effect: their team types `/prd-draft` and gets a document titled
 with THEIR word.
 
+### When they want their own command names too
+
+Some orgs do not just want a *Product Brief* — they want to type `/product-brief-draft`.
+The boundary above says no, for a good reason: renaming `.claude/skills/prd-draft/` forks a
+master-maintained skill, and every future update to it stops applying cleanly to this
+instance. That reason is about **folder names**, not about what the user is allowed to type.
+
+So offer the alias route instead of refusing, and never rename the folder:
+
+1. Keep every skill folder at its canonical name. Master updates keep flowing.
+2. Record the wanted command names in the status file header beside `naming:`, as
+   `command-aliases: {house name} → {canonical}`, one per mapped skill.
+3. Install them as thin alias entries pointing at the canonical skill — the alias carries
+   the house name and nothing else; it never copies or edits the skill body. Where the
+   deployment offers no alias mechanism, say so plainly and stop at step 2: the aliases are
+   then a documented request, not an installed feature, and prose keeps canonical commands.
+4. Whatever is NOT installed must not appear in prose. This is the failure that ships: repo
+   text telling a reader to run `/product-brief-draft` when only `/prd-draft` exists. The
+   post-apply verify below treats an unresolvable command reference as a residual hit, and
+   `targets/instance-handoff.md` Gate 4 blocks the handover on it.
+
+**If an instance renamed skill folders anyway** — by hand, outside this target — that is a
+fork, not a mapping. Record it in the status file with its cost stated (master updates no
+longer apply to those folders) and offer to convert it back to aliases. Do not leave it
+undocumented: the next person to pull a master update will not find out until it breaks.
+
 - **Keep** → write `naming: canonical (confirmed YYYY-MM-DD)` into the status file
   header. Never ask again. Target → `complete`.
 - **Map** → a complete mapping, collected in the same question — not re-asked later:

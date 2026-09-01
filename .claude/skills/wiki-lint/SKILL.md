@@ -93,16 +93,31 @@ carried into the readout.
    line to add or fix (gated — the guard prompts), or the legacy→catalog conversion.
 4. **Broken cross-references** — *"Links that lead nowhere."* Markdown links and backticked
    repo paths across `product-development/`, `governance/`, and `.claude/` that point at
-   nothing. Suggest: repoint (unique same-name file found) or remove; group by source page.
+   nothing — **every content file, not only the folder contents lists** (those are check 2b;
+   this is the whole repo). Blank scaffolds are exempt: `handbook/templates/` and
+   `PRDs/examples/` link illustratively, and `{placeholder}` targets never resolve.
+   **Staging provenance:** a durable page whose link points at a FILE inside
+   `product-development/inbox/` is flagged — the inbox is transient, so that citation breaks
+   the day filing drains it (folder-level references and nav files are fine). Suggest:
+   repoint (unique same-name file found) or remove; for a staging citation, repoint at the
+   filed home; group by source page.
 5. **Initiative-page health** — *"Initiative pages."* Every `initiatives/*.md` has a status
    + updated date (frontmatter `status:`/`updated:`, or the legacy `_status:`/`_updated:`
    lines — both readable); ACTIVE pages with no artifact/activity change in 30+ days flagged
    — closed pages (`shipped` / `killed`) are exempt, they never move again by design; every
-   artifact link on the page resolves. Join symmetry: every decision record naming a slug
-   (frontmatter `initiatives:` or legacy `Initiative:` header) is linked from that page's
-   Decisions section, and every meeting/call summary naming one has a matching Activity line
-   there (one-way — pages may link records that don't name them). Suggest: the missing
-   values; the missing Decisions / Activity line, quoted and ready to append; "still
+   artifact link on the page resolves. Join symmetry — **every artifact class, not only
+   records**: whatever names an initiative slug must appear on that page (write-back-contract
+   rule 8). Decision records are linked from the Decisions section; meeting/call summaries get
+   a matching Activity line; and **PRDs, jobs breakdowns, job specs, `reviews/` artifacts,
+   syntheses and launches get their Artifacts row plus a dated Activity line** — the class
+   that used to go unchecked, and so the class that silently went missing. One-way: pages may
+   link records that don't name them. **`[PENDING: path]` means "planned but not written yet"**
+   (initiative-page template), so a PENDING marker whose file EXISTS is an error, not a gap —
+   the page tells a reader the artifact does not exist while it sits on disk. The same
+   symmetry governs the per-customer view: every call summary under
+   `accounts/{slug}/calls/summaries/` is reachable from that account's `account-context.md`
+   History. Suggest: the missing values; the missing Decisions / Activity / Artifacts line,
+   quoted and ready to append; the PENDING marker replaced by the real link; "still
    active? — mark it paused, or close it (shipped / killed)" for the quiet ones.
 6. **Living-page registry** — *"Always-current pages."* Every glob in
    `write-policy.yaml#living-pages` matches at least the expected files; each living page
@@ -122,7 +137,12 @@ carried into the readout.
    Every ledger path exists on disk; ledger is sorted and duplicate-free; unprocessed backlog
    count (the `/context-update` discovery `comm`); proposals in `governance/proposals/` older
    than 14 days flagged. Inbox arrivals are ledgered under their destination path after the
-   move (junk under its inbox path). Learning loop: `.claude/team-learnings.md` entry lines
+   move (junk under its inbox path). **Staging hygiene — filing MOVES:** an inbox file that a
+   filed transcript or account page cites as its source was *copied*, not moved, and the
+   conversation now exists twice. Report it as duplication ("the file is in two places"), not
+   as an unprocessed backlog — the backlog count above will also see it, and the wrong
+   diagnosis sends the user to re-process a record that is already filed. Learning loop:
+   `.claude/team-learnings.md` entry lines
    over the ~30 cap flagged (capture-loop rule: prune the weakest), and entries older than
    180 days flagged for re-validation. Fix: sort + dedupe. Suggest: a ledger line whose file
    is gone — drop it (or repoint if the file moved); a backlog — "run `/context-update`"; each
