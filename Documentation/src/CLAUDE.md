@@ -16,3 +16,11 @@ The single source of the documentation and the script that builds the site from 
 - [feature-catalog.jpg](feature-catalog.jpg) — Illustration for *Key context principles*: the console's Features page (areas → features → status → targeting initiative).
 - [initiatives.jpg](initiatives.jpg) — Illustration for *Key context principles*: the console's Initiatives page (one living page per bet, artifact counts).
 - [initiative-artifacts.jpg](initiative-artifacts.jpg) — Illustration for *Key context principles*: an initiative page's Artifacts panel (linked files, In place / Pending).
+- [build-pdf.js](build-pdf.js) — Renders one article of `content.js` to a standalone, print-styled PDF (`node build-pdf.js [section/article] [--platform github|azure] [--out file]`; default: *Set up Claude Code for the team* → `../claude-code-team-setup.pdf`). Internal links become italic cross-references; the footer carries the version and page numbers. Needs Node 22+ and a Chromium-based browser — no npm dependencies.
+- [chrome.js](chrome.js) — Finds a Chromium-based browser (Chrome, Chromium, Edge, Playwright's Chromium, or `CHROME_PATH`) and drives it over the DevTools protocol with Node's built-in WebSocket: print to PDF, capture a screenshot. Used by `build-pdf.js` and `illustrations/render.js`.
+- [claude-admin-console.jpg](claude-admin-console.jpg) — Schematic for *Set up Claude Code for the team*: the Claude Code page of the Claude admin console (organization switches, Managed settings box). Not a screenshot — rendered from `illustrations/claude-admin-console.html`.
+- [claude-code-mode-selector.jpg](claude-code-mode-selector.jpg) — Schematic for *Set up Claude Code for the team*: the desktop app's mode selector without Auto and Bypass permissions, and the approval card before a file change. Not a screenshot — rendered from `illustrations/claude-code-mode-selector.html`.
+
+### Subfolders
+
+- [illustrations/](illustrations/) — Sources of the schematic illustrations (`*.html`, one per JPEG, each declaring its canvas on `<body data-canvas="WxH">`) and `render.js`, which captures every one of them at 2× into the JPEG of the same name here. Edit the HTML, run `node illustrations/render.js`, rebuild the site and the PDF.

@@ -1,0 +1,87 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Schematic — the Claude Code page of the Claude admin console</title>
+<!-- A schematic, not a screenshot. The layout and the names follow Anthropic's documentation
+     (Admin settings › Claude Code: the organization switches and the Managed settings box).
+     Rendered to ../claude-admin-console.jpg by render.js. -->
+<style>
+  body{margin:0;width:1200px;height:940px;background:#EEF2F6;font:15px/1.4 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;color:#425466;position:relative;overflow:hidden}
+  .win{position:absolute;left:40px;top:44px;width:1120px;height:850px;background:#fff;border-radius:12px;box-shadow:0 14px 40px -14px rgba(10,37,64,.28);border:1px solid #DCE3EA;overflow:hidden;display:grid;grid-template-rows:50px 1fr}
+  .bar{border-bottom:1px solid #E3E8EE;display:flex;align-items:center;padding:0 16px;gap:10px;background:#FAFBFC}
+  .dots span{display:inline-block;width:11px;height:11px;border-radius:50%;background:#DCE3EA;margin-right:5px}
+  .url{margin-left:10px;flex:1;height:30px;border-radius:8px;background:#fff;border:1px solid #E3E8EE;display:flex;align-items:center;padding:0 12px;font-size:13px;color:#697386}
+  .url b{color:#0A2540;font-weight:500}
+  .body{display:grid;grid-template-columns:236px 1fr;height:800px}
+  .nav{border-right:1px solid #E3E8EE;padding:22px 14px;background:#FAFBFC}
+  .nav .t{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8898AA;margin:0 10px 12px}
+  .nav div{padding:9px 12px;border-radius:8px;color:#5B6B7C;font-size:14px;margin-bottom:2px}
+  .nav div.on{background:#EEF6FC;color:#0E5E8B;font-weight:600}
+  .main{padding:24px 34px 0;position:relative}
+  h1{font-size:22px;color:#0A2540;margin:0 0 3px;font-weight:600}
+  .sub{font-size:13px;color:#697386;margin:0 0 16px}
+  .card{border:1px solid #E3E8EE;border-radius:10px;background:#fff;margin-bottom:16px;position:relative}
+  .card h2{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:#0A2540;margin:0;padding:11px 16px;border-bottom:1px solid #EDF1F5;background:#F6F9FC;border-radius:10px 10px 0 0}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-top:1px solid #EDF1F5;gap:16px}
+  .row:nth-of-type(1){border-top:0}
+  .row b{display:block;color:#0A2540;font-weight:600;font-size:14px}
+  .row span{font-size:12.5px;color:#697386}
+  .tg{width:44px;height:24px;border-radius:12px;background:#CBD5DF;position:relative;flex:0 0 auto}
+  .tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .tg.on{background:#1485C4}.tg.on::after{left:23px}
+  .tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:#EEF6FC;color:#0E5E8B;margin-left:8px;vertical-align:middle}
+  .tag.you{background:#FDF0EC;color:#C24A2C}
+  .desc{padding:10px 16px 0;font-size:13px;color:#697386}
+  .json{font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;color:#0A2540;background:#F6F9FC;margin:10px 16px 0;padding:12px 14px;white-space:pre;border:1px solid #E3E8EE;border-radius:8px}
+  .actions{display:flex;justify-content:flex-end;gap:10px;padding:12px 16px 14px}
+  .btn{display:inline-block;font-weight:600;font-size:13px;padding:8px 16px;border-radius:8px;border:1px solid #E3E8EE;color:#425466;background:#fff}
+  .btn.primary{background:#0E5E8B;border-color:#0E5E8B;color:#fff}
+  .badge{position:absolute;width:30px;height:30px;border-radius:50%;background:#F46A4A;color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.28);border:2px solid #fff}
+  .ribbon{position:absolute;right:0;top:20px;background:#0A2540;color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:7px 16px 7px 14px;border-radius:6px 0 0 6px;z-index:2}
+  .foot{position:absolute;left:40px;right:40px;bottom:14px;font-size:12px;color:#8898AA;display:flex;justify-content:space-between}
+</style>
+<body data-canvas="1200x940">
+  <div class="ribbon">Schematic · not a screenshot</div>
+  <div class="win">
+    <div class="bar"><span class="dots"><span></span><span></span><span></span></span><div class="url">claude.ai/<b>admin-settings/claude-code</b></div></div>
+    <div class="body">
+      <div class="nav">
+        <p class="t">Admin settings</p>
+        <div>Members</div>
+        <div>Security</div>
+        <div class="on">Claude Code</div>
+        <div>Cloud environments</div>
+      </div>
+      <div class="main">
+        <h1>Claude Code</h1>
+        <p class="sub">Organization-wide settings for Claude Code · visible to Owners</p>
+
+        <div class="card">
+          <div class="badge" style="left:-15px;top:-13px">1</div>
+          <h2>Organization switches</h2>
+          <div class="row"><div><b>Code in the desktop</b><span>Members can use Claude Code in the Claude desktop app</span></div><div class="tg on"></div></div>
+          <div class="row"><div><b>Code in the web <span class="tag you">your decision</span></b><span>Sessions that run on Anthropic's computers — file edits are reviewed afterwards, not one by one</span></div><div class="tg"></div></div>
+          <div class="row"><div><b>Remote Control <span class="tag you">your decision</span></b><span>Steer a session on your own computer from your phone or browser</span></div><div class="tg"></div></div>
+          <div class="row"><div><b>Disable Bypass permissions mode</b><span>Nobody in the organization can switch Claude Code to the mode that never asks</span></div><div class="tg on"></div></div>
+        </div>
+
+        <div class="card">
+          <div class="badge" style="left:-15px;top:-13px">2</div>
+          <h2>Managed settings</h2>
+          <p class="desc">Settings delivered to every member's Claude Code (JSON). They override personal and project settings.</p>
+<pre class="json">{
+  "permissions": {
+    "defaultMode": "default",
+    "disableAutoMode": "disable",
+    "disableBypassPermissionsMode": "disable",
+    "ask": ["Edit", "Write", "NotebookEdit", "Bash(mv *)", "Bash(cp *)",
+            "Bash(rm *)", "Bash(rmdir *)", "Bash(sed *)"]
+  },
+  "allowManagedPermissionRulesOnly": true
+}</pre>
+          <div class="actions"><span class="btn">Cancel</span><span class="btn primary" style="position:relative">Save<div class="badge" style="right:-17px;top:-15px">3</div></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Admin settings › Claude Code — layout simplified; names as in Anthropic's documentation. The live page may differ in detail.</span><span>① switches (step 2) · ② policy text (step 3) · ③ Save</span></div>
+</body>

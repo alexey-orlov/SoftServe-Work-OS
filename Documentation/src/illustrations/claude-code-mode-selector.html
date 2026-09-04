@@ -1,0 +1,95 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Schematic — the Claude Code desktop app under the organization rule</title>
+<!-- A schematic, not a screenshot: the Code tab of the Claude desktop app with the mode selector open
+     (Manual, Accept edits, Plan — Auto and Bypass permissions removed by the organization) and the
+     approval card Claude shows before a file change. Rendered to ../claude-code-mode-selector.jpg by render.js. -->
+<style>
+  body{margin:0;width:1200px;height:880px;background:#EEF2F6;font:15px/1.45 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;color:#425466;position:relative;overflow:hidden}
+  .win{position:absolute;left:40px;top:44px;width:1120px;height:790px;background:#fff;border-radius:12px;box-shadow:0 14px 40px -14px rgba(10,37,64,.28);border:1px solid #DCE3EA;overflow:hidden;display:grid;grid-template-columns:232px 1fr}
+  .side{background:#FAFBFC;border-right:1px solid #E3E8EE;padding:16px 12px}
+  .side .tabs{display:flex;gap:4px;margin:0 4px 16px}
+  .side .tabs span{font-size:12px;font-weight:600;color:#697386;padding:5px 10px;border-radius:999px}
+  .side .tabs span.on{background:#0A2540;color:#fff}
+  .side .t{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8898AA;margin:0 8px 8px}
+  .side div.s{padding:8px 10px;border-radius:8px;font-size:13.5px;color:#5B6B7C;margin-bottom:2px}
+  .side div.s.on{background:#EEF6FC;color:#0E5E8B;font-weight:600}
+  .main{position:relative;display:grid;grid-template-rows:46px 1fr auto}
+  .top{border-bottom:1px solid #E3E8EE;display:flex;align-items:center;padding:0 22px;font-size:13px;color:#697386;gap:8px}
+  .top b{color:#0A2540;font-weight:600}
+  .chat{padding:22px 26px 0;overflow:hidden}
+  .me{margin-left:auto;max-width:560px;background:#F6F9FC;border:1px solid #E3E8EE;border-radius:12px 12px 2px 12px;padding:10px 14px;font-size:14px;color:#0A2540}
+  .ai{margin:16px 0 0;font-size:14px;color:#425466}
+  .card{margin:14px 0 0;border:1px solid #BFDDF1;border-radius:10px;background:#fff;max-width:760px;box-shadow:0 6px 20px -14px rgba(10,37,64,.3)}
+  .card .h{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid #EDF1F5;background:#F3F9FD;border-radius:10px 10px 0 0;font-size:13px}
+  .card .h b{color:#0A2540;font-weight:600}
+  .card .h code{font:12.5px ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;color:#0E5E8B;background:#fff;border:1px solid #D6EAF7;padding:2px 6px;border-radius:5px}
+  .diff{font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;padding:10px 14px;color:#0A2540}
+  .diff div{padding:0 8px;border-radius:4px}
+  .diff .add{background:#E6F6EF;color:#0C6E4C}
+  .card .q{padding:8px 14px 0;font-size:13px;color:#425466}
+  .card .btns{display:flex;gap:10px;padding:10px 14px 12px}
+  .btn{font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;border:1px solid #E3E8EE;color:#425466;background:#fff}
+  .btn.primary{background:#0E5E8B;border-color:#0E5E8B;color:#fff}
+  .compose{margin:14px 26px 22px;border:1px solid #E3E8EE;border-radius:12px;padding:12px 14px 10px;position:relative;box-shadow:0 1px 2px rgba(10,37,64,.05)}
+  .compose .ph{font-size:14px;color:#8898AA;margin-bottom:12px}
+  .ctl{display:flex;align-items:center;gap:8px}
+  .chip{font-size:12.5px;font-weight:600;color:#425466;border:1px solid #E3E8EE;border-radius:999px;padding:5px 11px;background:#fff}
+  .chip.mode{background:#EEF6FC;border-color:#BFDDF1;color:#0E5E8B}
+  .send{margin-left:auto;width:32px;height:32px;border-radius:50%;background:#0E5E8B;position:relative}
+  .send::after{content:"";position:absolute;left:11px;top:8px;width:8px;height:8px;border-left:2px solid #fff;border-top:2px solid #fff;transform:rotate(45deg)}
+  .menu{position:absolute;left:14px;bottom:56px;width:330px;background:#fff;border:1px solid #E3E8EE;border-radius:10px;box-shadow:0 10px 30px -10px rgba(10,37,64,.35);padding:6px;z-index:3}
+  .menu .t{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8898AA;padding:6px 10px 4px}
+  .menu div.i{padding:8px 10px;border-radius:7px;font-size:13.5px;color:#0A2540;display:flex;justify-content:space-between;align-items:center}
+  .menu div.i span{font-size:12px;color:#697386;font-weight:400}
+  .menu div.i.on{background:#EEF6FC;color:#0E5E8B;font-weight:600}
+  .menu .gone{margin:4px 4px 2px;padding:8px 10px;border-top:1px dashed #E3E8EE;font-size:12px;color:#8898AA}
+  .menu .gone s{color:#8898AA}
+  .badge{position:absolute;width:30px;height:30px;border-radius:50%;background:#F46A4A;color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.28);border:2px solid #fff;z-index:4}
+  .ribbon{position:absolute;right:0;top:20px;background:#0A2540;color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:7px 16px 7px 14px;border-radius:6px 0 0 6px;z-index:2}
+  .foot{position:absolute;left:40px;right:40px;bottom:14px;font-size:12px;color:#8898AA;display:flex;justify-content:space-between}
+</style>
+<body data-canvas="1200x880">
+  <div class="ribbon">Schematic · not a screenshot</div>
+  <div class="win">
+    <div class="side">
+      <div class="tabs"><span>Chat</span><span>Cowork</span><span class="on">Code</span></div>
+      <p class="t">work-os</p>
+      <div class="s on">Policy test</div>
+      <div class="s">Access test</div>
+      <div class="s">Weekly review</div>
+      <div class="s">Tier discount PRD</div>
+    </div>
+    <div class="main">
+      <div class="top"><b>Policy test</b><span>·</span><span>Documents/work-os</span><span>·</span><span>Local</span></div>
+      <div class="chat">
+        <div class="me">Create a short test note at product-development/product/meetings/other/summaries/2026-09-04-policy-test.md and mark it clearly as TEST</div>
+        <p class="ai">I'll create the test note. Here is the file I want to write:</p>
+        <div class="card" style="position:relative">
+          <div class="badge" style="left:-15px;top:-13px">2</div>
+          <div class="h"><b>Write file</b><code>product-development/product/meetings/other/summaries/2026-09-04-policy-test.md</code></div>
+          <div class="diff">
+            <div class="add">+ # TEST — policy test note</div>
+            <div class="add">+ Date: 2026-09-04 · Created to check the organization's Claude Code rule.</div>
+            <div class="add">+ Safe to delete.</div>
+          </div>
+          <p class="q">Do you want to make this change?</p>
+          <div class="btns"><span class="btn primary">Accept</span><span class="btn">Reject</span></div>
+        </div>
+      </div>
+      <div class="compose">
+        <div class="menu">
+          <div class="badge" style="left:-15px;top:-13px">1</div>
+          <p class="t">Permission mode</p>
+          <div class="i on">Manual <span>asks before every change ✓</span></div>
+          <div class="i">Accept edits <span>file edits still ask — organization rule</span></div>
+          <div class="i">Plan <span>read and plan, no edits</span></div>
+          <div class="gone"><s>Auto</s> · <s>Bypass permissions</s> — removed by your organization</div>
+        </div>
+        <div class="ph">Reply to Claude…</div>
+        <div class="ctl"><span class="chip mode">⏸ Manual ▾</span><span class="chip">Model ▾</span><span class="send"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Claude Code desktop app, Code tab — layout simplified. The live app may differ in detail.</span><span>① the mode selector without Auto and Bypass · ② the approval card before a file change</span></div>
+</body>

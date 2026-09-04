@@ -2,5 +2,5 @@
   "name": "work-os-documentation",
   "private": true,
   "description": "Builds the Work OS documentation site from content.js",
-  "scripts": { "build": "node build.js" }
+  "scripts": { "build": "node build.js", "pdf": "node build-pdf.js", "illustrations": "node illustrations/render.js" }
 }
