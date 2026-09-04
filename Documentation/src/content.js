@@ -672,7 +672,7 @@ const doc = {
 
       // ------------------------------------------------------------- stage 1 · claude organization owner
       { id: "claude-code", title: "Set up Claude Code for the team", audience: "Stage 1 · Owner of your Claude organization", time: "about 20 minutes, once", blocks: [
-        lead("You are an Owner of your company's Claude organization — the account under which the team uses Claude Code. In this article you set the Claude Code policy for the whole team: every file change is shown to the person and approved before it is written, and the modes that skip that approval — **Auto** and **Bypass permissions** — are removed from everyone's Claude Code. You do it once, in the Claude admin console in your browser. Nothing to install; people who join later are covered automatically."),
+        lead("You are an Owner of your company's Claude organization — the account under which the team uses Claude Code. In this article you set the policy under which every teammate can use Claude Code only with approval of every write: before Claude writes a file, the person sees the change and says yes — in every mode — and the modes that skip that approval, **Auto** and **Bypass permissions**, are removed. Three moves, once, in the Claude admin console in your browser: switch off what skips approval, paste the policy text, check it on one computer. Nothing to install; people who join later are covered automatically."),
         callout("why", "Without the policy, Claude Code on the Team plan starts new sessions in **Auto**, where a background check approves actions instead of the person. With it, a person approves every change on every computer; the repository rule from [Set up the repository](#/setup/repository) adds a Work OS admin's approval on top for the gated files."),
         h2("Before you start", "before"),
         checklist([
@@ -694,6 +694,7 @@ const doc = {
           "**Remote Control** — leave **off**, the default. It lets a person steer their own computer's session from a phone or browser, with the same approval cards, so it can be turned on later if someone asks.",
         ]),
         h2("Step 3 — Add the file-change policy", "p3"),
+        p("The switches remove the modes that never ask. The policy text below is what makes every write ask, whatever mode a person picks."),
         steps([
           "Under **Managed settings**, open the settings box — the text field that takes JSON.",
           step("Paste the policy below. If the box already holds settings from your IT, add the two parts — `permissions` and `allowManagedPermissionRulesOnly` — inside the existing outer braces instead.",
@@ -707,6 +708,8 @@ const doc = {
               "      \"Edit\",",
               "      \"Write\",",
               "      \"NotebookEdit\",",
+              "      \"Bash(touch *)\",",
+              "      \"Bash(mkdir *)\",",
               "      \"Bash(mv *)\",",
               "      \"Bash(cp *)\",",
               "      \"Bash(rm *)\",",
@@ -725,7 +728,7 @@ const doc = {
           ["`\"defaultMode\": \"default\"`", "Every session starts in **Manual** — Claude asks before each file change and each command."],
           ["`\"disableAutoMode\": \"disable\"`", "Removes **Auto** from everyone's mode selector."],
           ["`\"disableBypassPermissionsMode\": \"disable\"`", "Removes **Bypass permissions** everywhere Claude Code runs — the same as the switch in step 2."],
-          ["`\"ask\": [ … ]`", "Claude's file tools, and the commands that move, copy, delete or rewrite files, always ask — even if a person switches a session to **Accept edits**, the one mode that can't be removed."],
+          ["`\"ask\": [ … ]`", "Every write asks: Claude's file tools (`Edit`, `Write`, `NotebookEdit`) and the commands that create, move, copy, delete or rewrite files and folders — even if a person switches a session to **Accept edits**, the one mode that can't be removed."],
           ["`\"allowManagedPermissionRulesOnly\": true`", "Nobody can weaken the policy from their own settings, and the approval card no longer offers *don't ask again*."],
         ], [3400, 6200]),
         callout("dont", "Add `allow` rules for file tools or commands here — they would switch the approval off for everyone at once."),
@@ -746,9 +749,9 @@ const doc = {
         h2("Good to know", "notes"),
         bullets([
           "**Changing the policy later:** open the same page, edit the settings text, save — every Claude Code follows it at its next start or within the hour. Removing a line loosens the policy for everyone, so agree changes with the Work OS admin first.",
-          "**Who the policy reaches:** the Code tab of the Claude desktop app, signed in with the organization account. Sign-ins with an API key or through a company gateway, and Cowork sessions, don't receive it.",
+          "**Who the policy reaches:** the Code tab of the Claude desktop app, signed in with the organization account. Sign-ins with an API key or through a company gateway, and Cowork sessions, don't receive it — a device policy does (next point).",
           "**It is a setting, not a lock.** Anthropic describes console-managed settings as a client-side control, not a security boundary. That is why gated files also need an approved pull request on `main` ([Set up the repository](#/setup/repository), step 4), whatever happens on a computer.",
-          "**Devices managed by IT** (Jamf, Intune, Group Policy) can receive the same policy text as a device policy instead — harder to get around, but it doesn't reach sessions on Anthropic's computers. Paths and formats: Anthropic's [Deploy managed settings](https://code.claude.com/docs/en/managed-settings).",
+          "**Devices managed by IT** (Jamf, Intune, Group Policy) can receive the same policy text as a device policy instead: it applies to every session on that computer, Cowork and API-key sign-ins included, and can't be edited without administrator rights — but it doesn't reach sessions on Anthropic's computers. Paths and formats: Anthropic's [Deploy managed settings](https://code.claude.com/docs/en/managed-settings).",
         ]),
       ]},
 
