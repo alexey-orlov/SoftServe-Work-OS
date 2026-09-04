@@ -1,5 +1,5 @@
 // build-pdf.js — renders ONE article of content.js (the single source) to a standalone, print-styled PDF.
-//   node build-pdf.js                                  → Setup › Set up Claude Code for the team → ../claude-code-team-setup.pdf
+//   node build-pdf.js                                  → Setup › Require approval for every Claude Code write → ../claude-code-team-setup.pdf
 //   node build-pdf.js setup/claude-code                → the same article, by route (section/article, as in the site's links)
 //   node build-pdf.js <route> --out <file.pdf> [--platform github|azure] [--html <keep the intermediate HTML here>]
 // Needs node 22+ and a Chromium-based browser (chrome.js finds it; set CHROME_PATH otherwise). No npm dependencies.

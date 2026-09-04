@@ -7,7 +7,7 @@ The customer-facing documentation of the Work OS — what a team is told when it
 ## What is here
 
 - [work-os-docs.html](work-os-docs.html) — The documentation site, one self-contained file (open it in a browser; works offline). Sections and articles come from `src/content.js` — the top menu and the left panel are the live table of contents (Work OS 101, the skills and context-system overviews, the setup stages, troubleshooting, …). A GitHub / Azure Repos switch shows only the platform in use.
-- [claude-code-team-setup.pdf](claude-code-team-setup.pdf) — The *Set up Claude Code for the team* article as a standalone, print-styled PDF for the Owner of the Claude organization (the organization-wide rule that Claude asks before every file change). Rendered from the same `src/content.js` by `src/build-pdf.js` — never edited by hand.
+- [claude-code-team-setup.pdf](claude-code-team-setup.pdf) — The *Require approval for every Claude Code write* article as a standalone, print-styled PDF for the Owner of the Claude organization (the organization-wide policy that Claude asks before every write). Rendered from the same `src/content.js` by `src/build-pdf.js` — never edited by hand.
 
 ### Subfolders
 
