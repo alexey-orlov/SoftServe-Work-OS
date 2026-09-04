@@ -695,7 +695,6 @@ const doc = {
         ]),
         callout("expected", "The page shows the organization switches for Claude Code — **Code in the desktop**, **Code in the web**, **Remote Control**, **Disable Bypass permissions mode** — and a **Managed settings** section. If the link lands on another admin page instead, your account isn't an Owner: ask an Owner to do this article."),
         callout("note", "The console evolves — a switch may carry a slightly different name than shown here. Go by what it does, described next to it."),
-        image("claude-admin-console.jpg", "Schematic of the Claude Code page in the Claude admin console: the four organization switches and the Managed settings box", "The Claude Code page of the admin console — a schematic, not a screenshot: the layout follows Anthropic's documentation, and the live page may differ in detail. ① the switches (step 2) · ② the policy text (step 3) · ③ Save."),
         h2("Step 2 — Set the organization switches", "p2"),
         steps([
           "**Code in the desktop** — on. The Work OS runs in the Claude Code desktop app; off would lock the team out.",
@@ -756,7 +755,6 @@ const doc = {
           step("Ask Claude to change a gated file — and reject it, this is only a test:", say("In business-info.md, correct or fill in one line"),
             callout("expected", "The approval card carries the Work OS's **🔒 GATED FILE** note: why the file is protected and where an approved change would go. After a reject, nothing is written.")),
         ]),
-        image("claude-code-mode-selector.jpg", "Schematic of the Claude Code desktop app with the mode selector open — Manual, Accept edits and Plan — and an approval card showing a file change", "What the teammate sees — a schematic, not a screenshot: the mode selector without Auto and Bypass permissions, and the approval card before a file change."),
         callout("tip", "**Only from a terminal:** to see which policy a computer follows, someone with a terminal runs `claude doctor` and reads the *Managed settings (remote)* line, or `/status` in a terminal session, whose *Setting sources* line reads *Enterprise managed settings (remote)*. The checks above show the same without one."),
         callout("tip", "**Clean-up:** ask Claude to delete the test note."),
         h2("Step 5 — Tell the team", "p5"),
