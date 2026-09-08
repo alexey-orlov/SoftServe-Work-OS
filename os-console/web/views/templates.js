@@ -13,22 +13,11 @@ const TABS = [
   ['writing', 'Writing styles'],
 ];
 
-// Which templates each tab holds, in the order they should read — the PRDs tab is
-// the definition chain, so it is deliberately not alphabetical. Anything not named
-// here falls to "Other templates", so a new scaffold in the handbook shows up
-// rather than disappearing — give it a row in the same change that adds it.
-const TAB_TEMPLATES = {
-  prds: ['prd-template.md', 'jobs-breakdown-template.md', 'job-spec-template.md'],
-  meetings: ['interview-template.md', 'retrospective-template.md'],
-};
-const CLAIMED = new Set(Object.values(TAB_TEMPLATES).flat());
-
-/** The tab's templates, in declared order; "other" keeps the adapter's own order. */
+// Group membership and order both come from the adapter (`lib/adapters/templates.js`
+// GROUPS + ORDER), so these tabs and the Setup page's Templates sections cannot drift.
+// An unlisted template arrives as `other` rather than disappearing.
 function templatesFor(tab, items) {
-  if (tab === 'other') return items.filter((t) => !CLAIMED.has(t.name));
-  return (TAB_TEMPLATES[tab] || [])
-    .map((name) => items.find((t) => t.name === name))
-    .filter(Boolean);
+  return items.filter((t) => (t.group || 'other') === tab);
 }
 
 // Business-language descriptions per template (fallback: the repo's own nav line).

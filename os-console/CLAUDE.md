@@ -27,9 +27,16 @@ page rather than one per tab. The Library ↔ Folder tree switch stays above the
 owns the mode; tabs subdivide the curated view only, and never appear over the tree.
 "System rules" is the same name on the Gated-files page; that page's "Steering files" is
 deliberately broader than the Library's Strategic context, because it groups by what the
-policy protects (business context, templates and engineering together). The Setup page's
-first tab carries the same "Strategic context" name over the same files; its
-`?tab=business` id stays put so old links keep working.
+policy protects (business context, templates and engineering together). The **Setup page follows the
+Library's structure inside its own tabs**: its first tab is *Business context* and
+sections into the same Library groups (Strategic context — the steering files in the
+Library's tile order; Ongoing business context and Data, tech and the codebase — content
+readiness, reported as signal and deliberately OUTSIDE the progress counter, because
+"12 meetings filed" is not a step anyone finishes); the Templates tab groups by the
+Templates page's four names; the Integrations table sections by which Library group each
+tool feeds. Its `?tab=business` id stays put so old links keep working. Template group
+membership, order and display names all come from `lib/adapters/templates.js`, so the
+Templates page and the Setup tab cannot drift apart.
 Second-level group pages (Templates, Competition, Skills) share one skeleton — crumbs
 back to Library, title + one-line purpose, tile grid; Templates splits that grid across
 four tabs (PRDs and specs · Meetings & interviews · Other templates · Writing styles)

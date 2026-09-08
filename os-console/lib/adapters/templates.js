@@ -47,6 +47,26 @@ function labelFor(name) {
   return base.charAt(0).toUpperCase() + base.slice(1);
 }
 
+// Which of the Templates page's four groups a scaffold belongs to, and the order it
+// reads in — `prds` is the definition chain, so it is deliberately not alphabetical.
+// The Templates page's tabs and the Setup tab's sections both read this, which is what
+// stops them drifting apart. Anything unlisted falls to `other` rather than vanishing.
+// (The fourth group, `writing`, is the writing guides — read, not copied, so no row.)
+const GROUPS = {
+  'prd-template.md': 'prds',
+  'jobs-breakdown-template.md': 'prds',
+  'job-spec-template.md': 'prds',
+  'interview-template.md': 'meetings',
+  'retrospective-template.md': 'meetings',
+};
+const ORDER = ['prd-template.md', 'jobs-breakdown-template.md', 'job-spec-template.md',
+  'interview-template.md', 'retrospective-template.md'];
+
+function rank(name) {
+  const i = ORDER.indexOf(name);
+  return i === -1 ? ORDER.length : i;
+}
+
 export function build() {
   const pol = policy.load();
   const descs = md.navDescriptions(DIR);
@@ -59,12 +79,14 @@ export function build() {
       name: e.name,
       title: md.firstHeading(text) || e.name.replace(/-template\.md$/, ''),
       label: labelFor(e.name),
+      group: GROUPS[e.name] || 'other',
       desc: descs[e.rel] || '',
       tier: policy.tierFor(e.rel, pol).tier,
       suggest: SUGGEST[e.name] || 'product-development/{where-it-belongs}.md',
       lines: text.split('\n').length,
     });
   }
+  items.sort((a, b) => rank(a.name) - rank(b.name) || a.label.localeCompare(b.label));
   return { dir: DIR, items };
 }
 

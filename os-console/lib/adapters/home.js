@@ -78,17 +78,100 @@ export function codeReposConfigured() {
 const BC = 'product-development/product/strategy/business-context';
 const CR = 'product-development/product/competitive-research';
 
+// Order mirrors the Library's Strategic context tiles, with the one Library tile that
+// fronts two files (Competition) expanded into both — population status is per file.
+// /job-spec-draft and /jobs-breakdown stamp [GAP: platform model unfilled] on their
+// output while the platform model is empty, so its fill state belongs on the meter.
 const STEERING_FILES = [
   ['claude-md', 'Root CLAUDE.md', 'CLAUDE.md'],
   ['business-info', 'Business info', `${BC}/business-info.md`],
-  ['stakeholders', 'Stakeholders', `${BC}/stakeholders.md`],
   ['segmentation', 'Segmentation matrix', `${BC}/segmentation-matrix.md`],
-  // /job-spec-draft and /jobs-breakdown stamp [GAP: platform model unfilled] on their
-  // output while this one is empty, so its fill state belongs on the setup meter.
-  ['platform-model', 'Platform model', `${BC}/platform-model.md`],
   ['landscape', 'Competitive landscape', `${CR}/competitive-landscape.md`],
   ['matrix', 'Competitive matrix', `${CR}/competitive-matrix.md`],
+  ['platform-model', 'Platform model', `${BC}/platform-model.md`],
+  ['stakeholders', 'Stakeholders', `${BC}/stakeholders.md`],
 ];
+
+// ---------------------------------------------------------------- content readiness
+// The two Library groups the setup meter cannot measure: material that ACCUMULATES
+// (ongoing business context) and registries that describe systems set up elsewhere
+// (data, tech and the codebase). Both are reported as signal, never as progress —
+// "12 meetings filed" is not a step anyone finishes, so counting it toward the meter
+// would mean a bar that can never legitimately reach the end. One row per Library
+// tile, in the Library's own order.
+const READINESS = {
+  ongoing: [
+    { key: 'competitors', label: 'Competitors', noun: 'teardown', dir: `${CR}/competitors`,
+      globs: [`${CR}/competitors/*/teardown.md`] },
+    { key: 'customers', label: 'Customers', noun: 'account', dir: 'product-development/product/customers',
+      globs: ['product-development/product/customers/accounts/*/account-context.md'] },
+    { key: 'roadmap', label: 'Roadmap & OKRs', noun: 'roadmap', dir: 'product-development/product/strategy',
+      globs: ['product-development/product/strategy/roadmaps/*.md'], skip: ['roadmap-guide.md'] },
+    { key: 'insights', label: 'User insights', noun: 'record', dir: 'product-development/product/user-insights',
+      globs: ['product-development/product/user-insights/**/*.md'] },
+    { key: 'meetings', label: 'Meetings', noun: 'record', dir: 'product-development/product/meetings',
+      globs: ['product-development/product/meetings/**/*.md'] },
+    { key: 'decisions', label: 'Decisions', noun: 'decision', dir: 'product-development/product/decisions',
+      globs: ['product-development/product/decisions/*.md'] },
+    { key: 'launches', label: 'Launches', noun: 'record', dir: 'product-development/product/launches',
+      globs: ['product-development/product/launches/*.md'] },
+    { key: 'inbox', label: 'Inbox (drop zone)', noun: 'file waiting', dir: 'product-development/inbox',
+      globs: ['product-development/inbox/*'] },
+  ],
+  data: [
+    { key: 'analytics', label: 'Analytics', noun: 'definition', dir: 'product-development/analytics',
+      globs: ['product-development/analytics/metrics/**/*.md', 'product-development/analytics/queries/**/*.sql'] },
+    { key: 'engineering', label: 'Engineering', noun: 'document', dir: 'product-development/engineering',
+      globs: ['product-development/engineering/plans/**/*.md', 'product-development/engineering/codebases/**/*.md'] },
+  ],
+};
+
+/** Files a group's globs match, minus navigation files and the named guides. */
+function countContent(globs, skip = []) {
+  const seen = new Set();
+  for (const g of globs) {
+    let hits;
+    try {
+      hits = repo.globFiles(g);
+    } catch { continue; }
+    for (const rel of hits) {
+      const name = rel.split('/').pop();
+      if (name === 'CLAUDE.md' || name === '.gitkeep' || skip.includes(name)) continue;
+      seen.add(rel);
+    }
+  }
+  return seen.size;
+}
+
+/** Per-row content signal for the two groups the meter deliberately does not count. */
+export function contentReadiness() {
+  const rows = (list) => list.map((r) => {
+    const n = countContent(r.globs, r.skip);
+    return { key: r.key, label: r.label, dir: r.dir, count: n, state: n > 0 ? 'done' : 'todo',
+      detail: n > 0 ? `${n} ${r.noun}${n === 1 ? '' : 's'} filed.` : 'Nothing here yet.' };
+  });
+  const out = { ongoing: rows(READINESS.ongoing), data: rows(READINESS.data) };
+
+  // The two registries carry their own notion of "filled" — a file that exists but
+  // registers nothing is not readiness, so they are read, not counted.
+  const code = codeReposConfigured();
+  out.data.unshift({
+    key: 'code-repos', label: 'Code repositories', path: 'product-development/engineering/code-repos.yaml',
+    state: code.configured ? 'done' : 'todo',
+    detail: code.configured ? `${code.remotes} registered.`
+      : code.present ? 'Registry present, no real repository yet — /connect-code fills it.'
+        : 'No registry yet — /connect-code creates it.',
+  });
+  const catalogText = repo.readTextOrNull('product-development/analytics/data-catalog.yaml');
+  const tables = catalogText ? (catalogText.match(/^\s*-\s+name:/gm) || []).length : 0;
+  out.data.unshift({
+    key: 'data-catalog', label: 'Data catalog', path: 'product-development/analytics/data-catalog.yaml',
+    state: tables > 0 ? 'done' : 'todo',
+    detail: tables > 0 ? `${tables} table${tables === 1 ? '' : 's'} registered.`
+      : 'No tables registered yet — filled by hand as the warehouse is mapped.',
+  });
+  return out;
+}
 
 /** Population status per steering file — same completion lens as the Steering
  *  page (steering.completion), over the setup page's curated population set. */
@@ -121,10 +204,31 @@ export function templatesStatus(customization) {
   } catch {
     items = [];
   }
+  // Writing guides ride along so this tab can group by the same four names the
+  // Templates page uses; they are read, not copied, so they carry no destination.
+  let guides = [];
+  const GUIDES = 'product-development/product/handbook/writing-guides';
+  try {
+    // Descriptions come from the folder's own CLAUDE.md nav lines, the same source
+    // every other listing uses — a filename is not a description.
+    const gDescs = md.navDescriptions(GUIDES);
+    guides = repo.listDir(GUIDES)
+      .filter((e) => e.type === 'file' && e.name.endsWith('.md') && e.name !== 'CLAUDE.md')
+      .map((e) => ({
+        name: e.name,
+        label: e.name.replace(/\.md$/, '').replace(/^./, (c) => c.toUpperCase()),
+        path: e.rel,
+        desc: gDescs[e.rel] || '',
+      }));
+  } catch { /* folder missing on a stripped install */ }
+
   return {
     phase,
     customized: done,
-    items: items.map((t) => ({ name: t.name, title: t.title, label: t.label, path: t.path, desc: t.desc })),
+    items: items.map((t) => ({
+      name: t.name, title: t.title, label: t.label, group: t.group, path: t.path, desc: t.desc,
+    })),
+    guides,
   };
 }
 
@@ -313,9 +417,11 @@ export function build() {
   // Per-tab progress; demo data is deliberately outside the meter (synthetic
   // data is not a goal state for a real instance).
   const tabs = {
-    business: { items: steer, done: steer.filter((s) => s.state === 'done').length, total: steer.length },
+    // readiness rides along as signal only — it is deliberately outside done/total.
+    business: { items: steer, readiness: contentReadiness(),
+      done: steer.filter((s) => s.state === 'done').length, total: steer.length },
     templates: { phase: tmpl.phase, customized: tmpl.customized, items: tmpl.items,
-      done: tmpl.customized ? 1 : 0, total: 1 },
+      guides: tmpl.guides, done: tmpl.customized ? 1 : 0, total: 1 },
     integrations: { rows: integ.rows, other: integ.other,
       done: integ.rows.filter((r) => r.status === 'live' || r.status === 'files').length,
       total: integ.rows.length },

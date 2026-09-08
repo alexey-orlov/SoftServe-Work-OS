@@ -432,3 +432,4 @@ handled-elsewhere:
   - "User-insights source + meeting cadences → /customize-os research-source"
   - "Initiative pages & per-initiative context → /customize-os initiatives"
   - "Audience writing guides (handbook/writing-guides/) → planned target; fill by hand meanwhile"
+  - "Warehouse table registry (analytics/data-catalog.yaml) → no target and no skill writer; the analyst fills it by hand as tables are mapped"

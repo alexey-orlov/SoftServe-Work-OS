@@ -1,4 +1,4 @@
-// Set up this OS — five tabs (Strategic context / Templates / Integrations /
+// Set up this OS — five tabs (Business context / Templates / Integrations /
 // Auto-sync / Demo data), overall progress + per-tab counters, every signal
 // read live from the team's files. The guided-way strip spans the page (it
 // concerns the whole setup, not one tab); the Integrations tab is the full
@@ -10,10 +10,15 @@ import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promp
 import { renderAutosync } from '/views/autosync.js';
 
 // The ids are the URL's ?tab= value and the keys of the API's setup payload, so
-// they stay put when a label is reworded — 'business' reads "Strategic context",
-// the same name the Library gives that group.
+// they stay put when a label is reworded — 'business' reads "Business context", the
+// same name the Library's first tab carries, and holds the same groups it does.
+const TEMPLATE_GROUPS = [
+  ['prds', 'PRDs and specs'],
+  ['meetings', 'Meetings & interviews'],
+  ['other', 'Other templates'],
+];
 const TABS = [
-  ['business', 'Strategic context'],
+  ['business', 'Business context'],
   ['templates', 'Templates'],
   ['integrations', 'Integrations'],
   ['autosync', 'Auto-sync'],
@@ -101,11 +106,18 @@ function tidyDetail(s) {
     .replace('Populated — no placeholders left.', 'Complete — nothing left to fill in.');
 }
 
+// The Library's group eyebrow, reused so a section carries the same name, order and
+// colour here as it does over there.
+function sectionHead(key, title) {
+  return el('h2', { class: `group-head g-${key}` }, el('span', { class: 'group-dot' }), title);
+}
+
 function drawBusiness(box, tab) {
   const card = el('div', { class: 'card' },
     el('h3', {}, 'How filled-in your context is'),
     el('div', { class: 'hint' },
       'The files every strategic skill reads first. A file is complete when nothing is left as a placeholder.'),
+    sectionHead('strategic', 'Strategic context'),
   );
   for (const r of (tab && tab.items) || []) {
     card.append(el('div', { class: 'step' },
@@ -118,6 +130,32 @@ function drawBusiness(box, tab) {
         : cmdChip('/customize-os'),
     ));
   }
+
+  // Signal, not progress: these two sections stay out of the counter above, because
+  // "12 meetings filed" is not a step anyone finishes.
+  const rd = (tab && tab.readiness) || {};
+  const readSection = (key, title, note, rows) => {
+    if (!rows || !rows.length) return;
+    card.append(sectionHead(key, title), el('div', { class: 'hint', style: 'margin:0 0 4px' }, note));
+    for (const r of rows) {
+      const href = r.path ? `#/file?path=${encodeURIComponent(r.path)}`
+        : `#/library?path=${encodeURIComponent(r.dir)}`;
+      card.append(el('div', { class: 'step' },
+        pill(r.state),
+        el('div', { class: 'body' },
+          el('div', { class: 'title' }, r.label),
+          el('div', { class: 'detail' }, r.detail)),
+        el('a', { class: 'btn small quiet', href, title: r.path || r.dir }, 'Open'),
+      ));
+    }
+  };
+  readSection('ongoing', 'Ongoing business context',
+    'What the team has filed so far. This grows with the work rather than getting finished, so it is reported as a signal and left out of the progress above.',
+    rd.ongoing);
+  readSection('data', 'Data, tech and the codebase',
+    'The warehouse and repositories the Work OS reads. These are set up outside the Work OS — the rows say what it can currently see.',
+    rd.data);
+
   box.append(card);
 }
 
@@ -143,14 +181,24 @@ function drawTemplates(box, tab) {
         ? `Your house formats are in — derived from your own documents (program reports: ${tab.phase}).`
         : el('span', {}, 'The blank documents skills start from. They work as shipped; deriving your house formats from 2–4 of your real documents makes every future document look like yours: ', cmdChip('/customize-os templates'))),
   );
-  // same fixed rhythm as the Templates page, so the two read as one thing
-  const grid = el('div', { class: 'tiles quick three-up', style: 'margin-top:10px' });
-  for (const t of (tab && tab.items) || []) {
-    grid.append(el('a', { class: 'tile', href: `#/file?path=${encodeURIComponent(t.path)}`, title: t.path },
-      el('div', { class: 'row-t' }, icon('file'), el('span', { class: 'grow' }, t.label || tidyTemplateTitle(t.title))),
-      el('div', { class: 'd' }, tidyTemplateDesc(t.desc || t.name))));
+  // Same four groups, same order and same fixed rhythm as the Templates page, so the
+  // two surfaces read as one thing. Group membership comes from the adapter.
+  const tile = (t, ico) => el('a', { class: 'tile', href: `#/file?path=${encodeURIComponent(t.path)}`, title: t.path },
+    el('div', { class: 'row-t' }, icon(ico), el('span', { class: 'grow' }, t.label || tidyTemplateTitle(t.title))),
+    el('div', { class: 'd' }, tidyTemplateDesc(t.desc || t.name)));
+
+  const items = (tab && tab.items) || [];
+  for (const [group, title] of TEMPLATE_GROUPS) {
+    const rows = items.filter((t) => (t.group || 'other') === group);
+    if (!rows.length) continue;
+    card.append(sectionHead('templates', title),
+      el('div', { class: 'tiles quick three-up', style: 'margin-top:8px' }, rows.map((t) => tile(t, 'file'))));
   }
-  card.append(grid);
+  const guides = (tab && tab.guides) || [];
+  if (guides.length) {
+    card.append(sectionHead('templates', 'Writing styles'),
+      el('div', { class: 'tiles quick three-up', style: 'margin-top:8px' }, guides.map((g) => tile(g, 'edit'))));
+  }
   box.append(card);
 }
 
@@ -163,22 +211,42 @@ const STATUS_PILLS = {
   todo: ['todo', 'Not set up'],
 };
 
+// Each integration feeds one Library group; grouping the table by that answers "what
+// does connecting this actually improve?" in the vocabulary of the Library. A surface
+// not listed here falls into Ongoing business context, the group that collects what
+// keeps arriving. Order within a group follows the adapter's SURFACES order.
+const INTEGRATION_GROUPS = [
+  ['ongoing', 'Ongoing business context',
+    ['meeting-transcripts', 'user-insights', 'knowledge-base', 'feature-requests', 'team-chat', 'calendar']],
+  ['data', 'Data, tech and the codebase', ['codebase', 'analytics']],
+  ['artifacts', 'Output artifacts', ['prototyping', 'ticketing']],
+];
+
 function drawIntegrations(box, tab) {
   const rows = (tab && tab.rows) || [];
   const card = el('div', { class: 'card' },
     el('h3', {}, 'Integrations'),
     el('div', { class: 'hint' },
-      'Every connection is optional — each row has a way of working with plain files out of the box. Type the tool you plan to use under "System used"; once a real connection is live, the field locks to the connected tool.'),
+      'Every connection is optional — each row has a way of working with plain files out of the box. Type the tool you plan to use under "System used"; once a real connection is live, the field locks to the connected tool. Grouped by what each one feeds in the Library.'),
   );
-  const table = el('table', { class: 'integrations' },
-    el('thead', {}, el('tr', {},
-      el('th', {}, 'Integration'), el('th', {}, 'Purpose'), el('th', {}, 'System used'),
-      el('th', {}, 'Status'), el('th', {}, 'Comment'), el('th', {}, 'Actions'))),
-  );
-  const tbody = el('tbody', {});
-  table.append(tbody);
-  for (const r of rows) tbody.append(integrationRow(r));
-  card.append(el('div', { class: 'table-scroll' }, table));
+
+  const claimed = new Set(INTEGRATION_GROUPS.flatMap(([, , keys]) => keys));
+  const groupRows = (keys, catchAll) => rows.filter((r) => (catchAll && !claimed.has(r.key)) || keys.includes(r.key));
+
+  for (const [key, title, keys] of INTEGRATION_GROUPS) {
+    const mine = groupRows(keys, key === 'ongoing');
+    if (!mine.length) continue;
+    const table = el('table', { class: 'integrations' },
+      el('thead', {}, el('tr', {},
+        el('th', {}, 'Integration'), el('th', {}, 'Purpose'), el('th', {}, 'System used'),
+        el('th', {}, 'Status'), el('th', {}, 'Comment'), el('th', {}, 'Actions'))),
+    );
+    const tbody = el('tbody', {});
+    table.append(tbody);
+    for (const r of mine) tbody.append(integrationRow(r));
+    card.append(sectionHead(key, title), el('div', { class: 'table-scroll' }, table));
+  }
+
   if (tab && tab.other && tab.other.length) {
     card.append(el('div', { class: 'hint', style: 'margin-top:8px' },
       `Also connected (not tied to a row above): ${tab.other.join(', ')}.`));
