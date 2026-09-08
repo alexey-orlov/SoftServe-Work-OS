@@ -32,9 +32,9 @@ const ROUTES = {
 const NAV = {
   primary: [
     ['home', 'Home', 'home'],
-    ['initiatives', 'Initiatives', 'flag'],
-    ['features', 'Product map', 'compass'],
     ['library', 'Library', 'book'],
+    ['features', 'Product map', 'compass'],
+    ['initiatives', 'Initiatives', 'flag'],
     ['activity', 'Activity', 'clock'],
   ],
   manage: [

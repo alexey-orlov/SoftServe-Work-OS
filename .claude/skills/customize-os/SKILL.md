@@ -39,7 +39,7 @@ readout.
 
 | # | Target | Playbook | What it settles |
 |---|--------|----------|-----------------|
-| 1 | `context-core` | `targets/context-core.md` | The general steering context — business info, team, stakeholders, segmentation, quarter — populated from real documents; report; optional web enrichment |
+| 1 | `context-core` | `targets/context-core.md` | The general steering context — business info, team, stakeholders, segmentation, quarter, platform model, tech constraints — populated from real documents; report; optional web enrichment |
 | 2 | `initiatives` | `targets/initiatives.md` | Real initiative pages (aim for 3+) and their attached material folded in |
 | 3 | `design-system` | `targets/design-system.md` | How prototypes get design grounding → `toolchain.yaml` |
 | 4 | `research-source` | `targets/research-source.md` | Where research/meeting records come from → `toolchain.yaml`; meeting cadences; optional first load |

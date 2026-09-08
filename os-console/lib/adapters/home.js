@@ -83,6 +83,9 @@ const STEERING_FILES = [
   ['business-info', 'Business info', `${BC}/business-info.md`],
   ['stakeholders', 'Stakeholders', `${BC}/stakeholders.md`],
   ['segmentation', 'Segmentation matrix', `${BC}/segmentation-matrix.md`],
+  // /job-spec-draft and /jobs-breakdown stamp [GAP: platform model unfilled] on their
+  // output while this one is empty, so its fill state belongs on the setup meter.
+  ['platform-model', 'Platform model', `${BC}/platform-model.md`],
   ['landscape', 'Competitive landscape', `${CR}/competitive-landscape.md`],
   ['matrix', 'Competitive matrix', `${CR}/competitive-matrix.md`],
 ];
@@ -121,7 +124,7 @@ export function templatesStatus(customization) {
   return {
     phase,
     customized: done,
-    items: items.map((t) => ({ name: t.name, title: t.title, path: t.path, desc: t.desc })),
+    items: items.map((t) => ({ name: t.name, title: t.title, label: t.label, path: t.path, desc: t.desc })),
   };
 }
 

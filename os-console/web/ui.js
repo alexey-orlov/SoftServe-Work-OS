@@ -316,6 +316,58 @@ export function filePicker({ title = 'Pick a file', onPick, startPath = 'product
   return m;
 }
 
+// ---- tab bar ---------------------------------------------------------------
+// The console's one tabbed-page component (Library, Setup, Templates, Proposed
+// changes). It owns the ?tab= parameter, the active state and the tablist
+// semantics, so a tabbed page only has to say what to draw for the chosen id.
+// `tabs` rows are [id, label] or [id, label, count] — a count renders the pill,
+// omit it for a bar that shouldn't carry numbers.
+
+export function tabBar({ route, tabs, active, onSelect }) {
+  const bar = el('div', { class: 'tabs', role: 'tablist' });
+
+  const select = (id) => {
+    history.replaceState(null, '', `#/${route}?tab=${id}`);
+    for (const b of bar.querySelectorAll('.tab')) {
+      const on = b.dataset.tab === id;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    }
+    onSelect(id);
+  };
+
+  // Left/Right walk the bar, the way a tablist is expected to behave.
+  const arrows = (ev) => {
+    const dir = ev.key === 'ArrowRight' ? 1 : ev.key === 'ArrowLeft' ? -1 : 0;
+    if (!dir) return;
+    ev.preventDefault();
+    const btns = [...bar.querySelectorAll('.tab')];
+    const next = btns[(btns.indexOf(ev.currentTarget) + dir + btns.length) % btns.length];
+    next.focus();
+    select(next.dataset.tab);
+  };
+
+  for (const [id, label, count] of tabs) {
+    const on = id === active;
+    bar.append(el('button', {
+      class: `tab ${on ? 'on' : ''}`,
+      role: 'tab',
+      'aria-selected': on ? 'true' : 'false',
+      dataset: { tab: id },
+      onclick: () => select(id),
+      onkeydown: arrows,
+    }, label, count === undefined || count === null || count === '' ? null
+      : el('span', { class: 'count' }, String(count))));
+  }
+  return bar;
+}
+
+/** The ?tab= value when it names a real tab, else the first tab's id. */
+export function activeTab(params, tabs) {
+  const want = params && params.get('tab');
+  return tabs.some(([id]) => id === want) ? want : tabs[0][0];
+}
+
 export function crumbs(parts) {
   const box = el('span', {});
   parts.forEach((p, i) => {

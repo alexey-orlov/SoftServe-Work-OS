@@ -23,6 +23,7 @@
   --err-ink: #b03328;  --err-tint: #fbe9e7;
   --todo-ink: #5b6672; --todo-tint: #eceff2;
   --gate-ink: #6d38b8; --gate-tint: #f0e9fb;
+  --teal-ink: #0b7285;        /* the sixth Library group colour — templates */
 
   --shadow: 0 1px 2px rgba(16, 24, 32, .05), 0 4px 16px rgba(16, 24, 32, .05);
   --shadow-lift: 0 2px 6px rgba(16, 24, 32, .08), 0 12px 32px rgba(16, 24, 32, .10);
@@ -54,6 +55,7 @@
     --err-ink: #ef8b80;  --err-tint: #331713;
     --todo-ink: #9aa5b1; --todo-tint: #222a32;
     --gate-ink: #b791ec; --gate-tint: #261a3a;
+    --teal-ink: #5fc2d1;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
     --shadow-lift: 0 2px 6px rgba(0, 0, 0, .4), 0 12px 32px rgba(0, 0, 0, .4);
   }
@@ -201,12 +203,21 @@ h2.section { font-size: 12px; font-weight: 650; letter-spacing: .07em; text-tran
 .pill.icon-only { padding: 2.5px; gap: 0; }
 .pill.xs.icon-only svg { width: 11px; height: 11px; }
 
-/* heading hierarchy: h1 (page) → .group-head (primary group) → .subgroup (small caps) */
+/* Heading hierarchy, and it steps DOWN into the page:
+     h1 (page, 21/680) → .tabs .tab (section, 15/600) → .group-head (block) → tile title.
+   .group-head is an uppercase eyebrow rather than a bigger bolder title on purpose: a
+   block sitting INSIDE a tab must not outweigh the tab naming it, and uppercase +
+   letter-spacing marks a label of a different class, so it reads as superordinate to the
+   13.5px tile titles below it without competing with the tab above. Separation comes from
+   whitespace and the group's colour dot, which is why the top margin grew as the type
+   shrank. (.subgroup is the alternative third level for pages that nest — no page renders
+   both.) */
 .group-head {
-  font-size: 16px; font-weight: 680; letter-spacing: -.01em; color: var(--ink);
-  margin: 30px 0 2px;
+  font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 34px 0 2px;
 }
-.group-head:first-of-type { margin-top: 18px; }
+.group-head:first-of-type { margin-top: 20px; }
 .subgroup {
   font-size: 11px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase;
   color: var(--muted); margin: 14px 0 8px;
@@ -464,14 +475,17 @@ a.locked { text-decoration: none; }
 }
 .btn.copied { background: var(--ok-tint); color: var(--ok-ink); }
 
-/* tab bar (Setup, Proposed changes) */
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 14px 0 18px; }
+/* tab bar — the page's section switch, so it outranks every heading inside a tab.
+   Weight stays constant across states (the accent colour + underline carry the active
+   one) because a bold-on-select would re-flow the bar under the pointer. */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 16px 0 18px; }
 .tabs .tab {
   appearance: none; background: none; border: 0; border-bottom: 2px solid transparent;
-  font: inherit; font-size: 13.5px; font-weight: 550; color: var(--ink-2);
-  padding: 7px 10px 9px; cursor: pointer; display: flex; align-items: center; gap: 7px;
+  font: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.005em; color: var(--ink-2);
+  padding: 8px 11px 10px; cursor: pointer; display: flex; align-items: center; gap: 7px;
 }
 .tabs .tab:hover { color: var(--ink); }
+.tabs .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px 6px 0 0; }
 .tabs .tab.on { color: var(--accent-ink); border-bottom-color: var(--accent); }
 .tabs .tab .count { font-size: 11px; font-weight: 650; background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 99px; padding: 1px 7px; color: var(--muted); }
 .tabs .tab.on .count { background: var(--accent-tint); color: var(--accent-ink); border-color: transparent; }
@@ -549,18 +563,36 @@ table.integrations th:nth-child(2), table.integrations td.purpose { max-width: 1
 table.integrations th:nth-child(5), table.integrations td.comment { max-width: 230px; }
 table.integrations td:first-child { white-space: normal; min-width: 110px; }
 
+/* Quick-access tile grid — a fixed column count instead of auto-fit, so a group
+   breaks into even rows (8 → 4+4, 6 → 3+3) rather than one packed row plus an
+   orphan, and tiles keep one width whatever their group's size. `three-up` is the
+   opt-out for groups that want roomier cards. Both collapse down the same ladder. */
+.tiles.quick { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tiles.quick.three-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1140px) {
+  .tiles.quick, .tiles.quick.three-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 920px) {
+  .tiles.quick, .tiles.quick.three-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .tiles.quick, .tiles.quick.three-up { grid-template-columns: 1fr; }
+}
+
 /* library group color coding — a quiet accent per group, never color alone */
 .group-head .group-dot {
-  display: inline-block; width: 9px; height: 9px; border-radius: 3px;
-  margin-right: 8px; vertical-align: 1px; background: var(--muted);
+  display: inline-block; width: 7px; height: 7px; border-radius: 2px;
+  margin-right: 8px; vertical-align: .5px; background: var(--muted);
 }
-.g-steering  { --group-color: var(--gate-ink); }
+.g-strategic { --group-color: var(--gate-ink); }
+.g-templates { --group-color: var(--teal-ink); }
+.g-ongoing   { --group-color: var(--warm); }
 .g-artifacts { --group-color: var(--accent); }
-.g-source    { --group-color: var(--warm); }
 .g-data      { --group-color: var(--ok-ink); }
 .g-system    { --group-color: var(--muted); }
 .group-head .group-dot { background: var(--group-color, var(--muted)); }
-.tile.g-steering, .tile.g-artifacts, .tile.g-source, .tile.g-data, .tile.g-system {
+.tile.g-strategic, .tile.g-templates, .tile.g-ongoing, .tile.g-artifacts,
+.tile.g-data, .tile.g-system {
   border-left: 3px solid var(--group-color, var(--line));
 }
 /* tile titles stay neutral ink — the group speaks through the frame and the icon,
@@ -574,6 +606,13 @@ a.tile:hover .row-t { color: var(--accent-ink); }
 /* second-level group pages (Templates, Competition, Skills) share one skeleton:
    crumbs back to Library, h1 + sub, then tile grids / cards */
 .subpage-foot { margin-top: 18px; }
+
+/* template / writing-guide cards — the Library tile with an action row, so the
+   card carries Use · Preview · Edit instead of being one big link */
+.tile.tpl { cursor: default; display: flex; flex-direction: column; }
+.tile.tpl .d { flex: 1; }
+.tile.tpl .tpl-dest { font-size: 10px; opacity: .55; margin-top: 8px; }
+.tile.tpl .tpl-acts { margin-top: 10px; gap: 6px; flex-wrap: wrap; }
 
 /* ---------- skills page ---------- */
 

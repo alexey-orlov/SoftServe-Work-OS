@@ -12,12 +12,37 @@ projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
-underlying folder structure. Library
-tile groups and the Gated-files group headings share one vocabulary (Steering files /
-System rules), with a quiet color code per Library group: the group speaks through the
-tile frame and icon tint while titles stay neutral ink. Second-level group pages
-(Templates, Competition, Skills) share one skeleton — crumbs back to Library, title +
-one-line purpose, tile grid. Zero install: it runs on the Node 18+ standard library —
+underlying folder structure. The Library sorts its six tile groups into three tabs —
+**Business context** (Strategic context · Templates · Ongoing business context · Data,
+tech and the codebase), **Output artifacts** (Artifacts) and **System rules** — each
+group keeping a quiet color code: the group speaks through the tile frame and icon
+tint while titles stay neutral ink. The split is by provenance, not by folder: the
+warehouse and the code repos are context the team sets up before the OS runs and the OS
+only reads, so they sit with the context; only what the OS's own programs produce lands
+under Output artifacts. A tab holding a single group prints no group heading, because the
+tab already carries that name. The tile grid is a fixed column count (four,
+or three where a group wants roomier cards), so a group breaks into even rows instead of
+one packed row plus an orphan, and the gated-badge lookup is one request for the whole
+page rather than one per tab. The Library ↔ Folder tree switch stays above the tabs and
+owns the mode; tabs subdivide the curated view only, and never appear over the tree.
+"System rules" is the same name on the Gated-files page; that page's "Steering files" is
+deliberately broader than the Library's Strategic context, because it groups by what the
+policy protects (business context, templates and engineering together). The Setup page's
+first tab carries the same "Strategic context" name over the same files; its
+`?tab=business` id stays put so old links keep working.
+Second-level group pages (Templates, Competition, Skills) share one skeleton — crumbs
+back to Library, title + one-line purpose, tile grid; Templates splits that grid across
+four tabs (PRDs and specs · Meetings & interviews · Other templates · Writing styles)
+whose names and order the Library's Templates section mirrors tile for tile.
+**Every tabbed page uses the one `tabBar` component in `web/ui.js`** (Library, Setup,
+Templates, Proposed changes) — it owns the `?tab=` parameter, the active state, the
+tablist semantics and arrow-key navigation, and takes an optional per-tab count, so a new
+tabbed page never hand-rolls a fourth copy. **Type steps down into the page:** h1 21/680
+→ tab 15/600 → `.group-head` 12/700 uppercase eyebrow → tile or row title 13.5. A heading
+inside a tab must never outweigh the tab that names it — the eyebrow is smaller in px than
+the tile titles under it on purpose, because uppercase, letter-spacing and the group's
+colour dot mark it as a label of a different class rather than a competing title.
+Zero install: it runs on the Node 18+ standard library —
 no dependencies, no `npm install`, ever, nothing beyond the runtime — with the frontend's
 one MIT-licensed library vendored in `vendor/`.
 
@@ -65,14 +90,20 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
   `product-development/feature-index.yaml`, `toolchain.yaml`, initiative pages, and folder
   CLAUDE.md navigation files. The console adds no second source of truth.
 - **The few hardcoded maps are the drift surface — update them in the same commit as the
-  structure they describe.** Four small tables name repo paths the registries do not:
-  `lib/adapters/activity.js AREA_MAP` (path → friendly area), `lib/adapters/templates.js
-  SUGGEST` (template → destination), `lib/adapters/home.js STEERING_FILES` + `SURFACES`, and
-  `lib/adapters/steering.js CORE`. A folder move, a new template, a new steering file or a new
-  toolchain surface silently invalidates one of them. Checking that the paths still EXIST is
-  not enough — the destination a template row suggests can point at a folder that is still
-  there but no longer holds that kind of file. Read the row's meaning against the folder's own
-  CLAUDE.md, which is where destinations are stated.
+  structure they describe.** A handful of small tables name repo paths, names or groupings
+  the registries do not: `lib/adapters/activity.js AREA_MAP` (path → friendly area),
+  `lib/adapters/templates.js SUGGEST` (template → destination) + `LABELS` (template →
+  display name, shown on every surface that lists templates), `lib/adapters/home.js
+  STEERING_FILES` + `SURFACES`, `lib/adapters/steering.js CORE`, `web/views/library.js
+  QUICK` (the tile groups and the paths behind them), and `web/views/templates.js
+  TAB_TEMPLATES` (which tab each template sits in) + `TEMPLATE_DESCS`. A folder move, a new
+  template, a new steering file or a new toolchain surface silently invalidates one of them.
+  Checking that the paths still EXIST is not enough — the destination a template row suggests
+  can point at a folder that is still there but no longer holds that kind of file. Read the
+  row's meaning against the folder's own CLAUDE.md, which is where destinations are stated.
+  The two template tables fail softly by design (an unlisted template gets a de-slugged
+  label and lands in "Other templates") — soft enough that a missing row shows up as a
+  slightly-off card, not an error, so add the row with the template.
 - **Writes respect the write policy.** One endpoint resolves every path against the policy's
   gated globs; gated files are badged in the UI and a save there is the person's approval
   (the human is the approver the gate exists for). The console never writes scripts, `.git/`,

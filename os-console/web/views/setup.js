@@ -1,4 +1,4 @@
-// Set up this OS — five tabs (Business context / Templates / Integrations /
+// Set up this OS — five tabs (Strategic context / Templates / Integrations /
 // Auto-sync / Demo data), overall progress + per-tab counters, every signal
 // read live from the team's files. The guided-way strip spans the page (it
 // concerns the whole setup, not one tab); the Integrations tab is the full
@@ -6,11 +6,14 @@
 // actions. The Auto-sync tab renders the same modes component as the
 // Auto-sync page, so the two never drift.
 import { api } from '/api.js';
-import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promptModal, LITE, liteLock, staleServerCard } from '/ui.js';
+import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promptModal, tabBar, activeTab, LITE, liteLock, staleServerCard } from '/ui.js';
 import { renderAutosync } from '/views/autosync.js';
 
+// The ids are the URL's ?tab= value and the keys of the API's setup payload, so
+// they stay put when a label is reworded — 'business' reads "Strategic context",
+// the same name the Library gives that group.
 const TABS = [
-  ['business', 'Business context'],
+  ['business', 'Strategic context'],
   ['templates', 'Templates'],
   ['integrations', 'Integrations'],
   ['autosync', 'Auto-sync'],
@@ -42,29 +45,22 @@ export async function render(view, params) {
     guidedStrip(o),
   );
 
-  const tabBar = el('div', { class: 'tabs' });
   const content = el('div', {});
-  page.append(tabBar, content);
-
-  let active = params.get('tab') || 'business';
-  if (!TABS.some(([id]) => id === active)) active = 'business';
-
-  function tabButton(id, label) {
+  let active = activeTab(params, TABS);
+  const counterFor = (id) => {
     const t = tabs[id] || {};
-    const counter = 'total' in t ? `${t.done}/${t.total}` : (id === 'demo' ? (t.present ? '1' : '0') : '');
-    const btn = el('button', {
-      class: `tab ${id === active ? 'on' : ''}`,
-      onclick: () => {
-        active = id;
-        history.replaceState(null, '', `#/setup?tab=${id}`);
-        tabBar.querySelectorAll('.tab').forEach((b) => b.classList.remove('on'));
-        btn.classList.add('on');
-        draw();
-      },
-    }, label, counter ? el('span', { class: 'count' }, counter) : null);
-    return btn;
-  }
-  for (const [id, label] of TABS) tabBar.append(tabButton(id, label));
+    if ('total' in t) return `${t.done}/${t.total}`;
+    return id === 'demo' ? (t.present ? '1' : '0') : '';
+  };
+  page.append(
+    tabBar({
+      route: 'setup',
+      tabs: TABS.map(([id, label]) => [id, label, counterFor(id)]),
+      active,
+      onSelect: (id) => { active = id; draw(); },
+    }),
+    content,
+  );
 
   function draw() {
     content.replaceChildren();
@@ -147,10 +143,11 @@ function drawTemplates(box, tab) {
         ? `Your house formats are in — derived from your own documents (program reports: ${tab.phase}).`
         : el('span', {}, 'The blank documents skills start from. They work as shipped; deriving your house formats from 2–4 of your real documents makes every future document look like yours: ', cmdChip('/customize-os templates'))),
   );
-  const grid = el('div', { class: 'tiles', style: 'margin-top:10px' });
+  // same fixed rhythm as the Templates page, so the two read as one thing
+  const grid = el('div', { class: 'tiles quick three-up', style: 'margin-top:10px' });
   for (const t of (tab && tab.items) || []) {
     grid.append(el('a', { class: 'tile', href: `#/file?path=${encodeURIComponent(t.path)}`, title: t.path },
-      el('div', { class: 'row-t' }, icon('file'), el('span', { class: 'grow' }, tidyTemplateTitle(t.title))),
+      el('div', { class: 'row-t' }, icon('file'), el('span', { class: 'grow' }, t.label || tidyTemplateTitle(t.title))),
       el('div', { class: 'd' }, tidyTemplateDesc(t.desc || t.name))));
   }
   card.append(grid);

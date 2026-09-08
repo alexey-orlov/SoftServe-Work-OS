@@ -23,6 +23,30 @@ const SUGGEST = {
   'job-spec-template.md': 'product-development/product/PRDs/{area}/{initiative}-{job}-job-spec.md',
 };
 
+// Display names. A template's own H1 is the one the filled document will carry, so
+// it is written with {placeholder} tokens ("[Initiative] — J[N]: [job code-name]")
+// and reads as noise in a card. Every surface that lists templates shows `label`;
+// `title` stays the raw H1. Add a row here when you add a template.
+const LABELS = {
+  'prd-template.md': 'PRD',
+  'jobs-breakdown-template.md': 'Jobs breakdown',
+  'job-spec-template.md': 'Job spec',
+  'interview-template.md': 'Customer interview',
+  'retrospective-template.md': 'Retrospective',
+  'initiative-page-template.md': 'Initiative page',
+  'launch-checklist-template.md': 'Launch checklist',
+  'account-context-template.md': 'Account context',
+  'competitor-teardown-template.md': 'Competitor teardown',
+  'competitive-area-matrix-template.md': 'Competitive area matrix',
+};
+
+/** Fallback label for a template no LABELS row covers: the filename, de-slugged. */
+function labelFor(name) {
+  if (LABELS[name]) return LABELS[name];
+  const base = name.replace(/-template\.md$/, '').replace(/\.md$/, '').replace(/-/g, ' ');
+  return base.charAt(0).toUpperCase() + base.slice(1);
+}
+
 export function build() {
   const pol = policy.load();
   const descs = md.navDescriptions(DIR);
@@ -34,6 +58,7 @@ export function build() {
       path: e.rel,
       name: e.name,
       title: md.firstHeading(text) || e.name.replace(/-template\.md$/, ''),
+      label: labelFor(e.name),
       desc: descs[e.rel] || '',
       tier: policy.tierFor(e.rel, pol).tier,
       suggest: SUGGEST[e.name] || 'product-development/{where-it-belongs}.md',

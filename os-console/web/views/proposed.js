@@ -8,7 +8,7 @@
 // the reason; everywhere else the console attempts the action and the git host
 // stays the enforcer.
 import { api } from '/api.js';
-import { el, icon, timeAgo, setCrumbs, spinner, toast, modal, field, promptModal, gatedTag, LITE, liteLock, staleServerCard } from '/ui.js';
+import { el, icon, timeAgo, setCrumbs, spinner, toast, modal, field, promptModal, gatedTag, tabBar, activeTab, LITE, liteLock, staleServerCard } from '/ui.js';
 
 export async function render(view, params) {
   view.append(spinner());
@@ -45,28 +45,16 @@ export async function render(view, params) {
       'What is waiting for a person. Approving or rejecting acts on GitHub or Azure DevOps as you, with your own account — the platform still enforces who may approve what.'),
   );
 
-  const tabBar = el('div', { class: 'tabs' });
   const content = el('div', {});
-  page.append(tabBar, content);
-
-  let active = params.get('tab') === 'auto' ? 'auto' : 'team';
   const tabDefs = [
     ['team', 'From team members', teamCount],
     ['auto', 'Automatic', autoCount],
   ];
-  for (const [id, label, count] of tabDefs) {
-    const btn = el('button', {
-      class: `tab ${id === active ? 'on' : ''}`,
-      onclick: () => {
-        active = id;
-        history.replaceState(null, '', `#/proposed?tab=${id}`);
-        tabBar.querySelectorAll('.tab').forEach((b) => b.classList.remove('on'));
-        btn.classList.add('on');
-        draw();
-      },
-    }, label, el('span', { class: 'count' }, String(count)));
-    tabBar.append(btn);
-  }
+  let active = activeTab(params, tabDefs);
+  page.append(
+    tabBar({ route: 'proposed', tabs: tabDefs, active, onSelect: (id) => { active = id; draw(); } }),
+    content,
+  );
 
   function draw() {
     content.replaceChildren();

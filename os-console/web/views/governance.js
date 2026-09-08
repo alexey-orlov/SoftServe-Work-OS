@@ -3,8 +3,9 @@
 // tiers list surgically, regenerates CODEOWNERS in the same commit, and reminds
 // about the Azure path filter when that mirror applies. The review queue lives
 // in Proposed changes; the files themselves are edited from Library, Features,
-// or their own views. Group names here (Steering files / System rules) are the
-// same ones the Library uses.
+// or their own views. Groups here are by what the policy protects — "Steering
+// files" spans business context, templates and engineering, so it is broader than
+// the Library's Strategic context section; "System rules" is the same set in both.
 import { api } from '/api.js';
 import { el, icon, pill, timeAgo, setCrumbs, spinner, toast, modal, field, filePicker, cmdChip, LITE, liteLock } from '/ui.js';
 
