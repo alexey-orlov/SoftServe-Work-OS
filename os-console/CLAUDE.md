@@ -12,12 +12,13 @@ projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
-underlying folder structure. The Context library sorts its five tile groups into three tabs —
+underlying folder structure. The Context library sorts its six tile groups into four tabs —
 **Business context** (Strategic context · Templates · Ongoing business context), **Tech
 context** (one group of the same name — how the team's own systems are laid out and how
 to use them: Analytics, which fronts the data catalog, and Engineering, which fronts the
 code-repo registry; the registries get no tile of their own, because that would be the
-same door twice) and **Output artifacts** (Artifacts) — each
+same door twice), **Output artifacts** (Artifacts) and **Product & initiatives** (Product
+map · Initiatives) — each
 group keeping a quiet color code: the group speaks through the tile frame and icon
 tint while titles stay neutral ink. Each tab carries a one-line hint that states its
 scope in the order its groups appear. The split is by provenance, not by folder: the
@@ -25,7 +26,12 @@ warehouse and the code repos are context the team sets up before the OS runs and
 only reads, so they are context and not output — but how the systems are laid out is a
 different question from who the team is, often answered by a different person, so they
 get their own tab rather than trailing the business material. Only what the OS's own
-programs produce lands under Output artifacts. Strategic context closes with Roadmap &
+programs produce lands under Output artifacts. Product & initiatives closes the bar as the
+one tab that is a way IN rather than a category of content: the two halves of one graph —
+the product's lasting shape, and the work in flight against it — through one of which every
+artifact is reached. Both tiles also sit in the left rail, because a second door onto a main
+road is not a duplicate, and the tab stays at two: the other registries front their own
+folders and belong where they already are. Strategic context closes with Roadmap &
 OKRs, the one strategic input replaced on a cadence rather than kept. A tab holding a
 single group prints no group heading, because the tab already carries that name. The
 tile grid is a fixed column count (four, or three where a group wants roomier cards),
