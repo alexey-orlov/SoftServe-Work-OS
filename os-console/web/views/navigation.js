@@ -5,7 +5,7 @@
 // it for the whole repo, and the folders missing from the list are the ones an
 // agent walks into with no briefing at all.
 import { api } from '/api.js';
-import { el, icon, setCrumbs, spinner, gatedTag } from '/ui.js';
+import { el, icon, setCrumbs, spinner, gatedTag, staleServerCard } from '/ui.js';
 
 /** Nesting shown by indent rather than a third column — same table, real shape. */
 function indent(depth) {
@@ -14,7 +14,18 @@ function indent(depth) {
 
 export async function render(view) {
   view.append(spinner());
-  const d = await api.get('/api/navmap').catch(() => ({ items: [] }));
+  // /api/navmap arrived with this page, so a server started before it 404s here.
+  // Swallowing that would print "0 folders" over a repo full of them — the same
+  // success-shaped exit the OS forbids its own automations.
+  let d;
+  try {
+    d = await api.get('/api/navmap');
+  } catch {
+    view.replaceChildren();
+    setCrumbs([{ label: 'OS harness', href: '#/harness' }, { label: 'Agent navigation' }]);
+    view.append(el('div', { class: 'page' }, el('h1', {}, 'Agent navigation'), staleServerCard()));
+    return;
+  }
   view.replaceChildren();
   setCrumbs([{ label: 'OS harness', href: '#/harness' }, { label: 'Agent navigation' }]);
 
@@ -51,7 +62,7 @@ export async function render(view) {
   }
   if (!d.items.length) {
     tbody.append(el('tr', {}, el('td', { colspan: 2 },
-      el('div', { class: 'empty' }, 'No folder navigation files found.'))));
+      el('div', { class: 'empty' }, 'No folder in this repository carries a CLAUDE.md.'))));
   }
 
   page.append(el('div', { class: 'card scroll-x', style: 'padding:6px 10px' }, table));
