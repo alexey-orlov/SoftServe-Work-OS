@@ -1,5 +1,5 @@
 // Team memory — the cross-cutting agent rules injected at every session start.
-// Reached as a tile on System files; the file behind it is .claude/team-learnings.md.
+// Reached as a tile on the OS harness page; the file behind it is .claude/team-learnings.md.
 import { api } from '/api.js';
 import { el, icon, toast, timeAgo, setCrumbs, spinner, meter, tierPill, LITE, liteLock } from '/ui.js';
 
@@ -7,7 +7,7 @@ export async function render(view) {
   view.append(spinner());
   const d = await api.get('/api/learnings');
   view.replaceChildren();
-  setCrumbs([{ label: 'System files', href: '#/system' }, { label: 'Team memory' }]);
+  setCrumbs([{ label: 'OS harness', href: '#/harness' }, { label: 'Team memory' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);

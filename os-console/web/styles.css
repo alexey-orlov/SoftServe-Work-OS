@@ -581,6 +581,14 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 @media (max-width: 700px) {
   .tiles.quick, .tiles.quick.three-up { grid-template-columns: 1fr; }
 }
+/* `rows-of-three` keeps the four equal columns but starts every third tile on a
+   new row, leaving the fourth column empty — a group of six reads 3+3 at exactly
+   the tile width every other group on the page uses, instead of four-and-two.
+   Only at the widest breakpoint: below 1140px the grid is three columns or fewer
+   and the rule has nothing left to do. */
+@media (min-width: 1141px) {
+  .tiles.quick.rows-of-three > .tile:nth-child(3n+1) { grid-column-start: 1; }
+}
 
 /* library group color coding — a quiet accent per group, never color alone */
 .group-head .group-dot {
@@ -593,7 +601,7 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 .g-artifacts { --group-color: var(--accent); }
 .g-data      { --group-color: var(--ok-ink); }
 .g-system    { --group-color: var(--muted); }
-/* System files reuses the same three-token palette — its groups are a different
+/* OS harness reuses the same three-token palette — its groups are a different
    subject, not a different design language. */
 .g-agents    { --group-color: var(--accent); }
 .g-gov       { --group-color: var(--gate-ink); }
@@ -611,39 +619,20 @@ a.tile { color: var(--ink); }
 a.tile:hover { text-decoration: none; }
 a.tile:hover .row-t { color: var(--accent-ink); }
 
-/* Two-destination tile — a card with a default and a visible alternative.
-   The card is NOT an anchor: the primary link stretches an invisible overlay
-   across the whole surface (click anywhere = the default), and the foot chip
-   is a second real link raised above it. Two plain links, never nested, so
-   both are keyboard-reachable and the browser shows each real href. */
-.tile.tile-dual { display: flex; flex-direction: column; }
-.tile.tile-dual .d { flex: 1; }
-.tile-dual .tile-main { color: var(--ink); text-decoration: none; }
-.tile-dual .tile-main::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
-.tile-dual:hover .row-t { color: var(--accent-ink); }
-.tile-dual:focus-within { border-color: var(--accent); }
-.tile-dual .tile-alt {
-  position: relative; z-index: 1; align-self: flex-start; margin-top: 10px;
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; color: var(--muted); text-decoration: none;
-  border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
-  background: var(--bg);
-}
-.tile-dual .tile-alt svg { width: 12px; height: 12px; }
-.tile-dual .tile-alt:hover {
-  color: var(--accent-ink); border-color: var(--accent); text-decoration: none;
-}
-
-/* second-level group pages (Templates, Competition, Skills) share one skeleton:
-   crumbs back to Library, h1 + sub, then tile grids / cards */
+/* second-level group pages (Templates, Competition, Skills, Gated files, Filing &
+   linking rules) share one skeleton: crumbs back to their parent, h1 + sub, then
+   tile grids / cards */
 .subpage-foot { margin-top: 18px; }
 
-/* template / writing-guide cards — the Library tile with an action row, so the
-   card carries Use · Preview · Edit instead of being one big link */
-.tile.tpl { cursor: default; display: flex; flex-direction: column; }
-.tile.tpl .d { flex: 1; }
+/* action-row cards — the Library tile with its actions at the foot instead of
+   being one big link: `tpl` for templates and writing guides (Use · Preview ·
+   Edit), `acts` for tiles with a page to open AND a folder to browse (OS
+   harness). The card itself is never clickable — a clickable card with a button
+   inside is two affordances in one component, and the buttons carry honest hrefs. */
+.tile.tpl, .tile.acts { cursor: default; display: flex; flex-direction: column; }
+.tile.tpl .d, .tile.acts .d { flex: 1; }
 .tile.tpl .tpl-dest { font-size: 10px; opacity: .55; margin-top: 8px; }
-.tile.tpl .tpl-acts { margin-top: 10px; gap: 6px; flex-wrap: wrap; }
+.tile.tpl .tpl-acts, .tile.acts .acts-row { margin-top: 10px; gap: 6px; flex-wrap: wrap; }
 
 /* ---------- skills page ---------- */
 

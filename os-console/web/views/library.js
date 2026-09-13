@@ -107,7 +107,7 @@ const QUICK = [
 
 // Three tabs over the five tile groups: what the team knows about the business,
 // what it knows about its own systems, and what it produces. The OS's own rules
-// left for the System files page under Manage — this page is about the team's
+// left for the OS harness page under Manage — this page is about the team's
 // knowledge, that one is about the machinery. Each row
 // is [id, label, section keys, one-line hint] — the hint states the tab's scope in
 // one sentence, in the order its groups appear.
