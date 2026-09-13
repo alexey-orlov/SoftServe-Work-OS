@@ -15,8 +15,9 @@ actionable proposed-changes queues, and the activity log, without touching the
 underlying folder structure. The Library sorts its six tile groups into four tabs —
 **Business context** (Strategic context · Templates · Ongoing business context), **Tech
 context** (one group of the same name — how the team's own systems are laid out and how
-to use them: the data catalog and the analytics folder, the code-repo registry and the
-engineering folder), **Output artifacts** (Artifacts) and **System rules** — each
+to use them: Analytics, which fronts the data catalog, and Engineering, which fronts the
+code-repo registry; the registries get no tile of their own, because that would be the
+same door twice), **Output artifacts** (Artifacts) and **System rules** — each
 group keeping a quiet color code: the group speaks through the tile frame and icon
 tint while titles stay neutral ink. Each tab carries a one-line hint that states its
 scope in the order its groups appear. The split is by provenance, not by folder: the
@@ -41,9 +42,10 @@ steering files in the Library's tile order, the Roadmap & OKRs tile standing for
 quarter page whose fill state is measurable; Ongoing business context — content
 readiness, reported as signal and deliberately OUTSIDE the progress counter, because
 "12 meetings filed" is not a step anyone finishes). *Tech context* is one row per
-Library tile in the tile order — the two registries' own fill state and the two
-folders' content counts — all signal, so the tab carries no counter and, holding a
-single group, prints no eyebrow. The Templates tab groups by the Templates page's four
+Library tile in the tile order — each folder's content count with the fill state of the
+registry it fronts folded into the same row (done needs both, in progress is either) —
+all signal, so the tab carries no counter and, holding a single group, prints no
+eyebrow. The Templates tab groups by the Templates page's four
 names; the Integrations table sections by which Library group each tool feeds, using the
 tab's name where a tab holds exactly one group (Tech context, Output artifacts). The
 `?tab=business` and `?tab=tech` ids stay put so links keep working. Template group

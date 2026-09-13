@@ -103,9 +103,10 @@ const STEERING_FILES = [
 // describe systems set up elsewhere (Tech context, its own tab). Both are reported as
 // signal, never as progress — "12 meetings filed" is not a step anyone finishes, so
 // counting it toward the meter would mean a bar that can never legitimately reach the
-// end. One row per Library tile, in the Library's own order; the two registries in
-// the tech group carry their own notion of "filled" (a file that exists but registers
-// nothing is not readiness), so they are read by the reader below, not counted.
+// end. One row per Library tile, in the Library's own order. A tech row also fronts
+// a registry (the data catalog, the code-repo registry) whose own notion of "filled"
+// is read, not counted — a file that exists but registers nothing is not readiness —
+// and folded into the row, so the registry is never a second row beside its folder.
 const READINESS = {
   ongoing: [
     { key: 'competitors', label: 'Competitors', noun: 'teardown', dir: `${CR}/competitors`,
@@ -124,12 +125,12 @@ const READINESS = {
       globs: ['product-development/inbox/*'] },
   ],
   tech: [
-    { key: 'data-catalog', registry: 'data-catalog' },
     { key: 'analytics', label: 'Analytics', noun: 'definition', dir: 'product-development/analytics',
-      globs: ['product-development/analytics/metrics/**/*.md', 'product-development/analytics/queries/**/*.sql'] },
-    { key: 'code-repos', registry: 'code-repos' },
+      globs: ['product-development/analytics/metrics/**/*.md', 'product-development/analytics/queries/**/*.sql'],
+      registry: 'data-catalog' },
     { key: 'engineering', label: 'Engineering', noun: 'document', dir: 'product-development/engineering',
-      globs: ['product-development/engineering/plans/**/*.md', 'product-development/engineering/codebases/**/*.md'] },
+      globs: ['product-development/engineering/plans/**/*.md', 'product-development/engineering/codebases/**/*.md'],
+      registry: 'code-repos' },
   ],
 };
 
@@ -150,8 +151,8 @@ function countContent(globs, skip = []) {
   return seen.size;
 }
 
-/** The two registries' own fill state — what each says it registers. */
-function registryRow(which) {
+/** A registry's own fill state — what it says it registers. */
+function registryState(which) {
   if (which === 'code-repos') {
     const code = codeReposConfigured();
     return {
@@ -183,10 +184,19 @@ function registryRow(which) {
 /** Per-row content signal for the two groups the meter deliberately does not count. */
 export function contentReadiness() {
   const rows = (list) => list.map((r) => {
-    if (r.registry) return registryRow(r.registry);
     const n = countContent(r.globs, r.skip);
-    return { key: r.key, label: r.label, dir: r.dir, count: n, state: n > 0 ? 'done' : 'todo',
-      detail: n > 0 ? `${n} ${r.noun}${n === 1 ? '' : 's'} filed.` : 'Nothing here yet.' };
+    const filed = n > 0 ? `${n} ${r.noun}${n === 1 ? '' : 's'} filed.` : 'Nothing filed yet.';
+    if (!r.registry) {
+      return { key: r.key, label: r.label, dir: r.dir, count: n, state: n > 0 ? 'done' : 'todo',
+        detail: n > 0 ? filed : 'Nothing here yet.' };
+    }
+    // The registry rides in the row: done needs both the registry filled and content
+    // filed, todo means neither, anything in between is in progress.
+    const reg = registryState(r.registry);
+    const state = reg.state === 'done' && n > 0 ? 'done' : reg.state === 'todo' && n === 0 ? 'todo' : 'partial';
+    return { key: r.key, label: r.label, dir: r.dir, count: n, state,
+      detail: `${filed} ${reg.label}: ${reg.detail.charAt(0).toLowerCase()}${reg.detail.slice(1)}`,
+      registry: { path: reg.path, state: reg.state } };
   });
   return { ongoing: rows(READINESS.ongoing), tech: rows(READINESS.tech) };
 }

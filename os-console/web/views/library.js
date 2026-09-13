@@ -86,18 +86,16 @@ const QUICK = [
     }],
   },
   {
-    // One row of four, in two pairs: for the data and for the code, first the
-    // registry that says how that system is laid out, then the folder that holds
-    // how the team uses it. Same name as the tab that holds it — one vocabulary.
+    // Two tiles, one per system: the data and the code. Each folder fronts its own
+    // registry (the data catalog, the code-repo registry), so a registry tile beside
+    // it would be the same door twice. Same name as the tab that holds it.
     title: 'Tech context',
     key: 'data',
     groups: [{
       name: null,
       items: [
-        it('Data catalog', 'product-development/analytics/data-catalog.yaml', 'The warehouse map — every table, its owner, refresh and who reads it', 'file'),
-        it('Analytics', 'product-development/analytics', 'How we use the data — metrics, queries, schemas, dashboards, experiments'),
-        it('Code repositories', 'product-development/engineering/code-repos.yaml', 'Which repositories implement the product, what each covers, how to reach it', 'file'),
-        it('Engineering', 'product-development/engineering', 'How we build — tech constraints, implementation plans, codebase maps'),
+        it('Analytics', 'product-development/analytics', 'The data catalog and how we use the data — metrics, queries, schemas, dashboards, experiments'),
+        it('Engineering', 'product-development/engineering', 'The code-repo registry and how we build — tech constraints, implementation plans, codebase maps'),
       ],
     }],
   },

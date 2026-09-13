@@ -164,9 +164,11 @@ function readinessRow(r) {
 // ---- tech context -----------------------------------------------------------
 
 // The Library's Tech context tab, as readiness: one row per tile, in the tile
-// order. All signal — the warehouse and the repositories are set up outside the
-// Work OS, so nothing here is a step the setup meter could count. A tab holding a
-// single group prints no group eyebrow, the same rule the Library follows.
+// order, each folding in the fill state of the registry its folder fronts (the data
+// catalog, the code-repo registry). All signal — the warehouse and the repositories
+// are set up outside the Work OS, so nothing here is a step the setup meter could
+// count. A tab holding a single group prints no group eyebrow, the same rule the
+// Library follows.
 // `business` is the fallback for a server started before this tab existed, which
 // still ships these rows inside the Business context payload.
 function drawTech(box, tab, business) {
@@ -175,7 +177,7 @@ function drawTech(box, tab, business) {
   const card = el('div', { class: 'card' },
     el('h3', {}, 'What the Work OS can see of your systems'),
     el('div', { class: 'hint' },
-      'How your data warehouse and code repositories are laid out, and what the team has written down about using them. These are set up outside the Work OS — the rows say what it can currently read. Reported as a signal, not counted in the progress above.'),
+      'How your data warehouse and code repositories are laid out, and what the team has written down about using them. Each row pairs the folder\'s content with the registry it fronts. These are set up outside the Work OS — the rows say what it can currently read. Reported as a signal, not counted in the progress above.'),
   );
   for (const r of rows) card.append(readinessRow(r));
   if (!rows.length) card.append(el('div', { class: 'empty' }, 'Nothing registered yet.'));
