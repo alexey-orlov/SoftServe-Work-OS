@@ -35,7 +35,11 @@ const GROUPS = [
   },
   {
     key: 'agents',
-    title: 'Agent setup',
+    // Not "Agent setup": the Manage nav already has Set up this OS, and both it and
+    // this group carry an Integrations entry over the same toolchain.yaml — two doors
+    // with one label. These five are what an agent is TOLD, which is the line that
+    // separates this group from Skills and agents (what an agent can DO).
+    title: 'Agent instructions',
     hint: 'What steers the agents, what runs on its own, what they remember, what they are connected to, and where they are told they are.',
     // Five tiles, and `rows-of-three` breaks them 3+2 at full width rather than
     // leaving a four-and-one row — see .tiles.quick.rows-of-three.

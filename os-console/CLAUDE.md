@@ -49,7 +49,7 @@ the Manage nav block, because the Context library answers "what does the team kn
 different question from "what makes the OS behave". It uses the Context library's tile language
 and the Context library's own tab component, sorting three groups into two tabs. **Agents & rules**
 holds the three that decide how a session behaves: *Skills and agents* (the two capability
-surfaces, kept apart from what an agent is told), *Agent setup* (CLAUDE.md, Hooks, Team
+surfaces, kept apart from what an agent is told), *Agent instructions* (CLAUDE.md, Hooks, Team
 memory, Integrations, Agent navigation — what steers the agents, what runs on its own, what
 they remember, what they connect to, and where they are told they are; Hooks opens a
 second-level page, because a folder tile showed the three scripts and hid `settings.json`,
@@ -59,9 +59,12 @@ rules, which folds the write-back contract, the link schema and the lint that en
 into one second-level page because they serve one goal). **OS user interface** holds the
 third (OS console, Documentation, Admin guides). Same rule as the Context library: the two-group
 tab prints its group eyebrows, the single-group tab prints none — the tab already carries
-that name — and takes that group's own line as its hint. Agent setup's five tiles break
-3+2 (`rows-of-three`) rather than four-and-one, at the same tile width as every other
-group. Team learnings is reached from here as **Team memory** and is no longer a sidebar
+that name — and takes that group's own line as its hint. The five tiles of Agent
+instructions break 3+2 (`rows-of-three`) rather than four-and-one, at the same tile width
+as every other group. That group is named for what an agent is TOLD, never *setup*: the
+Manage nav already has **Set up this OS**, and both it and this group carry an Integrations
+entry over the same `toolchain.yaml`, so a setup-shaped name here sends a reader to the
+wrong one of two identical-sounding doors. Team learnings is reached from here as **Team memory** and is no longer a sidebar
 entry; Skills moved with it, so both pages crumb back to OS harness rather than Context library.
 The gated-list management page (the Manage nav's Gated files) keeps its own "System rules"
 group name; its "Steering files" is deliberately broader than the Context library's Strategic
