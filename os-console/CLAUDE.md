@@ -20,7 +20,11 @@ code-repo registry; the registries get no tile of their own, because that would 
 same door twice), **Output artifacts** (Artifacts) and **Index pages** (Product map ·
 Initiatives) — each
 group keeping a quiet color code: the group speaks through the tile frame and icon
-tint while titles stay neutral ink. Each tab carries a one-line hint that states its
+tint while titles stay neutral ink. Every tab name is *[which kind] + [what material]* —
+context of the business kind, context of the tech kind, artifacts that are output, pages
+that are indexes — so a new tab is named for the material it holds, never for its subject;
+a name that reads as the tile names concatenated is the tell that the pattern was missed.
+Each tab carries a one-line hint that states its
 scope in the order its groups appear. The split is by provenance, not by folder: the
 warehouse and the code repos are context the team sets up before the OS runs and the OS
 only reads, so they are context and not output — but how the systems are laid out is a
