@@ -18,12 +18,13 @@ const TPL = `${P}/handbook/templates`;
 
 const QUICK = [
   {
-    // Two rows of three: who we are (root steering → business → segments), then
-    // the market, the product's own mechanics, and the people who decide.
+    // Four-up: who we are (root steering → business → segments → the market), then
+    // the product's own mechanics, the people who decide, and where we said we are
+    // going — the quarter's OKRs and the roadmaps close the block because they are
+    // the one strategic input that is replaced on a cadence rather than kept.
     // Feature index lives in the Product map nav entry; Toolchain in Setup → Integrations.
     title: 'Strategic context',
     key: 'strategic',
-    cols: 3,
     groups: [{
       name: null,
       items: [
@@ -33,6 +34,7 @@ const QUICK = [
         it('Competition', '#/competition', 'How we position and compare — the landscape and the capability matrix', 'view', CR, 'target'),
         it('Platform model', `${BC}/platform-model.md`, 'How the product works underneath — access, states, obligations', 'file'),
         it('Stakeholders', `${BC}/stakeholders.md`, 'Who decides, what they care about, how to win them', 'file'),
+        it('Roadmap & OKRs', `${P}/strategy`, 'Where we are heading — this quarter\'s objectives and key results, and the roadmaps beyond it'),
       ],
     }],
   },
@@ -52,8 +54,8 @@ const QUICK = [
     }],
   },
   {
-    // Two rows of four: the market and where we said we are going first, then
-    // the running record of what happened and what is still coming in.
+    // The running record: who we watch and who we serve first, then what the team
+    // keeps learning, deciding and shipping, and what is still coming in.
     title: 'Ongoing business context',
     key: 'ongoing',
     groups: [{
@@ -61,7 +63,6 @@ const QUICK = [
       items: [
         it('Competitors', CR, 'Competitor teardowns and dated monitoring intel'),
         it('Customers', `${P}/customers`, 'The tracked accounts — context and call records'),
-        it('Roadmap & OKRs', `${P}/strategy`, 'This quarter\'s objectives and key results, and the roadmaps ahead'),
         it('User insights', `${P}/user-insights`, 'Syntheses, interviews, feature requests, guides, journey maps'),
         it('Meetings', `${P}/meetings`, 'Meeting records — transcripts, summaries, retros'),
         it('Decisions', `${P}/decisions`, 'Why we chose what we chose, dated'),
@@ -85,13 +86,18 @@ const QUICK = [
     }],
   },
   {
-    title: 'Data, tech and the codebase',
+    // One row of four, in two pairs: for the data and for the code, first the
+    // registry that says how that system is laid out, then the folder that holds
+    // how the team uses it. Same name as the tab that holds it — one vocabulary.
+    title: 'Tech context',
     key: 'data',
     groups: [{
       name: null,
       items: [
-        it('Analytics', 'product-development/analytics', 'Metrics, queries, schemas, dashboards, experiments'),
-        it('Engineering', 'product-development/engineering', 'Tech constraints, the code-repo registry, implementation plans'),
+        it('Data catalog', 'product-development/analytics/data-catalog.yaml', 'The warehouse map — every table, its owner, refresh and who reads it', 'file'),
+        it('Analytics', 'product-development/analytics', 'How we use the data — metrics, queries, schemas, dashboards, experiments'),
+        it('Code repositories', 'product-development/engineering/code-repos.yaml', 'Which repositories implement the product, what each covers, how to reach it', 'file'),
+        it('Engineering', 'product-development/engineering', 'How we build — tech constraints, implementation plans, codebase maps'),
       ],
     }],
   },
@@ -110,22 +116,26 @@ const QUICK = [
   },
 ];
 
-// Three tabs over the six tile groups: what the team knows, what it produces,
-// and the OS's own rules. Each row is [id, label, section keys, one-line hint].
+// Four tabs over the six tile groups: what the team knows about the business, what
+// it knows about its own systems, what it produces, and the OS's own rules. Each row
+// is [id, label, section keys, one-line hint] — the hint states the tab's scope in
+// one sentence, in the order its groups appear.
 // A tab holding a single section drops that section's heading — printing the
 // tab's own name again right under it is noise, and the tiles keep the group's
 // colour on their left edge either way.
-// Data, tech and the codebase sits with the context, not the output: the warehouse
-// and the repos are set up before the OS runs, and the OS reads them — it does not
-// produce them. It comes last in the tab because it is the substrate a PM reaches for
-// least often, under the material they touch daily.
+// Tech context is context, not output: the warehouse and the repositories are set up
+// before the OS runs and the OS only reads them. It gets its own tab because how the
+// team's systems are laid out, and how to use them, is a different question from who
+// the team is — and a different person often answers it.
 const TABS = [
-  ['context', 'Business context', ['strategic', 'templates', 'ongoing', 'data'],
-    'Who we are, the scaffolds we write with, everything the team keeps learning, and the data and code underneath it all.'],
+  ['context', 'Business context', ['strategic', 'templates', 'ongoing'],
+    'Who we are and where we are heading, the scaffolds we write with, and the running record of what the team keeps learning.'],
+  ['tech', 'Tech context', ['data'],
+    'How the team\'s own systems are laid out and how to use them — the data warehouse and its metrics, the code repositories and their constraints.'],
   ['output', 'Output artifacts', ['artifacts'],
-    'What the team produces out of all that — feature definitions, job specs, and the prototypes that test them.'],
+    'What the team produces from all that context — PRDs, jobs breakdowns and job specs, and the prototypes that test them.'],
   ['system', 'System rules', ['system'],
-    'The OS itself — the guided programs, reviewer personas and session automation.'],
+    'The Work OS itself — its guided programs, its reviewer personas and subagents, and its session automation.'],
 ];
 
 // Every tile's policy path, looked up once per page rather than once per tab.

@@ -1,6 +1,7 @@
-// Set up this OS — five tabs (Business context / Templates / Integrations /
-// Auto-sync / Demo data), overall progress + per-tab counters, every signal
-// read live from the team's files. The guided-way strip spans the page (it
+// Set up this OS — six tabs (Business context / Tech context / Templates /
+// Integrations / Auto-sync / Demo data), overall progress + per-tab counters,
+// every signal read live from the team's files. The first two tabs mirror the
+// Library's first two, group for group. The guided-way strip spans the page (it
 // concerns the whole setup, not one tab); the Integrations tab is the full
 // table: type, purpose, system used (editable until live), status, comment,
 // actions. The Auto-sync tab renders the same modes component as the
@@ -10,8 +11,9 @@ import { el, icon, pill, cmdChip, meter, setCrumbs, spinner, toast, modal, promp
 import { renderAutosync } from '/views/autosync.js';
 
 // The ids are the URL's ?tab= value and the keys of the API's setup payload, so
-// they stay put when a label is reworded — 'business' reads "Business context", the
-// same name the Library's first tab carries, and holds the same groups it does.
+// they stay put when a label is reworded — 'business' reads "Business context" and
+// 'tech' reads "Tech context", the names the Library's first two tabs carry, and each
+// holds the same groups its Library twin does.
 const TEMPLATE_GROUPS = [
   ['prds', 'PRDs and specs'],
   ['meetings', 'Meetings & interviews'],
@@ -19,6 +21,7 @@ const TEMPLATE_GROUPS = [
 ];
 const TABS = [
   ['business', 'Business context'],
+  ['tech', 'Tech context'],
   ['templates', 'Templates'],
   ['integrations', 'Integrations'],
   ['autosync', 'Auto-sync'],
@@ -70,6 +73,7 @@ export async function render(view, params) {
   function draw() {
     content.replaceChildren();
     if (active === 'business') drawBusiness(content, tabs.business);
+    else if (active === 'tech') drawTech(content, tabs.tech, tabs.business);
     else if (active === 'templates') drawTemplates(content, tabs.templates);
     else if (active === 'integrations') drawIntegrations(content, tabs.integrations);
     else if (active === 'autosync') drawAutosync(content, tabs.autosync);
@@ -131,31 +135,50 @@ function drawBusiness(box, tab) {
     ));
   }
 
-  // Signal, not progress: these two sections stay out of the counter above, because
+  // Signal, not progress: this section stays out of the counter above, because
   // "12 meetings filed" is not a step anyone finishes.
   const rd = (tab && tab.readiness) || {};
-  const readSection = (key, title, note, rows) => {
-    if (!rows || !rows.length) return;
-    card.append(sectionHead(key, title), el('div', { class: 'hint', style: 'margin:0 0 4px' }, note));
-    for (const r of rows) {
-      const href = r.path ? `#/file?path=${encodeURIComponent(r.path)}`
-        : `#/library?path=${encodeURIComponent(r.dir)}`;
-      card.append(el('div', { class: 'step' },
-        pill(r.state),
-        el('div', { class: 'body' },
-          el('div', { class: 'title' }, r.label),
-          el('div', { class: 'detail' }, r.detail)),
-        el('a', { class: 'btn small quiet', href, title: r.path || r.dir }, 'Open'),
-      ));
-    }
-  };
-  readSection('ongoing', 'Ongoing business context',
-    'What the team has filed so far. This grows with the work rather than getting finished, so it is reported as a signal and left out of the progress above.',
-    rd.ongoing);
-  readSection('data', 'Data, tech and the codebase',
-    'The warehouse and repositories the Work OS reads. These are set up outside the Work OS — the rows say what it can currently see.',
-    rd.data);
+  if (rd.ongoing && rd.ongoing.length) {
+    card.append(sectionHead('ongoing', 'Ongoing business context'),
+      el('div', { class: 'hint', style: 'margin:0 0 4px' },
+        'What the team has filed so far. This grows with the work rather than getting finished, so it is reported as a signal and left out of the progress above.'));
+    for (const r of rd.ongoing) card.append(readinessRow(r));
+  }
 
+  box.append(card);
+}
+
+/** One content-readiness row — a count or a registry's fill state, with a way in. */
+function readinessRow(r) {
+  const href = r.path ? `#/file?path=${encodeURIComponent(r.path)}`
+    : `#/library?path=${encodeURIComponent(r.dir)}`;
+  return el('div', { class: 'step' },
+    pill(r.state),
+    el('div', { class: 'body' },
+      el('div', { class: 'title' }, r.label),
+      el('div', { class: 'detail' }, r.detail)),
+    el('a', { class: 'btn small quiet', href, title: r.path || r.dir }, 'Open'),
+  );
+}
+
+// ---- tech context -----------------------------------------------------------
+
+// The Library's Tech context tab, as readiness: one row per tile, in the tile
+// order. All signal — the warehouse and the repositories are set up outside the
+// Work OS, so nothing here is a step the setup meter could count. A tab holding a
+// single group prints no group eyebrow, the same rule the Library follows.
+// `business` is the fallback for a server started before this tab existed, which
+// still ships these rows inside the Business context payload.
+function drawTech(box, tab, business) {
+  const rows = (tab && tab.rows)
+    || (business && business.readiness && business.readiness.data) || [];
+  const card = el('div', { class: 'card' },
+    el('h3', {}, 'What the Work OS can see of your systems'),
+    el('div', { class: 'hint' },
+      'How your data warehouse and code repositories are laid out, and what the team has written down about using them. These are set up outside the Work OS — the rows say what it can currently read. Reported as a signal, not counted in the progress above.'),
+  );
+  for (const r of rows) card.append(readinessRow(r));
+  if (!rows.length) card.append(el('div', { class: 'empty' }, 'Nothing registered yet.'));
   box.append(card);
 }
 
@@ -212,13 +235,15 @@ const STATUS_PILLS = {
 };
 
 // Each integration feeds one Library group; grouping the table by that answers "what
-// does connecting this actually improve?" in the vocabulary of the Library. A surface
-// not listed here falls into Ongoing business context, the group that collects what
-// keeps arriving. Order within a group follows the adapter's SURFACES order.
+// does connecting this actually improve?" in the vocabulary of the Library, in the
+// Library's tab order. Where a Library tab holds exactly one group the tab's name is
+// used (Tech context, Output artifacts), because that is the name a person saw. A
+// surface not listed here falls into Ongoing business context, the group that
+// collects what keeps arriving. Order within a group follows the adapter's SURFACES order.
 const INTEGRATION_GROUPS = [
   ['ongoing', 'Ongoing business context',
     ['meeting-transcripts', 'user-insights', 'knowledge-base', 'feature-requests', 'team-chat', 'calendar']],
-  ['data', 'Data, tech and the codebase', ['codebase', 'analytics']],
+  ['data', 'Tech context', ['codebase', 'analytics']],
   ['artifacts', 'Output artifacts', ['prototyping', 'ticketing']],
 ];
 

@@ -12,29 +12,41 @@ projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
-underlying folder structure. The Library sorts its six tile groups into three tabs —
-**Business context** (Strategic context · Templates · Ongoing business context · Data,
-tech and the codebase), **Output artifacts** (Artifacts) and **System rules** — each
+underlying folder structure. The Library sorts its six tile groups into four tabs —
+**Business context** (Strategic context · Templates · Ongoing business context), **Tech
+context** (one group of the same name — how the team's own systems are laid out and how
+to use them: the data catalog and the analytics folder, the code-repo registry and the
+engineering folder), **Output artifacts** (Artifacts) and **System rules** — each
 group keeping a quiet color code: the group speaks through the tile frame and icon
-tint while titles stay neutral ink. The split is by provenance, not by folder: the
+tint while titles stay neutral ink. Each tab carries a one-line hint that states its
+scope in the order its groups appear. The split is by provenance, not by folder: the
 warehouse and the code repos are context the team sets up before the OS runs and the OS
-only reads, so they sit with the context; only what the OS's own programs produce lands
-under Output artifacts. A tab holding a single group prints no group heading, because the
-tab already carries that name. The tile grid is a fixed column count (four,
-or three where a group wants roomier cards), so a group breaks into even rows instead of
-one packed row plus an orphan, and the gated-badge lookup is one request for the whole
-page rather than one per tab. The Library ↔ Folder tree switch stays above the tabs and
-owns the mode; tabs subdivide the curated view only, and never appear over the tree.
+only reads, so they are context and not output — but how the systems are laid out is a
+different question from who the team is, often answered by a different person, so they
+get their own tab rather than trailing the business material. Only what the OS's own
+programs produce lands under Output artifacts. Strategic context closes with Roadmap &
+OKRs, the one strategic input replaced on a cadence rather than kept. A tab holding a
+single group prints no group heading, because the tab already carries that name. The
+tile grid is a fixed column count (four, or three where a group wants roomier cards),
+so a group breaks into even rows instead of one packed row plus an orphan, and the
+gated-badge lookup is one request for the whole page rather than one per tab. The
+Library ↔ Folder tree switch stays above the tabs and owns the mode; tabs subdivide the
+curated view only, and never appear over the tree.
 "System rules" is the same name on the Gated-files page; that page's "Steering files" is
 deliberately broader than the Library's Strategic context, because it groups by what the
 policy protects (business context, templates and engineering together). The **Setup page follows the
-Library's structure inside its own tabs**: its first tab is *Business context* and
-sections into the same Library groups (Strategic context — the steering files in the
-Library's tile order; Ongoing business context and Data, tech and the codebase — content
+Library's structure inside its own tabs**: its first two tabs are the Library's first
+two. *Business context* sections into the same Library groups (Strategic context — the
+steering files in the Library's tile order, the Roadmap & OKRs tile standing for the
+quarter page whose fill state is measurable; Ongoing business context — content
 readiness, reported as signal and deliberately OUTSIDE the progress counter, because
-"12 meetings filed" is not a step anyone finishes); the Templates tab groups by the
-Templates page's four names; the Integrations table sections by which Library group each
-tool feeds. Its `?tab=business` id stays put so old links keep working. Template group
+"12 meetings filed" is not a step anyone finishes). *Tech context* is one row per
+Library tile in the tile order — the two registries' own fill state and the two
+folders' content counts — all signal, so the tab carries no counter and, holding a
+single group, prints no eyebrow. The Templates tab groups by the Templates page's four
+names; the Integrations table sections by which Library group each tool feeds, using the
+tab's name where a tab holds exactly one group (Tech context, Output artifacts). The
+`?tab=business` and `?tab=tech` ids stay put so links keep working. Template group
 membership, order and display names all come from `lib/adapters/templates.js`, so the
 Templates page and the Setup tab cannot drift apart.
 Second-level group pages (Templates, Competition, Skills) share one skeleton — crumbs
