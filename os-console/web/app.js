@@ -21,6 +21,7 @@ import * as competitionView from '/views/competition.js';
 import * as harnessView from '/views/harness.js';
 import * as filingView from '/views/filing.js';
 import * as gatedView from '/views/gated.js';
+import * as hooksView from '/views/hooks.js';
 import { currentModeLabel } from '/views/autosync.js';
 
 const ROUTES = {
@@ -29,7 +30,7 @@ const ROUTES = {
   docs: docsView, setup, proposed: proposedView,
   features: featuresView, autosync: autosyncView,
   skills: skillsView, competition: competitionView,
-  harness: harnessView, filing: filingView, gated: gatedView,
+  harness: harnessView, filing: filingView, gated: gatedView, hooks: hooksView,
   steering: { render: () => location.replace('#/features') }, // old links self-correct
   system: { render: () => location.replace('#/harness') },    // old links self-correct
 };
@@ -37,7 +38,7 @@ const ROUTES = {
 const NAV = {
   primary: [
     ['home', 'Home', 'home'],
-    ['library', 'Library', 'book'],
+    ['library', 'Context library', 'book'],
     ['features', 'Product map', 'compass'],
     ['initiatives', 'Initiatives', 'flag'],
     ['activity', 'Activity', 'clock'],
@@ -65,7 +66,7 @@ async function render(preserveScroll = false) {
       || ((name === 'file' || name === 'edit' || name === 'templates'
         || name === 'competition') && n.dataset.route === 'library')
       || ((name === 'skills' || name === 'learnings' || name === 'filing'
-        || name === 'gated') && n.dataset.route === 'harness');
+        || name === 'gated' || name === 'hooks') && n.dataset.route === 'harness');
     if (n.dataset.section) {
       active = name === 'docs'
         && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));

@@ -42,13 +42,21 @@ const GROUPS = [
         desc: 'On every pull request, and every Monday with a weekly repo-health issue',
         ico: 'clock',
       },
+      {
+        // Repo root, so the root listing is fetched alongside the three folders.
+        // The one file on this page a PM edits, and the one that is not gated.
+        name: 'Staleness exceptions',
+        path: '.freshness-ignore',
+        desc: 'The pages the check skips — worked examples and stable reference — so it flags only what is meant to stay current',
+        ico: 'edit',
+      },
     ],
   },
 ];
 
 export async function render(view) {
   view.append(spinner());
-  const dirs = [G, SCRIPTS, FLOWS];
+  const dirs = [G, SCRIPTS, FLOWS, ''];  // '' = the repo root, for .freshness-ignore
   const listings = await Promise.all(dirs.map((d) =>
     api.get(`/api/library?path=${encodeURIComponent(d)}`).catch(() => null)));
   view.replaceChildren();

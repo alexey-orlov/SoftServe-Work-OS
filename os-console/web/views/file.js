@@ -12,7 +12,7 @@ export async function render(view, params) {
   catch (e) {
     const parts = path.split('/');
     setCrumbs([
-      { label: 'Library', href: '#/library' },
+      { label: 'Context library', href: '#/library' },
       ...parts.slice(0, -1).map((seg, idx) => ({
         label: seg, href: `#/library?path=${encodeURIComponent(parts.slice(0, idx + 1).join('/'))}`,
       })),
@@ -26,7 +26,7 @@ export async function render(view, params) {
 
   const parts = f.path.split('/');
   setCrumbs([
-    { label: 'Library', href: '#/library' },
+    { label: 'Context library', href: '#/library' },
     ...parts.slice(0, -1).map((seg, idx) => ({
       label: seg, href: `#/library?path=${encodeURIComponent(parts.slice(0, idx + 1).join('/'))}`,
     })),

@@ -25,7 +25,7 @@ export async function render(view) {
   view.append(spinner());
   const dir = await api.get(`/api/library?path=${encodeURIComponent(CR)}`).catch(() => null);
   view.replaceChildren();
-  setCrumbs([{ label: 'Library', href: '#/library' }, { label: 'Competition' }]);
+  setCrumbs([{ label: 'Context library', href: '#/library' }, { label: 'Competition' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);

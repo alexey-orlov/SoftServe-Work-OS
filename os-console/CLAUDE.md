@@ -12,7 +12,7 @@ projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
-underlying folder structure. The Library sorts its five tile groups into three tabs —
+underlying folder structure. The Context library sorts its five tile groups into three tabs —
 **Business context** (Strategic context · Templates · Ongoing business context), **Tech
 context** (one group of the same name — how the team's own systems are laid out and how
 to use them: Analytics, which fronts the data catalog, and Engineering, which fronts the
@@ -31,55 +31,60 @@ single group prints no group heading, because the tab already carries that name.
 tile grid is a fixed column count (four, or three where a group wants roomier cards),
 so a group breaks into even rows instead of one packed row plus an orphan, and the
 gated-badge lookup is one request for the whole page rather than one per tab. The
-Library ↔ Folder tree switch stays above the tabs and owns the mode; tabs subdivide the
-curated view only, and never appear over the tree.
-The OS's own machinery is NOT in the Library: it lives on **OS harness**, the last page in
-the Manage nav block, because the Library answers "what does the team know" and that is a
-different question from "what makes the OS behave". It uses the Library's tile language
-and the Library's own tab component, sorting three groups into two tabs. **Agents & rules**
+Curated ↔ Folder tree switch stays above the tabs and owns the mode; tabs subdivide the
+curated view only, and never appear over the tree. It names the two MODES rather than
+repeating the page title, which sits an inch below it.
+The OS's own machinery is NOT in the Context library: it lives on **OS harness**, the last page in
+the Manage nav block, because the Context library answers "what does the team know" and that is a
+different question from "what makes the OS behave". It uses the Context library's tile language
+and the Context library's own tab component, sorting three groups into two tabs. **Agents & rules**
 holds the two that decide how a session behaves: *Agent setup* (CLAUDE.md, Skills, Agents,
 Hooks, Team memory, Integrations — what steers the agents, what they can do, what runs on
-its own, what they remember, what they connect to) and *Governance* (Gated files, which
+its own, what they remember, what they connect to; Hooks opens a second-level page, because
+a folder tile showed the three scripts and hid `settings.json`, the file that decides
+whether any of them runs) and *Governance* (Gated files, which
 pairs the write policy with the script that mirrors it to the server, and Filing & linking
 rules, which folds the write-back contract, the link schema and the lint that enforces them
 into one second-level page because they serve one goal). **OS user interface** holds the
-third (OS console, Documentation, Admin guides). Same rule as the Library: the two-group
+third (OS console, Documentation, Admin guides). Same rule as the Context library: the two-group
 tab prints its group eyebrows, the single-group tab prints none — the tab already carries
 that name — and takes that group's own line as its hint. Agent setup's six tiles break
 3+3 (`rows-of-three`) rather than four-and-two, at the same tile width as every other
 group. Team learnings is reached from here as **Team memory** and is no longer a sidebar
-entry; Skills moved with it, so both pages crumb back to OS harness rather than Library.
+entry; Skills moved with it, so both pages crumb back to OS harness rather than Context library.
 The gated-list management page (the Manage nav's Gated files) keeps its own "System rules"
-group name; its "Steering files" is deliberately broader than the Library's Strategic
+group name; its "Steering files" is deliberately broader than the Context library's Strategic
 context, because it groups by what the policy protects (business context, templates and
 engineering together). The **Setup page follows the
-Library's structure inside its own tabs**: its first two tabs are the Library's first
-two. *Business context* sections into the same Library groups (Strategic context — the
-steering files in the Library's tile order, the Roadmap & OKRs tile standing for the
+Context library's structure inside its own tabs**: its first two tabs are the Context library's first
+two. *Business context* sections into the same Context library groups (Strategic context — the
+steering files in the Context library's tile order, the Roadmap & OKRs tile standing for the
 quarter page whose fill state is measurable; Ongoing business context — content
 readiness, reported as signal and deliberately OUTSIDE the progress counter, because
 "12 meetings filed" is not a step anyone finishes). *Tech context* is one row per
-Library tile in the tile order — each folder's content count with the fill state of the
+Context library tile in the tile order — each folder's content count with the fill state of the
 registry it fronts folded into the same row (done needs both, in progress is either) —
 all signal, so the tab carries no counter and, holding a single group, prints no
 eyebrow. The Templates tab groups by the Templates page's four
-names; the Integrations table sections by which Library group each tool feeds, using the
+names; the Integrations table sections by which Context library group each tool feeds, using the
 tab's name where a tab holds exactly one group (Tech context, Output artifacts). The
 `?tab=business` and `?tab=tech` ids stay put so links keep working. Template group
 membership, order and display names all come from `lib/adapters/templates.js`, so the
 Templates page and the Setup tab cannot drift apart.
-Second-level group pages (Templates, Competition, Skills, Gated files, Filing & linking
-rules) share one skeleton — crumbs back to their parent, title + one-line purpose, tile
+Second-level group pages (Templates, Competition, Skills, Gated files, Hooks, Filing &
+linking rules) share one skeleton — crumbs back to their parent, title + one-line purpose, tile
 grid; Templates splits that grid across four tabs (PRDs and specs · Meetings & interviews ·
-Other templates · Writing styles) whose names and order the Library's Templates section
-mirrors tile for tile, and Filing & linking rules splits its across two eyebrows — the two
-rule files, then the wiki-lint pair (the script, and the workflow that runs it on every
-pull request and every Monday) that checks the repo against them. The OS user interface
+Other templates · Writing styles) whose names and order the Context library's Templates section
+mirrors tile for tile. Filing & linking rules splits its across two eyebrows — the two rule
+files, then the check that holds the repo to them: the lint script, the workflow that runs
+it on every pull request and every Monday, and `.freshness-ignore`, the pages it skips and
+the one file on that page a PM edits. Hooks splits its the same way — the three scripts
+that run on their own, then `settings.json` and the hook reference that wire them. The OS user interface
 tiles are the one place in the tile language where the card is NOT a link: each has a page
 to open AND a folder to browse, so all three use the Templates page's action-row card —
 the card itself inert, `Open` and `Browse files` as real buttons with honest hrefs —
 because a clickable card with a button inside it is two affordances in one component.
-**Every tabbed page uses the one `tabBar` component in `web/ui.js`** (Library, Setup,
+**Every tabbed page uses the one `tabBar` component in `web/ui.js`** (Context library, Setup,
 Templates, Proposed changes, OS harness) — it owns the `?tab=` parameter, the active
 state, the tablist semantics and arrow-key navigation, and takes an optional per-tab
 count, so a new tabbed page never hand-rolls another copy. **Type steps down into the

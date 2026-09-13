@@ -135,8 +135,8 @@ const ALL_TARGETS = [...new Set(QUICK.flatMap((s) => s.groups.flatMap((g) => g.i
 // Two views over the same files: the curated Library (default) and the raw
 // Folder tree — switched at the top, never shown together.
 function viewSwitch(mode) {
-  return el('div', { class: 'view-switch', role: 'group', 'aria-label': 'Library view' },
-    el('a', { class: mode === 'lib' ? 'on' : '', href: '#/library' }, 'Library'),
+  return el('div', { class: 'view-switch', role: 'group', 'aria-label': 'Context library view' },
+    el('a', { class: mode === 'lib' ? 'on' : '', href: '#/library' }, 'Curated'),
     el('a', { class: mode === 'tree' ? 'on' : '', href: '#/library?view=tree' }, 'Folder tree'));
 }
 
@@ -149,7 +149,7 @@ export async function render(view, params) {
 
   const parts = path ? path.split('/') : [];
   setCrumbs([
-    { label: 'Library', href: '#/library' },
+    { label: 'Context library', href: '#/library' },
     ...parts.map((seg, idx) => ({
       label: seg,
       href: `#/library?path=${encodeURIComponent(parts.slice(0, idx + 1).join('/'))}`,
@@ -162,7 +162,7 @@ export async function render(view, params) {
   if (mode === 'lib') {
     page.append(
       el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
-        el('h1', { class: 'grow', style: 'margin:0' }, 'Library'),
+        el('h1', { class: 'grow', style: 'margin:0' }, 'Context library'),
         viewSwitch(mode)),
       el('div', { class: 'sub' },
         'Quick access by what things mean. The same files by location: Folder tree.'),
@@ -235,7 +235,7 @@ export async function render(view, params) {
   if (!path) {
     page.append(
       el('div', { class: 'row wrap', style: 'margin-bottom:4px' },
-        el('h1', { class: 'grow', style: 'margin:0' }, 'Library'),
+        el('h1', { class: 'grow', style: 'margin:0' }, 'Context library'),
         viewSwitch(mode)),
       el('div', { class: 'sub' },
         'The raw folder tree — the same files by actual location. 🔒 Gated = needs a human\'s approval to change.'),
