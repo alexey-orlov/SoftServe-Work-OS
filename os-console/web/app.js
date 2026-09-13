@@ -22,6 +22,7 @@ import * as harnessView from '/views/harness.js';
 import * as filingView from '/views/filing.js';
 import * as gatedView from '/views/gated.js';
 import * as hooksView from '/views/hooks.js';
+import * as navigationView from '/views/navigation.js';
 import { currentModeLabel } from '/views/autosync.js';
 
 const ROUTES = {
@@ -31,6 +32,7 @@ const ROUTES = {
   features: featuresView, autosync: autosyncView,
   skills: skillsView, competition: competitionView,
   harness: harnessView, filing: filingView, gated: gatedView, hooks: hooksView,
+  navigation: navigationView,
   steering: { render: () => location.replace('#/features') }, // old links self-correct
   system: { render: () => location.replace('#/harness') },    // old links self-correct
 };
@@ -66,7 +68,8 @@ async function render(preserveScroll = false) {
       || ((name === 'file' || name === 'edit' || name === 'templates'
         || name === 'competition') && n.dataset.route === 'library')
       || ((name === 'skills' || name === 'learnings' || name === 'filing'
-        || name === 'gated' || name === 'hooks') && n.dataset.route === 'harness');
+        || name === 'gated' || name === 'hooks' || name === 'navigation')
+        && n.dataset.route === 'harness');
     if (n.dataset.section) {
       active = name === 'docs'
         && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));

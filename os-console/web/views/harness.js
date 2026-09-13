@@ -22,22 +22,33 @@ function act(label, href, ico = null, primary = false) {
 
 const GROUPS = [
   {
-    key: 'agents',
-    title: 'Agent setup',
-    hint: 'What steers the agents, what they can do, what runs on its own, what they remember, and what they are connected to.',
-    // Six tiles, and `rows-of-three` breaks them 3+3 at full width rather than
-    // leaving a four-and-two row — see .tiles.quick.rows-of-three.
-    rowsOfThree: true,
+    // What an agent can DO, kept apart from what it is told: these two are the
+    // team's own capability surface, and both open pages of their own.
+    key: 'skills',
+    title: 'Skills and agents',
+    hint: 'The work the team has taught the OS to do, and the reviewers it can put on a draft.',
     items: [
-      it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file', 'file'),
       it('Skills', '#/skills', 'The team\'s guided programs, mapped to the product workflow', 'view', 'zap',
         { policyPath: '.claude/skills' }),
       it('Agents', '.claude/agents', 'Reviewer personas and subagent definitions', 'dir', 'target'),
+    ],
+  },
+  {
+    key: 'agents',
+    title: 'Agent setup',
+    hint: 'What steers the agents, what runs on its own, what they remember, what they are connected to, and where they are told they are.',
+    // Five tiles, and `rows-of-three` breaks them 3+2 at full width rather than
+    // leaving a four-and-one row — see .tiles.quick.rows-of-three.
+    rowsOfThree: true,
+    items: [
+      it('CLAUDE.md', 'CLAUDE.md', 'The root steering file every session loads first', 'file', 'file'),
       it('Hooks', '#/hooks', 'Session automation — the briefing, the write guard, auto-sync, and what switches them on', 'view', 'refresh',
         { policyPath: '.claude/hooks' }),
       it('Team memory', '#/learnings', 'Rules the team taught the agents, injected at every session start', 'view', 'bulb',
         { policyPath: '.claude/team-learnings.md' }),
       it('Integrations', TOOLCHAIN, 'Which tool each workflow surface uses, and what is connected', 'file', 'external'),
+      it('Agent navigation', '#/navigation', 'Every folder that briefs an agent working inside it, and the file that does the briefing', 'view', 'compass',
+        { policyPath: 'CLAUDE.md' }),
     ],
   },
   {
@@ -77,7 +88,7 @@ const hintOf = (key) => GROUPS.find((g) => g.key === key).hint;
 // heading — the tab already carries that name — and so it carries that group's
 // own line as its hint rather than restating it.
 const TABS = [
-  ['rules', 'Agents & rules', ['agents', 'gov'],
+  ['rules', 'Agents & rules', ['skills', 'agents', 'gov'],
     'What steers the agents and what governs the repo — the rules that decide how every session behaves.'],
   ['ui', 'OS user interface', ['ui'], hintOf('ui')],
 ];

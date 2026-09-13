@@ -129,6 +129,7 @@ const ROUTES = {
   'POST /api/initiatives/create': (q, body) => initiatives.create(
     body.slug, body.title, policy.load().settings, body.areas || [], body.features || []),
   'GET /api/library': (q) => library.dirInfo(q.get('path') || ''),
+  'GET /api/navmap': () => library.navMap(),
   'GET /api/file': fileInfo,
   'PUT /api/file': fileSave,
   'GET /api/features': () => steering.featureIndex(),

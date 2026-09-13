@@ -73,7 +73,8 @@ const MODULES = ['api.js', 'ui.js', 'app.js',
   'views/editor.js', 'views/templates.js', 'views/governance.js', 'views/activity.js',
   'views/learnings.js', 'views/docs.js', 'views/setup.js', 'views/proposed.js',
   'views/features.js', 'views/autosync.js', 'views/skills.js', 'views/competition.js',
-  'views/harness.js', 'views/filing.js', 'views/gated.js', 'views/hooks.js'];
+  'views/harness.js', 'views/filing.js', 'views/gated.js', 'views/hooks.js',
+  'views/navigation.js'];
 
 /** Every dir and file rel path the console can browse (same skip rules). */
 function walkRepo() {
@@ -234,6 +235,7 @@ function collect() {
     '/api/leaders': prs.leaders(builtMs),
     '/api/activity': activityPayload,
     '/api/skills': skills.build(),
+    '/api/navmap': library.navMap(),
   };
   normalizeTimes(routes, lastChanges);
 

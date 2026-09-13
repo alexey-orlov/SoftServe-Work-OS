@@ -39,6 +39,36 @@ export function dirInfo(rel) {
   };
 }
 
+/** Every folder carrying a CLAUDE.md navigation file, parents before children.
+ *  The folder tree shows one folder at a time; this is the whole map at once —
+ *  which folders brief an agent working inside them, and which do not appear
+ *  here at all. Walk order is listDir's, so the list reads as the tree does. */
+export function navMap() {
+  const pol = policy.load();
+  const items = [];
+  const walk = (rel) => {
+    let entries;
+    try {
+      entries = repo.listDir(rel || '.');
+    } catch {
+      return;
+    }
+    const nav = entries.find((e) => e.type === 'file' && e.name === 'CLAUDE.md');
+    if (nav) {
+      items.push({
+        dir: rel,
+        depth: rel ? rel.split('/').length : 0,
+        file: nav.rel,
+        tier: tierOf(nav.rel, false, pol),
+        mtimeMs: nav.mtimeMs,
+      });
+    }
+    for (const e of entries) if (e.type === 'dir') walk(e.rel);
+  };
+  walk('');
+  return { items };
+}
+
 /** Bulk tier lookup for arbitrary paths (used by the quick-access tiles). */
 export function tiers(paths) {
   const pol = policy.load();

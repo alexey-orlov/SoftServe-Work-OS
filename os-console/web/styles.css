@@ -582,8 +582,8 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
   .tiles.quick, .tiles.quick.three-up { grid-template-columns: 1fr; }
 }
 /* `rows-of-three` keeps the four equal columns but starts every third tile on a
-   new row, leaving the fourth column empty — a group of six reads 3+3 at exactly
-   the tile width every other group on the page uses, instead of four-and-two.
+   new row, leaving the fourth column empty — a group of five reads 3+2 at exactly
+   the tile width every other group on the page uses, instead of four-and-one.
    Only at the widest breakpoint: below 1140px the grid is three columns or fewer
    and the rule has nothing left to do. */
 @media (min-width: 1141px) {
@@ -604,11 +604,12 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 /* OS harness reuses the same three-token palette — its groups are a different
    subject, not a different design language. */
 .g-agents    { --group-color: var(--accent); }
+.g-skills    { --group-color: var(--ok-ink); }
 .g-gov       { --group-color: var(--gate-ink); }
 .g-ui        { --group-color: var(--teal-ink); }
 .group-head .group-dot { background: var(--group-color, var(--muted)); }
 .tile.g-strategic, .tile.g-templates, .tile.g-ongoing, .tile.g-artifacts,
-.tile.g-data, .tile.g-system, .tile.g-agents, .tile.g-gov, .tile.g-ui {
+.tile.g-data, .tile.g-system, .tile.g-agents, .tile.g-skills, .tile.g-gov, .tile.g-ui {
   border-left: 3px solid var(--group-color, var(--line));
 }
 /* tile titles stay neutral ink — the group speaks through the frame and the icon,
@@ -619,7 +620,8 @@ a.tile { color: var(--ink); }
 a.tile:hover { text-decoration: none; }
 a.tile:hover .row-t { color: var(--accent-ink); }
 
-/* second-level group pages (Templates, Competition, Skills, Gated files, Hooks, Filing &
+/* second-level group pages (Templates, Competition, Skills, Gated files, Hooks, Agent
+   navigation, Filing &
    linking rules) share one skeleton: crumbs back to their parent, h1 + sub, then
    tile grids / cards */
 .subpage-foot { margin-top: 18px; }

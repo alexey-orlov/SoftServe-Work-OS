@@ -38,18 +38,19 @@ The OS's own machinery is NOT in the Context library: it lives on **OS harness**
 the Manage nav block, because the Context library answers "what does the team know" and that is a
 different question from "what makes the OS behave". It uses the Context library's tile language
 and the Context library's own tab component, sorting three groups into two tabs. **Agents & rules**
-holds the two that decide how a session behaves: *Agent setup* (CLAUDE.md, Skills, Agents,
-Hooks, Team memory, Integrations — what steers the agents, what they can do, what runs on
-its own, what they remember, what they connect to; Hooks opens a second-level page, because
-a folder tile showed the three scripts and hid `settings.json`, the file that decides
-whether any of them runs) and *Governance* (Gated files, which
+holds the three that decide how a session behaves: *Skills and agents* (the two capability
+surfaces, kept apart from what an agent is told), *Agent setup* (CLAUDE.md, Hooks, Team
+memory, Integrations, Agent navigation — what steers the agents, what runs on its own, what
+they remember, what they connect to, and where they are told they are; Hooks opens a
+second-level page, because a folder tile showed the three scripts and hid `settings.json`,
+the file that decides whether any of them runs) and *Governance* (Gated files, which
 pairs the write policy with the script that mirrors it to the server, and Filing & linking
 rules, which folds the write-back contract, the link schema and the lint that enforces them
 into one second-level page because they serve one goal). **OS user interface** holds the
 third (OS console, Documentation, Admin guides). Same rule as the Context library: the two-group
 tab prints its group eyebrows, the single-group tab prints none — the tab already carries
-that name — and takes that group's own line as its hint. Agent setup's six tiles break
-3+3 (`rows-of-three`) rather than four-and-two, at the same tile width as every other
+that name — and takes that group's own line as its hint. Agent setup's five tiles break
+3+2 (`rows-of-three`) rather than four-and-one, at the same tile width as every other
 group. Team learnings is reached from here as **Team memory** and is no longer a sidebar
 entry; Skills moved with it, so both pages crumb back to OS harness rather than Context library.
 The gated-list management page (the Manage nav's Gated files) keeps its own "System rules"
@@ -71,15 +72,18 @@ tab's name where a tab holds exactly one group (Tech context, Output artifacts).
 `?tab=business` and `?tab=tech` ids stay put so links keep working. Template group
 membership, order and display names all come from `lib/adapters/templates.js`, so the
 Templates page and the Setup tab cannot drift apart.
-Second-level group pages (Templates, Competition, Skills, Gated files, Hooks, Filing &
-linking rules) share one skeleton — crumbs back to their parent, title + one-line purpose, tile
+Second-level group pages (Templates, Competition, Skills, Gated files, Hooks, Agent
+navigation, Filing & linking rules) share one skeleton — crumbs back to their parent, title + one-line purpose, tile
 grid; Templates splits that grid across four tabs (PRDs and specs · Meetings & interviews ·
 Other templates · Writing styles) whose names and order the Context library's Templates section
 mirrors tile for tile. Filing & linking rules splits its across two eyebrows — the two rule
 files, then the check that holds the repo to them: the lint script, the workflow that runs
 it on every pull request and every Monday, and `.freshness-ignore`, the pages it skips and
 the one file on that page a PM edits. Hooks splits its the same way — the three scripts
-that run on their own, then `settings.json` and the hook reference that wire them. The OS user interface
+that run on their own, then `settings.json` and the hook reference that wire them. Agent
+navigation is the one that is a table rather than tiles: every folder carrying a CLAUDE.md,
+parents before children, served by `/api/navmap` (`lib/adapters/library.js navMap`) — which,
+like every read route, must be baked into the light-mode snapshot or the page is blank there. The OS user interface
 tiles are the one place in the tile language where the card is NOT a link: each has a page
 to open AND a folder to browse, so all three use the Templates page's action-row card —
 the card itself inert, `Open` and `Browse files` as real buttons with honest hrefs —
