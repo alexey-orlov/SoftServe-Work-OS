@@ -1,7 +1,10 @@
 // Filing & linking rules — second-level group page (same skeleton as Competition:
 // crumbs back to its parent, h1 + sub, tile grid). One goal in two halves: the
 // rules that say where an artifact lands and what it must link to, and the check
-// that sweeps the repo for work that drifted out of line with them.
+// that sweeps the repo for work that drifted out of line with them. Both halves
+// follow the OS harness pattern — a short noun eyebrow with the group's scope on
+// the hint line under it, and tiles named for the file they open, never for a
+// question about it.
 import { api } from '/api.js';
 import { el, icon, timeAgo, setCrumbs, spinner, gatedTag, cmdChip } from '/ui.js';
 
@@ -12,6 +15,7 @@ const FLOWS = '.github/workflows';
 const GROUPS = [
   {
     title: 'The rules',
+    hint: 'Where a new artifact lands, and what it has to link to so it can be found again.',
     items: [
       {
         name: 'Write-back contract',
@@ -28,24 +32,25 @@ const GROUPS = [
     ],
   },
   {
-    title: 'The check that enforces them',
+    title: 'The check',
+    hint: 'What sweeps the repo for work that drifted out of line with those rules, when it runs, and the pages it leaves alone on purpose.',
     items: [
       {
-        name: 'Mechanical lint',
+        name: 'Lint script',
         path: `${SCRIPTS}/wiki-lint.sh`,
-        desc: 'The scriptable half of /wiki-lint — nav coverage, cross-references, the link contract, ledger integrity; reports, never fixes',
+        desc: 'The scriptable half of /wiki-lint — nav coverage, cross-references, the link contract, ledger integrity. Reports what it finds, never repairs it',
         ico: 'check',
       },
       {
-        name: 'When it runs',
+        name: 'Run schedule',
         path: `${FLOWS}/wiki-lint.yml`,
-        desc: 'On every pull request, and every Monday with a weekly repo-health issue',
+        desc: 'What sets the script off — every pull request, and every Monday, when it also opens a repo-health issue for the week',
         ico: 'clock',
       },
       {
         // Repo root, so the root listing is fetched alongside the three folders.
         // The one file on this page a PM edits, and the one that is not gated.
-        name: 'Staleness exceptions',
+        name: 'Skip list',
         path: '.freshness-ignore',
         desc: 'The pages the check skips — worked examples and stable reference — so it flags only what is meant to stay current',
         ico: 'edit',
@@ -73,7 +78,10 @@ export async function render(view) {
   const byRel = new Map(listings.flatMap((d) => (d ? d.entries.map((e) => [e.rel, e]) : [])));
 
   for (const group of GROUPS) {
-    page.append(el('h2', { class: 'group-head g-gov' }, el('span', { class: 'group-dot' }), group.title));
+    page.append(
+      el('h2', { class: 'group-head g-gov' }, el('span', { class: 'group-dot' }), group.title),
+      el('div', { class: 'hint', style: 'margin:-2px 0 10px' }, group.hint),
+    );
     page.append(el('div', { class: 'tiles', style: 'grid-template-columns:repeat(auto-fit, minmax(260px, 1fr))' },
       group.items.map((t) => {
         const entry = byRel.get(t.path);
@@ -89,7 +97,7 @@ export async function render(view) {
   page.append(el('div', { class: 'card subpage-foot' },
     el('h3', {}, 'Keeping this current'),
     el('div', { class: 'hint', style: 'margin-bottom:8px' },
-      'The lint pair above is the mechanical half — what a script can check, reported and never repaired. The other half is judgment, and it takes a session: the same sweep, with the mechanical drift fixed in place and everything else listed as plain-language suggestions for a person to approve:'),
+      'The script above is the mechanical half — what a check can verify, reported and never repaired. The other half is judgment, and it takes a session: the same sweep, with the mechanical drift fixed in place and everything else listed as plain-language suggestions for a person to approve:'),
     el('div', { class: 'chips' }, cmdChip('/wiki-lint')),
   ));
 }
