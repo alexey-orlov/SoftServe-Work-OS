@@ -5,7 +5,8 @@
 // in Proposed changes; the files themselves are edited from Library, Features,
 // or their own views. Groups here are by what the policy protects — "Steering
 // files" spans business context, templates and engineering, so it is broader than
-// the Library's Strategic context section; "System rules" is the same set in both.
+// the Library's Strategic context section; "System rules" is the set the System
+// files page lays out as tiles.
 import { api } from '/api.js';
 import { el, icon, pill, timeAgo, setCrumbs, spinner, toast, modal, field, filePicker, cmdChip, LITE, liteLock } from '/ui.js';
 

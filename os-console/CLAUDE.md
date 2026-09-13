@@ -12,12 +12,12 @@ projection opens the same skill card with the command to copy), tabbed setup
 with the integrations table and per-file population status, gated-list management, the
 auto-sync switch (a Setup tab — PM language, no git jargon; the one home for it),
 actionable proposed-changes queues, and the activity log, without touching the
-underlying folder structure. The Library sorts its six tile groups into four tabs —
+underlying folder structure. The Library sorts its five tile groups into three tabs —
 **Business context** (Strategic context · Templates · Ongoing business context), **Tech
 context** (one group of the same name — how the team's own systems are laid out and how
 to use them: Analytics, which fronts the data catalog, and Engineering, which fronts the
 code-repo registry; the registries get no tile of their own, because that would be the
-same door twice), **Output artifacts** (Artifacts) and **System rules** — each
+same door twice) and **Output artifacts** (Artifacts) — each
 group keeping a quiet color code: the group speaks through the tile frame and icon
 tint while titles stay neutral ink. Each tab carries a one-line hint that states its
 scope in the order its groups appear. The split is by provenance, not by folder: the
@@ -33,9 +33,20 @@ so a group breaks into even rows instead of one packed row plus an orphan, and t
 gated-badge lookup is one request for the whole page rather than one per tab. The
 Library ↔ Folder tree switch stays above the tabs and owns the mode; tabs subdivide the
 curated view only, and never appear over the tree.
-"System rules" is the same name on the Gated-files page; that page's "Steering files" is
-deliberately broader than the Library's Strategic context, because it groups by what the
-policy protects (business context, templates and engineering together). The **Setup page follows the
+The OS's own machinery is NOT in the Library: it lives on **System files**, a page in the
+Manage nav block, because the Library answers "what does the team know" and that is a
+different question from "what makes the OS behave". It uses the Library's tile language
+without tabs — three groups on one screen: **Agent setup** (CLAUDE.md, Skills, Agents,
+Hooks, Team memory, Integrations — what steers the agents, what they can do, what runs on
+its own, what they remember, what they connect to), **Governance** (Gated files, and
+Filing & linking rules, which folds the write-back contract and the link schema into one
+second-level page because they serve one goal) and **OS user interface** (OS console,
+Documentation, Admin guides). Team learnings is reached from here as **Team memory** and
+is no longer a sidebar entry; Skills moved with it, so both pages crumb back to System
+files rather than Library. The Gated-files page keeps its own "System rules" group name;
+its "Steering files" is deliberately broader than the Library's Strategic context, because
+it groups by what the policy protects (business context, templates and engineering
+together). The **Setup page follows the
 Library's structure inside its own tabs**: its first two tabs are the Library's first
 two. *Business context* sections into the same Library groups (Strategic context — the
 steering files in the Library's tile order, the Roadmap & OKRs tile standing for the
@@ -51,10 +62,15 @@ tab's name where a tab holds exactly one group (Tech context, Output artifacts).
 `?tab=business` and `?tab=tech` ids stay put so links keep working. Template group
 membership, order and display names all come from `lib/adapters/templates.js`, so the
 Templates page and the Setup tab cannot drift apart.
-Second-level group pages (Templates, Competition, Skills) share one skeleton — crumbs
-back to Library, title + one-line purpose, tile grid; Templates splits that grid across
-four tabs (PRDs and specs · Meetings & interviews · Other templates · Writing styles)
-whose names and order the Library's Templates section mirrors tile for tile.
+Second-level group pages (Templates, Competition, Skills, Filing & linking rules) share
+one skeleton — crumbs back to their parent, title + one-line purpose, tile grid; Templates
+splits that grid across four tabs (PRDs and specs · Meetings & interviews · Other
+templates · Writing styles) whose names and order the Library's Templates section mirrors
+tile for tile. A tile with TWO destinations (System files' OS console and Documentation:
+open the page, or browse the folder) is the one tile that is not an anchor — the primary
+link stretches an invisible overlay across the card and the secondary chip is raised above
+it, so both stay real, focusable links with honest hrefs instead of a nested-anchor
+hack.
 **Every tabbed page uses the one `tabBar` component in `web/ui.js`** (Library, Setup,
 Templates, Proposed changes) — it owns the `?tab=` parameter, the active state, the
 tablist semantics and arrow-key navigation, and takes an optional per-tab count, so a new
@@ -145,7 +161,8 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
   `lib/adapters/templates.js SUGGEST` (template → destination) + `LABELS` (template →
   display name, shown on every surface that lists templates), `lib/adapters/home.js
   STEERING_FILES` + `SURFACES`, `lib/adapters/steering.js CORE`, `web/views/library.js
-  QUICK` (the tile groups and the paths behind them), and `web/views/templates.js
+  QUICK` (the tile groups and the paths behind them), `web/views/system.js GROUPS` (the
+  same, for System files), and `web/views/templates.js
   TAB_TEMPLATES` (which tab each template sits in) + `TEMPLATE_DESCS`. A folder move, a new
   template, a new steering file or a new toolchain surface silently invalidates one of them.
   Checking that the paths still EXIST is not enough — the destination a template row suggests
