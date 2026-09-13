@@ -206,12 +206,12 @@ export async function render(view, params) {
     d = await api.get('/api/skills');
   } catch (e) {
     view.replaceChildren();
-    setCrumbs([{ label: 'Library', href: '#/library' }, { label: 'Skills' }]);
+    setCrumbs([{ label: 'System files', href: '#/system' }, { label: 'Skills' }]);
     view.append(el('div', { class: 'page' }, el('h1', {}, 'Skills'), staleServerCard()));
     return;
   }
   view.replaceChildren();
-  setCrumbs([{ label: 'Library', href: '#/library' }, { label: 'Skills' }]);
+  setCrumbs([{ label: 'System files', href: '#/system' }, { label: 'Skills' }]);
 
   const mode = ['workflow', 'groups', 'az'].includes(params.get('v')) ? params.get('v') : 'workflow';
   const page = el('div', { class: 'page' });

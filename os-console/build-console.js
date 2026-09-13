@@ -72,7 +72,8 @@ const MODULES = ['api.js', 'ui.js', 'app.js',
   'views/home.js', 'views/initiatives.js', 'views/library.js', 'views/file.js',
   'views/editor.js', 'views/templates.js', 'views/governance.js', 'views/activity.js',
   'views/learnings.js', 'views/docs.js', 'views/setup.js', 'views/proposed.js',
-  'views/features.js', 'views/autosync.js', 'views/skills.js', 'views/competition.js'];
+  'views/features.js', 'views/autosync.js', 'views/skills.js', 'views/competition.js',
+  'views/system.js', 'views/filing.js'];
 
 /** Every dir and file rel path the console can browse (same skip rules). */
 function walkRepo() {

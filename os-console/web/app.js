@@ -18,6 +18,8 @@ import * as featuresView from '/views/features.js';
 import * as autosyncView from '/views/autosync.js';
 import * as skillsView from '/views/skills.js';
 import * as competitionView from '/views/competition.js';
+import * as systemView from '/views/system.js';
+import * as filingView from '/views/filing.js';
 import { currentModeLabel } from '/views/autosync.js';
 
 const ROUTES = {
@@ -26,6 +28,7 @@ const ROUTES = {
   docs: docsView, setup, proposed: proposedView,
   features: featuresView, autosync: autosyncView,
   skills: skillsView, competition: competitionView,
+  system: systemView, filing: filingView,
   steering: { render: () => location.replace('#/features') }, // old links self-correct
 };
 
@@ -39,9 +42,9 @@ const NAV = {
   ],
   manage: [
     ['setup', 'Set up this OS', 'sliders'],
+    ['system', 'System files', 'chip'],
     ['governance', 'Gated files', 'shield'],
     ['proposed', 'Proposed changes', 'pr'],
-    ['learnings', 'Learnings', 'bulb'],
   ],
 };
 
@@ -58,7 +61,9 @@ async function render(preserveScroll = false) {
     let active = n.dataset.route === name
       || (name === 'initiative' && n.dataset.route === 'initiatives')
       || ((name === 'file' || name === 'edit' || name === 'templates'
-        || name === 'skills' || name === 'competition') && n.dataset.route === 'library');
+        || name === 'competition') && n.dataset.route === 'library')
+      || ((name === 'skills' || name === 'learnings' || name === 'filing')
+        && n.dataset.route === 'system');
     if (n.dataset.section) {
       active = name === 'docs'
         && (n.dataset.section === params.get('s') || (!params.get('s') && n.dataset.first !== undefined));

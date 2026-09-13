@@ -593,9 +593,14 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 .g-artifacts { --group-color: var(--accent); }
 .g-data      { --group-color: var(--ok-ink); }
 .g-system    { --group-color: var(--muted); }
+/* System files reuses the same three-token palette — its groups are a different
+   subject, not a different design language. */
+.g-agents    { --group-color: var(--accent); }
+.g-gov       { --group-color: var(--gate-ink); }
+.g-ui        { --group-color: var(--teal-ink); }
 .group-head .group-dot { background: var(--group-color, var(--muted)); }
 .tile.g-strategic, .tile.g-templates, .tile.g-ongoing, .tile.g-artifacts,
-.tile.g-data, .tile.g-system {
+.tile.g-data, .tile.g-system, .tile.g-agents, .tile.g-gov, .tile.g-ui {
   border-left: 3px solid var(--group-color, var(--line));
 }
 /* tile titles stay neutral ink — the group speaks through the frame and the icon,
@@ -605,6 +610,29 @@ a.tile { color: var(--ink); }
 .tile .row-t svg { color: var(--group-color, var(--ink-2)); opacity: .95; }
 a.tile:hover { text-decoration: none; }
 a.tile:hover .row-t { color: var(--accent-ink); }
+
+/* Two-destination tile — a card with a default and a visible alternative.
+   The card is NOT an anchor: the primary link stretches an invisible overlay
+   across the whole surface (click anywhere = the default), and the foot chip
+   is a second real link raised above it. Two plain links, never nested, so
+   both are keyboard-reachable and the browser shows each real href. */
+.tile.tile-dual { display: flex; flex-direction: column; }
+.tile.tile-dual .d { flex: 1; }
+.tile-dual .tile-main { color: var(--ink); text-decoration: none; }
+.tile-dual .tile-main::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.tile-dual:hover .row-t { color: var(--accent-ink); }
+.tile-dual:focus-within { border-color: var(--accent); }
+.tile-dual .tile-alt {
+  position: relative; z-index: 1; align-self: flex-start; margin-top: 10px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
+  background: var(--bg);
+}
+.tile-dual .tile-alt svg { width: 12px; height: 12px; }
+.tile-dual .tile-alt:hover {
+  color: var(--accent-ink); border-color: var(--accent); text-decoration: none;
+}
 
 /* second-level group pages (Templates, Competition, Skills) share one skeleton:
    crumbs back to Library, h1 + sub, then tile grids / cards */

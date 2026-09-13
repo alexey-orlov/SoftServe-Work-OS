@@ -33,7 +33,7 @@ export async function render(view) {
     tile(o.counts.initiatives, 'Active initiatives', '#/initiatives'),
     tile(o.counts.accounts, 'Customer accounts', '#/library?path=product-development%2Fproduct%2Fcustomers%2Faccounts'),
     tile(o.counts.mcps, 'Tools connected', '#/setup?tab=integrations'),
-    tile(o.counts.learnings, 'Team learnings', '#/learnings'),
+    tile(o.counts.learnings, 'Team memory', '#/learnings'),
     el('a', { class: 'tile', href: '#/proposed' }, prTileN, el('div', { class: 't' }, 'Proposed changes')),
   ));
 

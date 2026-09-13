@@ -1,4 +1,5 @@
-// Team learnings — the cross-cutting agent rules injected at every session start.
+// Team memory — the cross-cutting agent rules injected at every session start.
+// Reached as a tile on System files; the file behind it is .claude/team-learnings.md.
 import { api } from '/api.js';
 import { el, icon, toast, timeAgo, setCrumbs, spinner, meter, tierPill, LITE, liteLock } from '/ui.js';
 
@@ -6,12 +7,12 @@ export async function render(view) {
   view.append(spinner());
   const d = await api.get('/api/learnings');
   view.replaceChildren();
-  setCrumbs([{ label: 'Learnings' }]);
+  setCrumbs([{ label: 'System files', href: '#/system' }, { label: 'Team memory' }]);
 
   const page = el('div', { class: 'page' });
   view.append(page);
   page.append(
-    el('h1', {}, 'Team learnings'),
+    el('h1', {}, 'Team memory'),
     el('div', { class: 'sub' },
       'Rules for how agents must behave in this repo — corrections that should never recur. Injected into every session start, so the list is a context tax: keep it short, prune the weakest when adding.'),
   );

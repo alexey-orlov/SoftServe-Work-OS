@@ -82,6 +82,10 @@ const QUICK = [
         // suffix. Two tiles here pointed at the same listing.
         it('PRDs, JTBD & job specs', `${P}/PRDs`, 'Feature definitions, jobs breakdowns and buildable job specs — filed together by area, with each area\'s reviews/ alongside'),
         it('Prototypes', `${P}/prototypes`, 'Clickable prototypes and the feedback on them'),
+        // Reports are output, not record: four skills write this one folder and
+        // nothing else does — weekly review, portfolio pulse, status update, and
+        // process-meeting's batch digest, told apart by filename prefix.
+        it('Reports', `${P}/reports`, 'Weekly reviews, portfolio pulses, status updates and batch-day digests'),
       ],
     }],
   },
@@ -99,23 +103,12 @@ const QUICK = [
       ],
     }],
   },
-  {
-    // Same name as the Gated files page's group — one vocabulary everywhere.
-    title: 'System rules',
-    key: 'system',
-    groups: [{
-      name: null,
-      items: [
-        it('Skills', '#/skills', 'The team\'s guided programs, mapped to the product workflow', 'view', '.claude/skills', 'zap'),
-        it('Agents', '.claude/agents', 'Reviewer personas and subagent definitions'),
-        it('Hooks', '.claude/hooks', 'Session automation — write guard, auto-sync, session briefing'),
-      ],
-    }],
-  },
 ];
 
-// Four tabs over the six tile groups: what the team knows about the business, what
-// it knows about its own systems, what it produces, and the OS's own rules. Each row
+// Three tabs over the five tile groups: what the team knows about the business,
+// what it knows about its own systems, and what it produces. The OS's own rules
+// left for the System files page under Manage — this page is about the team's
+// knowledge, that one is about the machinery. Each row
 // is [id, label, section keys, one-line hint] — the hint states the tab's scope in
 // one sentence, in the order its groups appear.
 // A tab holding a single section drops that section's heading — printing the
@@ -131,9 +124,7 @@ const TABS = [
   ['tech', 'Tech context', ['data'],
     'How the team\'s own systems are laid out and how to use them — the data warehouse and its metrics, the code repositories and their constraints.'],
   ['output', 'Output artifacts', ['artifacts'],
-    'What the team produces from all that context — PRDs, jobs breakdowns and job specs, and the prototypes that test them.'],
-  ['system', 'System rules', ['system'],
-    'The Work OS itself — its guided programs, its reviewer personas and subagents, and its session automation.'],
+    'What the team produces from all that context — PRDs, jobs breakdowns and job specs, the prototypes that test them, and the periodic reports that roll it all up.'],
 ];
 
 // Every tile's policy path, looked up once per page rather than once per tab.
