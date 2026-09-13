@@ -30,7 +30,7 @@ const ADO_FILTER = "/product-development/feature-index.yaml;/product-development
 const doc = {
   name: "Work OS Team Setup",
   siteTitle: "Work OS · Team setup",
-  version: "v4.6 · August 2026",
+  version: "v4.7 · September 2026",
   repoPath: "Documentation/",
   intro: "How to set up and customize the Work OS for your organization — who does what, how the repository is set up on {gh:GitHub|az:Azure Repos}, how each person gets going, how the Work OS is customized and connected to your tools and code, and how changes flow. Also published as an interactive site with a GitHub / Azure Repos switch.",
   home: ["overview", "work-os-101"],
@@ -136,7 +136,7 @@ const doc = {
         ]),
         h2("The map — what Claude knows", "map"),
         p("Grouped by what you go looking for, not by folder. A question about a segment, a competitor, a decision or a metric has one group below; Claude knows the paths, so you never need to type them."),
-        p("The Work OS console shows the same material on its **Library** page, under four tabs — *Business context* (who you are and where you are heading, the templates, the running record), *Tech context* (how your data warehouse and code repositories are laid out and how to use them), *Output artifacts* and *System rules* — with a tile per group. The headings below are the finer cut of the same map: use the console to click through it, this page to read it."),
+        p("The Work OS console shows the same material on its **Library** page, under three tabs — *Business context* (who you are and where you are heading, the templates, the running record), *Tech context* (how your data warehouse and code repositories are laid out and how to use them) and *Output artifacts* — with a tile per group. The headings below are the finer cut of the same map: use the console to click through it, this page to read it. The one exception is *The OS itself*, which has a console page of its own: **Manage › System files**."),
         h3("Strategy and business context", "strategy"),
         catalog([
           { name: "Business info (`business-info.md`)", kind: "steering", what: "Source of truth for company, product, ICP, personas, pricing, go-to-market and market", use: "Read in full before any PRD, pricing, positioning, metric, competitive or strategy work" },
