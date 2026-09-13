@@ -265,11 +265,15 @@ function azureComment(n, comment) {
 /** Most-active leaderboards over the last 7 / 30 days — humans only, counted
  *  from the commits in local history. Credit goes to the commit AUTHOR (whoever
  *  produced the change); merge commits are skipped so approving or landing someone
- *  else's work never counts. Author-based counting works the same whether the team
- *  lands work as direct pushes or through pull requests, and needs no platform CLI.
- *  `force` is kept for route compatibility — history is read fresh on every call. */
-export function leaders() {
-  const r = gitlib.git(['log', '--since=30 days ago', '--no-merges', '--pretty=format:%ct%x1f%an%x1f%ae']);
+ *  else's work never counts, and snapshot rebuilds (derived output that follows
+ *  most commits) are skipped so they cannot double a person's count. Author-based
+ *  counting works the same whether the team lands work as direct pushes or through
+ *  pull requests, and needs no platform CLI.
+ *  `nowMs` anchors the windows: the snapshot builder passes its source commit's
+ *  time so the same commit always bakes the same numbers; the server passes nothing
+ *  (a boolean from the refresh route is ignored) and counts back from now. */
+export function leaders(nowMs) {
+  const r = gitlib.git(['log', '--since=30 days ago', '--no-merges', '--pretty=format:%ct%x1f%an%x1f%ae%x1f%s']);
   if (!r.ok) {
     return {
       available: false,
@@ -279,17 +283,18 @@ export function leaders() {
       note: `git history unavailable (${(r.err || '').slice(0, 120)})`,
     };
   }
-  const nowS = Date.now() / 1000;
+  const nowS = (typeof nowMs === 'number' ? nowMs : Date.now()) / 1000;
   const week = new Map();
   const month = new Map();
   for (const line of r.out.split('\n')) {
     const parts = line.split('\x1f');
-    if (parts.length !== 3) continue;
-    const [ts, name, email] = parts;
+    if (parts.length !== 4) continue;
+    const [ts, name, email, subject] = parts;
     const seconds = parseInt(ts, 10);
     if (Number.isNaN(seconds)) continue;
     const ageS = nowS - seconds;
-    if (isBotAuthor(name, email) || ageS > 30 * 86400) continue;
+    if (isBotAuthor(name, email) || ageS > 30 * 86400 || ageS < 0) continue;
+    if (gitlib.isSnapshotCommit({ subject })) continue;
     month.set(name, (month.get(name) || 0) + 1);
     if (ageS <= 7 * 86400) week.set(name, (week.get(name) || 0) + 1);
   }

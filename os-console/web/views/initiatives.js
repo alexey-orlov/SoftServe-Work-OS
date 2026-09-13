@@ -1,7 +1,7 @@
 // Initiatives — the current-work lens. Cards grouped by status; detail joins the
 // living page with feature-index artifacts. Grouping is derived; pins are prefs.
 import { api, isPinned, togglePin } from '/api.js';
-import { el, icon, statusPill, pill, mdRender, timeAgo, toast, modal, field, filePicker, setCrumbs, spinner, cmdChip, LITE, liteLock } from '/ui.js';
+import { el, icon, statusPill, pill, mdRender, timeAgo, toast, modal, field, filePicker, setCrumbs, spinner, cmdChip, LITE, liteLock, syncToast } from '/ui.js';
 
 const STATUSES = ['active', 'exploring', 'paused', 'shipped', 'killed'];
 
@@ -114,7 +114,7 @@ function list(view, items) {
         label: 'Create', kind: 'primary',
         onclick: async (close) => {
           const r = await api.post('/api/initiatives/create', { slug: slugIn.value.trim(), title: titleIn.value.trim(), features: split(featIn.value), areas: split(areaIn.value) });
-          toast(`Created ${r.page.slug}${r.commit.committed ? ' ✓' : ''}`);
+          syncToast(`Created ${r.page.slug}`, r);
           window.dispatchEvent(new Event('console:saved'));
           close();
           location.hash = `#/initiative?slug=${encodeURIComponent(r.page.slug)}`;
@@ -290,7 +290,7 @@ function instructionsModal(i) {
       label: 'Save', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/instructions', { slug: i.slug, text: ta.value.trim() });
-        toast(`Instructions ${ta.value.trim() ? 'saved' : 'cleared'}${r.commit.committed ? ' ✓' : ''}`);
+        syncToast(`Instructions ${ta.value.trim() ? 'saved' : 'cleared'}`, r);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
@@ -321,7 +321,7 @@ function sourcesCard(i) {
       : { label: s.label, href: s.href, note: s.note }));
     const r = await api.post('/api/initiatives/sources', { slug: i.slug, items: payload });
     items = (r.page.sources || []).map((s) => ({ ...s }));
-    toast(`Sources saved${r.commit.committed ? ' ✓' : ''}`);
+    syncToast(`Sources saved`, r);
     window.dispatchEvent(new Event('console:saved'));
     draw();
   }
@@ -449,7 +449,7 @@ function statusModal(i) {
       label: 'Update', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/status', { slug: i.slug, status: sel.value, note: note.value.trim() });
-        toast(`Status → ${sel.value}${r.commit.committed ? ' ✓' : ''}`);
+        syncToast(`Status → ${sel.value}`, r);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();
@@ -469,7 +469,7 @@ function attachModal(i, path) {
       label: 'Attach', kind: 'primary',
       onclick: async (close) => {
         const r = await api.post('/api/initiatives/attach', { slug: i.slug, path, label: label.value.trim() });
-        toast(`Attached${r.commit.committed ? ' ✓' : ''}`);
+        syncToast(`Attached`, r);
         window.dispatchEvent(new Event('console:saved'));
         close();
         location.reload();

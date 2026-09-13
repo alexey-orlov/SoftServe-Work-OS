@@ -46,7 +46,9 @@ export function prefixOf(subject) {
 export function build(limit) {
   const parsed = parseInt(limit, 10);
   const n = Number.isNaN(parsed) ? 0 : parsed;
-  const commits = gitlib.log(Math.min(n || 120, 400)).map((c) => ({
+  // Snapshot rebuilds (console: rebuild snapshot) follow most commits — derived
+  // output, not work — and would double the timeline; the chip reports them instead.
+  const commits = gitlib.log(Math.min(n || 120, 400)).filter((c) => !gitlib.isSnapshotCommit(c)).map((c) => ({
     sha: c.sha,
     date: c.date,
     author: c.author,

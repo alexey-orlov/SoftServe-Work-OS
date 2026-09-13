@@ -84,22 +84,51 @@ zero-setup light mode below.
 `console.html` is the whole console as ONE self-contained read-only file: the same
 frontend with every view's data, all wiki file contents, a client-side search index, and
 the built docs site baked in. Open it from the clone, a file share, or any static host —
-no runtime, no install, nothing to approve. Built by `build-console.js` (same Node stdlib);
-on GitHub the `build-console` workflow rebuilds and commits it on every push to main, so
-the file in the repo is always the latest state of main. Azure instances run
-`node os-console/build-console.js` from a pipeline (or by hand) instead.
+no runtime, no install, nothing to approve. Built by `build-console.js` (same Node stdlib).
+
+**How it stays current — three writers, one builder, no CI:**
+
+- **The turn-end hook** (`.claude/hooks/auto-commit.sh`, once auto-sync is on) rebuilds it
+  on every machine that has Node, in the same push as the work it describes. Direct
+  mode: a `console: rebuild snapshot` commit right after the turn's commit. Pr mode: one
+  more commit inside the drain, so the pull request lands content and snapshot together;
+  a drain whose pull request reports a merge conflict (two people landed snapshots at
+  once) is rebuilt from the current target next turn. No Node on that machine → skipped
+  and said out loud; the next teammate with Node catches up, since every build bakes the
+  whole repo.
+- **The console's Rebuild** — the snapshot line in the sidebar's git chip reads `current`
+  or `N behind`; one click rebuilds, commits, and pushes per auto-sync (`lib/snapshot.js`,
+  `POST /api/snapshot/rebuild`).
+- **By hand:** `node os-console/build-console.js --ref HEAD`.
+
+Every writer bakes a COMMITTED tree, never the working tree — `--ref` checks the commit
+out in a throwaway worktree, and the drain worktree already is one — so held gated edits
+cannot leak into a file that lands on the shared branch. Builds are deterministic per
+commit (dates come from git, the leaderboard anchors on the source commit, nothing reads
+the clock): two people baking the same commit produce the same bytes, which git merges
+without a conflict. Where two snapshots do differ, `.gitattributes` names a `snapshot`
+merge driver — keep the current side, the next rebuild regenerates it — registered per
+clone by the hook and the console. The file carries a stamp in its `<head>`
+(`<meta name="os-console-snapshot" …>`: source sha, branch, build date) that the chip, the
+hook, and a person with `head` can read; the page's own banner prints the build age and
+turns amber past a week. Snapshot commits are derived output, not work: the leaderboard
+and the Activity timeline leave them out. The GitHub workflow `build-console.yml` is a
+manual fallback only (`workflow_dispatch`): on a pull-request-only `main` its push is
+refused unless the Actions app sits on the ruleset bypass list, and it raced the hooks
+for the tip of `main` — so it no longer runs on push, and Azure needs no pipeline.
 
 **Two modes, one behavior:** the light page probes `http://127.0.0.1:4820/api/ping`
 (the server's one CORS-open endpoint — a static "I am the console" flag, no data) on
 load and every 5 seconds, and the moment a full console is running on the machine it
 hands off to it, keeping the current view. Until then the banner says what you have:
-a read-only snapshot as of its source commit.
+a read-only snapshot as of its source commit, and how old it is.
 
 What light mode cannot do: edit or act on anything — every write affordance (saves,
 initiative status/sources/instructions, templates, learnings, gated-list edits, the
-auto-sync switch, PR and proposal actions) renders **locked with an explanatory
-tooltip** (`LITE`/`liteLock` in `web/ui.js`), so nothing dead-ends in a 403. It also
-cannot reflect changes newer than its build or show live pull requests. Copy-prompt
+auto-sync switch, PR and proposal actions, the snapshot Rebuild) renders **locked with
+an explanatory tooltip** (`LITE`/`liteLock` in `web/ui.js`), so nothing dead-ends in a
+403. It cannot reflect changes newer than its build, and hook-built snapshots leave
+pull requests out (the page says so and points at the full console). Copy-prompt
 hand-offs to Claude Code still work. Per-user pins/recents work via the browser's
 localStorage. Files over 300 KB are listed but their text is not embedded.
 
@@ -182,8 +211,8 @@ localStorage. Files over 300 KB are listed but their text is not embedded.
 - [server.js](server.js) — HTTP server: API routes, static files, SSE live refresh, localhost-only
 - [package.json](package.json) — Name, `"type": "module"`, the Node 18+ engine floor, and the two scripts (`npm start`, `npm run build`); no `dependencies` key, by rule
 - [state.json] — created on demand; per-user prefs overlay (gitignored)
-- [build-console.js](build-console.js) — Bakes the zero-setup snapshot; run by the build-console workflow on every push to main
-- [console.html](console.html) — Light mode: the console as one read-only file, no runtime needed; auto-switches to a running full console
+- [build-console.js](build-console.js) — Bakes the zero-setup snapshot from a committed tree (`--ref`), deterministically; run by the turn-end hook, the console's Rebuild, or by hand
+- [console.html](console.html) — Light mode: the console as one read-only file, no runtime needed, stamped with its source commit; auto-switches to a running full console
 
 ### Subfolders
 

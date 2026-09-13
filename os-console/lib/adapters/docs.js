@@ -5,7 +5,7 @@
 import * as repo from '../repo.js';
 
 export const SITE = 'Documentation/work-os-docs.html';
-const SRC = ['Documentation/src/content.js', 'Documentation/src/build.js'];
+export const SRC = ['Documentation/src/content.js', 'Documentation/src/build.js'];
 
 export function build() {
   const st = repo.statOrNull(SITE);

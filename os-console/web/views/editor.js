@@ -2,7 +2,7 @@
 // (console: prefix). For gated files the save itself is the human approval; the
 // bar says so instead of interrupting with a second dialog.
 import { api } from '/api.js';
-import { el, icon, tierPill, mdRender, toast, setCrumbs, spinner, modal, LITE, liteLock } from '/ui.js';
+import { el, icon, tierPill, mdRender, toast, setCrumbs, spinner, modal, LITE, LITE_HINT, liteLock, syncToast } from '/ui.js';
 
 export async function render(view, params) {
   const path = params.get('path') || '';
@@ -82,9 +82,7 @@ export async function render(view, params) {
       baseMtimeMs = r.mtimeMs;
       dirty = false;
       dirtyDot.style.display = 'none';
-      const bits = [r.commit.committed ? `committed ${r.commit.sha}` : r.commit.note,
-        r.push.pushed ? r.push.note : null].filter(Boolean);
-      toast(`Saved${r.tier === 'gated' ? ' (gated — your approval)' : ''}${r.commit.committed ? ' ✓' : ` · ${r.commit.note || ''}`}`);
+      syncToast(`Saved${r.tier === 'gated' ? ' (gated — your approval)' : ''}`, r);
       window.dispatchEvent(new Event('console:saved'));
     } catch (e) {
       if (e.status === 409) return conflictModal();

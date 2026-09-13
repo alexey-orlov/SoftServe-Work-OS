@@ -1,6 +1,6 @@
 // Work OS Console — shell: router, sidebar, search, git chip.
 import { api, loadState } from '/api.js';
-import { el, icon, toast, setCrumbs } from '/ui.js';
+import { el, icon, toast, setCrumbs, timeAgo, LITE, syncToast } from '/ui.js';
 
 import * as home from '/views/home.js';
 import * as initiatives from '/views/initiatives.js';
@@ -120,8 +120,48 @@ async function refreshChrome() {
         g.dirty ? ` · ${g.dirty} uncommitted` : ' · clean'),
       g.lastCommit ? el('div', { title: g.lastCommit.subject }, `${g.lastCommit.sha} ${g.lastCommit.subject.slice(0, 26)}…`) : null,
       el('div', {}, `auto-sync: ${currentModeLabel(o.autoSync).toLowerCase()}`),
+      snapshotLine(o.snapshot),
     );
   } catch { /* chrome is decorative */ }
+}
+
+// The light-mode snapshot's standing. Full console: current, or N commits behind
+// with a Rebuild button (bakes HEAD's tree, commits, pushes per auto-sync). The
+// snapshot page itself prints its age — it has no repo to measure against. A
+// server older than this frontend sends no field and the line is simply absent.
+function snapshotLine(s) {
+  if (LITE) {
+    const meta = (window.__LITE__ && window.__LITE__.meta) || {};
+    return el('div', { title: `Read-only snapshot built from ${meta.branch || '?'}@${meta.sha || '?'}` },
+      `snapshot: built ${timeAgo(meta.builtAt)}`);
+  }
+  if (!s) return null;
+  if (!s.exists) return el('div', {}, 'snapshot: none yet ', rebuildBtn('Build'));
+  if (s.behind === null) return el('div', { title: s.note || '' }, 'snapshot: unknown ', rebuildBtn('Rebuild'));
+  if (s.behind === 0) {
+    return el('div', { title: `Light-mode snapshot (os-console/console.html) built from ${s.sha} — matches the current commit` },
+      'snapshot: current');
+  }
+  return el('div', { class: 'behind', title: `Light-mode snapshot (os-console/console.html) built from ${s.sha}, ${s.behind} commit(s) ago` },
+    `snapshot: ${s.behind} behind `, rebuildBtn('Rebuild'));
+}
+
+function rebuildBtn(label) {
+  const b = el('button', {
+    class: 'btn quiet small inline',
+    title: 'Rebuild the light-mode snapshot from the current commit, commit it, and push it per auto-sync',
+  }, label);
+  b.onclick = async () => {
+    b.disabled = true;
+    b.textContent = 'Building…';
+    try {
+      syncToast('Snapshot rebuilt', await api.post('/api/snapshot/rebuild', {}));
+    } catch (e) {
+      toast(e.message, 'err');
+    }
+    refreshChrome();
+  };
+  return b;
 }
 
 // ---- global search ---------------------------------------------------------

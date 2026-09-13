@@ -23,6 +23,16 @@
 #     the user says "propose the gated changes" (/propose; on GitHub the desktop
 #     Create PR button does the same). Nothing gated ever reaches the target from here.
 #
+# The light-mode snapshot (os-console/console.html — the read-only console for people
+# without Node.js) is derived output and rides with the work: rebuilt here from the
+# COMMITTED tree (never the working tree, so held gated edits cannot leak) wherever
+# `node` is on PATH. Direct mode: a `console: rebuild snapshot` commit right after the
+# turn's commit, in the same push. Pr mode: one more commit inside the drain worktree, so
+# the pull request lands content and snapshot together; a drain whose pull request
+# reports a merge conflict (two people landed snapshots at once) is rebuilt from the
+# current target next turn. No node → skipped and said. The console's Rebuild button and
+# `node os-console/build-console.js --ref HEAD` are the same builder, by hand.
+#
 # Contract with Claude Code:
 #   - Stop hooks take NO matcher. Wired via .claude/settings.json as a bare group.
 #   - Exit 0 with empty stdout = "did nothing, carry on". That is the success path.
@@ -116,6 +126,58 @@ is_protected() {
     esac
   done < "$POLICY"
   return 1
+}
+
+# --- the light-mode snapshot: os-console/console.html ----------------------------------
+# Derived output — the read-only console for people without Node.js. Rebuilt from a
+# COMMITTED tree only (a --ref build checks the commit out in a throwaway worktree; the
+# drain worktree in pr mode already is one), so held gated edits never leak into a file
+# that lands on the target. The console's Rebuild button and a person's
+# `node os-console/build-console.js --ref HEAD` run the same builder.
+SNAP="os-console/console.html"
+SNAP_BUILDER="os-console/build-console.js"
+snapshot_available() { [ -f "$SNAP_BUILDER" ] && command -v node >/dev/null 2>&1; }
+# full sha of the commit the snapshot file at $1 was built from (empty = none / unstamped)
+snapshot_source() {
+  [ -f "$1" ] || return 0
+  head -c 16384 "$1" | grep -o 'os-console-snapshot" content="[^"]*"' | sed -n 's/.*shaFull=\([0-9a-f]*\).*/\1/p' | head -1
+}
+# rebuild $SNAP in this checkout from <ref>'s tree; the banner is labelled <branch>
+snapshot_build_ref() { node "$SNAP_BUILDER" --ref "$1" --out "$PWD/$SNAP" --branch "$2" --no-prs >/dev/null 2>&1; }
+# rebuild the snapshot INSIDE worktree <dir> from its own HEAD; the banner is labelled <branch>
+snapshot_build_in() { OS_CONSOLE_ROOT="$1" node "$PWD/$SNAP_BUILDER" --out "$1/$SNAP" --branch "$2" --no-prs >/dev/null 2>&1; }
+# .gitattributes names a `snapshot` merge driver for the file (keep the current side; the
+# next rebuild regenerates it). The driver is per-clone config — registered here.
+snapshot_merge_driver() { git config --get merge.snapshot.driver >/dev/null 2>&1 || git config merge.snapshot.driver true; }
+# Direct mode: a `console: rebuild snapshot` commit right after the turn's commit, when
+# anything but the snapshot itself changed since the file's source commit. Sets SNAP_NOTE,
+# and SNAP_SAY=y when a person should hear about it.
+SNAP_NOTE=""; SNAP_SAY=""
+snapshot_refresh_direct() {
+  SNAP_NOTE=""
+  [ "$AC_SCOPE" = "product-development" ] && return 0            # scope excludes os-console/
+  local src n=1
+  src=$(snapshot_source "$SNAP")
+  if [ -n "$src" ] && git rev-parse --verify --quiet "$src^{commit}" >/dev/null 2>&1; then
+    n=$(git rev-list --count "$src..HEAD" -- . ":(exclude)$SNAP" 2>/dev/null); n=${n:-1}
+  fi
+  [ "$n" -gt 0 ] 2>/dev/null || return 0
+  if ! snapshot_available; then
+    SNAP_NOTE="snapshot: not rebuilt — node is not on PATH here; the next teammate with Node.js (or the console's Rebuild) will"
+    return 0
+  fi
+  if snapshot_build_ref HEAD "$BRANCH"; then
+    git add -- "$SNAP" 2>/dev/null
+    git diff --cached --quiet -- "$SNAP" 2>/dev/null && return 0            # byte-identical
+    if git commit -q -m "console: rebuild snapshot (source $(git rev-parse --short HEAD))" -- "$SNAP" 2>/dev/null; then
+      SNAP_NOTE="snapshot: rebuilt → $(git rev-parse --short HEAD)"
+    else
+      git reset -q -- "$SNAP" 2>/dev/null
+      SNAP_NOTE="snapshot: rebuilt but git commit FAILED — commit $SNAP by hand"; SNAP_SAY=y
+    fi
+  else
+    SNAP_NOTE="snapshot: rebuild FAILED — run: node $SNAP_BUILDER --ref HEAD (the error shows there)"; SNAP_SAY=y
+  fi
 }
 
 # --- keep the server-side mirrors of the gated list fresh --------------------------
@@ -273,7 +335,7 @@ $OUTSIDE"
   esac
 
   # --- everyday commits still on the branch: pending drains vs. new ------------------
-  NEW_SHAS=""; PENDING=""; RETRY_BRANCHES=""; GATED_SHAS=""; GATED_FILES=""; OLDEST=""
+  NEW_SHAS=""; PENDING=""; RETRY_BRANCHES=""; GATED_SHAS=""; GATED_FILES=""; OLDEST=""; PID_SHAS=""
   while read -r mark sha; do
     [ "$mark" = "+" ] || continue
     FILES=$(git diff-tree --no-commit-id --name-only -r "$sha" 2>/dev/null)
@@ -290,6 +352,8 @@ $FILES"
     fi
     PID=$(git show "$sha" 2>/dev/null | git patch-id --stable 2>/dev/null | cut -d' ' -f1)
     [ -z "$PID" ] && continue
+    PID_SHAS="$PID_SHAS$PID $sha
+"
     ENTRY=$(grep "^$PID " "$DRAINS" 2>/dev/null | head -1)
     if [ -n "$ENTRY" ]; then
       DB=$(printf '%s' "$ENTRY" | awk '{print $2}'); PR=$(printf '%s' "$ENTRY" | awk '{print $3}')
@@ -363,6 +427,58 @@ $(printf '%s' "$line" | awk '{print $2}')"; fi
     esac
   }
 
+  # pr_conflicting <ref> → 0 when the platform reports a merge conflict on that PR
+  pr_conflicting() {
+    case "$TOOL:$1" in
+      gh:\#*) [ "$(gh pr view "${1#\#}" --json mergeable --jq .mergeable 2>/dev/null)" = "CONFLICTING" ] ;;
+      az:\!*) [ "$(az repos pr show --id "${1#\!}" --query mergeStatus -o tsv 2>/dev/null)" = "conflicts" ] ;;
+      *)      return 1 ;;
+    esac
+  }
+  # drain_snapshot <worktree>: one more commit on the drain — the snapshot baked from the
+  # drain's own tip (the target + what is landing). Sets SNAP_DRAIN_NOTE.
+  SNAP_DRAIN_NOTE=""
+  drain_snapshot() {
+    SNAP_DRAIN_NOTE=""
+    if ! snapshot_available; then SNAP_DRAIN_NOTE="snapshot not rebuilt (no node on PATH here)"; return 0; fi
+    if snapshot_build_in "$1" "$AM_TARGET"; then
+      git -C "$1" add -- "$SNAP" >/dev/null 2>&1
+      git -C "$1" diff --cached --quiet -- "$SNAP" 2>/dev/null && return 0
+      if git -C "$1" commit -q -m "console: rebuild snapshot (source $(git -C "$1" rev-parse --short HEAD))" -- "$SNAP" >/dev/null 2>&1; then
+        SNAP_DRAIN_NOTE="snapshot rebuilt in the drain"
+      else
+        SNAP_DRAIN_NOTE="snapshot rebuilt but NOT committed in the drain"
+      fi
+    else
+      SNAP_DRAIN_NOTE="snapshot rebuild FAILED in the drain (node $SNAP_BUILDER --ref HEAD shows why)"
+    fi
+  }
+  # refresh_drain <drain-branch>: rebuild the drain from the CURRENT target — its session
+  # commits cherry-picked afresh, the snapshot regenerated — and force-push it. The PR
+  # keeps its number and its auto-merge. Returns 1 when the commits no longer apply.
+  refresh_drain() {
+    local db="$1" shas="" pid sha tw ok=1
+    for pid in $(awk -v d="$db" '$2==d{print $1}' "$DRAINS"); do
+      sha=$(printf '%s' "$PID_SHAS" | awk -v p="$pid" '$1==p{print $2; exit}')
+      [ -n "$sha" ] && shas="$shas $sha"
+    done
+    [ -n "$shas" ] || return 1
+    tw=$(mktemp -d "${TMPDIR:-/tmp}/team-os-drain.XXXXXX" 2>/dev/null) || return 1
+    git fetch -q origin "$db" >/dev/null 2>&1
+    if git worktree add -q --detach "$tw" "$BASE" >/dev/null 2>&1; then
+      # shellcheck disable=SC2086
+      if git -C "$tw" cherry-pick --allow-empty $shas >/dev/null 2>&1; then
+        drain_snapshot "$tw"
+        git -C "$tw" push -q --force-with-lease origin "HEAD:refs/heads/$db" >/dev/null 2>&1 && ok=0
+      else
+        git -C "$tw" cherry-pick --abort >/dev/null 2>&1
+      fi
+      git worktree remove --force "$tw" >/dev/null 2>&1
+    fi
+    rm -rf "$tw" 2>/dev/null; git worktree prune >/dev/null 2>&1
+    return $ok
+  }
+
   # --- drain the new everyday commits -------------------------------------------------
   # One open drain at a time per session branch: while an earlier drain has not merged
   # yet, new everyday commits are STACKED onto that same drain branch (its PR grows) —
@@ -386,6 +502,7 @@ $(printf '%s' "$line" | awk '{print $2}')"; fi
     if [ -n "$TMPW" ] && git worktree add -q --detach "$TMPW" "$DRAIN_BASE" >/dev/null 2>&1; then
       # shellcheck disable=SC2086
       if git -C "$TMPW" cherry-pick --allow-empty $NEW_SHAS >/dev/null 2>&1; then
+        drain_snapshot "$TMPW"
         DRAIN_TIP=$(git -C "$TMPW" rev-parse HEAD 2>/dev/null)
         if git -C "$TMPW" push -q origin "HEAD:refs/heads/$DRAIN" >/dev/null 2>&1; then DRAIN_STATE=pushed; else DRAIN_STATE=pushfail; fi
       else
@@ -403,7 +520,7 @@ $(printf '%s' "$line" | awk '{print $2}')"; fi
         if [ -n "$STACK_DB" ] && [ "$STACK_REF" != "-" ]; then
           REF="$STACK_REF"
           [ "$TOOL" = "gh" ] && arm_merge "$DRAIN" "$REF"
-          add "everyday: $NCOMMITS commit(s) added to the pending drain → PR $REF${MERGE_NOTE:+ — $MERGE_NOTE}"
+          add "everyday: $NCOMMITS commit(s) added to the pending drain → PR $REF${MERGE_NOTE:+ — $MERGE_NOTE}${SNAP_DRAIN_NOTE:+ · $SNAP_DRAIN_NOTE}"
         else
           BODY=$(mktemp "${TMPDIR:-/tmp}/team-os-pr.XXXXXX")
           {
@@ -424,11 +541,11 @@ $(printf '%s' "$line" | awk '{print $2}')"; fi
           rm -f "$BODY"
           if [ -n "$REF" ]; then
             arm_merge "$DRAIN" "$REF"
-            add "everyday: $NCOMMITS commit(s) drained → PR $REF — $MERGE_NOTE${URL:+ · $URL}"
+            add "everyday: $NCOMMITS commit(s) drained → PR $REF — $MERGE_NOTE${SNAP_DRAIN_NOTE:+ · $SNAP_DRAIN_NOTE}${URL:+ · $URL}"
             [ -n "$STACK_DB" ] && { sed -i.bak "s|^\([^ ]*\) $DRAIN -\$|\1 $DRAIN $REF|" "$DRAINS" 2>/dev/null; rm -f "$DRAINS.bak"; }
           else
             [ "$TOOL" != "none" ] && [ -z "$TOOL_WHY" ] && TOOL_WHY="$TOOL could not open it — check login (gh auth login / az login, az devops configure --defaults) and permissions"
-            add "everyday: $NCOMMITS commit(s) pushed to origin/$DRAIN but NO pull request opened${TOOL_WHY:+ ($TOOL_WHY)} — open and merge it by hand: $DRAIN → $AM_TARGET (retried next turn)"
+            add "everyday: $NCOMMITS commit(s) pushed to origin/$DRAIN${SNAP_DRAIN_NOTE:+ · $SNAP_DRAIN_NOTE} but NO pull request opened${TOOL_WHY:+ ($TOOL_WHY)} — open and merge it by hand: $DRAIN → $AM_TARGET (retried next turn)"
             REF="-"
           fi
         fi
@@ -474,6 +591,10 @@ EOF
                 [ -n "$DB" ] && git push -q origin --delete "$DB" >/dev/null 2>&1
                 add "everyday: PR $PR merged — its commit leaves $BRANCH at the next rebase" ;;
         OPEN)   DB=$(awk -v r="$PR" '$3==r{print $2; exit}' "$DRAINS")
+                if [ -n "$DB" ] && pr_conflicting "$PR"; then
+                  if refresh_drain "$DB"; then add "everyday: PR $PR had a merge conflict (someone landed first) — drain $DB rebuilt onto the current $AM_TARGET${SNAP_DRAIN_NOTE:+ · $SNAP_DRAIN_NOTE}"
+                  else add "everyday: PR $PR has a merge conflict this turn could not clear — fix by hand: git rebase origin/$AM_TARGET on $BRANCH, then let the next turn re-drain"; fi
+                fi
                 if [ "$TOOL" = "gh" ] && [ -n "$DB" ]; then arm_merge "$DB" "$PR"; add "everyday: PR $PR still open — $MERGE_NOTE"; else add "everyday: PR $PR still open (auto-complete pending)"; fi ;;
         CLOSED) add "everyday: PR $PR was CLOSED without merging — its commit stays on $BRANCH; reopen or drain by hand" ;;
         *)      add "everyday: PR $PR — state unknown${TOOL_WHY:+ ($TOOL_WHY)}" ;;
@@ -599,14 +720,38 @@ REPORT="committed $COMMITTED ($COUNT file(s)) on $BRANCH"
 [ -n "$LEFT" ] && REPORT="$REPORT
 $LEFT"
 
+# --- sync with origin BEFORE the snapshot (push on, session on the target) ------------
+# origin may have moved (a teammate, a snapshot rebuild): rebase onto it first, so the
+# snapshot bakes the merged tree and one push never turns every following turn into
+# "remote ahead". Side branches are merged below and push the target ref as it is.
+SYNC_NOTE=""
+if [ "${AM_ENABLED:-false}" = "true" ] && [ "${AM_PUSH:-false}" = "true" ] && [ "$BRANCH" = "$AM_TARGET" ] \
+   && git remote get-url origin >/dev/null 2>&1 && git fetch -q origin "$AM_TARGET" 2>/dev/null \
+   && ! git merge-base --is-ancestor "origin/$AM_TARGET" HEAD 2>/dev/null; then
+  snapshot_merge_driver
+  if git rebase -q --autostash "origin/$AM_TARGET" >/dev/null 2>&1; then
+    SYNC_NOTE=" (rebased onto origin/$AM_TARGET first)"
+  else
+    git rebase --abort >/dev/null 2>&1
+    note "$REPORT
+push skipped: origin/$AM_TARGET has changes that conflict with yours — everything is committed locally. Fix: git pull --rebase origin $AM_TARGET, resolve, then git push origin $AM_TARGET."
+  fi
+fi
+
+# --- the snapshot rides with the work --------------------------------------------------
+snapshot_refresh_direct
+[ -n "$SNAP_NOTE" ] && REPORT="$REPORT
+$SNAP_NOTE"
+
 # --- land it: merge only when on a side branch, then push ---------------------------
 if [ "${AM_ENABLED:-false}" != "true" ]; then
-  [ -n "$LEFT" ] && note "$REPORT"
+  { [ -n "$LEFT" ] || [ "$SNAP_SAY" = y ]; } && note "$REPORT"
   exit 0
 fi
 
 SAY=""
 [ -n "$LEFT" ] && SAY=y
+[ "$SNAP_SAY" = y ] && SAY=y
 
 if [ "$BRANCH" != "$AM_TARGET" ]; then
   if ! git show-ref --verify --quiet "refs/heads/$AM_TARGET"; then
@@ -671,7 +816,7 @@ if [ "${AM_PUSH:-false}" = "true" ]; then
   if git remote get-url origin >/dev/null 2>&1; then
     if git push -q origin "$AM_TARGET" 2>/dev/null; then
       REPORT="$REPORT
-pushed to origin/$AM_TARGET"
+pushed to origin/$AM_TARGET$SYNC_NOTE"
       SAY=y
     else
       note "$REPORT

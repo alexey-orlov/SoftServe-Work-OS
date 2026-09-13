@@ -30,6 +30,7 @@ import * as library from './lib/adapters/library.js';
 import * as proposed from './lib/adapters/proposed.js';
 import * as prs from './lib/adapters/prs.js';
 import * as skills from './lib/adapters/skills.js';
+import * as snapshot from './lib/snapshot.js';
 import * as steering from './lib/adapters/steering.js';
 import * as templates from './lib/adapters/templates.js';
 
@@ -157,6 +158,7 @@ const ROUTES = {
   'PUT /api/state': (q, body) => saveState(body),
   'GET /api/docs': () => docs.build(),
   'GET /api/skills': () => skills.build(),
+  'POST /api/snapshot/rebuild': () => snapshot.rebuild(policy.load().settings),
 };
 
 // ---------------------------------------------------------------- live events

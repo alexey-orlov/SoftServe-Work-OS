@@ -5,6 +5,7 @@ import * as actions from '../actions.js';
 import * as gitlib from '../gitlib.js';
 import * as md from '../mdparse.js';
 import * as repo from '../repo.js';
+import * as snapshot from '../snapshot.js';
 import * as governance from './governance.js';
 import * as initiatives from './initiatives.js';
 import * as learnings from './learnings.js';
@@ -453,8 +454,10 @@ export function build() {
   const progTotal = meterTabs.reduce((n, k) => n + tabs[k].total, 0);
 
   const st = gitlib.statusInfo();
-  const log = gitlib.log(1);
-  const last = log.length ? log[0] : null;
+  // The chip's "last commit" is the last piece of WORK — a snapshot rebuild
+  // (console: rebuild snapshot) follows most commits and would hide it.
+  const log = gitlib.log(8);
+  const last = log.find((c) => !gitlib.isSnapshotCommit(c)) || (log.length ? log[0] : null);
 
   return {
     product,
@@ -477,6 +480,7 @@ export function build() {
       mcps: mcps.length,
     },
     autoSync: gov.autoSync,
+    snapshot: snapshot.info(),
     git: {
       branch: st.branch, ahead: st.ahead, behind: st.behind,
       dirty: st.entries.length,

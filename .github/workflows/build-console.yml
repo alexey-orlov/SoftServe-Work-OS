@@ -1,14 +1,17 @@
-# Rebuild the console's zero-setup file (os-console/console.html) on every
-# push to main, and commit it back. The paths-ignore filter keeps the bot's
-# own commit from re-triggering the build. GH_TOKEN lets the snapshot's
-# "Proposed changes" view bake real pull-request data via the preinstalled gh.
+# MANUAL FALLBACK — rebuild the console's zero-setup file (os-console/console.html)
+# from the current main and commit it back. Actions → build-console → Run workflow.
+#
+# It no longer runs on push. The snapshot is kept current by the turn-end hook
+# (.claude/hooks/auto-commit.sh — rebuilt on every machine with Node, in the same
+# push as the work it describes) and by the console's Rebuild button; a bot commit
+# after every push raced those pushes for the tip of main, and on a pull-request-only
+# main this job's direct push is refused unless the Actions app sits on the ruleset's
+# bypass list (a workflow token cannot bypass "require a pull request"). Use it only
+# on an instance where no contributor has Node.js — and then expect that refusal on a
+# protected main. GH_TOKEN lets the snapshot bake real pull-request data via gh.
 name: build-console
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'os-console/console.html'
   workflow_dispatch:
 
 permissions:
@@ -33,7 +36,8 @@ jobs:
           node-version: '20'
 
       - name: Build console.html
-        run: node os-console/build-console.js
+        # --ref HEAD bakes the checked-out commit's tree; --branch names it (a CI checkout is detached)
+        run: node os-console/build-console.js --ref HEAD --branch "$GITHUB_REF_NAME"
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -46,5 +50,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add os-console/console.html
-          git commit -m "console: rebuild console.html"
+          git commit -m "console: rebuild snapshot (source $(git rev-parse --short HEAD), manual workflow)"
           git push

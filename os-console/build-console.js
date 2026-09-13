@@ -4,7 +4,23 @@
 // static host, a file share, or straight out of the clone. Node 18+ standard
 // library, no packages.
 //
-//   node os-console/build-console.js        →  os-console/console.html
+//   node os-console/build-console.js               →  os-console/console.html (working tree)
+//   node os-console/build-console.js --ref HEAD    →  the same file, baked from HEAD's TREE
+//
+//   --ref <commit-ish>  bake that commit in a throwaway worktree — never the working
+//                       tree, so held gated edits cannot leak into a file that lands
+//                       on the shared branch
+//   --out <path>        write elsewhere (default: os-console/console.html)
+//   --branch <name>     branch label for the banner (detached checkouts show "HEAD")
+//   --no-prs            skip the platform CLI: no network, and one deterministic file
+//                       per source commit
+//
+// Who runs it: the turn-end auto-sync hook (.claude/hooks/auto-commit.sh) — on every
+// machine that has Node, in the same push as the work it describes; the console's
+// Rebuild button (lib/snapshot.js) on demand; and a person, by hand. The GitHub
+// workflow of the same name is a manual fallback only. Determinism matters: two
+// machines building the same commit must produce the same bytes, so dates come from
+// git, the leaderboard windows anchor on the source commit, and nothing reads the clock.
 //
 // The snapshot embeds the UNCHANGED web/ frontend (modules inlined via an
 // import map, absolute-path imports rewritten to bare "console/…" specifiers)
@@ -12,10 +28,10 @@
 // per-user prefs in localStorage, refuses writes with a friendly note, and —
 // the upgrade path — probes http://127.0.0.1:4820/api/ping every few seconds
 // and hands off to the full console (keeping the current view) the moment one
-// is running on the machine. CI rebuilds this file on every push to main
-// (.github/workflows/build-console.yml); Azure instances run this script from
-// their pipeline or by hand instead.
+// is running on the machine.
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -35,8 +51,14 @@ import * as skills from './lib/adapters/skills.js';
 import * as steering from './lib/adapters/steering.js';
 import * as templates from './lib/adapters/templates.js';
 
-const BASE = path.dirname(fileURLToPath(import.meta.url));
-const OUT = path.join(BASE, 'console.html');
+const SELF = fileURLToPath(import.meta.url);
+const BASE = path.dirname(SELF);
+// Frontend + vendor come from the checkout being baked when it has them (a --ref
+// build runs inside a worktree), else from this script's own folder.
+const WEB_BASE = fs.existsSync(path.join(repo.ROOT, 'os-console', 'web', 'app.js'))
+  ? path.join(repo.ROOT, 'os-console') : BASE;
+const ARGS = parseArgs(process.argv.slice(2));
+const OUT = ARGS.out ? path.resolve(ARGS.out) : path.join(repo.ROOT, 'os-console', 'console.html');
 const MAX_TEXT = 300 * 1024; // per-file content cap in the snapshot
 const MAX_IMAGE = 300 * 1024; // images above this stay a placeholder
 
@@ -72,11 +94,31 @@ function walkRepo() {
   return { dirs, files };
 }
 
+/** Filesystem mtimes are build-machine noise (a fresh worktree stamps every file
+ *  with checkout time). Any listing entry that names its path gets the date of the
+ *  commit that last touched it instead — the one fact two builds of the same commit
+ *  agree on. Entries git never saw (untracked) keep whatever they had. */
+function normalizeTimes(node, lastChanges, seen = new Set()) {
+  if (!node || typeof node !== 'object' || seen.has(node)) return;
+  seen.add(node);
+  if (Array.isArray(node)) {
+    for (const item of node) normalizeTimes(item, lastChanges, seen);
+    return;
+  }
+  const p = typeof node.path === 'string' ? node.path : (typeof node.rel === 'string' ? node.rel : null);
+  if (p !== null && typeof node.mtimeMs === 'number') {
+    const ms = isoToMs(lastChanges.get(p));
+    if (ms) node.mtimeMs = ms;
+  }
+  for (const v of Object.values(node)) normalizeTimes(v, lastChanges, seen);
+}
+
 function collect() {
   const pol = policy.load();
   const { dirs, files } = walkRepo();
   const linked = initiatives.reverseIndex();
 
+  const lastChanges = gitlib.lastChangeMap(); // one git call for every file's date
   const fileMeta = {};
   const fileText = {};
   const rawImages = {};
@@ -85,7 +127,7 @@ function collect() {
     if (!st) continue;
     const isText = repo.isTextPath(rel) && st.size < 1.5 * 1024 * 1024;
     const tier = policy.tierFor(rel, pol);
-    const lastChange = gitlib.lastChangeIso(rel);
+    const lastChange = lastChanges.get(rel) || null;
     fileMeta[rel] = {
       path: rel,
       isText: Boolean(isText && st.size <= MAX_TEXT),
@@ -141,45 +183,62 @@ function collect() {
   }
 
   const head = gitlib.git(['rev-parse', '--short', 'HEAD']);
+  const headFull = gitlib.git(['rev-parse', 'HEAD']);
   const built = gitlib.git(['log', '-1', '--pretty=%cI']); // source commit date — deterministic per commit
+  const builtMs = isoToMs(built.ok ? built.out.trim() : '') || Date.now();
   const st = gitlib.statusInfo();
-  const branch = process.env.GITHUB_REF_NAME || st.branch;
+  // Detached checkouts (a --ref worktree, CI) report "HEAD" — the label comes from
+  // the caller, else the CI ref name (GitHub Actions / Azure Pipelines).
+  const branch = ARGS.branch || process.env.GITHUB_REF_NAME || process.env.BUILD_SOURCEBRANCHNAME
+    || (st.branch && st.branch !== 'HEAD' ? st.branch : null) || 'HEAD';
 
   const d = docs.build();
   const docsHtml = d.exists ? repo.readText(docs.SITE) : null;
+  if (d.exists) {
+    // Staleness from git dates, not mtimes — a fresh checkout's mtimes say nothing.
+    const srcMs = Math.max(0, ...docs.SRC.map((p) => isoToMs(lastChanges.get(p)) || 0));
+    const siteMs = isoToMs(lastChanges.get(docs.SITE)) || 0;
+    d.stale = srcMs > siteMs;
+    d.builtMtimeMs = siteMs || d.builtMtimeMs;
+    d.srcMtimeMs = srcMs;
+  }
 
   const overview = home.build();
   const activityPayload = activity.build(400);
-  // Detached CI checkouts report "HEAD" as the branch — show the ref name.
-  if (process.env.GITHUB_REF_NAME) {
-    overview.git.branch = branch;
-    activityPayload.status.branch = branch;
-  }
+  overview.git.branch = branch;
+  activityPayload.status.branch = branch;
   // The artifact this script writes must not count as repo dirt in its own snapshot.
   const artifact = 'os-console/console.html';
   activityPayload.status.uncommitted = activityPayload.status.uncommitted.filter((e) => e.path !== artifact);
   overview.git.dirty = activityPayload.status.uncommitted.length;
+  // A snapshot describes its own source commit; "behind" is the full console's measure.
+  const meta = {
+    sha: head.ok ? head.out.trim() : '?',
+    shaFull: headFull.ok ? headFull.out.trim() : '',
+    branch,
+    builtAt: built.ok ? built.out.trim() : '',
+  };
+  overview.snapshot = { exists: true, path: artifact, sha: meta.sha, shaFull: meta.shaFull, branch,
+    builtAt: meta.builtAt, behind: 0, current: true, note: null };
+
+  const routes = {
+    '/api/overview': overview,
+    '/api/initiatives': { items: initiatives.listPages() },
+    '/api/features': steering.featureIndex(),
+    '/api/templates': templates.build(),
+    '/api/governance': governance.pageData(),
+    '/api/learnings': learnings.build(),
+    '/api/docs': d,
+    '/api/proposed': proposed.build(false, { noPrs: ARGS.noPrs }),
+    '/api/leaders': prs.leaders(builtMs),
+    '/api/activity': activityPayload,
+    '/api/skills': skills.build(),
+  };
+  normalizeTimes(routes, lastChanges);
 
   return {
-    meta: {
-      sha: head.ok ? head.out.trim() : '?',
-      // CI checkouts are detached HEADs — the ref name env is the truth there.
-      branch: process.env.GITHUB_REF_NAME || st.branch,
-      builtAt: built.ok ? built.out.trim() : '',
-    },
-    routes: {
-      '/api/overview': overview,
-      '/api/initiatives': { items: initiatives.listPages() },
-      '/api/features': steering.featureIndex(),
-      '/api/templates': templates.build(),
-      '/api/governance': governance.pageData(),
-      '/api/learnings': learnings.build(),
-      '/api/docs': d,
-      '/api/proposed': proposed.build(false),
-      '/api/leaders': prs.leaders(false),
-      '/api/activity': activityPayload,
-      '/api/skills': skills.build(),
-    },
+    meta,
+    routes,
     library: libPayloads,
     fileMeta,
     fileText,
@@ -377,8 +436,17 @@ const BOOT_JS = String.raw`
       + ' in the repo folder — this page upgrades to the full console by itself.';
     var meta = document.createElement('span');
     meta.style.cssText = 'margin-left:auto;opacity:.55;white-space:nowrap';
+    var ageDays = LITE.meta.builtAt ? Math.floor((Date.now() - new Date(LITE.meta.builtAt).getTime()) / 86400000) : null;
+    var ageText = ageDays === null ? '' : (ageDays <= 0 ? ' · built today'
+      : ' · built ' + ageDays + ' day' + (ageDays === 1 ? '' : 's') + ' ago');
     meta.textContent = 'snapshot ' + (LITE.meta.branch || '') + '@' + LITE.meta.sha
-      + (LITE.meta.builtAt ? ' · ' + LITE.meta.builtAt.slice(0, 10) : '');
+      + (LITE.meta.builtAt ? ' · ' + LITE.meta.builtAt.slice(0, 10) : '') + ageText;
+    if (ageDays !== null && ageDays > 7) {
+      // A week-old snapshot has almost certainly been overtaken — say so where the date is.
+      meta.style.cssText = 'margin-left:auto;white-space:nowrap;color:#9a4b00;font-weight:600';
+      meta.title = 'More than a week old — the repository has probably moved on. Anyone with Node.js '
+        + 'refreshes it: the Rebuild button in the full console, or node os-console/build-console.js';
+    }
     bar.append(msg, meta);
     document.body.insertBefore(bar, document.body.firstChild);
     var cmd = document.getElementById('lite-cmd');
@@ -434,10 +502,10 @@ function jsEscape(s) {
 }
 
 function buildHtml(data) {
-  const web = path.join(BASE, 'web');
+  const web = path.join(WEB_BASE, 'web');
   let html = fs.readFileSync(path.join(web, 'index.html'), 'utf8');
   const styles = fs.readFileSync(path.join(web, 'styles.css'), 'utf8');
-  const marked = fs.readFileSync(path.join(BASE, 'vendor', 'marked.min.js'), 'utf8');
+  const marked = fs.readFileSync(path.join(WEB_BASE, 'vendor', 'marked.min.js'), 'utf8');
 
   const imports = {};
   for (const rel of MODULES) {
@@ -456,21 +524,91 @@ function buildHtml(data) {
   ].join('\n');
 
   html = html.split('<link rel="stylesheet" href="/styles.css">').join(`<style>${styles}</style>`);
+  // The stamp: what this file was built from, readable from the first bytes (the
+  // console's snapshot line, the hook's rebuild check, a person with `head`).
+  const m = data.meta;
+  const stampTag = `<meta name="os-console-snapshot" content="sha=${m.sha};shaFull=${m.shaFull};branch=${m.branch};builtAt=${m.builtAt}">`;
+  html = html.split('<meta name="viewport" content="width=device-width, initial-scale=1">')
+    .join(`<meta name="viewport" content="width=device-width, initial-scale=1">\n${stampTag}`);
   html = html.split('<title>Work OS Console</title>').join('<title>Work OS Console — snapshot</title>');
   html = html.split('<script src="/vendor/marked.min.js"></script>\n'
     + '<script type="module" src="/app.js"></script>').join(blocks);
   return html;
 }
 
+function parseArgs(argv) {
+  const usage = 'usage: node os-console/build-console.js [--ref <commit-ish>] [--out <path>] [--branch <name>] [--no-prs]';
+  const out = { ref: null, out: null, branch: null, noPrs: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--ref') out.ref = argv[++i];
+    else if (a === '--out') out.out = argv[++i];
+    else if (a === '--branch') out.branch = argv[++i];
+    else if (a === '--no-prs') out.noPrs = true;
+    else if (a === '--help' || a === '-h') { console.log(usage); process.exit(0); }
+    else { console.error(`unknown argument ${a}\n${usage}`); process.exit(2); }
+  }
+  if (out.ref !== null && !out.ref) { console.error(usage); process.exit(2); }
+  return out;
+}
+
+/** The banner's branch label for a --ref build: the checkout's branch for HEAD,
+ *  the bare name for origin/<x> or refs/heads/<x>, the ref itself otherwise. */
+function refLabel(ref) {
+  if (ref === 'HEAD') {
+    const st = gitlib.statusInfo();
+    return st.branch && st.branch !== 'HEAD' ? st.branch : 'HEAD';
+  }
+  return ref.replace(/^(refs\/remotes\/origin|refs\/heads|origin)\//, '');
+}
+
+/** --ref: check the commit out into a throwaway worktree and run THIS script inside
+ *  it (OS_CONSOLE_ROOT), writing to the caller's --out. The worktree goes away
+ *  whatever happens. Nothing here reads the working tree. */
+function buildFromRef(ref) {
+  const label = ARGS.branch || refLabel(ref);
+  const wt = fs.mkdtempSync(path.join(os.tmpdir(), 'os-console-snapshot-'));
+  const add = gitlib.git(['worktree', 'add', '-q', '--detach', wt, ref]);
+  if (!add.ok) {
+    fs.rmSync(wt, { recursive: true, force: true });
+    throw new Error(`git worktree add ${ref} failed: ${(add.err || '').trim()}`);
+  }
+  try {
+    const args = [SELF, '--out', OUT, '--branch', label];
+    if (ARGS.noPrs) args.push('--no-prs');
+    const child = spawnSync(process.execPath, args, {
+      stdio: 'inherit',
+      env: { ...process.env, OS_CONSOLE_ROOT: wt },
+    });
+    if (child.status !== 0) throw new Error(`snapshot build in the worktree exited ${child.status}`);
+  } finally {
+    gitlib.git(['worktree', 'remove', '--force', wt]);
+    fs.rmSync(wt, { recursive: true, force: true });
+    gitlib.git(['worktree', 'prune']);
+  }
+}
+
 function main() {
+  if (ARGS.ref && !process.env.OS_CONSOLE_ROOT) {
+    buildFromRef(ARGS.ref);
+    return;
+  }
   process.chdir(repo.ROOT);
   const data = collect();
   const html = buildHtml(data);
-  fs.writeFileSync(OUT, html, 'utf8');
+  // Atomic: the running server's watcher and an open snapshot never see half a file.
+  fs.mkdirSync(path.dirname(OUT), { recursive: true });
+  fs.writeFileSync(`${OUT}.tmp`, html, 'utf8');
+  fs.renameSync(`${OUT}.tmp`, OUT);
   const kb = (Buffer.byteLength(html, 'utf8') / 1024).toFixed(1);
-  console.log(`console.html: ${kb} KB · ${Object.keys(data.fileMeta).length} files baked `
+  console.log(`${path.relative(process.cwd(), OUT) || OUT}: ${kb} KB · ${Object.keys(data.fileMeta).length} files baked `
     + `(${Object.keys(data.fileText).length} with text, ${Object.keys(data.rawImages).length} images) `
     + `· ${Object.keys(data.library).length} dirs · source ${data.meta.branch}@${data.meta.sha}`);
 }
 
-main();
+try {
+  main();
+} catch (e) {
+  console.error(`build-console: ${e && e.message ? e.message : e}`);
+  process.exit(1);
+}

@@ -4,7 +4,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const ROOT = path.dirname(path.dirname(HERE));
+// OS_CONSOLE_ROOT points the whole read layer at another checkout of this repo —
+// the snapshot builder sets it to a throwaway worktree so a snapshot bakes exactly
+// one commit's tree, never the working tree (held gated edits must not leak).
+export const ROOT = process.env.OS_CONSOLE_ROOT
+  ? path.resolve(process.env.OS_CONSOLE_ROOT)
+  : path.dirname(path.dirname(HERE));
 
 export const TEXT_EXT = new Set(['.md', '.yaml', '.yml', '.txt', '.sql', '.json', '.csv', '.html', '.js', '.mjs', '.cjs', '.css', '.sh']);
 // The console only ever writes wiki-content file types — never scripts or hooks.

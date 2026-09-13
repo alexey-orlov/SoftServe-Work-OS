@@ -385,3 +385,21 @@ export function setCrumbs(parts) {
 
 export function spinner(msg) { return el('div', { class: 'spin' }, msg || 'Loading…'); }
 export function errorBox(e) { return el('div', { class: 'card' }, el('h3', {}, 'This view failed to load'), el('div', { class: 'hint' }, e.message)); }
+
+// ---- save feedback --------------------------------------------------------
+// Every console write commits at once and pushes per auto-sync. A toast must never
+// read "Saved ✓" over a push that was due and did not land — that is how edits stay
+// local unnoticed. `warn` is the server's verdict on the push it attempted.
+
+export function syncMark(r) {
+  if (!r || !r.commit) return '';
+  if (!r.commit.committed) {
+    return r.commit.note && r.commit.note !== 'no content change' ? ` · ${r.commit.note}` : '';
+  }
+  if (r.push && r.push.warn) return ` ✓ committed — NOT pushed: ${r.push.note}`;
+  return ' ✓';
+}
+
+export function syncToast(label, r) {
+  toast(`${label}${syncMark(r)}`, r && r.push && r.push.warn ? 'err' : undefined);
+}

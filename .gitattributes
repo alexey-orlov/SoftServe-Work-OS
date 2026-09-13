@@ -1,0 +1,6 @@
+# os-console/console.html is generated output — the light-mode snapshot of the
+# console. Two people rebuilding it on different branches must never hand-merge a
+# 5 MB file: the `snapshot` driver keeps the current side, and the next rebuild
+# regenerates it from the merged tree. The driver is a no-op command registered
+# per clone by the console and the auto-sync hook (git config merge.snapshot.driver true).
+os-console/console.html merge=snapshot

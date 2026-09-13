@@ -1,6 +1,7 @@
 // Proposed changes adapter — everything waiting for a human in one place:
 // open pull requests, the gated-change proposals inbox, health reports, and
 // the weekly review reports.
+import * as gitlib from '../gitlib.js';
 import * as repo from '../repo.js';
 import * as governance from './governance.js';
 import * as prs from './prs.js';
@@ -22,9 +23,14 @@ export function weeklyReports() {
 }
 
 /** Two symmetric queues: changes proposed by team members (human PRs) and
- *  automatically proposed changes (the proposals inbox + bot PRs). */
-export function build(force) {
-  const openAll = prs.allOpen(force);
+ *  automatically proposed changes (the proposals inbox + bot PRs).
+ *  opts.noPrs — leave the platform CLI alone (the snapshot builder, run at turn
+ *  end by the hook: no network, and a deterministic file per source commit). */
+export function build(force, opts = {}) {
+  const openAll = opts.noPrs
+    ? { available: false, provider: gitlib.provider(), items: [],
+      note: 'Pull requests are not baked into this snapshot — open the full console for the live list' }
+    : prs.allOpen(force);
   const human = openAll.items.filter((p) => !p.isBot);
   const bots = openAll.items.filter((p) => p.isBot);
   return {
@@ -35,7 +41,9 @@ export function build(force) {
       items: human,
     },
     auto: { proposals: governance.proposals(), botPrs: bots },
-    permissions: prs.permissions(),
+    permissions: opts.noPrs
+      ? { provider: openAll.provider, canMerge: null, login: null, note: null }
+      : prs.permissions(),
     health: governance.healthReports(),
     weeklyReports: weeklyReports(),
   };
