@@ -601,9 +601,9 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 .g-artifacts { --group-color: var(--accent); }
 .g-data      { --group-color: var(--ok-ink); }
 .g-system    { --group-color: var(--muted); }
-/* Product & initiatives sits alone in its own tab, so it reuses the accent rather
-   than asking the palette for a sixth token it would never be seen beside. */
-.g-product   { --group-color: var(--accent); }
+/* Index pages sits alone in its own tab, so it reuses the accent rather than
+   asking the palette for a sixth token it would never be seen beside. */
+.g-index     { --group-color: var(--accent); }
 /* OS harness reuses the same three-token palette — its groups are a different
    subject, not a different design language. */
 .g-agents    { --group-color: var(--accent); }
@@ -612,7 +612,7 @@ table.integrations td:first-child { white-space: normal; min-width: 110px; }
 .g-ui        { --group-color: var(--teal-ink); }
 .group-head .group-dot { background: var(--group-color, var(--muted)); }
 .tile.g-strategic, .tile.g-templates, .tile.g-ongoing, .tile.g-artifacts,
-.tile.g-data, .tile.g-product, .tile.g-system, .tile.g-agents, .tile.g-skills,
+.tile.g-data, .tile.g-index, .tile.g-system, .tile.g-agents, .tile.g-skills,
 .tile.g-gov, .tile.g-ui {
   border-left: 3px solid var(--group-color, var(--line));
 }

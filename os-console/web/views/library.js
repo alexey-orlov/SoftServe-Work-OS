@@ -104,14 +104,15 @@ const QUICK = [
     }],
   },
   {
-    // The two halves of one graph, and the only tab that is a way IN rather than a
-    // category of content: the map is the product's lasting shape, initiatives the
-    // work in flight against it, and every artifact is reached through one of them.
-    // Both also sit in the left rail — a second door to a main road is not a
+    // Named for what these two ARE, the way every tab here is — pages that index
+    // everything else — rather than for their subject. They are the two halves of
+    // one graph: the map is the product's lasting shape, initiatives the work in
+    // flight against it, and every artifact is reached through one of them. Both
+    // also sit in the left rail — a second door onto a main road is not a
     // duplicate. Keep it at two: the other registries (data catalog, code repos,
     // toolchain) front their own folders and belong where they already are.
-    title: 'Product & initiatives',
-    key: 'product',
+    title: 'Index pages',
+    key: 'index',
     groups: [{
       name: null,
       items: [
@@ -142,7 +143,7 @@ const TABS = [
     'How the team\'s own systems are laid out and how to use them — the data warehouse and its metrics, the code repositories and their constraints.'],
   ['output', 'Output artifacts', ['artifacts'],
     'What the team produces from all that context — PRDs, jobs breakdowns and job specs, the prototypes that test them, and the periodic reports that roll it all up.'],
-  ['product', 'Product & initiatives', ['product'],
+  ['index', 'Index pages', ['index'],
     'The two ways into a feature\'s artifacts — the product\'s lasting shape, areas and the features they hold, and the work in flight against it, one living page per initiative.'],
 ];
 
