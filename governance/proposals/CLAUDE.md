@@ -27,4 +27,4 @@ Delete the proposal file after applying or rejecting it.
 
 ### Files
 
-_Empty. Agent runs append entries here; humans clear them._
+- [2026-09-15-skills-to-plugin-migration.md](2026-09-15-skills-to-plugin-migration.md) — Move the Work OS skills into a `work-os` plugin published through a marketplace: decisions, what moves/stays, 50-row change table, acceptance gates, and the handoff prompt for the executing session (Vlad)
